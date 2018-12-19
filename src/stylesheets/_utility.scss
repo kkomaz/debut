@@ -1,0 +1,57 @@
+$base-space-unit: 1em;
+
+// Top margin
+.mt-none    { margin-top: 0; }
+.mt-quarter { margin-top: $base-space-unit / 4; }
+.mt-half    { margin-top: $base-space-unit / 2; }
+.mt-one     { margin-top: $base-space-unit; }
+.mt-two     { margin-top: $base-space-unit * 2; }
+
+// Bottom margin
+.mb-none    { margin-bottom: 0; }
+.mb-quarter { margin-bottom: $base-space-unit / 4; }
+.mb-half    { margin-bottom: $base-space-unit / 2; }
+.mb-one     { margin-bottom: $base-space-unit; }
+.mb-two     { margin-bottom: $base-space-unit * 2; }
+
+// left margin
+.ml-none    { margin-left: 0; }
+.ml-quarter { margin-left: $base-space-unit / 4; }
+.ml-half    { margin-left: $base-space-unit / 2; }
+.ml-one     { margin-left: $base-space-unit; }
+.ml-two     { margin-left: $base-space-unit * 2; }
+
+// right margin
+.mr-none    { margin-right: 0; }
+.mr-quarter { margin-right: $base-space-unit / 4; }
+.mr-half    { margin-right: $base-space-unit / 2; }
+.mr-one     { margin-right: $base-space-unit; }
+.mr-two     { margin-right: $base-space-unit * 2; }
+
+// Top margin
+.pt-none    { padding-top: 0; }
+.pt-quarter { padding-top: $base-space-unit / 4; }
+.pt-half    { padding-top: $base-space-unit / 2; }
+.pt-one     { padding-top: $base-space-unit; }
+.pt-two     { padding-top: $base-space-unit * 2; }
+
+// Bottom margin
+.pb-none    { padding-bottom: 0; }
+.pb-quarter { padding-bottom: $base-space-unit / 4; }
+.pb-half    { padding-bottom: $base-space-unit / 2; }
+.pb-one     { padding-bottom: $base-space-unit; }
+.pb-two     { padding-bottom: $base-space-unit * 2; }
+
+// left margin
+.pl-none    { padding-left: 0; }
+.pl-quarter { padding-left: $base-space-unit / 4; }
+.pl-half    { padding-left: $base-space-unit / 2; }
+.pl-one     { padding-left: $base-space-unit; }
+.pl-two     { padding-left: $base-space-unit * 2; }
+
+// right margin
+.pr-none    { padding-right: 0; }
+.pr-quarter { padding-right: $base-space-unit / 4; }
+.pr-half    { padding-right: $base-space-unit / 2; }
+.pr-one     { padding-right: $base-space-unit; }
+.pr-two     { padding-right: $base-space-unit * 2; }
