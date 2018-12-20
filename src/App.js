@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { UserSession } from 'blockstack'
-import { Button } from 'react-bulma-components'
 import { appConfig } from 'utils/constants'
 import Login from 'components/Login'
+import RootRoute from 'pages/route'
 import 'stylesheets/main.scss'
 
 class App extends Component {
@@ -32,7 +32,7 @@ class App extends Component {
       <div className="App">
         {
           userSession.isUserSignedIn() ?
-          <div><Button onClick={() => userSession.signUserOut()}>Sign Out</Button></div> :
+          <RootRoute userSession={userSession} /> :
           <Login userSession={userSession} />
         }
       </div>
