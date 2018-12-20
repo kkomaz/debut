@@ -7,7 +7,9 @@ const introDisplay = (props) => {
 
   return (
     <div className="user-intro-display">
-      {description}
+      <p>
+        {description}
+      </p>
     </div>
   )
 }

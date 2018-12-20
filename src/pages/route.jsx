@@ -6,6 +6,7 @@ import UserProvider from 'components/User/UserProvider'
 import AdminUsernameRoute from 'pages/admin/_username/route'
 import RootPage from 'pages'
 import UsernamePage from 'pages/username'
+import Navbar from 'components/Navbar'
 
 class Routes extends Component {
   static propTypes = {
@@ -17,6 +18,7 @@ class Routes extends Component {
 
     return (
       <UserProvider userSession={userSession}>
+        <Navbar />
         <Container>
           <Switch>
             <Route
