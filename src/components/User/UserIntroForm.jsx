@@ -58,7 +58,7 @@ class UserIntroForm extends Component {
     const { userSession, userAddress, username } = this.props
 
     await userSession.putFile(`user-intro-${userAddress}.json`, JSON.stringify({ description }), options)
-    await axios.post('https://debut-3fcee.firebaseio.com/user.json', { description, blockstackId: userAddress, username })
+    await axios.post('https://debut-3fcee.firebaseio.com/user.json', { blockstackId: userAddress, username })
   }
 
   async editUserIndexer() {
@@ -67,7 +67,7 @@ class UserIntroForm extends Component {
     const { userSession, userAddress, username } = this.props
 
     await userSession.putFile(`user-intro-${userAddress}.json`, JSON.stringify({ description }), options)
-    await axios.post('https://debut-3fcee.firebaseio.com/users.json', { description, blockstackId: userAddress, username })
+    await axios.post('https://debut-3fcee.firebaseio.com/users.json', { blockstackId: userAddress, username })
   }
 
   render() {

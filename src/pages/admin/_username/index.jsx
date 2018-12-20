@@ -65,62 +65,60 @@ class AdminUsernamePage extends Component {
     const { loading, userInfo, displayView, fileExists } = this.state
 
     return (
-      <div className="admin-username-page">
-        <Card>
-          <Card.Content>
-            <Media>
-              <Media.Item renderAs="figure" position="left">
-                <Image renderAs="p" size={64} alt="64x64" src={userData.profile.image[0].contentUrl} />
-              </Media.Item>
-              <Media.Item>
-                <Heading size={4}>{userData.profile.name}</Heading>
-                <Heading subtitle size={6}>
-                  {username}
-                </Heading>
-              </Media.Item>
-            </Media>
-            <Content>
-              <Columns className="mt-one">
-                <Columns.Column size={6}>
-                  1st Half
-                </Columns.Column>
-                <Columns.Column size={6}>
-                  {
-                    loading ? <div>Loading...</div> :
-                    <div className="admin-username-page__info-details">
-                      <div className="admin-username-page__button-actions mb-one">
-                        {
-                          fileExists ?
-                          <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                            Edit
-                          </Button> :
-                          <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                            Create
-                          </Button>
-                        }
-                        <Button onClick={this.onShowDisplay} color="warning">
-                          Show Display
-                        </Button>
-                      </div>
+      <Card className="admin-username-page">
+        <Card.Content>
+          <Media>
+            <Media.Item renderAs="figure" position="left">
+              <Image renderAs="p" size={64} alt="64x64" src={userData.profile.image[0].contentUrl} />
+            </Media.Item>
+            <Media.Item>
+              <Heading size={4}>{userData.profile.name}</Heading>
+              <Heading subtitle size={6}>
+                {username}
+              </Heading>
+            </Media.Item>
+          </Media>
+          <Content>
+            <Columns className="mt-one">
+              <Columns.Column size={6}>
+                1st Half
+              </Columns.Column>
+              <Columns.Column size={6}>
+                {
+                  loading ? <div>Loading...</div> :
+                  <div className="admin-username-page__info-details">
+                    <div className="admin-username-page__button-actions mb-one">
                       {
-                        displayView ? <UserIntroDisplay description={userInfo.description} /> :
-                        <UserIntroForm
-                          description={userInfo.description}
-                          fileExists={fileExists}
-                          onSubmit={this.onSubmit}
-                          userAddress={userData.identityAddress}
-                          userSession={userSession}
-                          username={username}
-                        />
+                        fileExists ?
+                        <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                          Edit
+                        </Button> :
+                        <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                          Create
+                        </Button>
                       }
+                      <Button onClick={this.onShowDisplay} color="warning">
+                        Show Display
+                      </Button>
                     </div>
-                  }
-                </Columns.Column>
-              </Columns>
-            </Content>
-          </Card.Content>
-        </Card>
-      </div>
+                    {
+                      displayView ? <UserIntroDisplay description={userInfo.description} /> :
+                      <UserIntroForm
+                        description={userInfo.description}
+                        fileExists={fileExists}
+                        onSubmit={this.onSubmit}
+                        userAddress={userData.identityAddress}
+                        userSession={userSession}
+                        username={username}
+                      />
+                    }
+                  </div>
+                }
+              </Columns.Column>
+            </Columns>
+          </Content>
+        </Card.Content>
+      </Card>
     )
   }
 }
