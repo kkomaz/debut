@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 // first we will make a new context
-export const MyContext = React.createContext();
+export const UserContext = React.createContext();
 
 class UserProvider extends Component {
   constructor(props) {
@@ -20,11 +20,11 @@ class UserProvider extends Component {
 
   render() {
     return (
-      <MyContext.Provider value={{
+      <UserContext.Provider value={{
         state: this.state
       }}>
         {this.props.children}
-      </MyContext.Provider>
+      </UserContext.Provider>
     )
   }
 }

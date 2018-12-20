@@ -1,8 +1,10 @@
 // Any Bulma variables I want to override go here...
 $family-sans-serif: 'Overpass', sans-serif;
 @import '~react-bulma-components/dist/react-bulma-components.min.css';
-@import "./utility";
 
+@import "./ui/container";
+
+@import "./utility";
 html {
   background: #f0f5f9;
 }

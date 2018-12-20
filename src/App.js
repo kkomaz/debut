@@ -26,8 +26,6 @@ class App extends Component {
   render() {
     const { userSession } = this.state
 
-    console.log(userSession.isUserSignedIn())
-
     return (
       <div className="App">
         {
