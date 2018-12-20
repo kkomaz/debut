@@ -61,6 +61,7 @@ class UsernamePage extends Component {
                 1st Half
               </Columns.Column>
               <Columns.Column size={6}>
+                <h4>About Myself</h4>
                 {userInfo.description}
               </Columns.Column>
             </Columns>

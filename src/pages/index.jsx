@@ -2,12 +2,7 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
-import {
-  Section,
-  Box,
-  Media,
-  Content
-} from 'react-bulma-components'
+import { Table } from 'react-bulma-components'
 import './stylesheets/_root.scss'
 
 class RootPage extends Component {
@@ -43,26 +38,19 @@ class RootPage extends Component {
   render() {
     const { users } = this.state
     return (
-      <Section className="root-page">
-        {
-          _.map(users, (user) => {
-            return (
-              <Box className="root-page__box" onClick={() => this.onBoxClick(user)}>
-                <Media>
-                  <Media.Item>
-                    <Content>
-                      <p>
-                        <strong>{user.username} </strong>
-                        <span>has joined debut!</span>
-                      </p>
-                    </Content>
-                  </Media.Item>
-                </Media>
-              </Box>
-            )
-          })
-        }
-      </Section>
+      <div className="root-page">
+        <Table>
+          <tbody>
+            {
+              _.map([...users, { username: 'koreanizm' }], (user) => {
+                return <tr className="username-table-row" onClick={() => this.onBoxClick(user)}>
+                  <td>{user.username} has joined debut!</td>
+                </tr>
+              })
+            }
+          </tbody>
+        </Table>
+      </div>
     )
   }
 }
