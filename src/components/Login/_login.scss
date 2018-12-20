@@ -1,0 +1,21 @@
+@import 'stylesheets/_variables.scss';
+
+.login {
+  height: 100vh;
+
+  .login-column-left {
+    background: $primary;
+  }
+
+  .login-column-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-blockstack {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+}
