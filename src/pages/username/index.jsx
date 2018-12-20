@@ -7,13 +7,15 @@ import {
   Heading,
   Columns,
 } from 'react-bulma-components'
+import _ from 'lodash'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 
 class UsernamePage extends Component {
   state = {
-    userInfo: { description: '' }
+    loading: true
   }
+
   async componentDidMount() {
     const { username } = this.props
     const user = await lookupProfile(username)
@@ -22,34 +24,42 @@ class UsernamePage extends Component {
     }
   }
 
-  async loadUserInfo(user) {
-    const { userSession } = this.context.state.currentUser
+  async loadUserInfo(profile) {
+    const { userSession } = this.context.state.sessionUser
     const { location, username } = this.props
     const options = { decrypt: false }
-    const result = await userSession.getFile(`user-intro-${location.state.userAddress}.json`, options)
+    const result = await userSession.getFile(`user-intro-${location.state.identityAddress}.json`, options)
+    const apps = _.map((profile.apps), (k,v) => {
+      return v
+    })
 
     this.setState({
       userInfo: {
         description: JSON.parse(result).description,
-        contentUrl: user.image[0].contentUrl,
-        name: user.name,
+        profile,
         username,
-      }
+        apps
+      },
+      loading: false
     })
   }
 
   render() {
-    const { userInfo } = this.state
+    const { userInfo, loading } = this.state
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
 
     return (
       <Card className="admin-username-page">
         <Card.Content>
           <Media>
             <Media.Item renderAs="figure" position="left">
-              <Image renderAs="p" size={64} alt="64x64" src={userInfo.contentUrl} />
+              <Image renderAs="p" size={64} alt="64x64" src={userInfo.profile.image[0].contentUrl} />
             </Media.Item>
             <Media.Item>
-              <Heading size={4}>{userInfo.name}</Heading>
+              <Heading size={4}>{userInfo.profile.name}</Heading>
               <Heading subtitle size={6}>
                 {userInfo.username}
               </Heading>
@@ -58,7 +68,14 @@ class UsernamePage extends Component {
           <Content>
             <Columns className="mt-one">
               <Columns.Column size={6}>
-                1st Half
+                <h4>My Apps</h4>
+                  <ul>
+                    {
+                      _.map((userInfo.apps), (app) => {
+                        return <li>{app}</li>
+                      })
+                    }
+                  </ul>
               </Columns.Column>
               <Columns.Column size={6}>
                 <h4>About Myself</h4>

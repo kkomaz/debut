@@ -30,7 +30,7 @@ class RootPage extends Component {
     history.push({
       pathname: `/${user.username}`,
       state: {
-        userAddress: user.blockstackId
+        identityAddress: user.blockstackId
       }
     })
   }

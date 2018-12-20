@@ -28,7 +28,7 @@ class AdminUsernamePage extends Component {
 
   async loadUserInfo() {
     const options = { decrypt: false }
-    const { userSession, userData } = this.context.state.currentUser
+    const { userSession, userData } = this.context.state.sessionUser
 
     try {
       const response = await userSession.getFile(`user-intro-${userData.identityAddress}.json`, options)
@@ -61,7 +61,7 @@ class AdminUsernamePage extends Component {
   }
 
   render() {
-    const { username, userData, userSession } = this.context.state.currentUser
+    const { username, userData, userSession } = this.context.state.sessionUser
     const { loading, userInfo, displayView, fileExists } = this.state
 
     return (
@@ -107,7 +107,7 @@ class AdminUsernamePage extends Component {
                         description={userInfo.description}
                         fileExists={fileExists}
                         onSubmit={this.onSubmit}
-                        userAddress={userData.identityAddress}
+                        identityAddress={userData.identityAddress}
                         userSession={userSession}
                         username={username}
                       />

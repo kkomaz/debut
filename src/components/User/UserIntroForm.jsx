@@ -24,7 +24,7 @@ class UserIntroForm extends Component {
     description: PropTypes.string,
     fileExists: PropTypes.bool.isRequired,
     onSubmit: PropTypes.func,
-    userAddress: PropTypes.string.isRequired,
+    identityAddress: PropTypes.string.isRequired,
     userSession: PropTypes.object.isRequired,
   }
 
@@ -55,19 +55,33 @@ class UserIntroForm extends Component {
   async createUserIndexer() {
     const options = { encrypt: false }
     const { description } = this.state
-    const { userSession, userAddress, username } = this.props
+    const {
+      userSession,
+      identityAddress,
+      username
+    } = this.props
 
-    await userSession.putFile(`user-intro-${userAddress}.json`, JSON.stringify({ description }), options)
-    await axios.post('https://debut-3fcee.firebaseio.com/user.json', { blockstackId: userAddress, username })
+    const result = await axios.post('https://debut-3fcee.firebaseio.com/users.json', { blockstackId: identityAddress, username })
+
+    const blockstackData = {
+      description,
+      firebaseId: result.data.name
+    }
+    await userSession.putFile(`user-intro-${identityAddress}.json`, JSON.stringify(blockstackData), options)
   }
 
   async editUserIndexer() {
     const options = { encrypt: false }
     const { description } = this.state
-    const { userSession, userAddress, username } = this.props
+    const {
+      userSession,
+      identityAddress,
+    } = this.props
 
-    await userSession.putFile(`user-intro-${userAddress}.json`, JSON.stringify({ description }), options)
-    await axios.post('https://debut-3fcee.firebaseio.com/users.json', { blockstackId: userAddress, username })
+    const blockstackData = {
+      description,
+    }
+    await userSession.putFile(`user-intro-${identityAddress}.json`, JSON.stringify(blockstackData), options)
   }
 
   render() {

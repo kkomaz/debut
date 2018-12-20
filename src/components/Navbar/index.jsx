@@ -18,20 +18,20 @@ class NavbarComp extends Component {
 
   goToProfile = () => {
     const { history } = this.props
-    const { currentUser } = this.context.state
-    history.push(`/admin/${currentUser.username}`)
+    const { sessionUser } = this.context.state
+    history.push(`/admin/${sessionUser.username}`)
   }
 
   signOut = () => {
-    const { currentUser } = this.context.state
-    currentUser.userSession.signUserOut()
+    const { sessionUser } = this.context.state
+    sessionUser.userSession.signUserOut()
     window.location = '/'
   }
 
   render() {
     const { open } = this.state
-    const { currentUser } = this.context.state
-    const isSignedIn = currentUser.userSession.isUserSignedIn()
+    const { sessionUser } = this.context.state
+    const isSignedIn = sessionUser.userSession.isUserSignedIn()
 
     return (
       <Navbar

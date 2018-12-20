@@ -10,7 +10,7 @@ class UserProvider extends Component {
     const userData = props.userSession.loadUserData()
 
     this.state = {
-      currentUser: {
+      sessionUser: {
         userSession: props.userSession,
         userData,
         username: userData.username,
