@@ -54,7 +54,7 @@ class NavbarComp extends Component {
                 isSignedIn &&
                 <React.Fragment>
                   <Navbar.Item onClick={this.goToProfile}>
-                    My page
+                    My Page
                   </Navbar.Item>
 
                   <Navbar.Item onClick={this.signOut}>

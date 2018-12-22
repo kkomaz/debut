@@ -3,12 +3,16 @@ $family-sans-serif: 'Overpass', sans-serif;
 @import '~react-bulma-components/dist/react-bulma-components.min.css';
 
 @import "./ui/container";
-
 @import "./utility";
+
 html {
   background: #f0f5f9;
 }
 
 p {
   white-space: pre-wrap
+}
+
+.content ul {
+  list-style: none;
 }

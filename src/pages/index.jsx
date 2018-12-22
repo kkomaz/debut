@@ -42,7 +42,7 @@ class RootPage extends Component {
         <Table>
           <tbody>
             {
-              _.map([...users, { username: 'koreanizm' }], (user) => {
+              _.map(users, (user) => {
                 return <tr className="username-table-row" onClick={() => this.onBoxClick(user)}>
                   <td>{user.username} has joined debut!</td>
                 </tr>
