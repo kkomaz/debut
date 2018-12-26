@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import {
-  Card,
-  Content,
-  Media,
-  Image,
-  Heading,
-  Columns,
-} from 'react-bulma-components'
+import Card from 'react-bulma-components/lib/components/card'
+import Columns from 'react-bulma-components/lib/components/columns'
+import Content from 'react-bulma-components/lib/components/content'
+import Media from 'react-bulma-components/lib/components/media'
+import Image from 'react-bulma-components/lib/components/image'
+import Heading from 'react-bulma-components/lib/components/heading'
 import _ from 'lodash'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
@@ -56,7 +54,7 @@ class UsernamePage extends Component {
         <Card.Content>
           <Media>
             <Media.Item renderAs="figure" position="left">
-              <Image renderAs="p" size={64} alt="64x64" src={userInfo.profile.image[0].contentUrl} />
+              <Image style={{ margin: 0 }} renderAs="p" size={64} alt="64x64" src={userInfo.profile.image[0].contentUrl} />
             </Media.Item>
             <Media.Item>
               <Heading size={4}>{userInfo.profile.name}</Heading>
@@ -66,7 +64,7 @@ class UsernamePage extends Component {
             </Media.Item>
           </Media>
           <Content>
-            <Columns className="mt-one">
+            <Columns className="mt-one" gapless>
               <Columns.Column size={6}>
                 <h4>My Apps</h4>
                   <ul>

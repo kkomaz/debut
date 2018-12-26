@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
-import { Table } from 'react-bulma-components'
+import Table from 'react-bulma-components/lib/components/table'
 import './stylesheets/_root.scss'
 
 class RootPage extends Component {

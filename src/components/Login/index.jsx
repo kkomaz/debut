@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import {
-  Button,
-  Columns,
-} from 'react-bulma-components'
+import Button from 'react-bulma-components/lib/components/button'
+import Columns from 'react-bulma-components/lib/components/columns'
 import debut from 'images/debut.png'
 import "./_login.scss"
 

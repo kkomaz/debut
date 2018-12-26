@@ -3,7 +3,6 @@ import { UserSession } from 'blockstack'
 import { appConfig } from 'utils/constants'
 import Login from 'components/Login'
 import RootRoute from 'pages/route'
-import Button from 'react-bulma-components/lib/components/button'
 import 'stylesheets/main.scss'
 
 class App extends Component {
@@ -29,9 +28,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Button color="primary">
-          Primary
-        </Button>
         {
           userSession.isUserSignedIn() ?
           <RootRoute userSession={userSession} /> :

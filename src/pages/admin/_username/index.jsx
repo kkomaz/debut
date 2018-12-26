@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import { UserContext } from 'components/User/UserProvider'
-import {
-  Button,
-  Card,
-  Content,
-  Media,
-  Image,
-  Heading,
-  Columns,
-} from 'react-bulma-components'
+import Button from 'react-bulma-components/lib/components/button'
+import Card from 'react-bulma-components/lib/components/card'
+import Columns from 'react-bulma-components/lib/components/columns'
+import Content from 'react-bulma-components/lib/components/content'
+import Media from 'react-bulma-components/lib/components/media'
+import Image from 'react-bulma-components/lib/components/image'
+import Heading from 'react-bulma-components/lib/components/heading'
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
 
@@ -79,7 +77,7 @@ class AdminUsernamePage extends Component {
             </Media.Item>
           </Media>
           <Content>
-            <Columns className="mt-one">
+            <Columns className="mt-one" gapless>
               <Columns.Column size={6}>
                 1st Half
               </Columns.Column>

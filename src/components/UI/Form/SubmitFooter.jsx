@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from 'react-bulma-components'
+import Button from 'react-bulma-components/lib/components/button'
 import './stylesheets/_submit-footer.scss'
 
 class SubmitFooter extends Component {

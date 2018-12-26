@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Container } from 'react-bulma-components'
+import Container from 'react-bulma-components/lib/components/container'
 import UserProvider from 'components/User/UserProvider'
 import AdminUsernameRoute from 'pages/admin/_username/route'
 import RootPage from 'pages'
