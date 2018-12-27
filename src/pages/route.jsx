@@ -1,16 +1,22 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import Container from 'react-bulma-components/lib/components/container'
 import UserProvider from 'components/User/UserProvider'
 import AdminUsernameRoute from 'pages/admin/_username/route'
 import RootPage from 'pages'
 import UsernamePage from 'pages/username'
 import Navbar from 'components/Navbar'
+import { requestBlockstackApps } from 'actions/blockstack'
 
 class Routes extends Component {
   static propTypes = {
     userSession: PropTypes.object.isRequired
+  }
+
+  componentDidMount() {
+    this.props.requestBlockstackApps()
   }
 
   render() {
@@ -42,4 +48,6 @@ class Routes extends Component {
   }
 }
 
-export default Routes
+export default connect(null, {
+  requestBlockstackApps
+})(Routes)

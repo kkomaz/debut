@@ -33,7 +33,6 @@ class Login extends Component {
               <Button
                 color="primary"
                 onClick={this.signIn}
-                disabled
                 >
                 Sign in with Blockstack
               </Button>
