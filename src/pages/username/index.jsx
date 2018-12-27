@@ -71,7 +71,7 @@ class UsernamePage extends Component {
                     {
                       _.map((userInfo.apps), (app) => {
                         return (
-                          <li>
+                          <li key={app}>
                             <a href={app}>{app}</a>
                           </li>
                         )

@@ -4,13 +4,26 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App';
 import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from './reducers'
 
-const createStoreWithMiddleware = applyMiddleware()(createStore)
+// const createStoreWithMiddleware = applyMiddleware()(createStore)
+
+const configureStore = (initialState) => {
+  const store = createStore(
+    reducers,
+    initialState,
+    compose(
+      applyMiddleware(),
+      window.devToolsExtension ? window.devToolsExtension() : f => f
+    ),
+  )
+
+  return store
+}
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={configureStore()}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
