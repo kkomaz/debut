@@ -1,7 +1,8 @@
-import { REQUEST_ALL_USERS } from 'actions'
-import { takeEvery } from 'redux-saga/effects'
-import fetchAllUsers from './user/fetchAllUsers'
+import { fork } from 'redux-saga/effects'
+import userSaga from 'sagas/user'
 
 export default function* rootSaga() {
-  yield takeEvery(REQUEST_ALL_USERS, fetchAllUsers)
+  yield [
+    fork(userSaga)
+  ]
 }

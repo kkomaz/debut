@@ -21,7 +21,7 @@ class Login extends Component {
     const { loadingUser } = this.state;
 
     return (
-      <Columns className="login">
+      <Columns className="login" gapless>
         <Columns.Column className="login-column-left" size={6}>
         </Columns.Column>
 
@@ -33,6 +33,7 @@ class Login extends Component {
               <Button
                 color="primary"
                 onClick={this.signIn}
+                disabled
                 >
                 Sign in with Blockstack
               </Button>
