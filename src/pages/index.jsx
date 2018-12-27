@@ -4,6 +4,7 @@ import axios from 'axios'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Table from 'react-bulma-components/lib/components/table'
+import requestAllUsers from 'actions/user/requestAllUsers'
 import './stylesheets/_root.scss'
 
 class RootPage extends Component {
@@ -15,6 +16,8 @@ class RootPage extends Component {
     try {
       const { data } = await axios.get('https://debut-3fcee.firebaseio.com/users.json')
       const users = []
+
+      await this.props.requestAllUsers()
 
       for (const key in data) {
         users.push({ ...data[key], id: key })
@@ -63,4 +66,6 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(RootPage))
+export default withRouter(connect(mapStateToProps, {
+  requestAllUsers,
+})(RootPage))
