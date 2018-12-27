@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import axios from 'axios'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
 import Table from 'react-bulma-components/lib/components/table'
 import './stylesheets/_root.scss'
 
@@ -37,13 +38,14 @@ class RootPage extends Component {
 
   render() {
     const { users } = this.state
+    console.log(this.props)
     return (
       <div className="root-page">
         <Table>
           <tbody>
             {
               _.map(users, (user) => {
-                return <tr className="username-table-row" onClick={() => this.onBoxClick(user)}>
+                return <tr key={user} className="username-table-row" onClick={() => this.onBoxClick(user)}>
                   <td>{user.username} has joined debut!</td>
                 </tr>
               })
@@ -55,4 +57,10 @@ class RootPage extends Component {
   }
 }
 
-export default withRouter(RootPage)
+const mapStateToProps = (state) => {
+  return {
+    users: state.user.users
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(RootPage))

@@ -1,20 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
-import App from './App';
-import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware, compose } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import App from './App';
+import * as serviceWorker from './serviceWorker'
 import reducers from './reducers'
+import mySaga from './sagas'
 
-// const createStoreWithMiddleware = applyMiddleware()(createStore)
+const sagaMiddleware = createSagaMiddleware()
 
 const configureStore = (initialState) => {
   const store = createStore(
     reducers,
     initialState,
     compose(
-      applyMiddleware(),
+      applyMiddleware(sagaMiddleware),
       window.devToolsExtension ? window.devToolsExtension() : f => f
     ),
   )
@@ -22,8 +24,11 @@ const configureStore = (initialState) => {
   return store
 }
 
+const store = configureStore()
+sagaMiddleware.run(mySaga)
+
 ReactDOM.render(
-  <Provider store={configureStore()}>
+  <Provider store={store}>
     <BrowserRouter>
       <App />
     </BrowserRouter>
