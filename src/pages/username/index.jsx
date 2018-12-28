@@ -8,6 +8,7 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import _ from 'lodash'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
+import { returnFilteredUrls } from 'utils/apps'
 
 class UsernamePage extends Component {
   state = {
@@ -31,12 +32,14 @@ class UsernamePage extends Component {
       return v
     })
 
+    const filteredDapps = returnFilteredUrls(apps)
+
     this.setState({
       userInfo: {
         description: JSON.parse(result).description,
         profile,
         username,
-        apps
+        apps: filteredDapps,
       },
       loading: false
     })

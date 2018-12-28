@@ -9,7 +9,6 @@ class SubmitFooter extends Component {
         <Button
           onClick={this.props.onCancel}
           className="mr-half"
-          type="submit"
         >
           Cancel
         </Button>

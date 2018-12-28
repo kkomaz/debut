@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 import Button from 'react-bulma-components/lib/components/button'
 import Card from 'react-bulma-components/lib/components/card'
@@ -9,11 +10,13 @@ import Image from 'react-bulma-components/lib/components/image'
 import Heading from 'react-bulma-components/lib/components/heading'
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
+import { returnFilteredUrls } from 'utils/apps'
 
 class AdminUsernamePage extends Component {
   state = {
     userInfo: {
       description: '',
+      apps: [],
     },
     loading: true,
     displayView: true,
@@ -33,7 +36,18 @@ class AdminUsernamePage extends Component {
       if (!response) {
         throw new Error('File does not exist')
       }
-      this.setState({ userInfo: JSON.parse(response) || '', loading: false, fileExists: true })
+
+      const apps = _.map(userData.profile.apps, (k,v) => {
+        return v
+      })
+
+      const filteredDapps = returnFilteredUrls(apps)
+
+      this.setState({
+        userInfo: { ...JSON.parse(response) || {}, apps: filteredDapps },
+        loading: false,
+        fileExists: true,
+      })
     } catch (e) {
       this.setState({ loading: false })
     }
@@ -58,6 +72,10 @@ class AdminUsernamePage extends Component {
     })
   }
 
+  onCancel = () => {
+    this.setState({ displayView: true })
+  }
+
   render() {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { loading, userInfo, displayView, fileExists } = this.state
@@ -79,7 +97,18 @@ class AdminUsernamePage extends Component {
           <Content>
             <Columns className="mt-one" gapless>
               <Columns.Column size={6}>
-                1st Half
+                <h4>My Apps</h4>
+                <ul>
+                  {
+                    _.map((userInfo.apps), (app) => {
+                      return (
+                        <li key={app}>
+                          <a href={app}>{app}</a>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
               </Columns.Column>
               <Columns.Column size={6}>
                 {
@@ -104,6 +133,7 @@ class AdminUsernamePage extends Component {
                       <UserIntroForm
                         description={userInfo.description}
                         fileExists={fileExists}
+                        onCancel={this.onCancel}
                         onSubmit={this.onSubmit}
                         identityAddress={userData.identityAddress}
                         userSession={userSession}

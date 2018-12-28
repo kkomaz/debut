@@ -23,6 +23,7 @@ class UserIntroForm extends Component {
   static propTypes = {
     description: PropTypes.string,
     fileExists: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func,
     onSubmit: PropTypes.func,
     identityAddress: PropTypes.string.isRequired,
     userSession: PropTypes.object.isRequired,
@@ -36,7 +37,7 @@ class UserIntroForm extends Component {
 
   onCancel = (e) => {
     e.preventDefault()
-    console.log('canceling')
+    this.props.onCancel()
   }
 
   onSubmit = async (e) => {
@@ -108,7 +109,8 @@ class UserIntroForm extends Component {
 
 UserIntroForm.defaultProps = {
   description: '',
-  onSubmit: _.noop
+  onSubmit: _.noop,
+  onCancel: _.noop,
 }
 
 export default UserIntroForm
