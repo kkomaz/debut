@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Container from 'react-bulma-components/lib/components/container'
@@ -16,7 +16,7 @@ class Routes extends Component {
   }
 
   componentDidMount() {
-    this.props.requestBlockstackApps()
+    // this.props.requestBlockstackApps()
   }
 
   render() {
@@ -48,6 +48,8 @@ class Routes extends Component {
   }
 }
 
-export default connect(null, {
+// export default Routes
+
+export default withRouter(connect(null, {
   requestBlockstackApps
-})(Routes)
+})(Routes))
