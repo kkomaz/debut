@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import Card from 'react-bulma-components/lib/components/card'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Content from 'react-bulma-components/lib/components/content'
@@ -11,29 +10,8 @@ import Heading from 'react-bulma-components/lib/components/heading'
 import _ from 'lodash'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
-import { returnFilteredUrls } from 'utils/apps'
-
-async function fetchUserBlockstackApps(blockstackDapps, userDapps) {
-  const promises = _.map(userDapps, async (userDapp) => {
-    const blockstackApp = _.find(blockstackDapps, (bDapp) => bDapp.url === userDapp)
-
-    if (blockstackApp) {
-      return blockstackApp
-    } else {
-      try {
-        const { data } = await axios.get(`${userDapp}/manifest.json`)
-        await axios.post('https://debut-3fcee.firebaseio.com/dapps.json', {...data, url: userDapp })
-        return {...data, url: userDapp }
-      } catch (e) {
-        console.log(e.message)
-      }
-    }
-  })
-
-  const results = await Promise.all(promises)
-
-  return _.compact(results)
-}
+import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
+import IconList from 'components/icon/List'
 
 class UsernamePage extends Component {
   state = {
@@ -101,19 +79,7 @@ class UsernamePage extends Component {
             <Columns className="mt-one" gapless>
               <Columns.Column size={6}>
                 <h4>My Apps</h4>
-                <ul style={{ display: 'flex', flexWrap: 'wrap', paddingLeft: '0', marginLeft: '0', width: '50%' }}>
-                  {
-                    _.map(userInfo.apps, (app) => {
-                      return (
-                        <li style={{ marginRight: '10px' }}>
-                          <a href={app.url} target="_blank" rel='noreferrer noopener'>
-                            <img src={app.icons[0].src} alt="dapp" height="42" width="42" />
-                          </a>
-                        </li>
-                      )
-                    })
-                  }
-                </ul>
+                <IconList apps={userInfo.apps} />
               </Columns.Column>
               <Columns.Column size={6}>
                 <h4>About Myself</h4>

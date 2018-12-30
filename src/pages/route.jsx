@@ -20,7 +20,11 @@ class Routes extends Component {
   }
 
   render() {
-    const { userSession } = this.props
+    const { userSession, blockstackAppsLoading } = this.props
+
+    if (blockstackAppsLoading) {
+      return <div>Loading...</div>
+    }
 
     return (
       <UserProvider userSession={userSession}>
@@ -48,6 +52,13 @@ class Routes extends Component {
   }
 }
 
-export default withRouter(connect(null, {
+const mapStateToProps = (state) => {
+  return {
+    blockstackAppsLoading: state.blockstack.loading
+  }
+}
+
+
+export default withRouter(connect(mapStateToProps, {
   requestBlockstackApps
 })(Routes))

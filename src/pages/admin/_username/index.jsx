@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import { UserContext } from 'components/User/UserProvider'
 import Button from 'react-bulma-components/lib/components/button'
 import Card from 'react-bulma-components/lib/components/card'
@@ -10,7 +11,8 @@ import Image from 'react-bulma-components/lib/components/image'
 import Heading from 'react-bulma-components/lib/components/heading'
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
-import { returnFilteredUrls } from 'utils/apps'
+import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
+import IconList from 'components/icon/List'
 
 class AdminUsernamePage extends Component {
   state = {
@@ -30,6 +32,9 @@ class AdminUsernamePage extends Component {
   async loadUserInfo() {
     const options = { decrypt: false }
     const { userSession, userData } = this.context.state.sessionUser
+    const { blockstackApps } = this.props
+
+    console.log('show blockstack aPP', blockstackApps)
 
     try {
       const response = await userSession.getFile(`user-intro-${userData.identityAddress}.json`, options)
@@ -43,8 +48,13 @@ class AdminUsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
 
+      const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
+
       this.setState({
-        userInfo: { ...JSON.parse(response) || {}, apps: filteredDapps },
+        userInfo: {
+          ...JSON.parse(response) || {},
+          apps: userDapps
+        },
         loading: false,
         fileExists: true,
       })
@@ -98,17 +108,7 @@ class AdminUsernamePage extends Component {
             <Columns className="mt-one" gapless>
               <Columns.Column size={6}>
                 <h4>My Apps</h4>
-                <ul>
-                  {
-                    _.map((userInfo.apps), (app) => {
-                      return (
-                        <li key={app}>
-                          <a href={app}>{app}</a>
-                        </li>
-                      )
-                    })
-                  }
-                </ul>
+                <IconList apps={userInfo.apps} />
               </Columns.Column>
               <Columns.Column size={6}>
                 {
@@ -151,5 +151,11 @@ class AdminUsernamePage extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    blockstackApps: state.blockstack.apps
+  }
+}
+
 AdminUsernamePage.contextType = UserContext
-export default AdminUsernamePage
+export default connect(mapStateToProps)(AdminUsernamePage)

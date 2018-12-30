@@ -6,7 +6,7 @@ const returnFilteredUrls = (userDapps) => {
 
 const removeTestUrls = (dapps) => {
   return _.filter(dapps, (dapp) => {
-    return !dapp.includes('localhost') && !dapp.includes('netlify')
+    return !dapp.includes('localhost') && !dapp.includes('netlify') && !dapp.includes('ykliao')
   })
 }
 
