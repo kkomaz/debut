@@ -34,8 +34,6 @@ class AdminUsernamePage extends Component {
     const { userSession, userData } = this.context.state.sessionUser
     const { blockstackApps } = this.props
 
-    console.log('show blockstack aPP', blockstackApps)
-
     try {
       const response = await userSession.getFile(`user-intro-${userData.identityAddress}.json`, options)
       if (!response) {
