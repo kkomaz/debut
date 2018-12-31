@@ -21,7 +21,7 @@ class Login extends Component {
     const { loadingUser } = this.state;
 
     return (
-      <Columns className="login" gapless>
+      <Columns className="login">
         <Columns.Column className="login-column-left" size={6}>
         </Columns.Column>
 

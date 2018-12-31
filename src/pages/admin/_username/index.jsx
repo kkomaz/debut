@@ -105,7 +105,7 @@ class AdminUsernamePage extends Component {
             </Media.Item>
           </Media>
           <Content>
-            <Columns className="mt-one" gapless>
+            <Columns className="mt-one">
               <Columns.Column size={6}>
                 <h4>My Apps</h4>
                 <IconList apps={userInfo.apps} />
