@@ -62,7 +62,7 @@ class UserIntroForm extends Component {
       username
     } = this.props
 
-    const result = await axios.post('https://debut-3fcee.firebaseio.com/users.json', { blockstackId: identityAddress, username })
+    const result = await axios.post('/users.json', { blockstackId: identityAddress, username })
 
     const blockstackData = {
       description,

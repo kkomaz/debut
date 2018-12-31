@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios'
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
@@ -24,8 +25,16 @@ const configureStore = (initialState) => {
   return store
 }
 
+const setAxiosHeaders = () => {
+  axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_DEV : process.env.REACT_APP_API_URL_PROD
+  axios.defaults.headers.common['Content-Type'] = 'application/json'
+  axios.defaults.headers.common.Accept = 'application/json'
+  axios.defaults.headers.Pragma = 'no-cache'
+}
+
 const store = configureStore()
 sagaMiddleware.run(mySaga)
+setAxiosHeaders()
 
 ReactDOM.render(
   <Provider store={store}>

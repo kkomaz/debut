@@ -4,7 +4,7 @@ import { FETCH_BLOCKSTACK_APPS_SUCCESS, FETCH_BLOCKSTACK_APPS_FAIL } from 'actio
 import { convertObjsToList } from 'utils/firebase'
 
 const fetchBlockstackApps = (action) => {
-  return axios.get('https://debut-3fcee.firebaseio.com/dapps.json')
+  return axios.get('/dapps.json')
 }
 
 function* fetchBlockstackAppsSaga(action) {

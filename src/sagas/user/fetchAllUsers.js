@@ -4,7 +4,7 @@ import { FETCH_ALL_USERS_SUCCESS, FETCH_ALL_USERS_FAIL } from 'actions'
 import { convertObjsToList } from 'utils/firebase'
 
 const fetchAllUsers = (action) => {
-  return axios.get('https://debut-3fcee.firebaseio.com/users.json')
+  return axios.get('/users.json')
 }
 
 function* fetchAllUsersSaga(action) {
