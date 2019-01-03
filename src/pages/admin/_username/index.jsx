@@ -84,16 +84,21 @@ class AdminUsernamePage extends Component {
     this.setState({ displayView: true })
   }
 
+  addDefaultSrc = (evt) => {
+    evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
+  }
+
   render() {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { loading, userInfo, displayView, fileExists } = this.state
+    const src = _.get(userData, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
 
     return (
       <Card className="admin-username-page">
         <Card.Content>
           <Media>
             <Media.Item renderAs="figure" position="left">
-              <Image renderAs="p" size={64} alt="64x64" src={userData.profile.image[0].contentUrl} />
+              <Image onError={this.addDefaultSrc} renderAs="p" size={64} alt="64x64" src={src} />
             </Media.Item>
             <Media.Item>
               <Heading size={4}>{userData.profile.name}</Heading>

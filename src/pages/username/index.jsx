@@ -33,7 +33,7 @@ class UsernamePage extends Component {
   async loadUserInfo(profile) {
     const { userSession } = this.context.state.sessionUser
     const { location, username, blockstackApps } = this.props
-    const options = { decrypt: false }
+    const options = { decrypt: false, username }
     const result = await userSession.getFile(`user-intro-${location.state.identityAddress}.json`, options)
     const apps = _.map((profile.apps), (k,v) => {
       return v
