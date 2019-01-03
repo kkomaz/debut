@@ -61,12 +61,14 @@ class UsernamePage extends Component {
       return <div>Loading...</div>
     }
 
+    const src = _.get(userInfo, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
+
     return (
       <Card className="admin-username-page">
         <Card.Content>
           <Media>
             <Media.Item renderAs="figure" position="left">
-              <Image style={{ margin: 0 }} renderAs="p" size={64} alt="64x64" src={userInfo.profile.image[0].contentUrl} />
+              <Image style={{ margin: 0 }} renderAs="p" size={64} alt="64x64" src={src} />
             </Media.Item>
             <Media.Item>
               <Heading size={4}>{userInfo.profile.name}</Heading>
