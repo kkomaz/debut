@@ -13,12 +13,14 @@ class NavbarComp extends Component {
 
   goToHome = () => {
     const { history } = this.props
+    this.toggleNavbar()
     history.push('/')
   }
 
   goToProfile = () => {
     const { history } = this.props
     const { sessionUser } = this.context.state
+    this.toggleNavbar()
     history.push(`/admin/${sessionUser.username}`)
   }
 
@@ -26,6 +28,10 @@ class NavbarComp extends Component {
     const { sessionUser } = this.context.state
     sessionUser.userSession.signUserOut()
     window.location = '/'
+  }
+
+  toggleNavbar = () => {
+    this.setState({ open: !this.state.open })
   }
 
   render() {
