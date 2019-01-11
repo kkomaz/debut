@@ -7,6 +7,7 @@ import Content from 'react-bulma-components/lib/components/content'
 import Media from 'react-bulma-components/lib/components/media'
 import Image from 'react-bulma-components/lib/components/image'
 import Heading from 'react-bulma-components/lib/components/heading'
+import Button from 'react-bulma-components/lib/components/button'
 import _ from 'lodash'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
@@ -54,8 +55,40 @@ class UsernamePage extends Component {
     })
   }
 
+  followUser = async () => {
+    const { username } = this.props
+    const { sessionUser } = this.context.state
+    const { setSessionUserState } = this.context
+    const options = { encrypt: false }
+
+    const params = [...sessionUser.following, username]
+
+    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
+
+    setSessionUserState('following', params)
+  }
+
+  unfollowUser = async () => {
+    const { username } = this.props
+    const { sessionUser } = this.context.state
+    const { setSessionUserState } = this.context
+    const options = { encrypt: false }
+
+    const params = _.filter(sessionUser.following, (user) => {
+      return user !== username
+    })
+
+    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
+
+    setSessionUserState('following', params)
+  }
+
   render() {
     const { userInfo, loading } = this.state
+    const { sessionUser } = this.context.state
+    const { username } = this.props
+
+    console.log(sessionUser)
 
     if (loading) {
       return <div>Loading...</div>
@@ -75,6 +108,19 @@ class UsernamePage extends Component {
               <Heading subtitle size={6}>
                 {userInfo.username}
               </Heading>
+              {
+                _.includes(sessionUser.following, username) ?
+                <Button
+                  onClick={this.unfollowUser}
+                >
+                  Unfollow
+                </Button> :
+                <Button
+                  onClick={this.followUser}
+                >
+                  Follow
+                </Button>
+              }
             </Media.Item>
           </Media>
           <Content>
