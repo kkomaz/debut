@@ -15,7 +15,8 @@ class UserProvider extends Component {
         userData,
         username: userData.username,
         following: [],
-      }
+      },
+      defaultImgUrl: 'https://i.imgur.com/w1ur3Lq.jpg'
     }
   }
 

@@ -57,11 +57,17 @@ class UsernamePage extends Component {
 
   followUser = async () => {
     const { username } = this.props
-    const { sessionUser } = this.context.state
+    const { sessionUser, defaultImgUrl } = this.context.state
     const { setSessionUserState } = this.context
-    const options = { encrypt: false }
+    const { userInfo } = this.state
 
-    const params = [...sessionUser.following, username]
+    const options = { encrypt: false }
+    const user = {
+      username,
+      imageUrl: _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+    }
+
+    const params = [...sessionUser.following, user]
 
     await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
 
@@ -75,7 +81,7 @@ class UsernamePage extends Component {
     const options = { encrypt: false }
 
     const params = _.filter(sessionUser.following, (user) => {
-      return user !== username
+      return user.username !== username
     })
 
     await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
@@ -85,16 +91,16 @@ class UsernamePage extends Component {
 
   render() {
     const { userInfo, loading } = this.state
-    const { sessionUser } = this.context.state
+    const { sessionUser, defaultImgUrl } = this.context.state
     const { username } = this.props
-
-    console.log(sessionUser)
 
     if (loading) {
       return <div>Loading...</div>
     }
 
-    const src = _.get(userInfo, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
+    const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+
+    console.log(sessionUser)
 
     return (
       <Card className="admin-username-page">
@@ -108,22 +114,24 @@ class UsernamePage extends Component {
               <Heading subtitle size={6}>
                 {userInfo.username}
               </Heading>
-              {
-                _.includes(sessionUser.following, username) ?
-                <Button
-                  onClick={this.unfollowUser}
-                >
-                  Unfollow
-                </Button> :
-                <Button
-                  onClick={this.followUser}
-                >
-                  Follow
-                </Button>
-              }
             </Media.Item>
           </Media>
           <Content>
+            {
+              _.find(sessionUser.following, (user) => user.username === username) ?
+              <Button
+                className="mt-one"
+                onClick={this.unfollowUser}
+                >
+                Unfollow
+              </Button> :
+              <Button
+                className="mt-one"
+                onClick={this.followUser}
+                >
+                Follow
+              </Button>
+            }
             <Columns className="mt-one">
               <Columns.Column size={6}>
                 <h4>My Apps</h4>
