@@ -9,6 +9,7 @@ class IconList extends Component {
 
   render() {
     const { apps } = this.props
+
     return (
       <ul className="icon-list">
         {

@@ -43,6 +43,7 @@ class UsernamePage extends Component {
     const filteredDapps = returnFilteredUrls(apps)
 
     const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
+    const following = await userSession.getFile(`users-following-${username}.json`, options)
 
     this.setState({
       userInfo: {
@@ -50,6 +51,7 @@ class UsernamePage extends Component {
         profile,
         username,
         apps: userDapps,
+        following: JSON.parse(following)
       },
       loading: false
     })
@@ -100,10 +102,10 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log(sessionUser)
+    console.log(userInfo)
 
     return (
-      <Card className="admin-username-page">
+      <Card className="username-page">
         <Card.Content>
           <Media>
             <Media.Item renderAs="figure" position="left">
@@ -141,6 +143,16 @@ class UsernamePage extends Component {
                 <h4>About Myself</h4>
                 {userInfo.description}
               </Columns.Column>
+            </Columns>
+            <Columns className="mt-one">
+              <h4>Following</h4>
+              <ul>
+                {
+                  _.map(userInfo.following, (user) => {
+                    return <li key={user.username}>{user.username}</li>
+                  })
+                }
+              </ul>
             </Columns>
           </Content>
         </Card.Content>
