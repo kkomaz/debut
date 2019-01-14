@@ -37,10 +37,14 @@ class AdminUsernamePage extends Component {
     const { blockstackApps } = this.props
 
     try {
-      const response = await userSession.getFile(`user-intro-${userData.identityAddress}.json`, options)
-      if (!response) {
-        throw new Error('File does not exist')
+      let result
+
+      result = await userSession.getFile(`user-intro-${username}.json`, options)
+
+      if (!result) {
+        result = await userSession.getFile(`user-intro-${userData.identityAddress}.json`, options)
       }
+
 
       const apps = _.map(userData.profile.apps, (k,v) => {
         return v
@@ -54,7 +58,7 @@ class AdminUsernamePage extends Component {
 
       this.setState({
         userInfo: {
-          ...JSON.parse(response) || {},
+          ...JSON.parse(result) || {},
           apps: userDapps,
           following: JSON.parse(following)
         },
@@ -78,9 +82,7 @@ class AdminUsernamePage extends Component {
     const { description } = data
 
     this.setState({
-      userInfo: {
-        description,
-      },
+      userInfo: { ...this.state.userInfo, description },
       displayView: true
     })
   }
@@ -97,6 +99,9 @@ class AdminUsernamePage extends Component {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { loading, userInfo, displayView, fileExists } = this.state
     const { history } = this.props
+
+    console.log(userInfo)
+
     const src = _.get(userData, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
     return (
       <Card className="admin-username-page">

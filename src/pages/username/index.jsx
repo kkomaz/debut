@@ -15,6 +15,7 @@ import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import IconList from 'components/icon/List'
 import UserList from 'components/icon/UserList'
 import { withRouter } from 'react-router-dom'
+import UserIntroDisplay from 'components/User/IntroDisplay'
 
 class UsernamePage extends Component {
   state = {
@@ -162,7 +163,7 @@ class UsernamePage extends Component {
               </Columns.Column>
               <Columns.Column size={6}>
                 <h4>About Myself</h4>
-                {userInfo.description}
+                <UserIntroDisplay description={userInfo.description} />
               </Columns.Column>
               <Columns.Column size={6}>
                 <h4>Following</h4>
