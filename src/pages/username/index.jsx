@@ -26,6 +26,7 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
+    console.log('did mount')
     const { username } = this.props
     const user = await lookupProfile(username)
     if (user) {
@@ -34,10 +35,14 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
+    console.log('did update')
     const { username } = this.props
-    const user = await lookupProfile(username)
-    if (user) {
-      this.loadUserInfo(user)
+
+    if (prevProps.username !== username) {
+      const user = await lookupProfile(username)
+      if (user) {
+        this.loadUserInfo(user)
+      }
     }
   }
 
@@ -45,7 +50,14 @@ class UsernamePage extends Component {
     const { userSession } = this.context.state.sessionUser
     const { username, blockstackApps, identityAddress } = this.props
     const options = { decrypt: false, username }
-    const result = await userSession.getFile(`user-intro-${identityAddress}.json`, options)
+    let result
+
+    result = await userSession.getFile(`user-intro-${username}.json`, options)
+
+    if (!result) {
+      result = await userSession.getFile(`user-intro-${identityAddress}.json`, options)
+    }
+
     const apps = _.map((profile.apps), (k,v) => {
       return v
     })

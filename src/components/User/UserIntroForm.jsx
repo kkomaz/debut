@@ -68,7 +68,7 @@ class UserIntroForm extends Component {
       description,
       firebaseId: result.data.name
     }
-    await userSession.putFile(`user-intro-${identityAddress}.json`, JSON.stringify(blockstackData), options)
+    await userSession.putFile(`user-intro-${username}.json`, JSON.stringify(blockstackData), options)
   }
 
   async editUserIndexer() {
@@ -76,13 +76,13 @@ class UserIntroForm extends Component {
     const { description } = this.state
     const {
       userSession,
-      identityAddress,
+      username,
     } = this.props
 
     const blockstackData = {
       description,
     }
-    await userSession.putFile(`user-intro-${identityAddress}.json`, JSON.stringify(blockstackData), options)
+    await userSession.putFile(`user-intro-${username}.json`, JSON.stringify(blockstackData), options)
   }
 
   render() {
