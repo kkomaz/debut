@@ -9,14 +9,17 @@ import RootPage from 'pages'
 import UsernamePage from 'pages/username'
 import Navbar from 'components/Navbar'
 import { requestBlockstackApps } from 'actions/blockstack'
+import requestAllUsers from 'actions/user/requestAllUsers'
 
 class Routes extends Component {
   static propTypes = {
-    userSession: PropTypes.object.isRequired
+    userSession: PropTypes.object.isRequired,
+    requestAllUsers: PropTypes.func.isRequired
   }
 
   componentDidMount() {
     this.props.requestBlockstackApps()
+    this.props.requestAllUsers()
   }
 
   render() {
@@ -60,5 +63,6 @@ const mapStateToProps = (state) => {
 
 
 export default withRouter(connect(mapStateToProps, {
-  requestBlockstackApps
+  requestBlockstackApps,
+  requestAllUsers,
 })(Routes))

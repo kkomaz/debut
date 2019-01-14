@@ -13,6 +13,8 @@ import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import IconList from 'components/icon/List'
+import UserList from 'components/icon/UserList'
+import { withRouter } from 'react-router-dom'
 
 class AdminUsernamePage extends Component {
   state = {
@@ -31,7 +33,7 @@ class AdminUsernamePage extends Component {
 
   async loadUserInfo() {
     const options = { decrypt: false }
-    const { userSession, userData } = this.context.state.sessionUser
+    const { userSession, userData, username } = this.context.state.sessionUser
     const { blockstackApps } = this.props
 
     try {
@@ -48,10 +50,13 @@ class AdminUsernamePage extends Component {
 
       const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
 
+      const following = await userSession.getFile(`users-following-${username}.json`, options)
+
       this.setState({
         userInfo: {
           ...JSON.parse(response) || {},
-          apps: userDapps
+          apps: userDapps,
+          following: JSON.parse(following)
         },
         loading: false,
         fileExists: true,
@@ -91,8 +96,8 @@ class AdminUsernamePage extends Component {
   render() {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { loading, userInfo, displayView, fileExists } = this.state
+    const { history } = this.props
     const src = _.get(userData, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
-
     return (
       <Card className="admin-username-page">
         <Card.Content>
@@ -146,6 +151,11 @@ class AdminUsernamePage extends Component {
                   </div>
                 }
               </Columns.Column>
+              <Columns.Column size={6}>
+                <h4>Following</h4>
+
+                <UserList users={userInfo.following} history={history} />
+              </Columns.Column>
             </Columns>
           </Content>
         </Card.Content>
@@ -161,4 +171,4 @@ const mapStateToProps = (state) => {
 }
 
 AdminUsernamePage.contextType = UserContext
-export default connect(mapStateToProps)(AdminUsernamePage)
+export default withRouter(connect(mapStateToProps)(AdminUsernamePage))

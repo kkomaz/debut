@@ -1,0 +1,16 @@
+.user-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 0;
+  padding-left: 0;
+  width: 50%;
+
+  &__single {
+    margin-right: 10px;
+    margin-bottom: 10px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

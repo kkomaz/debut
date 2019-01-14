@@ -13,6 +13,8 @@ import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import IconList from 'components/icon/List'
+import UserList from 'components/icon/UserList'
+import { withRouter } from 'react-router-dom'
 
 class UsernamePage extends Component {
   state = {
@@ -31,11 +33,19 @@ class UsernamePage extends Component {
     }
   }
 
+  async componentDidUpdate(prevProps, prevState) {
+    const { username } = this.props
+    const user = await lookupProfile(username)
+    if (user) {
+      this.loadUserInfo(user)
+    }
+  }
+
   async loadUserInfo(profile) {
     const { userSession } = this.context.state.sessionUser
-    const { location, username, blockstackApps } = this.props
+    const { username, blockstackApps, identityAddress } = this.props
     const options = { decrypt: false, username }
-    const result = await userSession.getFile(`user-intro-${location.state.identityAddress}.json`, options)
+    const result = await userSession.getFile(`user-intro-${identityAddress}.json`, options)
     const apps = _.map((profile.apps), (k,v) => {
       return v
     })
@@ -94,15 +104,13 @@ class UsernamePage extends Component {
   render() {
     const { userInfo, loading } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
-    const { username } = this.props
+    const { username, history } = this.props
 
     if (loading) {
       return <div>Loading...</div>
     }
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
-
-    console.log(userInfo)
 
     return (
       <Card className="username-page">
@@ -120,6 +128,7 @@ class UsernamePage extends Component {
           </Media>
           <Content>
             {
+              sessionUser.username === username ? null :
               _.find(sessionUser.following, (user) => user.username === username) ?
               <Button
                 className="mt-one"
@@ -143,16 +152,11 @@ class UsernamePage extends Component {
                 <h4>About Myself</h4>
                 {userInfo.description}
               </Columns.Column>
-            </Columns>
-            <Columns className="mt-one">
-              <h4>Following</h4>
-              <ul>
-                {
-                  _.map(userInfo.following, (user) => {
-                    return <li key={user.username}>{user.username}</li>
-                  })
-                }
-              </ul>
+              <Columns.Column size={6}>
+                <h4>Following</h4>
+
+                <UserList users={userInfo.following} history={history} />
+              </Columns.Column>
             </Columns>
           </Content>
         </Card.Content>
@@ -161,11 +165,14 @@ class UsernamePage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  const user = _.find(state.user.users, (user) => user.username === ownProps.username)
+
   return {
-    blockstackApps: state.blockstack.apps
+    blockstackApps: state.blockstack.apps,
+    identityAddress: _.get(user, 'blockstackId')
   }
 }
 
 UsernamePage.contextType = UserContext
-export default connect(mapStateToProps)(UsernamePage)
+export default withRouter(connect(mapStateToProps)(UsernamePage))
