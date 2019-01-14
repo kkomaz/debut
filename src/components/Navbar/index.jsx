@@ -5,7 +5,9 @@ import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 
 class NavbarComp extends Component {
-  state = { open: false }
+  state = {
+    open: false
+  }
 
   static propTypes = {
     history: PropTypes.object.isRequired,
@@ -13,7 +15,6 @@ class NavbarComp extends Component {
 
   goToHome = () => {
     const { history } = this.props
-    this.toggleNavbar()
     history.push('/')
   }
 

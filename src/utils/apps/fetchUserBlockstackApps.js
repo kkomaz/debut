@@ -10,7 +10,6 @@ async function fetchUserBlockstackApps(blockstackDapps, userDapps) {
     } else {
       try {
         const { data } = await axios.get(`${userDapp}/manifest.json`)
-        console.log(data)
         await axios.post('/dapps.json', {...data, url: userDapp })
         return {...data, url: userDapp }
       } catch (e) {

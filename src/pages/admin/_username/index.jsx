@@ -99,10 +99,8 @@ class AdminUsernamePage extends Component {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { loading, userInfo, displayView, fileExists } = this.state
     const { history } = this.props
-
-    console.log(userInfo)
-
     const src = _.get(userData, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
+
     return (
       <Card className="admin-username-page">
         <Card.Content>

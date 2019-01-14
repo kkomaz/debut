@@ -27,7 +27,6 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    console.log('did mount')
     const { username } = this.props
     const user = await lookupProfile(username)
     if (user) {
@@ -36,7 +35,6 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    console.log('did update')
     const { username } = this.props
 
     if (prevProps.username !== username) {
