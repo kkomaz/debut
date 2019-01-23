@@ -47,35 +47,38 @@ class UsernamePage extends Component {
 
   async loadUserInfo(profile) {
     const { userSession } = this.context.state.sessionUser
-    const { username, blockstackApps, identityAddress } = this.props
+    const { username, blockstackApps } = this.props
     const options = { decrypt: false, username }
-    let result
 
-    result = await userSession.getFile(`user-intro-${username}.json`, options)
+    try {
+      const result = await userSession.getFile(`user-intro-${username}.json`, options)
 
-    if (!result) {
-      result = await userSession.getFile(`user-intro-${identityAddress}.json`, options)
+      const apps = _.map((profile.apps), (k,v) => {
+        return v
+      })
+
+      const filteredDapps = returnFilteredUrls(apps)
+
+      const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
+      const following = await userSession.getFile(`users-following-${username}.json`, options)
+
+      this.setState({
+        userInfo: {
+          description: JSON.parse(result).description,
+          profile,
+          username,
+          apps: userDapps,
+          following: JSON.parse(following)
+        },
+        loading: false
+      })
+    } catch (e) {
+      console.log(e)
+
+      this.setState({
+        loading: false
+      });
     }
-
-    const apps = _.map((profile.apps), (k,v) => {
-      return v
-    })
-
-    const filteredDapps = returnFilteredUrls(apps)
-
-    const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
-    const following = await userSession.getFile(`users-following-${username}.json`, options)
-
-    this.setState({
-      userInfo: {
-        description: JSON.parse(result).description,
-        profile,
-        username,
-        apps: userDapps,
-        following: JSON.parse(following)
-      },
-      loading: false
-    })
   }
 
   followUser = async () => {

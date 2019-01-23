@@ -42,9 +42,8 @@ class AdminUsernamePage extends Component {
       result = await userSession.getFile(`user-intro-${username}.json`, options)
 
       if (!result) {
-        result = await userSession.getFile(`user-intro-${userData.identityAddress}.json`, options)
+        throw new Error('User intro data does not exist')
       }
-
 
       const apps = _.map(userData.profile.apps, (k,v) => {
         return v

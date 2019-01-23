@@ -85,6 +85,7 @@ class UserIntroForm extends Component {
     await userSession.putFile(`user-intro-${username}.json`, JSON.stringify(blockstackData), options)
   }
 
+
   render() {
     return (
       <form className="user-intro-form" onSubmit={this.onSubmit}>
