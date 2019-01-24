@@ -29,10 +29,14 @@ class Login extends Component {
           {
             loadingUser ? <div>Loading...</div> :
             <div className="login-blockstack">
+              <h4 style={{ fontWeight: 'bold' }}>
+                Under construction!  Apologize for the inconvenience!
+              </h4>
               <img src={debut} alt="Logo" />
               <Button
                 color="primary"
                 onClick={this.signIn}
+                disabled
                 >
                 Sign in with Blockstack
               </Button>
