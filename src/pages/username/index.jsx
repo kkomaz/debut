@@ -1,21 +1,28 @@
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Card from 'react-bulma-components/lib/components/card'
-import Columns from 'react-bulma-components/lib/components/columns'
-import Content from 'react-bulma-components/lib/components/content'
-import Media from 'react-bulma-components/lib/components/media'
-import Image from 'react-bulma-components/lib/components/image'
-import Heading from 'react-bulma-components/lib/components/heading'
-import Button from 'react-bulma-components/lib/components/button'
-import _ from 'lodash'
 import { lookupProfile } from 'blockstack'
-import { UserContext } from 'components/User/UserProvider'
-import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
-import IconList from 'components/icon/List'
-import UserList from 'components/icon/UserList'
 import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
+import {
+  Button,
+  Card,
+  Columns,
+  Content,
+  Heading,
+  Image,
+  Media,
+} from 'components/bulma'
+
+// Component Imports
+import { UserContext } from 'components/User/UserProvider'
+import { List, UserList } from 'components/icon';
 import UserIntroDisplay from 'components/User/IntroDisplay'
+
+// Util/Action Imports
+import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
+import { requestProfileSearch } from 'actions/blockstack'
 
 class UsernamePage extends Component {
   state = {
@@ -35,12 +42,24 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username } = this.props
+    const { username, searchedProfile, history } = this.props
+    const { loading } = this.state
 
     if (prevProps.username !== username) {
       const user = await lookupProfile(username)
       if (user) {
         this.loadUserInfo(user)
+      }
+    }
+
+    if (prevProps.searchedProfile !== searchedProfile && loading) {
+      const apps = _.map((searchedProfile.apps), (k,v) => {
+        return v
+      })
+
+      const filteredDapps = returnFilteredUrls(apps)
+      if (!_.includes(filteredDapps, 'https://debutapp_social')) {
+        history.push('/')
       }
     }
   }
@@ -52,6 +71,10 @@ class UsernamePage extends Component {
 
     try {
       const result = await userSession.getFile(`user-intro-${username}.json`, options)
+
+      if (!result) {
+        throw new Error('User does not exist')
+      }
 
       const apps = _.map((profile.apps), (k,v) => {
         return v
@@ -73,11 +96,7 @@ class UsernamePage extends Component {
         loading: false
       })
     } catch (e) {
-      console.log(e)
-
-      this.setState({
-        loading: false
-      });
+      this.requestProfileSearch()
     }
   }
 
@@ -100,6 +119,11 @@ class UsernamePage extends Component {
     setSessionUserState('following', params)
   }
 
+  requestProfileSearch = () => {
+    const { username } = this.props
+    this.props.requestProfileSearch(username)
+  }
+
   unfollowUser = async () => {
     const { username } = this.props
     const { sessionUser } = this.context.state
@@ -118,7 +142,7 @@ class UsernamePage extends Component {
   render() {
     const { userInfo, loading } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
-    const { username, history } = this.props
+    const { username, history, searchedProfile } = this.props
 
     if (loading) {
       return <div>Loading...</div>
@@ -141,6 +165,9 @@ class UsernamePage extends Component {
             </Media.Item>
           </Media>
           <Content>
+            <Button onClick={this.requestProfileSearch}>
+              Fetch Profile
+            </Button>
             {
               sessionUser.username === username ? null :
               _.find(sessionUser.following, (user) => user.username === username) ?
@@ -160,7 +187,7 @@ class UsernamePage extends Component {
             <Columns className="mt-one">
               <Columns.Column size={6}>
                 <h4>My Apps</h4>
-                <IconList apps={userInfo.apps} />
+                <List apps={userInfo.apps} />
               </Columns.Column>
               <Columns.Column size={6}>
                 <h4>About Myself</h4>
@@ -181,12 +208,16 @@ class UsernamePage extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const user = _.find(state.user.users, (user) => user.username === ownProps.username)
+  const searchedProfile = _.get(state, 'blockstack.searchedProfile', {})
 
   return {
     blockstackApps: state.blockstack.apps,
-    identityAddress: _.get(user, 'blockstackId')
+    identityAddress: _.get(user, 'blockstackId'),
+    searchedProfile,
   }
 }
 
 UsernamePage.contextType = UserContext
-export default withRouter(connect(mapStateToProps)(UsernamePage))
+export default withRouter(connect(mapStateToProps, {
+  requestProfileSearch,
+})(UsernamePage))
