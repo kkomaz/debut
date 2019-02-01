@@ -24,6 +24,7 @@ import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import { requestProfileSearch } from 'actions/blockstack'
 import toggleNotification from 'utils/notifier/toggleNotification'
+import '../stylesheets/ToastNotifier.scss'
 
 class UsernamePage extends Component {
   state = {
@@ -141,14 +142,10 @@ class UsernamePage extends Component {
     setSessionUserState('following', params)
   }
 
-  navigateAway = () => {
-    toggleNotification('error', 'this is an error')
-  }
-
   render() {
     const { userInfo, loading } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
-    const { username, history, searchedProfile } = this.props
+    const { username, history } = this.props
 
     if (loading) {
       return <div>Loading...</div>

@@ -35,7 +35,9 @@ class Routes extends Component {
       <UserProvider userSession={userSession}>
         <Navbar />
         <Container>
-          <ToastContainer />
+          <ToastContainer
+            className='toast-container'
+          />
           <Switch>
             <Route
               exact
