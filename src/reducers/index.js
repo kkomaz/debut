@@ -4,7 +4,7 @@ import blockstackReducer from './blockstackReducer'
 
 const rootReducer = combineReducers({
   user: userReducer,
-  blockstack: blockstackReducer
+  blockstack: blockstackReducer,
 });
 
 export default rootReducer;
