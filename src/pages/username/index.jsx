@@ -25,6 +25,7 @@ import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import { requestProfileSearch } from 'actions/blockstack'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import '../stylesheets/ToastNotifier.scss'
+import './UsernamePage.scss';
 
 class UsernamePage extends Component {
   state = {
@@ -154,21 +155,29 @@ class UsernamePage extends Component {
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
-      <div>
-        <Card className="username-page">
-          <Card.Content>
-            <Media>
+      <div className="username mt-two">
+        <Columns>
+          <Columns.Column size={12}>
+            <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
-                <Image style={{ margin: 0 }} renderAs="p" size={64} alt="64x64" src={src} />
+                <Image
+                  className="username__avatar"
+                  alt="100x100"
+                  renderAs="p"
+                  size={100}
+                  src={src}
+                  style={{ margin: 0 }}
+                  />
               </Media.Item>
-              <Media.Item>
-                <Heading size={4}>{userInfo.profile.name}</Heading>
-                <Heading subtitle size={6}>
-                  {userInfo.username}
-                </Heading>
-              </Media.Item>
-            </Media>
-            <Content>
+              <Media.Item
+                renderAs="p"
+                position="center"
+                style={{ alignSelf: 'center' }}
+              >
+              <Heading size={4} style={{ color: 'white' }}>{userInfo.profile.name}</Heading>
+              <Heading subtitle size={6} style={{ color: 'white' }}>
+                {userInfo.username}
+              </Heading>
               {
                 sessionUser.username === username ? null :
                 _.find(sessionUser.following, (user) => user.username === username) ?
@@ -185,24 +194,53 @@ class UsernamePage extends Component {
                   Follow
                 </Button>
               }
-              <Columns className="mt-one">
-                <Columns.Column size={6}>
-                  <h4>My Apps</h4>
-                  <List apps={userInfo.apps} />
-                </Columns.Column>
-                <Columns.Column size={6}>
-                  <h4>About Myself</h4>
-                  <UserIntroDisplay description={userInfo.description} />
-                </Columns.Column>
-                <Columns.Column size={6}>
-                  <h4>Following</h4>
+              </Media.Item>
+            </Media>
+          </Columns.Column>
+        </Columns>
 
-                  <UserList users={userInfo.following} history={history} />
-                </Columns.Column>
-              </Columns>
-            </Content>
-          </Card.Content>
-        </Card>
+        <Columns>
+          <Columns.Column size={4}>
+            <Columns>
+              <Columns.Column size={12}>
+                <Card className="username-page">
+                  <Card.Content>
+                    <Content>
+                      <Heading size={5}>My Blockstack Dapps</Heading>
+                      <List apps={userInfo.apps} />
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+              <Columns.Column size={12}>
+                <Card className="username-page">
+                  <Card.Content>
+                    <Content>
+                      <Heading size={5}>Following Users</Heading>
+
+                      <UserList users={userInfo.following} history={history} />
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+            </Columns>
+          </Columns.Column>
+
+          <Columns.Column size={8}>
+            <Columns>
+              <Columns.Column size={12}>
+                <Card className="username-page">
+                  <Card.Content>
+                    <Content>
+                      <h4>About Myself</h4>
+                      <UserIntroDisplay description={userInfo.description} />
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+            </Columns>
+          </Columns.Column>
+        </Columns>
       </div>
     )
   }

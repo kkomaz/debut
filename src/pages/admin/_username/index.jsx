@@ -96,72 +96,108 @@ class AdminUsernamePage extends Component {
 
   render() {
     const { username, userData, userSession } = this.context.state.sessionUser
+    const { defaultImgUrl } = this.context.state
     const { loading, userInfo, displayView, fileExists } = this.state
     const { history } = this.props
-    const src = _.get(userData, 'profile.image[0].contentUrl', 'https://i.imgur.com/w1ur3Lq.jpg')
+
+    const src = _.get(userData, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
-      <Card className="admin-username-page">
-        <Card.Content>
-          <Media>
-            <Media.Item renderAs="figure" position="left">
-              <Image onError={this.addDefaultSrc} renderAs="p" size={64} alt="64x64" src={src} />
-            </Media.Item>
-            <Media.Item>
-              <Heading size={4}>{userData.profile.name}</Heading>
-              <Heading subtitle size={6}>
-                {username}
-              </Heading>
-            </Media.Item>
-          </Media>
-          <Content>
-            <Columns className="mt-one">
-              <Columns.Column size={6}>
-                <h4>My Apps</h4>
-                <IconList apps={userInfo.apps} />
+      <React.Fragment>
+        <Columns>
+          <Columns.Column size={12}>
+            <Media className="username__hero">
+              <Media.Item renderAs="figure" position="left">
+                <Image
+                  className="username__avatar"
+                  alt="100x100"
+                  renderAs="p"
+                  size={100}
+                  src={src}
+                  style={{ margin: 0 }}
+                  />
+              </Media.Item>
+              <Media.Item
+                position="center"
+                style={{ alignSelf: 'center' }}
+              >
+                <Heading size={4} style={{ color: 'white' }}>{userData.profile.name}</Heading>
+                <Heading subtitle size={6} style={{ color: 'white' }}>
+                  {username}
+                </Heading>
+              </Media.Item>
+            </Media>
+          </Columns.Column>
+        </Columns>
+        <Columns>
+          <Columns.Column size={4}>
+            <Columns>
+              <Columns.Column size={12}>
+                <Card className="admin-username-page">
+                  <Card.Content>
+                    <Content>
+                      <h4>My Blockstack Dapps</h4>
+                      <IconList apps={userInfo.apps} />
+                    </Content>
+                  </Card.Content>
+                </Card>
               </Columns.Column>
-              <Columns.Column size={6}>
-                {
-                  loading ? <div>Loading...</div> :
-                  <div className="admin-username-page__info-details">
-                    <div className="admin-username-page__button-actions mb-one">
-                      {
-                        fileExists ?
-                        <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                          Edit
-                        </Button> :
-                        <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                          Create
-                        </Button>
-                      }
-                      <Button onClick={this.onShowDisplay} color="warning">
-                        Show Display
-                      </Button>
-                    </div>
-                    {
-                      displayView ? <UserIntroDisplay description={userInfo.description} /> :
-                      <UserIntroForm
-                        description={userInfo.description}
-                        fileExists={fileExists}
-                        onCancel={this.onCancel}
-                        onSubmit={this.onSubmit}
-                        identityAddress={userData.identityAddress}
-                        userSession={userSession}
-                        username={username}
-                      />
-                    }
-                  </div>
-                }
-              </Columns.Column>
-              <Columns.Column size={6}>
-                <h4>Following</h4>
-
-                <UserList users={userInfo.following} history={history} />
+              <Columns.Column size={12}>
+                <Card className="admin-username-page">
+                  <Card.Content>
+                    <Content>
+                      <Heading size={5}>Following Users</Heading>
+                      <UserList users={userInfo.following} history={history} />
+                    </Content>
+                  </Card.Content>
+                </Card>
               </Columns.Column>
             </Columns>
-          </Content>
-        </Card.Content>
-      </Card>
+          </Columns.Column>
+
+          <Columns.Column size={8}>
+            <Columns>
+              <Columns.Column size={12}>
+                <Card className="username-page">
+                  <Card.Content>
+                    <Content>
+                      <h4>About Myself</h4>
+                      {
+                        loading ? <div>Loading...</div> :
+                        <div className="admin-username-page__info-details">
+                          <div className="admin-username-page__button-actions mb-one">
+                            {
+                              fileExists ?
+                              <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                                Edit
+                              </Button> :
+                              <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                                Create
+                              </Button>
+                            }
+                          </div>
+                          {
+                            displayView ? <UserIntroDisplay description={userInfo.description} /> :
+                            <UserIntroForm
+                              description={userInfo.description}
+                              fileExists={fileExists}
+                              onCancel={this.onCancel}
+                              onSubmit={this.onSubmit}
+                              identityAddress={userData.identityAddress}
+                              userSession={userSession}
+                              username={username}
+                              />
+                          }
+                        </div>
+                      }
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+            </Columns>
+          </Columns.Column>
+        </Columns>
+      </React.Fragment>
     )
   }
 }

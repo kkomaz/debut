@@ -1,0 +1,25 @@
+@import 'src/_variables.sass';
+
+.username {
+  &__avatar {
+    img {
+      border: 10px solid $dark;
+      border-radius: 50%;
+      height: 200px;
+      width: auto;
+    }
+  }
+
+  &__hero {
+    background: $primary;
+    color: white;
+    padding: 20px;
+  }
+
+  &__profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
