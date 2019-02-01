@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Route, withRouter } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Container from 'react-bulma-components/lib/components/container'
@@ -33,6 +35,7 @@ class Routes extends Component {
       <UserProvider userSession={userSession}>
         <Navbar />
         <Container>
+          <ToastContainer />
           <Switch>
             <Route
               exact

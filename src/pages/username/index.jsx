@@ -23,6 +23,7 @@ import UserIntroDisplay from 'components/User/IntroDisplay'
 // Util/Action Imports
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import { requestProfileSearch } from 'actions/blockstack'
+import toggleNotification from 'utils/notifier/toggleNotification'
 
 class UsernamePage extends Component {
   state = {
@@ -59,6 +60,7 @@ class UsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
       if (!_.includes(filteredDapps, 'https://debutapp_social')) {
+        toggleNotification('error', 'User profile is compromised!  Blockstack team is addressing this issue!')
         history.push('/')
       }
     }
@@ -139,6 +141,10 @@ class UsernamePage extends Component {
     setSessionUserState('following', params)
   }
 
+  navigateAway = () => {
+    toggleNotification('error', 'this is an error')
+  }
+
   render() {
     const { userInfo, loading } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
@@ -151,57 +157,56 @@ class UsernamePage extends Component {
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
-      <Card className="username-page">
-        <Card.Content>
-          <Media>
-            <Media.Item renderAs="figure" position="left">
-              <Image style={{ margin: 0 }} renderAs="p" size={64} alt="64x64" src={src} />
-            </Media.Item>
-            <Media.Item>
-              <Heading size={4}>{userInfo.profile.name}</Heading>
-              <Heading subtitle size={6}>
-                {userInfo.username}
-              </Heading>
-            </Media.Item>
-          </Media>
-          <Content>
-            <Button onClick={this.requestProfileSearch}>
-              Fetch Profile
-            </Button>
-            {
-              sessionUser.username === username ? null :
-              _.find(sessionUser.following, (user) => user.username === username) ?
-              <Button
-                className="mt-one"
-                onClick={this.unfollowUser}
-                >
-                Unfollow
-              </Button> :
-              <Button
-                className="mt-one"
-                onClick={this.followUser}
-                >
-                Follow
-              </Button>
-            }
-            <Columns className="mt-one">
-              <Columns.Column size={6}>
-                <h4>My Apps</h4>
-                <List apps={userInfo.apps} />
-              </Columns.Column>
-              <Columns.Column size={6}>
-                <h4>About Myself</h4>
-                <UserIntroDisplay description={userInfo.description} />
-              </Columns.Column>
-              <Columns.Column size={6}>
-                <h4>Following</h4>
+      <div>
+        <Card className="username-page">
+          <Card.Content>
+            <Media>
+              <Media.Item renderAs="figure" position="left">
+                <Image style={{ margin: 0 }} renderAs="p" size={64} alt="64x64" src={src} />
+              </Media.Item>
+              <Media.Item>
+                <Heading size={4}>{userInfo.profile.name}</Heading>
+                <Heading subtitle size={6}>
+                  {userInfo.username}
+                </Heading>
+              </Media.Item>
+            </Media>
+            <Content>
+              {
+                sessionUser.username === username ? null :
+                _.find(sessionUser.following, (user) => user.username === username) ?
+                <Button
+                  className="mt-one"
+                  onClick={this.unfollowUser}
+                  >
+                  Unfollow
+                </Button> :
+                <Button
+                  className="mt-one"
+                  onClick={this.followUser}
+                  >
+                  Follow
+                </Button>
+              }
+              <Columns className="mt-one">
+                <Columns.Column size={6}>
+                  <h4>My Apps</h4>
+                  <List apps={userInfo.apps} />
+                </Columns.Column>
+                <Columns.Column size={6}>
+                  <h4>About Myself</h4>
+                  <UserIntroDisplay description={userInfo.description} />
+                </Columns.Column>
+                <Columns.Column size={6}>
+                  <h4>Following</h4>
 
-                <UserList users={userInfo.following} history={history} />
-              </Columns.Column>
-            </Columns>
-          </Content>
-        </Card.Content>
-      </Card>
+                  <UserList users={userInfo.following} history={history} />
+                </Columns.Column>
+              </Columns>
+            </Content>
+          </Card.Content>
+        </Card>
+      </div>
     )
   }
 }
