@@ -155,7 +155,7 @@ class UsernamePage extends Component {
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
-      <div className="username mt-two">
+      <div className="username mt-one">
         <Columns>
           <Columns.Column size={12}>
             <Media className="username__hero">
@@ -206,8 +206,12 @@ class UsernamePage extends Component {
                 <Card className="username-page">
                   <Card.Content>
                     <Content>
-                      <Heading size={5}>My Blockstack Dapps</Heading>
-                      <List apps={userInfo.apps} />
+                      <Heading size={4}>My Blockstack Dapps</Heading>
+                      {
+                        userInfo.apps.length > 0 ?
+                        <List apps={userInfo.apps} /> :
+                        <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
+                      }
                     </Content>
                   </Card.Content>
                 </Card>
@@ -216,9 +220,13 @@ class UsernamePage extends Component {
                 <Card className="username-page">
                   <Card.Content>
                     <Content>
-                      <Heading size={5}>Following Users</Heading>
+                      <Heading size={4}>Following Users</Heading>
+                      {
+                        userInfo.following > 0 ?
+                        <UserList users={userInfo.following} history={history} /> :
+                        <Heading style={{ color: '#401457' }} size={6}>Not following anyone!</Heading>
 
-                      <UserList users={userInfo.following} history={history} />
+                      }
                     </Content>
                   </Card.Content>
                 </Card>

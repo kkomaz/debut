@@ -14,7 +14,7 @@ import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import IconList from 'components/icon/List'
 import UserList from 'components/icon/UserList'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 
 class AdminUsernamePage extends Component {
   state = {
@@ -102,6 +102,8 @@ class AdminUsernamePage extends Component {
 
     const src = _.get(userData, 'profile.image[0].contentUrl', defaultImgUrl)
 
+    console.log(userInfo.Following);
+
     return (
       <React.Fragment>
         <Columns>
@@ -136,8 +138,16 @@ class AdminUsernamePage extends Component {
                 <Card className="admin-username-page">
                   <Card.Content>
                     <Content>
-                      <h4>My Blockstack Dapps</h4>
-                      <IconList apps={userInfo.apps} />
+                      <Heading size={4}>My Blockstack Dapps</Heading>
+                      {
+                        userInfo.apps.length > 0 ?
+                        <IconList apps={userInfo.apps} /> :
+                        <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
+                      }
+
+                      <Heading size={6}>
+                        Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
+                      </Heading>
                     </Content>
                   </Card.Content>
                 </Card>
@@ -146,8 +156,12 @@ class AdminUsernamePage extends Component {
                 <Card className="admin-username-page">
                   <Card.Content>
                     <Content>
-                      <Heading size={5}>Following Users</Heading>
-                      <UserList users={userInfo.following} history={history} />
+                      <Heading size={4}>Following Users</Heading>
+                      {
+                        userInfo.following > 0 ?
+                        <UserList users={userInfo.following} history={history} /> :
+                        <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
+                      }
                     </Content>
                   </Card.Content>
                 </Card>
