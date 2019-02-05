@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Button from 'react-bulma-components/lib/components/button'
 import Columns from 'react-bulma-components/lib/components/columns'
-import debut from 'images/debut.png'
 import "./_login.scss"
+import logo from 'assets/debut-app-icon-text.svg'
 
 class Login extends Component {
   state = {
@@ -29,9 +29,9 @@ class Login extends Component {
           {
             loadingUser ? <div>Loading...</div> :
             <div className="login-blockstack">
-              <img src={debut} alt="Logo" />
+              <img src={logo} alt="Logo" height={250} width={250} />
               <Button
-                color="primary"
+                color="primary mt-one"
                 onClick={this.signIn}
                 >
                 Sign in with Blockstack

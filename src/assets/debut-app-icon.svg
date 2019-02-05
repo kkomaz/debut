@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150px" height="150px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>App Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="3.061617e-15%" id="linearGradient-1">
+            <stop stop-color="#401457" offset="0%"></stop>
+            <stop stop-color="#281134" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="199.920148%" x2="48.3905867%" y2="-82.537336%" id="linearGradient-2">
+            <stop stop-color="#401457" offset="0%"></stop>
+            <stop stop-color="#281134" offset="100%"></stop>
+        </linearGradient>
+        <path d="M408,169.6875 C408,152.980352 398.827083,138.549844 385.333333,130.715937 L385.333333,22.6320703 C385.333333,16.4455469 380.389167,0 362.666667,0 C357.623333,0 352.615417,1.68273437 348.514167,4.96335937 L288.284583,53.0626953 C258.031667,77.2007422 220.050833,90.5 181.333333,90.5 L45.3333333,90.5 C20.29375,90.5 0,110.756445 0,135.75 L0,203.625 C0,228.618555 20.29375,248.875 45.3333333,248.875 L69.2041667,248.875 C68.2195833,256.284688 67.66,263.821641 67.66,271.5 C67.66,299.618633 74.2191667,326.188867 85.765,349.938047 C89.44125,357.496211 97.4666667,362 105.881667,362 L158.496667,362 C176.94875,362 188.027083,340.902188 176.8425,326.2525 C165.225833,311.037188 158.319583,292.060469 158.319583,271.5 C158.319583,263.644883 159.467083,256.093789 161.443333,248.875 L181.333333,248.875 C220.050833,248.875 258.031667,262.174258 288.2775,286.312305 L348.507083,334.411641 C352.524138,337.620289 357.514675,339.370497 362.659583,339.375 C380.31125,339.375 385.32625,323.268828 385.32625,316.75 L385.32625,208.666133 C398.827083,200.825156 408,186.394648 408,169.6875 Z M340,269.675859 L316.589583,250.981953 C278.339583,220.438203 230.293333,203.625 181.333333,203.625 L181.333333,135.75 C230.293333,135.75 278.339583,118.936797 316.589583,88.3930469 L340,69.6991406 L340,269.675859 Z" id="path-3"></path>
+        <filter x="-0.6%" y="-0.7%" width="101.2%" height="101.4%" filterUnits="objectBoundingBox" id="filter-4">
+            <feGaussianBlur stdDeviation="1.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="2" dy="2" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="App-Icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="url(#linearGradient-1)" fill-rule="nonzero" x="0" y="0" width="1024" height="1024" rx="144"></rect>
+        <g id="Group" transform="translate(194.000000, 225.000000)" fill-rule="nonzero">
+            <rect id="Rectangle" fill="#518DCA" x="122" y="29" width="514" height="513" rx="93"></rect>
+            <rect id="Rectangle-Copy" fill="#EA1D64" x="0" y="61" width="514" height="513" rx="93"></rect>
+            <rect id="Rectangle-Copy-4" fill="#FFFFFF" x="61" y="0" width="514" height="513" rx="93"></rect>
+            <g id="bullhorn" transform="translate(114.000000, 75.000000)">
+                <g id="Shape">
+                    <use fill="url(#linearGradient-2)" xlink:href="#path-3"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
