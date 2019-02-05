@@ -210,7 +210,7 @@ class UsernamePage extends Component {
                     <Content>
                       <Heading size={4}>My Blockstack Dapps</Heading>
                       {
-                        userInfo.apps.length > 0 ?
+                        _.get(userInfo, 'apps.length', 0) > 0 ?
                         <List apps={userInfo.apps} /> :
                         <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                       }
@@ -224,7 +224,7 @@ class UsernamePage extends Component {
                     <Content>
                       <Heading size={4}>Following Users</Heading>
                       {
-                        userInfo.following.length > 0 ?
+                        _.get(userInfo, 'following.length', 0) > 0 ?
                         <UserList users={userInfo.following} history={history} /> :
                         <Heading style={{ color: '#401457' }} size={6}>Not following anyone!</Heading>
 

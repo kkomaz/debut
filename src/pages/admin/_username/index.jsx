@@ -142,7 +142,7 @@ class AdminUsernamePage extends Component {
                     <Content>
                       <Heading size={4}>My Blockstack Dapps</Heading>
                       {
-                        userInfo.apps.length > 0 ?
+                        _.get(userInfo, 'apps.length', 0) > 0 ?
                         <IconList apps={userInfo.apps} /> :
                         <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                       }
@@ -160,7 +160,7 @@ class AdminUsernamePage extends Component {
                     <Content>
                       <Heading size={4}>Following Users</Heading>
                       {
-                        userInfo.following.length > 0 ?
+                        _.get(userInfo, 'following.length', 0) ?
                         <UserList users={userInfo.following} history={history} /> :
                         <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
                       }
