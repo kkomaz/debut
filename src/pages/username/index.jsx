@@ -154,6 +154,8 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
+    console.log(userInfo.following)
+
     return (
       <div className="username mt-one">
         <Columns>
@@ -222,7 +224,7 @@ class UsernamePage extends Component {
                     <Content>
                       <Heading size={4}>Following Users</Heading>
                       {
-                        userInfo.following > 0 ?
+                        userInfo.following.length > 0 ?
                         <UserList users={userInfo.following} history={history} /> :
                         <Heading style={{ color: '#401457' }} size={6}>Not following anyone!</Heading>
 

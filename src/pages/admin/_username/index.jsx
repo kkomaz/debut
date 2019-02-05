@@ -160,7 +160,7 @@ class AdminUsernamePage extends Component {
                     <Content>
                       <Heading size={4}>Following Users</Heading>
                       {
-                        userInfo.following > 0 ?
+                        userInfo.following.length > 0 ?
                         <UserList users={userInfo.following} history={history} /> :
                         <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
                       }
