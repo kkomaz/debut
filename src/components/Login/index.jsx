@@ -27,7 +27,7 @@ class Login extends Component {
       <Columns className="login">
         <Columns.Column className="login__column-left" size={6}>
           <div className="login__column-left-blockstack-details">
-            <Heading size={12} style={{ color: 'white' }}>
+            <Heading size={2} style={{ color: 'white' }}>
               Debut is powered by Blockstack to help introduce yourself to the community
             </Heading>
             <Heading size={6} style={{ color: 'white'}}>
@@ -47,7 +47,8 @@ class Login extends Component {
             <div className="login-blockstack">
               <img src={logo} alt="Logo" height={250} width={250} />
               <Button
-                color="primary mt-one"
+                className="mt-one"
+                color="primary"
                 onClick={this.signIn}
                 >
                 Sign in with Blockstack
