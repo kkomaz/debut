@@ -8,7 +8,8 @@ import './stylesheets/_root.scss'
 class RootPage extends Component {
   onBoxClick = (user) => {
     const { history } = this.props
-    history.push({
+
+    return history.push({
       pathname: `/${user.username}`,
       state: {
         identityAddress: user.blockstackId

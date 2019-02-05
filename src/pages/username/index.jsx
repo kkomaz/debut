@@ -37,8 +37,15 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { username } = this.props
+    const { username, history } = this.props
+    const { sessionUser } = this.context.state
+
+    if (_.isEqual(sessionUser.username, username)) {
+      return history.push(`/admin/${username}`)
+    }
+
     const user = await lookupProfile(username)
+
     if (user) {
       this.loadUserInfo(user)
     }
