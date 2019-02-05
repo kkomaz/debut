@@ -1,4 +1,4 @@
-import Button from 'react-bulma-components/lib/components/button'
+import Button from './Button'
 import Card from 'react-bulma-components/lib/components/card'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Content from 'react-bulma-components/lib/components/content'
