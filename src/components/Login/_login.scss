@@ -3,8 +3,17 @@
 .login {
   height: 100vh;
 
-  .login-column-left {
+  &__column-left {
     background: $primary;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+  }
+
+  &__column-left-blockstack-info {
+    align-self: flex-end;
   }
 
   .login-column-right {

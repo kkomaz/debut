@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Button from 'react-bulma-components/lib/components/button'
 import Columns from 'react-bulma-components/lib/components/columns'
+import { Heading } from 'components/bulma'
 import "./_login.scss"
 import logo from 'assets/debut-app-icon-text.svg'
 
@@ -22,7 +23,20 @@ class Login extends Component {
 
     return (
       <Columns className="login">
-        <Columns.Column className="login-column-left" size={6}>
+        <Columns.Column className="login__column-left" size={6}>
+          <div className="login__column-left-blockstack-details">
+            <Heading size={12} style={{ color: 'white' }}>
+              Debut is powered by Blockstack to help introduce yourself to the community
+            </Heading>
+            <Heading size={6} style={{ color: 'white'}}>
+              Create a profile, introduce yourself, and discover other people's blockstack app's by following them!
+            </Heading>
+          </div>
+          <div className="login__column-left-blockstack-info">
+            <Heading size={6} style={{ color: 'white' }}>
+              Questions about blockstack?  Learn more about it <a href="https://blockstack.org/" rel="noopener noreferrer" target="_blank">here!</a>
+            </Heading>
+          </div>
         </Columns.Column>
 
         <Columns.Column className="login-column-right" size={6}>
