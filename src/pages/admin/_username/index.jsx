@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { UserContext } from 'components/User/UserProvider'
-import Button from 'react-bulma-components/lib/components/button'
-import Card from 'react-bulma-components/lib/components/card'
-import Columns from 'react-bulma-components/lib/components/columns'
-import Content from 'react-bulma-components/lib/components/content'
-import Media from 'react-bulma-components/lib/components/media'
-import Image from 'react-bulma-components/lib/components/image'
-import Heading from 'react-bulma-components/lib/components/heading'
+import {
+  Button,
+  Card,
+  Columns,
+  Content,
+  Media,
+  Image,
+  Heading,
+} from 'components/bulma'
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'

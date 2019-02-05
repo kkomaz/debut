@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import Button from 'react-bulma-components/lib/components/button'
-import Columns from 'react-bulma-components/lib/components/columns'
-import { Heading } from 'components/bulma'
+import {
+  Button,
+  Columns,
+  Heading,
+} from 'components/bulma'
 import "./_login.scss"
 import logo from 'assets/debut-app-icon-text.svg'
 
