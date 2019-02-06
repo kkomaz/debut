@@ -3,9 +3,9 @@ import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import Table from 'react-bulma-components/lib/components/table'
-import './stylesheets/_root.scss'
+import './Page.scss'
 
-class RootPage extends Component {
+class Page extends Component {
   onBoxClick = (user) => {
     const { history } = this.props
 
@@ -21,12 +21,12 @@ class RootPage extends Component {
     const { users } = this.props
 
     return (
-      <div className="root-page">
+      <div className="page">
         <Table>
           <tbody>
             {
               _.map(users, (user) => {
-                return <tr key={user.username} className="username-table-row" onClick={() => this.onBoxClick(user)}>
+                return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
                   <td>{user.username} has joined debut!</td>
                 </tr>
               })
@@ -44,4 +44,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(RootPage))
+export default withRouter(connect(mapStateToProps)(Page))

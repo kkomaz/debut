@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import 'stylesheets/components/icon/icon-list.scss'
+import './IconList.scss'
 
 class IconList extends Component {
   addDefaultSrc = (evt) => {

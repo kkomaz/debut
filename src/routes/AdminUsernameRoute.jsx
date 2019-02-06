@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-
 import AdminUsernamePage from 'pages/admin/_username'
 
 class AdminUsernameRoute extends Component {

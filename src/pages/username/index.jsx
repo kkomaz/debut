@@ -17,14 +17,13 @@ import {
 
 // Component Imports
 import { UserContext } from 'components/User/UserProvider'
-import { List, UserList } from 'components/icon';
+import { IconList, UserList } from 'components/icon';
 import UserIntroDisplay from 'components/User/IntroDisplay'
 
 // Util/Action Imports
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import { requestProfileSearch } from 'actions/blockstack'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import '../stylesheets/ToastNotifier.scss'
 import './UsernamePage.scss';
 
 class UsernamePage extends Component {
@@ -161,8 +160,6 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log(userInfo.following)
-
     return (
       <div className="username mt-one">
         <Columns>
@@ -218,7 +215,7 @@ class UsernamePage extends Component {
                       <Heading size={4}>My Blockstack Dapps</Heading>
                       {
                         _.get(userInfo, 'apps.length', 0) > 0 ?
-                        <List apps={userInfo.apps} /> :
+                        <IconList apps={userInfo.apps} /> :
                         <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                       }
                     </Content>
@@ -275,6 +272,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 UsernamePage.contextType = UserContext
+
 export default withRouter(connect(mapStateToProps, {
   requestProfileSearch,
 })(UsernamePage))

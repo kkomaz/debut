@@ -1,2 +1,2 @@
-export { default as List } from './List'
+export { default as IconList } from './IconList'
 export { default as UserList } from './UserList'

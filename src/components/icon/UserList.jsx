@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import 'stylesheets/components/icon/user-list.scss'
+import './UserList.scss'
 
 class UserList extends Component {
   static propTypes = {

@@ -14,8 +14,10 @@ import {
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
-import IconList from 'components/icon/List'
-import UserList from 'components/icon/UserList'
+import {
+  IconList,
+  UserList
+} from 'components/icon'
 import { withRouter, Link } from 'react-router-dom'
 
 class AdminUsernamePage extends Component {

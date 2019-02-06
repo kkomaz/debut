@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Container from 'react-bulma-components/lib/components/container'
@@ -12,6 +11,8 @@ import UsernamePage from 'pages/username'
 import Navbar from 'components/Navbar'
 import { requestBlockstackApps } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
+import './RootRoute.scss'
+import 'react-toastify/dist/ReactToastify.css'
 
 class RootRoute extends Component {
   static propTypes = {
