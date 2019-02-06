@@ -9,6 +9,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker'
 import reducers from './reducers'
 import mySaga from './sagas'
+import { configure } from 'radiks';
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -32,6 +33,9 @@ const setAxiosHeaders = () => {
 const store = configureStore()
 sagaMiddleware.run(mySaga)
 setAxiosHeaders()
+configure({
+  apiServer: 'http://localhost:5000'
+});
 
 ReactDOM.render(
   <Provider store={store}>
