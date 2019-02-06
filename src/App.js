@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { UserSession } from 'blockstack'
 import { appConfig } from 'utils/constants'
 import Login from 'components/Login'
-import RootRoute from 'pages/route'
+import RootRoute from 'routes/RootRoute'
 import 'stylesheets/main.scss'
 
 class App extends Component {

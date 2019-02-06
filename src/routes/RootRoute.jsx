@@ -6,14 +6,14 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Container from 'react-bulma-components/lib/components/container'
 import UserProvider from 'components/User/UserProvider'
-import AdminUsernameRoute from 'pages/admin/_username/route'
+import AdminUsernameRoute from 'routes/AdminUsernameRoute'
 import RootPage from 'pages'
 import UsernamePage from 'pages/username'
 import Navbar from 'components/Navbar'
 import { requestBlockstackApps } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 
-class Routes extends Component {
+class RootRoute extends Component {
   static propTypes = {
     userSession: PropTypes.object.isRequired,
     requestAllUsers: PropTypes.func.isRequired
@@ -70,4 +70,4 @@ const mapStateToProps = (state) => {
 export default withRouter(connect(mapStateToProps, {
   requestBlockstackApps,
   requestAllUsers,
-})(Routes))
+})(RootRoute))
