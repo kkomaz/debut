@@ -13,8 +13,19 @@ import {
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
+import { requestUserIntro } from 'actions/blockstack'
 
 class Page extends Component {
+  componentDidMount() {
+    const { sessionUser } = this.context.state
+    const { userState } = this.props;
+
+    _.each(userState.users, (user) => {
+      console.log(user)
+      this.props.requestUserIntro(user.username, sessionUser.userSession)
+    })
+  }
+
   onBoxClick = (user) => {
     const { history } = this.props
 
@@ -78,5 +89,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Page))
+export default withRouter(connect(mapStateToProps, {
+  requestUserIntro,
+})(Page))
 Page.contextType = UserContext
