@@ -11,6 +11,7 @@ import {
   Media,
   Table
 } from 'components/bulma'
+import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 
 class Page extends Component {
@@ -26,88 +27,39 @@ class Page extends Component {
   }
 
   render() {
-    const { users } = this.props
+    const { userState } = this.props
 
     return (
       <div className="page">
-        <Columns breakpoint="desktop">
+        <Columns breakpoint="tablet">
           {
-            _.map(users, (user) => {
+            _.map(userState.users, (user) => {
               return (
                 <Columns.Column
                   key={user.username}
-                  desktop={{
+                  tablet={{
                     size: 3
                   }}
                 >
-                  <Card>
-                    <Card.Image size="4by3" src="http://bulma.io/images/placeholders/1280x960.png" />
-                    <Card.Content>
+                  <Card style={{ cursor: 'pointer' }} onClick={() => this.onBoxClick(user)}>
+                    <Card.Content style={{ height: '100px' }}>
                       <Media>
-                        <Media.Item renderAs="figure" position="left">
-                          <Image renderAs="p" size={64} alt="64x64" src="http://bulma.io/images/placeholders/128x128.png" />
-                        </Media.Item>
-                        <Media.Item>
-                          <Heading size={4}>John Smith</Heading>
-                          <Heading subtitle size={6}>
-                            @johnsmith
-                          </Heading>
+                        <Media.Item style={{ textAlign: 'center' }}>
+                          <p>{user.username}</p>
+                          <p>joined debut!</p>
                         </Media.Item>
                       </Media>
-                      <Content>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-                        <a href="#1">#css</a> <a href="#2">#responsive</a>
-                        <br />
-                        <time dateTime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-                      </Content>
                     </Card.Content>
                   </Card>
                 </Columns.Column>
               )
             })
           }
-          <Columns.Column
-            desktop={{
-              size: 3
-            }}
-          >
-            <p className="bd-notification is-success">
-              First Column
-            </p>
-          </Columns.Column>
-          <Columns.Column
-            desktop={{
-              size: 3
-            }}
-          >
-            <p className="bd-notification is-info">Second Column</p>
-          </Columns.Column>
-          <Columns.Column
-            desktop={{
-              size: 3
-            }}
-          >
-            <p className="bd-notification is-warning">Third Column</p>
-          </Columns.Column>
-          <Columns.Column
-            desktop={{
-              size: 3
-            }}
-          >
-            <p className="bd-notification is-warning">Fourth Column</p>
-          </Columns.Column>
-          <Columns.Column
-            desktop={{
-              size: 3
-            }}
-          >
-            <p className="bd-notification is-warning">Fourth Column</p>
-          </Columns.Column>
         </Columns>
         <Table>
           <tbody>
             {
-              _.map(users, (user) => {
+              _.map(userState.users, (user) => {
                 return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
                   <td>{user.username} has joined debut!</td>
                 </tr>
@@ -122,8 +74,9 @@ class Page extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.user.users
+    userState: state.user,
   }
 }
 
 export default withRouter(connect(mapStateToProps)(Page))
+Page.contextType = UserContext
