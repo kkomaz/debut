@@ -5,13 +5,15 @@ import Content from 'react-bulma-components/lib/components/content'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Image from 'react-bulma-components/lib/components/image'
 import Media from 'react-bulma-components/lib/components/media'
+import Table from 'react-bulma-components/lib/components/table'
 
 export {
+  Button,
   Card,
   Columns,
   Content,
-  Media,
-  Image,
   Heading,
-  Button,
+  Image,
+  Media,
+  Table,
 }
