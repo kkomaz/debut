@@ -14,9 +14,10 @@ import {
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
+import { User } from 'radiks';
 
 class Page extends Component {
-  componentDidMount() {
+  componentDidMount = async () => {
     const { sessionUser } = this.context.state
     const { userState } = this.props;
 
@@ -24,6 +25,9 @@ class Page extends Component {
       console.log(user)
       this.props.requestUserIntro(user.username, sessionUser.userSession)
     })
+
+    const result = await User.fetchList()
+    console.log(result, 'result')
   }
 
   onBoxClick = (user) => {
