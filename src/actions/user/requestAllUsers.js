@@ -1,7 +1,7 @@
 import { REQUEST_ALL_USERS } from 'actions'
 
-const requestSessionUser = () => {
+const requestallUsers = () => {
   return { type: REQUEST_ALL_USERS }
 };
 
-export default requestSessionUser
+export default requestallUsers
