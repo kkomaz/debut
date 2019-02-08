@@ -5,30 +5,23 @@ import { connect } from 'react-redux'
 import {
   Card,
   Columns,
-  Content,
-  Heading,
-  Image,
   Media,
-  Table
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
-import { User } from 'radiks';
 
 class Page extends Component {
-  componentDidMount = async () => {
-    const { sessionUser } = this.context.state
-    const { userState } = this.props;
-
-    _.each(userState.users, (user) => {
-      console.log(user)
-      this.props.requestUserIntro(user.username, sessionUser.userSession)
-    })
-
-    const result = await User.fetchList()
-    console.log(result, 'result')
-  }
+  // TODO: Commented out but might need later
+  // componentDidMount = async () => {
+  //   const { sessionUser } = this.context.state
+  //   const { userState } = this.props;
+  //
+  //   _.each(userState.users, (user) => {
+  //     console.log(user)
+  //     this.props.requestUserIntro(user.username, sessionUser.userSession)
+  //   })
+  // }
 
   onBoxClick = (user) => {
     const { history } = this.props
@@ -43,6 +36,7 @@ class Page extends Component {
 
   render() {
     const { userState } = this.props
+    const { defaultImgUrl } = this.context.state
 
     return (
       <div className="page">
@@ -56,7 +50,8 @@ class Page extends Component {
                     size: 3
                   }}
                 >
-                  <Card style={{ cursor: 'pointer' }} onClick={() => this.onBoxClick(user)}>
+                  <Card style={{ cursor: 'pointer', backgroundColor: '#401457', color: 'white' }} onClick={() => this.onBoxClick(user)}>
+                    <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
                     <Card.Content style={{ height: '100px' }}>
                       <Media>
                         <Media.Item style={{ textAlign: 'center' }}>
@@ -71,17 +66,6 @@ class Page extends Component {
             })
           }
         </Columns>
-        <Table>
-          <tbody>
-            {
-              _.map(userState.users, (user) => {
-                return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
-                  <td>{user.username} has joined debut!</td>
-                </tr>
-              })
-            }
-          </tbody>
-        </Table>
       </div>
     )
   }
