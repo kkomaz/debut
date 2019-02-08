@@ -5,13 +5,24 @@ import { connect } from 'react-redux'
 import {
   Card,
   Columns,
+  Container,
+  Control,
+  Field,
+  Heading,
+  Hero,
   Media,
+  Radio,
+  Table,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
 
 class Page extends Component {
+  state = {
+    showTileView: true,
+  }
+
   // TODO: Commented out but might need later
   // componentDidMount = async () => {
   //   const { sessionUser } = this.context.state
@@ -34,38 +45,88 @@ class Page extends Component {
     })
   }
 
+  onChange = (val) => {
+    this.setState({
+      showTileView: val
+    })
+  }
+
   render() {
     const { userState } = this.props
+    const { showTileView } = this.state
     const { defaultImgUrl } = this.context.state
 
     return (
       <div className="page">
-        <Columns breakpoint="tablet">
-          {
-            _.map(userState.users, (user) => {
-              return (
-                <Columns.Column
-                  key={user.username}
-                  tablet={{
-                    size: 3
-                  }}
-                >
-                  <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                    <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
-                    <Card.Content className="page__content">
-                      <Media>
-                        <Media.Item style={{ textAlign: 'center' }}>
-                          <p className="page__username-text">{user.username}</p>
-                          <p className="page__join-text">joined debut!</p>
-                        </Media.Item>
-                      </Media>
-                    </Card.Content>
-                  </Card>
-                </Columns.Column>
-              )
-            })
-          }
-        </Columns>
+        <Hero color="primary" className="mb-two">
+         <Hero.Body>
+           <Container>
+             <Heading>Choose your user's view!</Heading>
+               <Field>
+                 <Control>
+                   <Radio
+                     className="page__radio"
+                     onChange={() => this.onChange(true)}
+                     checked={showTileView}
+                     value="Tile"
+                     name="view"
+                    >
+                     Tile
+                   </Radio>
+                   <Radio
+                     className="page__radio"
+                     onChange={() => this.onChange(false)}
+                     checked={!showTileView}
+                     value="Table"
+                     name="view"
+                    >
+                     Table
+                   </Radio>
+                 </Control>
+               </Field>
+           </Container>
+         </Hero.Body>
+       </Hero>
+        {
+          showTileView ?
+          <Columns breakpoint="tablet">
+            {
+              _.map(userState.users, (user) => {
+                return (
+                  <Columns.Column
+                    key={user.username}
+                    tablet={{
+                      size: 3
+                    }}
+                  >
+                    <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                      <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
+                      <Card.Content className="page__content">
+                        <Media>
+                          <Media.Item style={{ textAlign: 'center' }}>
+                            <p className="page__username-text">{user.username}</p>
+                            <p className="page__join-text">joined debut!</p>
+                          </Media.Item>
+                        </Media>
+                      </Card.Content>
+                    </Card>
+                  </Columns.Column>
+                )
+              })
+            }
+          </Columns> :
+          <Table>
+            <tbody>
+              {
+                _.map(userState.users, (user) => {
+                  return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
+                    <td>{user.username} has joined debut!</td>
+                  </tr>
+                })
+              }
+            </tbody>
+          </Table>
+        }
       </div>
     )
   }

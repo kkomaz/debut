@@ -29,4 +29,10 @@
     position: absolute;
     transform: translateX(-50%);
   }
+
+  &__radio {
+    &:hover {
+      color: $white;
+    }
+  }
 }
