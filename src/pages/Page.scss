@@ -1,7 +1,38 @@
+@import 'src/variables';
+
 .page {
   &__user-row {
     :hover {
       cursor: pointer;
+    }
+  }
+
+  &__card {
+    cursor: pointer;
+    background-color: $light_purple;
+    color: $white;
+  }
+
+  &__content {
+    height: 100px;
+  }
+
+  &__username-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__join-text {
+    bottom: 20px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+  }
+
+  &__radio {
+    &:hover {
+      color: $white;
     }
   }
 }

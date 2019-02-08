@@ -3,8 +3,8 @@ import { UserSession } from 'blockstack'
 import { appConfig } from 'utils/constants'
 import Login from 'components/Login'
 import RootRoute from 'routes/RootRoute'
+import { User } from 'radiks';
 import 'stylesheets/main.scss'
-
 class App extends Component {
   state = {
     userSession: new UserSession({ appConfig })
@@ -15,6 +15,7 @@ class App extends Component {
 
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
       const userData = await userSession.handlePendingSignIn()
+      await User.createWithCurrentUser();
 
       if (!userData.username) {
         throw new Error('This app requires a username')
