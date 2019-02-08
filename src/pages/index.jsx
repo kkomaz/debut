@@ -50,13 +50,13 @@ class Page extends Component {
                     size: 3
                   }}
                 >
-                  <Card style={{ cursor: 'pointer', backgroundColor: '#401457', color: 'white' }} onClick={() => this.onBoxClick(user)}>
+                  <Card className="page__card" onClick={() => this.onBoxClick(user)}>
                     <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
-                    <Card.Content style={{ height: '100px' }}>
+                    <Card.Content className="page__content">
                       <Media>
                         <Media.Item style={{ textAlign: 'center' }}>
-                          <p>{user.username}</p>
-                          <p>joined debut!</p>
+                          <p className="page__username-text">{user.username}</p>
+                          <p className="page__join-text">joined debut!</p>
                         </Media.Item>
                       </Media>
                     </Card.Content>
