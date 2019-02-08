@@ -30,11 +30,13 @@ const setAxiosHeaders = () => {
   axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_URL_DEV : process.env.REACT_APP_API_URL_PROD
 }
 
+const apiServer = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_API_RADIKS_PROD : 'http://localhost:5000'
+
 const store = configureStore()
 sagaMiddleware.run(mySaga)
 setAxiosHeaders()
 configure({
-  apiServer: 'http://localhost:5000'
+  apiServer
 });
 
 ReactDOM.render(

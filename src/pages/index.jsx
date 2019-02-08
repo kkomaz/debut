@@ -3,7 +3,6 @@ import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
-  Button,
   Card,
   Columns,
   Content,
@@ -13,7 +12,6 @@ import {
   Table
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
-import { User } from 'radiks';
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
 
@@ -39,19 +37,36 @@ class Page extends Component {
     })
   }
 
-  doRadiks = async () => {
-    console.log('hitting here')
-    User.fetchList()
-  }
-
   render() {
     const { userState } = this.props
 
     return (
       <div className="page">
-        <Button onClick={this.doRadiks}>
-          Click me
-        </Button>
+        <Columns breakpoint="tablet">
+          {
+            _.map(userState.users, (user) => {
+              return (
+                <Columns.Column
+                  key={user.username}
+                  tablet={{
+                    size: 3
+                  }}
+                >
+                  <Card style={{ cursor: 'pointer' }} onClick={() => this.onBoxClick(user)}>
+                    <Card.Content style={{ height: '100px' }}>
+                      <Media>
+                        <Media.Item style={{ textAlign: 'center' }}>
+                          <p>{user.username}</p>
+                          <p>joined debut!</p>
+                        </Media.Item>
+                      </Media>
+                    </Card.Content>
+                  </Card>
+                </Columns.Column>
+              )
+            })
+          }
+        </Columns>
         <Table>
           <tbody>
             {
