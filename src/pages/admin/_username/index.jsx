@@ -59,14 +59,16 @@ class AdminUsernamePage extends Component {
             message: 'bottom reached',
             style: {
               position: 'absolute',
-              bottom: '15px'
+              bottom: '15px',
+              left: '12px'
             }
           });
       } else if (window.pageYOffset < 20) {
         this.setState({
           style: {
             position: 'absolute',
-            top: '0'
+            top: '0',
+            left: '12px'
           }
         })
       } else {
@@ -180,7 +182,43 @@ class AdminUsernamePage extends Component {
         <Columns>
           <div style={{ position: 'relative', width: '33%' }}>
             <div style={this.state.style}>
-              <Card className="admin-username-page">
+              <Card className="username-page mb-one">
+                <Card.Content>
+                  <Content>
+                    <h4>About Myself</h4>
+                    {
+                      loading ? <div>Loading...</div> :
+                      <div className="admin-username-page__info-details">
+                        <div className="admin-username-page__button-actions mb-one">
+                          {
+                            fileExists ?
+                            <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                              Edit
+                            </Button> :
+                            <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                              Create
+                            </Button>
+                          }
+                        </div>
+                        {
+                          displayView ? <UserIntroDisplay description={userInfo.description} /> :
+                          <UserIntroForm
+                            description={userInfo.description}
+                            fileExists={fileExists}
+                            onCancel={this.onCancel}
+                            onSubmit={this.onSubmit}
+                            identityAddress={userData.identityAddress}
+                            userSession={userSession}
+                            username={username}
+                            />
+                        }
+                      </div>
+                    }
+                  </Content>
+                </Card.Content>
+              </Card>
+
+              <Card className="admin-username-page mb-one">
                 <Card.Content>
                   <Content>
                     <Heading size={4}>My Blockstack Dapps</Heading>
@@ -196,7 +234,8 @@ class AdminUsernamePage extends Component {
                   </Content>
                 </Card.Content>
               </Card>
-              <Card className="admin-username-page mt-one">
+
+              <Card className="admin-username-page">
                 <Card.Content>
                   <Content>
                     <Heading size={4}>Following Users</Heading>
@@ -214,39 +253,9 @@ class AdminUsernamePage extends Component {
           <Columns.Column size={8}>
             <Columns>
               <Columns.Column size={12} style={{ paddingTop: '0' }}>
-                <Card className="username-page">
+                <Card>
                   <Card.Content>
-                    <Content>
-                      <h4>About Myself</h4>
-                      {
-                        loading ? <div>Loading...</div> :
-                        <div className="admin-username-page__info-details">
-                          <div className="admin-username-page__button-actions mb-one">
-                            {
-                              fileExists ?
-                              <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                                Edit
-                              </Button> :
-                              <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                                Create
-                              </Button>
-                            }
-                          </div>
-                          {
-                            displayView ? <UserIntroDisplay description={userInfo.description} /> :
-                            <UserIntroForm
-                              description={userInfo.description}
-                              fileExists={fileExists}
-                              onCancel={this.onCancel}
-                              onSubmit={this.onSubmit}
-                              identityAddress={userData.identityAddress}
-                              userSession={userSession}
-                              username={username}
-                              />
-                          }
-                        </div>
-                      }
-                    </Content>
+                    What's on your mind?
                   </Card.Content>
                 </Card>
                 <Card className="mt-one">
