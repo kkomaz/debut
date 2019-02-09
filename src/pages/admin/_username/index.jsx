@@ -29,11 +29,53 @@ class AdminUsernamePage extends Component {
     loading: true,
     displayView: true,
     fileExists: false,
+    height: window.innerHeight,
+    message: 'not at bottom',
+    style: {
+      position: 'absolute',
+      top: '0',
+      left: '12px',
+    }
   }
 
   componentDidMount() {
     this.loadUserInfo()
+    window.addEventListener("scroll", this.handleScroll);
   }
+
+  componentWillUnmount() {
+      window.removeEventListener("scroll", this.handleScroll);
+  }
+
+  handleScroll = () => {
+      const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+      const body = document.body;
+      const html = document.documentElement;
+      const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+      const windowBottom = windowHeight + window.pageYOffset;
+
+      if (windowBottom >= docHeight) {
+          this.setState({
+            message: 'bottom reached',
+            style: {
+              position: 'absolute',
+              bottom: '15px'
+            }
+          });
+      } else if (window.pageYOffset < 20) {
+        this.setState({
+          style: {
+            position: 'absolute',
+            top: '0'
+          }
+        })
+      } else {
+          this.setState({
+            message: 'not at bottom',
+          });
+      }
+  }
+
 
   async loadUserInfo() {
     const options = { decrypt: false }
@@ -106,7 +148,7 @@ class AdminUsernamePage extends Component {
 
     const src = _.get(userData, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log(userInfo.Following);
+    console.log(this.state.message)
 
     return (
       <React.Fragment>
@@ -136,46 +178,42 @@ class AdminUsernamePage extends Component {
           </Columns.Column>
         </Columns>
         <Columns>
-          <Columns.Column size={4}>
-            <Columns>
-              <Columns.Column size={12}>
-                <Card className="admin-username-page">
-                  <Card.Content>
-                    <Content>
-                      <Heading size={4}>My Blockstack Dapps</Heading>
-                      {
-                        _.get(userInfo, 'apps.length', 0) > 0 ?
-                        <IconList apps={userInfo.apps} /> :
+          <div style={{ position: 'relative', width: '33%' }}>
+            <div style={this.state.style}>
+              <Card className="admin-username-page">
+                <Card.Content>
+                  <Content>
+                    <Heading size={4}>My Blockstack Dapps</Heading>
+                    {
+                      _.get(userInfo, 'apps.length', 0) > 0 ?
+                      <IconList apps={userInfo.apps} /> :
                         <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                       }
 
                       <Heading size={6}>
                         Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
-                      </Heading>
-                    </Content>
-                  </Card.Content>
-                </Card>
-              </Columns.Column>
-              <Columns.Column size={12}>
-                <Card className="admin-username-page">
-                  <Card.Content>
-                    <Content>
-                      <Heading size={4}>Following Users</Heading>
-                      {
-                        _.get(userInfo, 'following.length', 0) ?
-                        <UserList users={userInfo.following} history={history} /> :
+                    </Heading>
+                  </Content>
+                </Card.Content>
+              </Card>
+              <Card className="admin-username-page mt-one">
+                <Card.Content>
+                  <Content>
+                    <Heading size={4}>Following Users</Heading>
+                    {
+                      _.get(userInfo, 'following.length', 0) ?
+                      <UserList users={userInfo.following} history={history} /> :
                         <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
                       }
                     </Content>
                   </Card.Content>
                 </Card>
-              </Columns.Column>
-            </Columns>
-          </Columns.Column>
+            </div>
+          </div>
 
           <Columns.Column size={8}>
             <Columns>
-              <Columns.Column size={12}>
+              <Columns.Column size={12} style={{ paddingTop: '0' }}>
                 <Card className="username-page">
                   <Card.Content>
                     <Content>
@@ -209,6 +247,71 @@ class AdminUsernamePage extends Component {
                         </div>
                       }
                     </Content>
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
+                  </Card.Content>
+                </Card>
+                <Card className="mt-one">
+                  <Card.Content>
+                    Tweet 1
                   </Card.Content>
                 </Card>
               </Columns.Column>
