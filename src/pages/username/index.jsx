@@ -231,7 +231,6 @@ class UsernamePage extends Component {
                         _.get(userInfo, 'following.length', 0) > 0 ?
                         <UserList users={userInfo.following} history={history} /> :
                         <Heading style={{ color: '#401457' }} size={6}>Not following anyone!</Heading>
-
                       }
                     </Content>
                   </Card.Content>
