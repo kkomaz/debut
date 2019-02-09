@@ -18,6 +18,7 @@ import {
   IconList,
   UserList
 } from 'components/icon'
+import MomentCreateForm from 'components/Moment/MomentCreateForm'
 import { withRouter, Link } from 'react-router-dom'
 
 class AdminUsernamePage extends Component {
@@ -255,7 +256,7 @@ class AdminUsernamePage extends Component {
               <Columns.Column size={12} style={{ paddingTop: '0' }}>
                 <Card>
                   <Card.Content>
-                    What's on your mind?
+                    <MomentCreateForm />
                   </Card.Content>
                 </Card>
                 <Card className="mt-one">
