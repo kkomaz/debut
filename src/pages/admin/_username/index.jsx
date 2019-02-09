@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { UserContext } from 'components/User/UserProvider'
@@ -18,8 +19,9 @@ import {
   IconList,
   UserList
 } from 'components/icon'
-import ShareCreateForm from 'components/Moment/ShareCreateForm'
+import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter, Link } from 'react-router-dom'
+import { requestUserShares } from 'actions/share'
 
 class AdminUsernamePage extends Component {
   state = {
@@ -39,8 +41,15 @@ class AdminUsernamePage extends Component {
     }
   }
 
+  static propTypes = {
+    shares: PropTypes.array.isRequired,
+    blockstackApps: PropTypes.array.isRequired
+  }
+
   componentDidMount() {
+    const { sessionUser } = this.context.state
     this.loadUserInfo()
+    this.props.requestUserShares(sessionUser.username)
     window.addEventListener("scroll", this.handleScroll);
   }
 
@@ -143,18 +152,24 @@ class AdminUsernamePage extends Component {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
+  fetchShares = async () => {
+    const { sessionUser } = this.context.state
+    this.props.requestUserShares()
+  }
+
   render() {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { defaultImgUrl } = this.context.state
     const { loading, userInfo, displayView, fileExists } = this.state
-    const { history } = this.props
+    const { history, shares } = this.props
 
     const src = _.get(userData, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log(this.state.message)
-
     return (
       <React.Fragment>
+        <Button onClick={this.fetchShares}>
+          fetch Shares
+        </Button>
         <Columns>
           <Columns.Column size={12}>
             <Media className="username__hero">
@@ -256,74 +271,20 @@ class AdminUsernamePage extends Component {
               <Columns.Column size={12} style={{ paddingTop: '0' }}>
                 <Card>
                   <Card.Content>
-                    <ShareCreateForm />
+                    <ShareCreateForm username={username} />
                   </Card.Content>
                 </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
-                <Card className="mt-one">
-                  <Card.Content>
-                    Tweet 1
-                  </Card.Content>
-                </Card>
+                {
+                  _.map(shares, (share) => {
+                    return (
+                      <Card key={share._id} className="mt-one">
+                        <Card.Content>
+                          <p>{share.text}</p>
+                        </Card.Content>
+                      </Card>
+                    )
+                  })
+                }
               </Columns.Column>
             </Columns>
           </Columns.Column>
@@ -335,9 +296,12 @@ class AdminUsernamePage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    blockstackApps: state.blockstack.apps
+    blockstackApps: state.blockstack.apps,
+    shares: state.share.shares,
   }
 }
 
 AdminUsernamePage.contextType = UserContext
-export default withRouter(connect(mapStateToProps)(AdminUsernamePage))
+export default withRouter(connect(mapStateToProps, {
+  requestUserShares
+})(AdminUsernamePage))
