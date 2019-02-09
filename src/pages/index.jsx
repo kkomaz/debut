@@ -3,7 +3,6 @@ import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
-  Button,
   Card,
   Columns,
   Container,
@@ -68,9 +67,6 @@ class Page extends Component {
          <Hero.Body>
            <Container>
              <Heading>Choose your user's view!</Heading>
-               <Button onClick={this.onClick}>
-                 click
-               </Button>
                <Field>
                  <Control>
                    <Radio
