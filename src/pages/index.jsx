@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
+  Button,
   Card,
   Columns,
   Container,
@@ -17,6 +18,7 @@ import {
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
+import requestAllUsers from 'actions/user/requestAllUsers'
 
 class Page extends Component {
   state = {
@@ -51,6 +53,10 @@ class Page extends Component {
     })
   }
 
+  onClick = () => {
+    this.props.requestAllUsers()
+  }
+
   render() {
     const { userState } = this.props
     const { showTileView } = this.state
@@ -62,6 +68,9 @@ class Page extends Component {
          <Hero.Body>
            <Container>
              <Heading>Choose your user's view!</Heading>
+               <Button onClick={this.onClick}>
+                 click
+               </Button>
                <Field>
                  <Control>
                    <Radio
@@ -140,5 +149,6 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestUserIntro,
+  requestAllUsers,
 })(Page))
 Page.contextType = UserContext
