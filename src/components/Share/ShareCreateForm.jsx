@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import {
   Field,
   Textarea,
@@ -7,6 +8,7 @@ import {
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import Share from 'model/share'
 import toggleNotification from 'utils/notifier/toggleNotification'
+import { requestCreateShare } from 'actions/share'
 
 class ShareCreateForm extends Component {
   state = {
@@ -29,24 +31,18 @@ class ShareCreateForm extends Component {
     const { text } = this.state
     const { username } = this.props
 
-    const share = new Share({
+    const params = {
       text,
       username,
       valid: true
-    })
-
-    try {
-      const result = await share.save()
-      if (result) {
-        toggleNotification('success', 'Thanks for sharing!')
-        this.setState({ text: '' })
-      }
-    } catch (e) {
-      console.log(e.message)
     }
+
+    this.props.requestCreateShare(params)
+    this.setState({ text: '' })
   }
 
-  onCancel = () => {
+  onCancel = (e) => {
+    e.preventDefault()
     this.setState({ text: '' })
   }
 
@@ -71,4 +67,6 @@ class ShareCreateForm extends Component {
   }
 }
 
-export default ShareCreateForm
+export default connect(null, {
+  requestCreateShare,
+})(ShareCreateForm)

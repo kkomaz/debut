@@ -152,11 +152,6 @@ class AdminUsernamePage extends Component {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
-  fetchShares = async () => {
-    const { sessionUser } = this.context.state
-    this.props.requestUserShares()
-  }
-
   render() {
     const { username, userData, userSession } = this.context.state.sessionUser
     const { defaultImgUrl } = this.context.state
@@ -167,9 +162,6 @@ class AdminUsernamePage extends Component {
 
     return (
       <React.Fragment>
-        <Button onClick={this.fetchShares}>
-          fetch Shares
-        </Button>
         <Columns>
           <Columns.Column size={12}>
             <Media className="username__hero">
