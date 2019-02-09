@@ -5,7 +5,7 @@ import {
 } from 'react-bulma-components/lib/components/form'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 
-class MomentCreateForm extends Component {
+class ShareCreateForm extends Component {
   state = {
     text: ''
   }
@@ -31,7 +31,7 @@ class MomentCreateForm extends Component {
           <Textarea
             name="text"
             onChange={this.onChange}
-            placeholder="Add moment here!"
+            placeholder="Share a moment here!"
             rows={5}
             value={this.state.text}
           />
@@ -45,4 +45,4 @@ class MomentCreateForm extends Component {
   }
 }
 
-export default MomentCreateForm
+export default ShareCreateForm
