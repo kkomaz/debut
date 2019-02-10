@@ -12,6 +12,7 @@ import {
   Image,
   Heading,
 } from 'components/bulma'
+import moment from 'moment'
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
@@ -38,7 +39,8 @@ class AdminUsernamePage extends Component {
       position: 'absolute',
       top: '0',
       left: '12px',
-    }
+    },
+    activateScroll: false,
   }
 
   static propTypes = {
@@ -50,11 +52,21 @@ class AdminUsernamePage extends Component {
     const { sessionUser } = this.context.state
     this.loadUserInfo()
     this.props.requestUserShares(sessionUser.username)
-    window.addEventListener("scroll", this.handleScroll);
+    this.setState({ loading: false })
   }
 
   componentWillUnmount() {
-      window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
+  componentDidUpdate() {
+    const { activateScroll } = this.state
+
+    if (!activateScroll && this.rightElement.clientHeight > this.leftElement.clientHeight) {
+      this.setState({ activateScroll: true }, () => {
+        window.addEventListener("scroll", this.handleScroll)
+      })
+    }
   }
 
   handleScroll = () => {
@@ -189,7 +201,7 @@ class AdminUsernamePage extends Component {
         </Columns>
         <Columns>
           <div style={{ position: 'relative', width: '33%' }}>
-            <div style={this.state.style}>
+            <div style={this.state.style} ref={(leftElement) => this.leftElement = leftElement}>
               <Card className="username-page mb-one">
                 <Card.Content>
                   <Content>
@@ -258,7 +270,10 @@ class AdminUsernamePage extends Component {
             </div>
           </div>
 
-          <Columns.Column size={8}>
+          <Columns.Column
+            size={8}
+            ref={(rightElement) => this.rightElement = rightElement}
+          >
             <Columns>
               <Columns.Column size={12} style={{ paddingTop: '0' }}>
                 <Card>
@@ -271,6 +286,7 @@ class AdminUsernamePage extends Component {
                     return (
                       <Card key={share._id} className="mt-one">
                         <Card.Content>
+                          <p><strong>{username}</strong> <span>{moment(share.createdAt).fromNow()}</span></p>
                           <p>{share.text}</p>
                         </Card.Content>
                       </Card>
