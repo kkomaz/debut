@@ -61,6 +61,9 @@ class AdminUsernamePage extends Component {
 
   componentDidUpdate() {
     const { activateScroll } = this.state
+    console.log(this.state.loading)
+    console.log(this.rightElement.clientHeight, 'right')
+    console.log(this.leftElement.clientHeight, 'left')
 
     if (!activateScroll && this.rightElement.clientHeight > this.leftElement.clientHeight) {
       this.setState({ activateScroll: true }, () => {
