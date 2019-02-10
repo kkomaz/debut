@@ -15,6 +15,7 @@ class App extends Component {
 
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
       const userData = await userSession.handlePendingSignIn()
+      console.log(userSession.loadUserData(), 'userLoadedData')
       await User.createWithCurrentUser();
 
       if (!userData.username) {
