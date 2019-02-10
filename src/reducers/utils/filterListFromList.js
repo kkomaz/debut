@@ -8,7 +8,7 @@ const filterListFromList = (currentShares, list) => {
     }
 
     return [...acc, curr]
-  }, [])
+  }, currentShares)
 }
 
 export default filterListFromList
