@@ -33,6 +33,10 @@ class Login extends Component {
             <Heading size={6} style={{ color: 'white'}}>
               Create a profile, introduce yourself, and discover other people's blockstack app's by following them!
             </Heading>
+
+            <Heading size={6} style={{ color: 'white' }}>
+              Curious about our roadmap? Click <a href="https://trello.com/b/he3qvtA0/debut" rel="noopener noreferrer" target="_blank">here!</a>
+            </Heading>
           </div>
           <div className="login__column-left-blockstack-info">
             <Heading size={6} style={{ color: 'white' }}>
