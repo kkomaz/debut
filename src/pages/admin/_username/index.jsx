@@ -23,6 +23,17 @@ import {
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter, Link } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
+import './AdminUsernamePage.scss';
+
+const formatDate = (input) => {
+  const postedDate = moment(input).fromNow()
+  const postedDateArray = postedDate.split(' ')
+
+  if (!_.includes(postedDateArray, 'hour') && !_.includes(postedDateArray, 'hours')) {
+    return moment(input).utc().format("MMM DD")
+  }
+  return postedDate
+}
 
 class AdminUsernamePage extends Component {
   state = {
@@ -55,53 +66,53 @@ class AdminUsernamePage extends Component {
     this.setState({ loading: false })
   }
 
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
+  // componentWillUnmount() {
+  //   window.removeEventListener("scroll", this.handleScroll);
+  // }
 
-  componentDidUpdate() {
-    const { activateScroll } = this.state
-    console.log(this.state.loading)
-    console.log(this.rightElement.clientHeight, 'right')
-    console.log(this.leftElement.clientHeight, 'left')
+  // componentDidUpdate() {
+  //   const { activateScroll } = this.state
+  //   console.log(this.state.loading)
+  //   console.log(this.rightElement.clientHeight, 'right')
+  //   console.log(this.leftElement.clientHeight, 'left')
+  //
+  //   if (!activateScroll && this.rightElement.clientHeight > this.leftElement.clientHeight) {
+  //     this.setState({ activateScroll: true }, () => {
+  //       window.addEventListener("scroll", this.handleScroll)
+  //     })
+  //   }
+  // }
 
-    if (!activateScroll && this.rightElement.clientHeight > this.leftElement.clientHeight) {
-      this.setState({ activateScroll: true }, () => {
-        window.addEventListener("scroll", this.handleScroll)
-      })
-    }
-  }
-
-  handleScroll = () => {
-      const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-      const body = document.body;
-      const html = document.documentElement;
-      const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-      const windowBottom = windowHeight + window.pageYOffset;
-
-      if (windowBottom >= docHeight) {
-          this.setState({
-            message: 'bottom reached',
-            style: {
-              position: 'absolute',
-              bottom: '15px',
-              left: '12px'
-            }
-          });
-      } else if (window.pageYOffset < 20) {
-        this.setState({
-          style: {
-            position: 'absolute',
-            top: '0',
-            left: '12px'
-          }
-        })
-      } else {
-          this.setState({
-            message: 'not at bottom',
-          });
-      }
-  }
+  // handleScroll = () => {
+  //     const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+  //     const body = document.body;
+  //     const html = document.documentElement;
+  //     const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+  //     const windowBottom = windowHeight + window.pageYOffset;
+  //
+  //     if (windowBottom >= docHeight) {
+  //         this.setState({
+  //           message: 'bottom reached',
+  //           style: {
+  //             position: 'absolute',
+  //             bottom: '15px',
+  //             left: '12px'
+  //           }
+  //         });
+  //     } else if (window.pageYOffset < 20) {
+  //       this.setState({
+  //         style: {
+  //           position: 'absolute',
+  //           top: '0',
+  //           left: '12px'
+  //         }
+  //       })
+  //     } else {
+  //         this.setState({
+  //           message: 'not at bottom',
+  //         });
+  //     }
+  // }
 
 
   async loadUserInfo() {
@@ -287,10 +298,10 @@ class AdminUsernamePage extends Component {
                 {
                   _.map(shares, (share) => {
                     return (
-                      <Card key={share._id} className="mt-one">
+                      <Card key={share._id} className="mt-one admin-username-page__share">
                         <Card.Content>
-                          <p><strong>{username}</strong> <span>{moment(share.createdAt).fromNow()}</span></p>
-                          <p>{share.text}</p>
+                          <p><strong>{username}</strong> <span className="admin-username-page__date small">- {formatDate(share.createdAt)}</span></p>
+                          <p className="mt-quarter">{share.text}</p>
                         </Card.Content>
                       </Card>
                     )
