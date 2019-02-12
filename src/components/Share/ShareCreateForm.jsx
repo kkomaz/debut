@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import { connect } from 'react-redux'
 import classNames from 'classnames';
 import {
   Field,
   Textarea,
+  Help,
 } from 'react-bulma-components/lib/components/form'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { requestCreateShare } from 'actions/share'
@@ -14,6 +16,7 @@ class ShareCreateForm extends Component {
   state = {
     text: '',
     characterLength: 0,
+    valid: true,
   }
 
   static propTypes = {
@@ -21,6 +24,12 @@ class ShareCreateForm extends Component {
   }
 
   onChange = (e) => {
+    const { valid } = this.props
+
+    if (!valid) {
+      this.setState({ valid: true })
+    }
+
     this.setState({
       [e.target.name]: e.target.value,
       characterLength: e.target.value.length
@@ -33,10 +42,13 @@ class ShareCreateForm extends Component {
     const { text } = this.state
     const { username } = this.props
 
+    if (_.isEmpty(text)) {
+      return this.setState({ valid: false })
+    }
+
     const params = {
       text,
       username,
-      valid: true
     }
 
     this.props.requestCreateShare(params)
@@ -56,7 +68,7 @@ class ShareCreateForm extends Component {
   }
 
   render() {
-    const { characterLength } = this.state
+    const { characterLength, valid } = this.state
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'share-create-form__character-length': true,
@@ -78,7 +90,11 @@ class ShareCreateForm extends Component {
             value={this.state.text}
             onKeyDown={this.onEnterPress}
             maxLength={150}
+            color={valid ? null : 'danger'}
           />
+          {
+            !valid && <Help color="danger">Field can not be empty!</Help>
+          }
         </Field>
         <div className="share-create-form__submit-wrapper">
           <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
