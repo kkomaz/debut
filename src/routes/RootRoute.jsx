@@ -13,6 +13,7 @@ import { requestBlockstackApps } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
+import AdminUsernamePage from 'pages/admin/_username'
 
 class RootRoute extends Component {
   static propTypes = {
@@ -48,7 +49,7 @@ class RootRoute extends Component {
             <Route
               exact
               path="/:username"
-              render={({ match, location }) => <UsernamePage username={match.params.username} location={location} />}
+              render={({ match, location }) => <AdminUsernamePage username={match.params.username} />}
             />
             <Route
               path="/admin/:username"
