@@ -17,14 +17,16 @@ import moment from 'moment'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import {
   IconList,
-  UserList
 } from 'components/icon'
 import ShareCreateForm from 'components/Share/ShareCreateForm'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import UserDescription from 'components/User/UserDescription'
 import './UsernamePage.scss';
+import {
+  UserDescription,
+  UserFollowing
+} from 'components/User'
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -228,7 +230,6 @@ class UsernamePage extends Component {
                   className="username__avatar"
                   alt="100x100"
                   renderAs="p"
-                  size={100}
                   src={src}
                   style={{ margin: 0 }}
                   />
@@ -285,19 +286,11 @@ class UsernamePage extends Component {
                 </Content>
               </Card.Content>
             </Card>
-
-            <Card className="admin-username-page">
-              <Card.Content>
-                <Content>
-                  <Heading size={4}>Following Users</Heading>
-                  {
-                    _.get(userInfo, 'following.length', 0) ?
-                    <UserList users={userInfo.following} history={history} /> :
-                      <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
-                    }
-                  </Content>
-                </Card.Content>
-              </Card>
+            <UserFollowing
+              adminMode={adminMode}
+              history={history}
+              userInfo={userInfo}
+            />
           </Columns.Column>
 
           <Columns.Column
