@@ -15,15 +15,13 @@ import {
 import FollowButton from 'components/Follow/FollowButton'
 import moment from 'moment'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
-import {
-  IconList,
-} from 'components/icon'
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import './UsernamePage.scss';
 import {
+  UserDapps,
   UserDescription,
   UserFollowing
 } from 'components/User'
@@ -117,7 +115,7 @@ class UsernamePage extends Component {
     try {
       userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
 
-      const apps = _.map(sessionUser.userData.profile.apps, (k,v) => {
+      const apps = _.map(profile.apps, (k,v) => {
         return v
       })
 
@@ -270,27 +268,20 @@ class UsernamePage extends Component {
               />
             </div>
 
-            <Card className="admin-username-page mb-one">
-              <Card.Content>
-                <Content>
-                  <Heading size={4}>My Blockstack Dapps</Heading>
-                  {
-                    _.get(userInfo, 'apps.length', 0) > 0 ?
-                    <IconList apps={userInfo.apps} /> :
-                      <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
-                    }
+            <div className="username-page__dapps mb-one">
+              <UserDapps
+                adminMode={adminMode}
+                userInfo={userInfo}
+              />
+            </div>
 
-                    <Heading size={6}>
-                      Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
-                  </Heading>
-                </Content>
-              </Card.Content>
-            </Card>
-            <UserFollowing
-              adminMode={adminMode}
-              history={history}
-              userInfo={userInfo}
-            />
+            <div className="username-page__following mb-one">
+              <UserFollowing
+                adminMode={adminMode}
+                history={history}
+                userInfo={userInfo}
+              />
+            </div>
           </Columns.Column>
 
           <Columns.Column
