@@ -63,6 +63,8 @@ class UsernamePage extends Component {
     const { username } = this.props
     const user = await lookupProfile(username)
 
+    window.addEventListener('scroll', this.handleScroll)
+
     if (user) {
       this.loadUserInfo(user)
       this.props.requestUserShares(username)
@@ -94,6 +96,10 @@ class UsernamePage extends Component {
         history.push('/')
       }
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 
   async loadUserInfo(profile) {
@@ -201,6 +207,20 @@ class UsernamePage extends Component {
     await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
 
     setSessionUserState('following', params)
+  }
+
+  handleScroll = () => {
+    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+    const body = document.body;
+    const html = document.documentElement;
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+    const windowBottom = windowHeight + window.pageYOffset;
+
+    if (windowBottom >= docHeight) {
+        this.setState({
+          message: 'bottom reached',
+        });
+    }
   }
 
   render() {
