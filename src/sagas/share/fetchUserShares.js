@@ -4,7 +4,7 @@ import { FETCH_USER_SHARES_SUCCESS, FETCH_USER_SHARES_FAIL } from 'actions'
 import Share from 'model/share'
 
 const fetchUserShares = (action) => {
-  return Share.fetchList({ username: action.payload })
+  return Share.fetchList({ username: action.payload, sort: '-createdAt' })
 }
 
 function* fetchUserSharesSaga(action) {

@@ -7,7 +7,6 @@ import { UserContext } from 'components/User/UserProvider'
 import {
   Card,
   Columns,
-  Content,
   Media,
   Image,
   Heading,
@@ -30,7 +29,7 @@ const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
   const postedDateArray = postedDate.split(' ')
 
-  if (!_.includes(postedDateArray, 'hour') && !_.includes(postedDateArray, 'hours')) {
+  if (_.includes(postedDateArray, 'day') || _.includes(postedDateArray, 'days')) {
     return moment(input).utc().format("MMM DD")
   }
   return postedDate
@@ -292,7 +291,7 @@ class UsernamePage extends Component {
               <Columns.Column size={12}>
                 {
                   adminMode &&
-                  <Card>
+                  <Card className="mb-one">
                     <Card.Content>
                       {
                         <ShareCreateForm username={username} />
