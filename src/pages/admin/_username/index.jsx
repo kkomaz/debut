@@ -24,6 +24,7 @@ import {
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter, Link } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
+import toggleNotification from 'utils/notifier/toggleNotification'
 import './AdminUsernamePage.scss';
 
 const formatDate = (input) => {
@@ -75,6 +76,30 @@ class AdminUsernamePage extends Component {
     if (user) {
       this.loadUserInfo(user)
       this.props.requestUserShares(username)
+    }
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const { username, searchedProfile, history } = this.props
+    const { loading } = this.state
+
+    if (prevProps.username !== username) {
+      const user = await lookupProfile(username)
+      if (user) {
+        this.loadUserInfo(user)
+      }
+    }
+
+    if (prevProps.searchedProfile !== searchedProfile && loading) {
+      const apps = _.map((searchedProfile.apps), (k,v) => {
+        return v
+      })
+
+      const filteredDapps = returnFilteredUrls(apps)
+      if (!_.includes(filteredDapps, 'https://debutapp_social')) {
+        toggleNotification('error', 'User profile is compromised!  Blockstack team is addressing this issue!')
+        history.push('/')
+      }
     }
   }
 
