@@ -335,7 +335,7 @@ class AdminUsernamePage extends Component {
             ref={(rightElement) => this.rightElement = rightElement}
           >
             <Columns>
-              <Columns.Column size={12} style={{ paddingTop: '0' }}>
+              <Columns.Column size={12}>
                 <Card>
                   <Card.Content>
                     <ShareCreateForm username={username} />

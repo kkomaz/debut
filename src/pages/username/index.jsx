@@ -24,7 +24,6 @@ import UserIntroDisplay from 'components/User/IntroDisplay'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import { requestProfileSearch } from 'actions/blockstack'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import './UsernamePage.scss';
 
 class UsernamePage extends Component {
   state = {
