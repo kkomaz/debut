@@ -5,3 +5,27 @@
     color: $dark_purple;
   }
 }
+
+.username {
+  &__avatar {
+    img {
+      border: 10px solid $pink;
+      border-radius: 50%;
+      height: 200px;
+      width: auto;
+    }
+  }
+
+  &__hero {
+    background: $primary;
+    color: white;
+    padding: 20px;
+  }
+
+  &__profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
