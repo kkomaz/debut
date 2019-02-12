@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import _ from 'lodash'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classNames from 'classnames';
 import {
@@ -42,13 +42,13 @@ class ShareCreateForm extends Component {
     const { text } = this.state
     const { username } = this.props
 
-    if (_.isEmpty(text)) {
-      return this.setState({ valid: false })
-    }
-
     const params = {
       text,
       username,
+    }
+
+    if (_.isEmpty(text)) {
+      return this.setState({ valid: false })
     }
 
     this.props.requestCreateShare(params)
@@ -62,8 +62,9 @@ class ShareCreateForm extends Component {
 
   onEnterPress = (e) => {
     if (e.keyCode === 13 && e.shiftKey === false) {
-      e.preventDefault()
-      this.shareForm.submit()
+      e.preventDefault();
+      e.stopPropagation();
+      this.onSubmit(e)
     }
   }
 
@@ -77,7 +78,6 @@ class ShareCreateForm extends Component {
     })
     return (
       <form
-        ref={(shareForm) => this.shareForm = shareForm}
         className="share-create-form"
         onSubmit={this.onSubmit}
       >
@@ -92,10 +92,12 @@ class ShareCreateForm extends Component {
             maxLength={150}
             color={valid ? null : 'danger'}
           />
-          {
-            !valid && <Help color="danger">Field can not be empty!</Help>
-          }
         </Field>
+
+        {
+          !valid && <Help color="danger">Field can not be empty!</Help>
+        }
+
         <div className="share-create-form__submit-wrapper">
           <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
 

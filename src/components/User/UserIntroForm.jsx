@@ -97,6 +97,13 @@ class UserIntroForm extends Component {
     await userSession.putFile(`user-intro-${username}.json`, JSON.stringify(blockstackData), options)
   }
 
+  onEnterPress = (e) => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.onSubmit(e)
+    }
+  }
 
   render() {
     const { valid } = this.state
@@ -110,6 +117,7 @@ class UserIntroForm extends Component {
             onChange={this.onChange}
             placeholder="Add description here!"
             rows={20}
+            onKeyDown={this.onEnterPress}
             value={this.state.description}
             color={valid ? null : 'danger'}
           />
