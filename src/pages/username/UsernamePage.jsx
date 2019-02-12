@@ -253,7 +253,7 @@ class UsernamePage extends Component {
         </Columns>
         <Columns>
           <Columns.Column size={4}>
-            <div className="username-page__description mb-one">
+            <div className="username__description mb-one">
               <UserDescription
                 adminMode={adminMode}
                 displayView={displayView}
@@ -268,14 +268,14 @@ class UsernamePage extends Component {
               />
             </div>
 
-            <div className="username-page__dapps mb-one">
+            <div className="username__dapps mb-one">
               <UserDapps
                 adminMode={adminMode}
                 userInfo={userInfo}
               />
             </div>
 
-            <div className="username-page__following mb-one">
+            <div className="username__following mb-one">
               <UserFollowing
                 adminMode={adminMode}
                 history={history}
@@ -290,17 +290,24 @@ class UsernamePage extends Component {
           >
             <Columns>
               <Columns.Column size={12}>
-                <Card>
-                  <Card.Content>
-                    <ShareCreateForm username={username} />
-                  </Card.Content>
-                </Card>
                 {
-                  _.map(shares, (share) => {
+                  adminMode &&
+                  <Card>
+                    <Card.Content>
+                      {
+                        <ShareCreateForm username={username} />
+                      }
+                    </Card.Content>
+                  </Card>
+                }
+                {
+                  _.map(shares, (share, index) => {
+                    const cardClass = _.isEqual(index, 0) ? 'username__share' : 'username__share mt-one'
+
                     return (
-                      <Card key={share._id} className="mt-one admin-username-page__share">
+                      <Card key={share._id} className={cardClass}>
                         <Card.Content>
-                          <p><strong>{username}</strong> <span className="admin-username-page__date small">- {formatDate(share.createdAt)}</span></p>
+                          <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
                           <p className="mt-quarter">{share.text}</p>
                         </Card.Content>
                       </Card>

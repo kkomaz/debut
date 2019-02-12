@@ -1,12 +1,10 @@
 @import 'src/variables';
 
-.admin-username-page {
+.username {
   &__date {
     color: $dark_purple;
   }
-}
 
-.username {
   &__avatar {
     img {
       border: 10px solid $pink;
