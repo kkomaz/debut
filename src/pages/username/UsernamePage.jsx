@@ -322,6 +322,7 @@ class UsernamePage extends Component {
 
                     return (
                       <ShareListItem
+                        key={share._id}
                         cardClass={cardClass}
                         share={share}
                         username={username}
