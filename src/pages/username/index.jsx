@@ -68,7 +68,7 @@ class UsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
       if (!_.includes(filteredDapps, 'https://debutapp_social')) {
-        toggleNotification('error', 'User profile is compromised!  Blockstack team is addressing this issue!')
+        toggleNotification('error', 'User issue related to a Blockstack bug!  The Blockstack team is addressing this issue!')
         history.push('/')
       }
     }
