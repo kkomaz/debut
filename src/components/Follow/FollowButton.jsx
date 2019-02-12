@@ -6,6 +6,7 @@ import './FollowButton.scss'
 
 class FollowButton extends Component {
   static propTypes = {
+    defaultImgUrl: PropTypes.string.isRequired,
     sessionUser: PropTypes.object.isRequired,
     setSessionUserState: PropTypes.func.isRequired,
     userInfo: PropTypes.object.isRequired,
@@ -22,9 +23,16 @@ class FollowButton extends Component {
 
     const params = [...sessionUser.following, user]
 
-    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
+    try {
+      const result = await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
 
-    setSessionUserState('following', params)
+      if (!result) {
+        throw new Error('Unable to follow user.')
+      }
+      setSessionUserState('following', params)
+    } catch (e) {
+      setSessionUserState('following', sessionUser.following)
+    }
   }
 
   unfollowUser = async () => {
@@ -35,19 +43,28 @@ class FollowButton extends Component {
       return user.username !== username
     })
 
-    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-
-    setSessionUserState('following', params)
+    try {
+      const result = await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
+      if (!result) {
+        throw new Error('Unable to follow user.')
+      }
+      setSessionUserState('following', params)
+    } catch (e) {
+      setSessionUserState('following', sessionUser.following)
+    }
   }
 
   render() {
     const { sessionUser, username } = this.props
 
+    if (_.isEqual(sessionUser.username, username)) {
+      return null
+    }
+
     return (
       <React.Fragment>
         {
-          sessionUser.username === username ? null :
-          _.find(sessionUser.following, (user) => user.username === username) ?
+          _.find(sessionUser.following, (user) => _.isEqual(user.username, username)) ?
           <Button
             className="follow-button mt-one"
             onClick={this.unfollowUser}
