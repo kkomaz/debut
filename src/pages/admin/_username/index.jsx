@@ -176,6 +176,40 @@ class AdminUsernamePage extends Component {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
+  followUser = async () => {
+    const { username } = this.props
+    const { sessionUser, defaultImgUrl } = this.context.state
+    const { setSessionUserState } = this.context
+    const { userInfo } = this.state
+
+    const options = { encrypt: false }
+    const user = {
+      username,
+      imageUrl: _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+    }
+
+    const params = [...sessionUser.following, user]
+
+    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
+
+    setSessionUserState('following', params)
+  }
+
+  unfollowUser = async () => {
+    const { username } = this.props
+    const { sessionUser } = this.context.state
+    const { setSessionUserState } = this.context
+    const options = { encrypt: false }
+
+    const params = _.filter(sessionUser.following, (user) => {
+      return user.username !== username
+    })
+
+    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
+
+    setSessionUserState('following', params)
+  }
+
   render() {
     const { sessionUser } = this.context.state
     const { username, history, shares } = this.props
@@ -207,6 +241,22 @@ class AdminUsernamePage extends Component {
                 <Heading subtitle size={6} style={{ color: 'white' }}>
                   {username}
                 </Heading>
+                {
+                  sessionUser.username === username ? null :
+                  _.find(sessionUser.following, (user) => user.username === username) ?
+                  <Button
+                    className="mt-one"
+                    onClick={this.unfollowUser}
+                    >
+                    Unfollow
+                  </Button> :
+                  <Button
+                    className="mt-one"
+                    onClick={this.followUser}
+                    >
+                    Follow
+                  </Button>
+                }
               </Media.Item>
             </Media>
           </Columns.Column>
