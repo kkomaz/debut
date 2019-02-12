@@ -6,8 +6,6 @@ import {
   Textarea,
 } from 'react-bulma-components/lib/components/form'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
-import Share from 'model/share'
-import toggleNotification from 'utils/notifier/toggleNotification'
 import { requestCreateShare } from 'actions/share'
 
 class ShareCreateForm extends Component {
@@ -46,9 +44,20 @@ class ShareCreateForm extends Component {
     this.setState({ text: '' })
   }
 
+  onEnterPress = (e) => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault()
+      this.shareForm.submit()
+    }
+  }
+
   render() {
     return (
-      <form className="moment-create-form" onSubmit={this.onSubmit}>
+      <form
+        ref={(shareForm) => this.shareForm = shareForm}
+        className="moment-create-form"
+        onSubmit={this.onSubmit}
+      >
         <Field>
           <Textarea
             name="text"
@@ -56,6 +65,7 @@ class ShareCreateForm extends Component {
             placeholder="Share a moment here!"
             rows={5}
             value={this.state.text}
+            onKeyDown={this.onEnterPress}
           />
         </Field>
         <SubmitFooter
