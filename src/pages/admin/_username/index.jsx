@@ -157,8 +157,6 @@ class AdminUsernamePage extends Component {
     const { defaultImgUrl } = this.context.state
     const { loading, userInfo, displayView, fileExists } = this.state
 
-    console.log(userInfo)
-
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
@@ -189,75 +187,73 @@ class AdminUsernamePage extends Component {
           </Columns.Column>
         </Columns>
         <Columns>
-          <div style={{ position: 'relative', width: '33%' }}>
-            <div style={this.state.style} ref={(leftElement) => this.leftElement = leftElement}>
-              <Card className="username-page mb-one">
-                <Card.Content>
-                  <Content>
-                    <h4>About Myself</h4>
-                    {
-                      loading ? <div>Loading...</div> :
-                      <div className="admin-username-page__info-details">
-                        <div className="admin-username-page__button-actions mb-one">
-                          {
-                            fileExists ?
-                            <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                              Edit
-                            </Button> :
-                            <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                              Create
-                            </Button>
-                          }
-                        </div>
+          <Columns.Column size={4}>
+            <Card className="username-page mb-one">
+              <Card.Content>
+                <Content>
+                  <h4>About Myself</h4>
+                  {
+                    loading ? <div>Loading...</div> :
+                    <div className="admin-username-page__info-details">
+                      <div className="admin-username-page__button-actions mb-one">
                         {
-                          displayView ? <UserIntroDisplay description={userInfo.description} /> :
-                          <UserIntroForm
-                            description={userInfo.description}
-                            fileExists={fileExists}
-                            onCancel={this.onCancel}
-                            onSubmit={this.onSubmit}
-                            identityAddress={sessionUser.userData.identityAddress}
-                            userSession={sessionUser.userSession}
-                            username={username}
-                            />
+                          fileExists ?
+                          <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                            Edit
+                          </Button> :
+                          <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
+                            Create
+                          </Button>
                         }
                       </div>
+                      {
+                        displayView ? <UserIntroDisplay description={userInfo.description} /> :
+                        <UserIntroForm
+                          description={userInfo.description}
+                          fileExists={fileExists}
+                          onCancel={this.onCancel}
+                          onSubmit={this.onSubmit}
+                          identityAddress={sessionUser.userData.identityAddress}
+                          userSession={sessionUser.userSession}
+                          username={username}
+                          />
+                      }
+                    </div>
+                  }
+                </Content>
+              </Card.Content>
+            </Card>
+
+            <Card className="admin-username-page mb-one">
+              <Card.Content>
+                <Content>
+                  <Heading size={4}>My Blockstack Dapps</Heading>
+                  {
+                    _.get(userInfo, 'apps.length', 0) > 0 ?
+                    <IconList apps={userInfo.apps} /> :
+                      <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
+                    }
+
+                    <Heading size={6}>
+                      Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
+                  </Heading>
+                </Content>
+              </Card.Content>
+            </Card>
+
+            <Card className="admin-username-page">
+              <Card.Content>
+                <Content>
+                  <Heading size={4}>Following Users</Heading>
+                  {
+                    _.get(userInfo, 'following.length', 0) ?
+                    <UserList users={userInfo.following} history={history} /> :
+                      <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
                     }
                   </Content>
                 </Card.Content>
               </Card>
-
-              <Card className="admin-username-page mb-one">
-                <Card.Content>
-                  <Content>
-                    <Heading size={4}>My Blockstack Dapps</Heading>
-                    {
-                      _.get(userInfo, 'apps.length', 0) > 0 ?
-                      <IconList apps={userInfo.apps} /> :
-                        <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
-                      }
-
-                      <Heading size={6}>
-                        Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
-                    </Heading>
-                  </Content>
-                </Card.Content>
-              </Card>
-
-              <Card className="admin-username-page">
-                <Card.Content>
-                  <Content>
-                    <Heading size={4}>Following Users</Heading>
-                    {
-                      _.get(userInfo, 'following.length', 0) ?
-                      <UserList users={userInfo.following} history={history} /> :
-                        <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
-                      }
-                    </Content>
-                  </Card.Content>
-                </Card>
-            </div>
-          </div>
+          </Columns.Column>
 
           <Columns.Column
             size={8}
