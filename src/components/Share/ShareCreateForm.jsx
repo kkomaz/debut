@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import classNames from 'classnames';
 import {
   Field,
   Textarea,
@@ -55,6 +56,13 @@ class ShareCreateForm extends Component {
   }
 
   render() {
+    const { characterLength } = this.state
+    const leftoverLength = 150 - characterLength
+    const characterClass = classNames({
+      'share-create-form__character-length': true,
+      'share-create-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
+      'share-create-form__character-length--danger': leftoverLength < 30
+    })
     return (
       <form
         ref={(shareForm) => this.shareForm = shareForm}
@@ -73,7 +81,7 @@ class ShareCreateForm extends Component {
           />
         </Field>
         <div className="share-create-form__submit-wrapper">
-          <p>{150 - this.state.characterLength} characters left</p>
+          <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
 
           <SubmitFooter
             onCancel={this.onCancel}

@@ -50,10 +50,6 @@ class RootRoute extends Component {
               path="/:username"
               render={({ match, location }) => <UsernamePage username={match.params.username} />}
             />
-            <Route
-              path="/admin/:username"
-              render={({ match }) => <AdminUsernameRoute match={match} />}
-            />
           </Switch>
         </Container>
       </UserProvider>
