@@ -12,7 +12,6 @@ import {
   Heading,
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
-import moment from 'moment'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
@@ -24,16 +23,10 @@ import {
   UserDescription,
   UserFollowing
 } from 'components/User'
-
-const formatDate = (input) => {
-  const postedDate = moment(input).fromNow()
-  const postedDateArray = postedDate.split(' ')
-
-  if (_.includes(postedDateArray, 'day') || _.includes(postedDateArray, 'days')) {
-    return moment(input).utc().format("MMM DD")
-  }
-  return postedDate
-}
+import {
+  NoShares,
+  ShareListItem,
+} from 'components/Share'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -300,16 +293,19 @@ class UsernamePage extends Component {
                   </Card>
                 }
                 {
+                  !adminMode && _.isEqual(shares.length, 0) &&
+                  <NoShares username={username} />
+                }
+                {
                   _.map(shares, (share, index) => {
                     const cardClass = _.isEqual(index, 0) ? 'username__share' : 'username__share mt-one'
 
                     return (
-                      <Card key={share._id} className={cardClass}>
-                        <Card.Content>
-                          <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
-                          <p className="mt-quarter">{share.text}</p>
-                        </Card.Content>
-                      </Card>
+                      <ShareListItem
+                        cardClass={cardClass}
+                        share={share}
+                        username={username}
+                      />
                     )
                   })
                 }
