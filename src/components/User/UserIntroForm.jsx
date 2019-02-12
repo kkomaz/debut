@@ -6,6 +6,7 @@ import {
   Field,
   Label,
   Textarea,
+  Help,
 } from 'react-bulma-components/lib/components/form'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 
@@ -17,6 +18,7 @@ class UserIntroForm extends Component {
 
     this.state = {
       description,
+      valid: true,
     }
   }
 
@@ -30,6 +32,12 @@ class UserIntroForm extends Component {
   }
 
   onChange = (e) => {
+    const { valid } = this.props
+
+    if (!valid) {
+      this.setState({ valid: true })
+    }
+
     this.setState({
       [e.target.name]: e.target.value
     })
@@ -44,6 +52,10 @@ class UserIntroForm extends Component {
     const { description } = this.state
     const { fileExists } = this.props
     e.preventDefault()
+
+    if (_.isEmpty(description)) {
+      return this.setState({ valid: false })
+    }
 
     try {
       fileExists ? this.editUserIndexer() : this.createUserIndexer()
@@ -87,6 +99,8 @@ class UserIntroForm extends Component {
 
 
   render() {
+    const { valid } = this.state
+
     return (
       <form className="user-intro-form" onSubmit={this.onSubmit}>
         <Field>
@@ -97,7 +111,11 @@ class UserIntroForm extends Component {
             placeholder="Add description here!"
             rows={20}
             value={this.state.description}
+            color={valid ? null : 'danger'}
           />
+          {
+            !valid && <Help color="danger">Field can not be empty!</Help>
+          }
         </Field>
         <SubmitFooter
           onCancel={this.onCancel}

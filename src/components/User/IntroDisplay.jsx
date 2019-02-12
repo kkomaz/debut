@@ -2,12 +2,20 @@ import React from 'react'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 
+const generateDescription = (props) => {
+  if (props.adminMode) {
+    return _.isEmpty(props.description) ? 'Add a short bio to tell people more about yourself.' : props.description
+  }
+
+  return _.isEmpty(props.description) ? 'Bio is currently empty.' : props.description
+}
+
 const introDisplay = (props) => {
-  const description = _.isEmpty(props.description) ? 'Add some info!' : props.description
+  const description = generateDescription(props)
 
   return (
     <div className="user-intro-display">
-      <p>
+      <p className="user-intro-display__description">
         {description}
       </p>
     </div>

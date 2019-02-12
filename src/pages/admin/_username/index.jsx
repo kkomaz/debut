@@ -1,82 +1,51 @@
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
-import { UserContext } from 'components/User/UserProvider'
+import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
 import {
   Button,
   Card,
   Columns,
   Content,
-  Media,
-  Image,
   Heading,
+  Image,
+  Media,
 } from 'components/bulma'
-import FollowButton from 'components/Follow/FollowButton'
-import moment from 'moment'
-import UserIntroForm from 'components/User/UserIntroForm'
+
+// Component Imports
+import { UserContext } from 'components/User/UserProvider'
+import { IconList, UserList } from 'components/icon';
 import UserIntroDisplay from 'components/User/IntroDisplay'
+
+// Util/Action Imports
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
-import {
-  IconList,
-  UserList
-} from 'components/icon'
-import ShareCreateForm from 'components/Share/ShareCreateForm'
-import { withRouter, Link } from 'react-router-dom'
-import { requestUserShares } from 'actions/share'
+import { requestProfileSearch } from 'actions/blockstack'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import './AdminUsernamePage.scss';
 
-const formatDate = (input) => {
-  const postedDate = moment(input).fromNow()
-  const postedDateArray = postedDate.split(' ')
-
-  if (!_.includes(postedDateArray, 'hour') && !_.includes(postedDateArray, 'hours')) {
-    return moment(input).utc().format("MMM DD")
-  }
-  return postedDate
-}
-
-class AdminUsernamePage extends Component {
-  constructor(props, context) {
-    super(props)
-
-    const { sessionUser } = context.state
-
-    this.state = {
-      userInfo: {
-        description: '',
-        apps: [],
-      },
-      loading: true,
-      displayView: true,
-      fileExists: false,
-      height: window.innerHeight,
-      message: 'not at bottom',
-      style: {
-        position: 'absolute',
-        top: '0',
-        left: '12px',
-      },
-      activateScroll: false,
-      adminMode: props.username === sessionUser.username
-    }
+class UsernamePage extends Component {
+  state = {
+    loading: true
   }
 
   static propTypes = {
-    shares: PropTypes.array.isRequired,
-    username: PropTypes.string.isRequired,
-    blockstackApps: PropTypes.array.isRequired
+    blockstackApps: PropTypes.array.isRequired,
   }
 
   async componentDidMount() {
-    const { username } = this.props
+    const { username, history } = this.props
+    const { sessionUser } = this.context.state
+
+    if (_.isEqual(sessionUser.username, username)) {
+      return history.push(`/admin/${username}`)
+    }
+
     const user = await lookupProfile(username)
 
     if (user) {
       this.loadUserInfo(user)
-      this.props.requestUserShares(username)
     }
   }
 
@@ -105,76 +74,39 @@ class AdminUsernamePage extends Component {
   }
 
   async loadUserInfo(profile) {
+    const { userSession } = this.context.state.sessionUser
     const { username, blockstackApps } = this.props
     const options = { decrypt: false, username }
-    const { sessionUser } = this.context.state
-    let userIntro
-    let userDapps
-    let following
 
     try {
-      userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
+      const result = await userSession.getFile(`user-intro-${username}.json`, options)
 
-      const apps = _.map(sessionUser.userData.profile.apps, (k,v) => {
+      if (!result) {
+        throw new Error('User does not exist')
+      }
+
+      const apps = _.map((profile.apps), (k,v) => {
         return v
       })
 
       const filteredDapps = returnFilteredUrls(apps)
 
-      userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
-
-      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
-
-      if (!userIntro || !userDapps || !following) {
-        throw new Error('User intro data does not exist')
-      }
+      const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
+      const following = await userSession.getFile(`users-following-${username}.json`, options)
 
       this.setState({
         userInfo: {
-          ...JSON.parse(userIntro) || {},
-          apps: userDapps,
-          following: JSON.parse(following),
+          description: JSON.parse(result).description,
           profile,
+          username,
+          apps: userDapps,
+          following: JSON.parse(following)
         },
-        loading: false,
-        fileExists: true,
+        loading: false
       })
     } catch (e) {
-      this.setState({
-        userInfo: {
-          ...JSON.parse(userIntro) || {},
-          apps: userDapps || [],
-          following: JSON.parse(following) || [],
-          profile
-        },
-        loading: false,
-      })
+      this.requestProfileSearch()
     }
-  }
-
-  onCreateEdit = () => {
-    this.setState({ displayView: false })
-  }
-
-  onShowDisplay = () => {
-    this.setState({ displayView: true })
-  }
-
-  onSubmit = (data) => {
-    const { description } = data
-
-    this.setState({
-      userInfo: { ...this.state.userInfo, description },
-      displayView: true
-    })
-  }
-
-  onCancel = () => {
-    this.setState({ displayView: true })
-  }
-
-  addDefaultSrc = (evt) => {
-    evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
   followUser = async () => {
@@ -196,6 +128,11 @@ class AdminUsernamePage extends Component {
     setSessionUserState('following', params)
   }
 
+  requestProfileSearch = () => {
+    const { username } = this.props
+    this.props.requestProfileSearch(username)
+  }
+
   unfollowUser = async () => {
     const { username } = this.props
     const { sessionUser } = this.context.state
@@ -212,15 +149,18 @@ class AdminUsernamePage extends Component {
   }
 
   render() {
-    const { sessionUser } = this.context.state
-    const { username, history, shares } = this.props
-    const { defaultImgUrl } = this.context.state
-    const { loading, userInfo, displayView, fileExists } = this.state
+    const { userInfo, loading } = this.state
+    const { sessionUser, defaultImgUrl } = this.context.state
+    const { username, history } = this.props
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
-      <React.Fragment>
+      <div className="username mt-one">
         <Columns>
           <Columns.Column size={12}>
             <Media className="username__hero">
@@ -235,136 +175,102 @@ class AdminUsernamePage extends Component {
                   />
               </Media.Item>
               <Media.Item
+                renderAs="p"
                 position="center"
                 style={{ alignSelf: 'center' }}
               >
-                <Heading size={4} style={{ color: 'white' }}>{_.get(userInfo, 'profile.name', username)}</Heading>
-                <Heading subtitle size={6} style={{ color: 'white' }}>
-                  {username}
-                </Heading>
-                <FollowButton
-                  defaultImgUrl={defaultImgUrl}
-                  sessionUser={sessionUser}
-                  setSessionUserState={this.context.setSessionUserState}
-                  userInfo={userInfo}
-                  username={username}
-                />
+              <Heading size={4} style={{ color: 'white' }}>{userInfo.profile.name}</Heading>
+              <Heading subtitle size={6} style={{ color: 'white' }}>
+                {userInfo.username}
+              </Heading>
+              {
+                sessionUser.username === username ? null :
+                _.find(sessionUser.following, (user) => user.username === username) ?
+                <Button
+                  className="mt-one"
+                  onClick={this.unfollowUser}
+                  >
+                  Unfollow
+                </Button> :
+                <Button
+                  className="mt-one"
+                  onClick={this.followUser}
+                  >
+                  Follow
+                </Button>
+              }
               </Media.Item>
             </Media>
           </Columns.Column>
         </Columns>
+
         <Columns>
           <Columns.Column size={4}>
-            <Card className="username-page mb-one">
-              <Card.Content>
-                <Content>
-                  <h4>About Myself</h4>
-                  {
-                    loading ? <div>Loading...</div> :
-                    <div className="admin-username-page__info-details">
-                      <div className="admin-username-page__button-actions mb-one">
-                        {
-                          fileExists ?
-                          <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                            Edit
-                          </Button> :
-                          <Button onClick={this.onCreateEdit} color="primary" className="mr-half">
-                            Create
-                          </Button>
-                        }
-                      </div>
-                      {
-                        displayView ? <UserIntroDisplay description={userInfo.description} /> :
-                        <UserIntroForm
-                          description={userInfo.description}
-                          fileExists={fileExists}
-                          onCancel={this.onCancel}
-                          onSubmit={this.onSubmit}
-                          identityAddress={sessionUser.userData.identityAddress}
-                          userSession={sessionUser.userSession}
-                          username={username}
-                          />
-                      }
-                    </div>
-                  }
-                </Content>
-              </Card.Content>
-            </Card>
-
-            <Card className="admin-username-page mb-one">
-              <Card.Content>
-                <Content>
-                  <Heading size={4}>My Blockstack Dapps</Heading>
-                  {
-                    _.get(userInfo, 'apps.length', 0) > 0 ?
-                    <IconList apps={userInfo.apps} /> :
-                      <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
-                    }
-
-                    <Heading size={6}>
-                      Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
-                  </Heading>
-                </Content>
-              </Card.Content>
-            </Card>
-
-            <Card className="admin-username-page">
-              <Card.Content>
-                <Content>
-                  <Heading size={4}>Following Users</Heading>
-                  {
-                    _.get(userInfo, 'following.length', 0) ?
-                    <UserList users={userInfo.following} history={history} /> :
-                      <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
-                    }
-                  </Content>
-                </Card.Content>
-              </Card>
-          </Columns.Column>
-
-          <Columns.Column
-            size={8}
-            ref={(rightElement) => this.rightElement = rightElement}
-          >
             <Columns>
               <Columns.Column size={12}>
-                <Card>
+                <Card className="username-page">
                   <Card.Content>
-                    <ShareCreateForm username={username} />
+                    <Content>
+                      <Heading size={4}>My Blockstack Dapps</Heading>
+                      {
+                        _.get(userInfo, 'apps.length', 0) > 0 ?
+                        <IconList apps={userInfo.apps} /> :
+                        <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
+                      }
+                    </Content>
                   </Card.Content>
                 </Card>
-                {
-                  _.map(shares, (share) => {
-                    return (
-                      <Card key={share._id} className="mt-one admin-username-page__share">
-                        <Card.Content>
-                          <p><strong>{username}</strong> <span className="admin-username-page__date small">- {formatDate(share.createdAt)}</span></p>
-                          <p className="mt-quarter">{share.text}</p>
-                        </Card.Content>
-                      </Card>
-                    )
-                  })
-                }
+              </Columns.Column>
+              <Columns.Column size={12}>
+                <Card className="username-page">
+                  <Card.Content>
+                    <Content>
+                      <Heading size={4}>Following Users</Heading>
+                      {
+                        _.get(userInfo, 'following.length', 0) > 0 ?
+                        <UserList users={userInfo.following} history={history} /> :
+                        <Heading style={{ color: '#401457' }} size={6}>Not following anyone!</Heading>
+                      }
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+            </Columns>
+          </Columns.Column>
+
+          <Columns.Column size={8}>
+            <Columns>
+              <Columns.Column size={12}>
+                <Card className="username-page">
+                  <Card.Content>
+                    <Content>
+                      <h4>About Myself</h4>
+                      <UserIntroDisplay description={userInfo.description} />
+                    </Content>
+                  </Card.Content>
+                </Card>
               </Columns.Column>
             </Columns>
           </Columns.Column>
         </Columns>
-      </React.Fragment>
+      </div>
     )
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { username } = ownProps
+  const user = _.find(state.user.users, (user) => user.username === ownProps.username)
+  const searchedProfile = _.get(state, 'blockstack.searchedProfile', {})
 
-  const shares = _.filter(state.share.shares, (share) => share.username === username)
   return {
     blockstackApps: state.blockstack.apps,
-    shares,
+    identityAddress: _.get(user, 'blockstackId'),
+    searchedProfile,
   }
 }
 
-AdminUsernamePage.contextType = UserContext
+UsernamePage.contextType = UserContext
+
 export default withRouter(connect(mapStateToProps, {
-  requestUserShares
-})(AdminUsernamePage))
+  requestProfileSearch,
+})(UsernamePage))
