@@ -13,6 +13,7 @@ import {
   Image,
   Heading,
 } from 'components/bulma'
+import FollowButton from 'components/Follow/FollowButton'
 import moment from 'moment'
 import UserIntroForm from 'components/User/UserIntroForm'
 import UserIntroDisplay from 'components/User/IntroDisplay'
@@ -241,22 +242,13 @@ class AdminUsernamePage extends Component {
                 <Heading subtitle size={6} style={{ color: 'white' }}>
                   {username}
                 </Heading>
-                {
-                  sessionUser.username === username ? null :
-                  _.find(sessionUser.following, (user) => user.username === username) ?
-                  <Button
-                    className="mt-one"
-                    onClick={this.unfollowUser}
-                    >
-                    Unfollow
-                  </Button> :
-                  <Button
-                    className="mt-one"
-                    onClick={this.followUser}
-                    >
-                    Follow
-                  </Button>
-                }
+                <FollowButton
+                  defaultImgUrl={defaultImgUrl}
+                  sessionUser={sessionUser}
+                  setSessionUserState={this.context.setSessionUserState}
+                  userInfo={userInfo}
+                  username={username}
+                />
               </Media.Item>
             </Media>
           </Columns.Column>
