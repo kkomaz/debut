@@ -37,22 +37,29 @@ const formatDate = (input) => {
 }
 
 class AdminUsernamePage extends Component {
-  state = {
-    userInfo: {
-      description: '',
-      apps: [],
-    },
-    loading: true,
-    displayView: true,
-    fileExists: false,
-    height: window.innerHeight,
-    message: 'not at bottom',
-    style: {
-      position: 'absolute',
-      top: '0',
-      left: '12px',
-    },
-    activateScroll: false,
+  constructor(props, context) {
+    super(props)
+
+    const { sessionUser } = context.state
+
+    this.state = {
+      userInfo: {
+        description: '',
+        apps: [],
+      },
+      loading: true,
+      displayView: true,
+      fileExists: false,
+      height: window.innerHeight,
+      message: 'not at bottom',
+      style: {
+        position: 'absolute',
+        top: '0',
+        left: '12px',
+      },
+      activateScroll: false,
+      adminMode: props.username === sessionUser.username
+    }
   }
 
   static propTypes = {
@@ -63,7 +70,6 @@ class AdminUsernamePage extends Component {
 
   async componentDidMount() {
     const { username } = this.props
-
     const user = await lookupProfile(username)
 
     if (user) {
@@ -72,41 +78,51 @@ class AdminUsernamePage extends Component {
     }
   }
 
-  async loadUserInfo() {
-    const options = { decrypt: false }
-    const { userSession, userData, username } = this.context.state.sessionUser
-    const { blockstackApps } = this.props
+  async loadUserInfo(profile) {
+    const { username, blockstackApps } = this.props
+    const options = { decrypt: false, username }
+    const { sessionUser } = this.context.state
+    let userIntro
+    let userDapps
+    let following
 
     try {
-      let result
+      userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
 
-      result = await userSession.getFile(`user-intro-${username}.json`, options)
-
-      if (!result) {
-        throw new Error('User intro data does not exist')
-      }
-
-      const apps = _.map(userData.profile.apps, (k,v) => {
+      const apps = _.map(sessionUser.userData.profile.apps, (k,v) => {
         return v
       })
 
       const filteredDapps = returnFilteredUrls(apps)
 
-      const userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
+      userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
 
-      const following = await userSession.getFile(`users-following-${username}.json`, options)
+      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
+
+      if (!userIntro || !userDapps || !following) {
+        throw new Error('User intro data does not exist')
+      }
 
       this.setState({
         userInfo: {
-          ...JSON.parse(result) || {},
+          ...JSON.parse(userIntro) || {},
           apps: userDapps,
-          following: JSON.parse(following)
+          following: JSON.parse(following),
+          profile,
         },
         loading: false,
         fileExists: true,
       })
     } catch (e) {
-      this.setState({ loading: false })
+      this.setState({
+        userInfo: {
+          ...JSON.parse(userIntro) || {},
+          apps: userDapps || [],
+          following: JSON.parse(following) || [],
+          profile
+        },
+        loading: false,
+      })
     }
   }
 
@@ -136,12 +152,14 @@ class AdminUsernamePage extends Component {
   }
 
   render() {
-    const { username, userData, userSession } = this.context.state.sessionUser
+    const { sessionUser } = this.context.state
+    const { username, history, shares } = this.props
     const { defaultImgUrl } = this.context.state
     const { loading, userInfo, displayView, fileExists } = this.state
-    const { history, shares } = this.props
 
-    const src = _.get(userData, 'profile.image[0].contentUrl', defaultImgUrl)
+    console.log(userInfo)
+
+    const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
       <React.Fragment>
@@ -162,7 +180,7 @@ class AdminUsernamePage extends Component {
                 position="center"
                 style={{ alignSelf: 'center' }}
               >
-                <Heading size={4} style={{ color: 'white' }}>{userData.profile.name}</Heading>
+                <Heading size={4} style={{ color: 'white' }}>{_.get(userInfo, 'profile.name', username)}</Heading>
                 <Heading subtitle size={6} style={{ color: 'white' }}>
                   {username}
                 </Heading>
@@ -198,8 +216,8 @@ class AdminUsernamePage extends Component {
                             fileExists={fileExists}
                             onCancel={this.onCancel}
                             onSubmit={this.onSubmit}
-                            identityAddress={userData.identityAddress}
-                            userSession={userSession}
+                            identityAddress={sessionUser.userData.identityAddress}
+                            userSession={sessionUser.userSession}
                             username={username}
                             />
                         }
@@ -273,10 +291,13 @@ class AdminUsernamePage extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  const { username } = ownProps
+
+  const shares = _.filter(state.share.shares, (share) => share.username === username)
   return {
     blockstackApps: state.blockstack.apps,
-    shares: state.share.shares,
+    shares,
   }
 }
 
