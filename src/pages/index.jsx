@@ -6,18 +6,16 @@ import {
   Card,
   Columns,
   Container,
-  Control,
-  Field,
   Heading,
   Hero,
   Media,
-  Radio,
   Table,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
+import Switch from 'react-bulma-switch/lib';
 
 class Page extends Component {
   state = {
@@ -56,6 +54,10 @@ class Page extends Component {
     this.props.requestAllUsers()
   }
 
+  toggleSwitch = () => {
+    this.setState({ showTileView: !this.state.showTileView })
+  }
+
   render() {
     const { userState } = this.props
     const { showTileView } = this.state
@@ -67,28 +69,24 @@ class Page extends Component {
          <Hero.Body>
            <Container>
              <Heading>Choose your user's view!</Heading>
-               <Field>
-                 <Control>
-                   <Radio
-                     className="page__radio"
-                     onChange={() => this.onChange(true)}
-                     checked={showTileView}
-                     value="Tile"
-                     name="view"
-                    >
-                     Tile
-                   </Radio>
-                   <Radio
-                     className="page__radio"
-                     onChange={() => this.onChange(false)}
-                     checked={!showTileView}
-                     value="Table"
-                     name="view"
-                    >
-                     Table
-                   </Radio>
-                 </Control>
-               </Field>
+              <Switch
+                className="page__slider"
+                color="success"
+                onChange={this.toggleSwitch}
+                checked={showTileView}
+                rounded
+              >
+                  Tile View
+              </Switch>
+              <Switch
+                className="page__slider"
+                color="success"
+                onChange={this.toggleSwitch}
+                checked={!showTileView}
+                rounded
+              >
+                  Table View
+              </Switch>
            </Container>
          </Hero.Body>
        </Hero>
