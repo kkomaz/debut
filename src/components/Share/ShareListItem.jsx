@@ -5,6 +5,7 @@ import {
   Card,
 } from 'components/bulma'
 import moment from 'moment'
+import { linkifyText } from 'utils/decorator'
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -23,7 +24,7 @@ const shareItemListItem = (props) => {
     <Card key={share._id} className={cardClass}>
       <Card.Content>
         <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
-        <p className="mt-quarter">{share.text}</p>
+        <p className="mt-quarter">{linkifyText(share.text)}</p>
       </Card.Content>
     </Card>
   )
