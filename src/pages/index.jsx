@@ -92,46 +92,50 @@ class Page extends Component {
            </Container>
          </Hero.Body>
        </Hero>
-        {
-          showTileView ?
-          <Columns breakpoint="tablet">
+          <Container>
             {
-              _.map(userState.users, (user) => {
-                return (
-                  <Columns.Column
-                    key={user.username}
-                    tablet={{
-                      size: 3
-                    }}
-                  >
-                    <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                      <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
-                      <Card.Content className="page__content">
-                        <Media>
-                          <Media.Item style={{ textAlign: 'center' }}>
-                            <p className="page__username-text">{user.username}</p>
-                            <p className="page__join-text">joined debut!</p>
-                          </Media.Item>
-                        </Media>
-                      </Card.Content>
-                    </Card>
-                  </Columns.Column>
-                )
-              })
+              showTileView ?
+                <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
+                  {
+                    _.map(userState.users, (user) => {
+                      return (
+                        <Columns.Column
+                          key={user.username}
+                          tablet={{
+                            size: 3,
+                          }}
+                        >
+                          <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                            <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
+                            <Card.Content className="page__content">
+                              <Media>
+                                <Media.Item style={{ textAlign: 'center' }}>
+                                  <p className="page__username-text">{user.username}</p>
+                                  <p className="page__join-text">joined debut!</p>
+                                </Media.Item>
+                              </Media>
+                            </Card.Content>
+                          </Card>
+                        </Columns.Column>
+                      )
+                    })
+                  }
+                </Columns> :
+                <div style={{ padding: '0 150px' }}>
+                  <Table>
+                    <tbody>
+                      {
+                        _.map(userState.users, (user) => {
+                          return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
+                            <td>{user.username} has joined debut!</td>
+                          </tr>
+                        })
+                      }
+                    </tbody>
+                  </Table>
+                </div>
             }
-          </Columns> :
-          <Table>
-            <tbody>
-              {
-                _.map(userState.users, (user) => {
-                  return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
-                    <td>{user.username} has joined debut!</td>
-                  </tr>
-                })
-              }
-            </tbody>
-          </Table>
-        }
+          </Container>
       </div>
     )
   }

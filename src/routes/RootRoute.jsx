@@ -3,9 +3,7 @@ import { Switch, Route, withRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Container from 'react-bulma-components/lib/components/container'
 import UserProvider from 'components/User/UserProvider'
-import AdminUsernameRoute from 'routes/AdminUsernameRoute'
 import RootPage from 'pages'
 import Navbar from 'components/Navbar'
 import { requestBlockstackApps } from 'actions/blockstack'
@@ -35,23 +33,22 @@ class RootRoute extends Component {
     return (
       <UserProvider userSession={userSession}>
         <Navbar />
-        <Container>
-          <ToastContainer
-            className='toast-container'
+        <ToastContainer
+          className='toast-container'
+        />
+
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={({ location }) => <RootPage />}
           />
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={({ location }) => <RootPage />}
-            />
-            <Route
-              exact
-              path="/:username"
-              render={({ match, location }) => <UsernamePage username={match.params.username} />}
-            />
-          </Switch>
-        </Container>
+          <Route
+            exact
+            path="/:username"
+            render={({ match, location }) => <UsernamePage username={match.params.username} />}
+          />
+        </Switch>
       </UserProvider>
     )
   }

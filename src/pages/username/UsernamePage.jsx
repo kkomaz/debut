@@ -7,6 +7,7 @@ import { UserContext } from 'components/User/UserProvider'
 import {
   Card,
   Columns,
+  Container,
   Media,
   Image,
   Heading,
@@ -231,7 +232,7 @@ class UsernamePage extends Component {
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
     return (
-      <React.Fragment>
+      <Container>
         <Columns>
           <Columns.Column size={12}>
             <Media className="username__hero">
@@ -334,7 +335,7 @@ class UsernamePage extends Component {
             </Columns>
           </Columns.Column>
         </Columns>
-      </React.Fragment>
+      </Container>
     )
   }
 }
