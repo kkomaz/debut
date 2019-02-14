@@ -211,12 +211,17 @@ class UsernamePage extends Component {
   }
 
   handleScroll = () => {
-    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
-    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    const windowBottom = windowHeight + window.pageYOffset;
+    const html = document.documentElement; // get the html element
+    // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
+    // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
+    const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
+    const body = document.body; // get the document body
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
+    const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
 
+    /**
+     * if windowBottom is larger then you know you reached the bottom
+    */
     if (windowBottom >= docHeight) {
         this.setState({
           message: 'bottom reached',
