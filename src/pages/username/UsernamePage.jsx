@@ -28,7 +28,7 @@ import {
   NoShares,
   ShareListItem,
 } from 'components/Share'
-import { BarLoader } from 'components/Loader'
+import { BarLoader, HeroAvatarLoader } from 'components/Loader'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -239,13 +239,17 @@ class UsernamePage extends Component {
           <Columns.Column size={12}>
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
-                <Image
-                  className="username__avatar"
-                  alt="100x100"
-                  renderAs="p"
-                  src={src}
-                  style={{ margin: 0 }}
-                  />
+                {
+                  loading ?
+                  <HeroAvatarLoader /> :
+                  <Image
+                    className="username__avatar"
+                    alt="100x100"
+                    renderAs="p"
+                    src={src}
+                    style={{ margin: 0 }}
+                    />
+                }
               </Media.Item>
               <Media.Item
                 position="center"
