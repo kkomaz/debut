@@ -7,6 +7,7 @@ import {
 } from 'react-bulma-components'
 import UserIntroDisplay from 'components/User/IntroDisplay'
 import UserIntroForm from 'components/User/UserIntroForm'
+import { List } from 'react-content-loader'
 
 class UserDescription extends Component {
   static propTypes = {
@@ -36,10 +37,13 @@ class UserDescription extends Component {
           <Card.Content>
             <Content>
               <h4>About Myself</h4>
-              <UserIntroDisplay
-                adminMode={adminMode}
-                description={userInfo.description}
-              />
+              {
+                loading ? <List /> :
+                <UserIntroDisplay
+                  adminMode={adminMode}
+                  description={userInfo.description}
+                  />
+              }
             </Content>
           </Card.Content>
         </Card>
@@ -52,7 +56,7 @@ class UserDescription extends Component {
           <Content>
             <h4>About Myself</h4>
             {
-              loading ? <div>Loading...</div> :
+              loading ? <List /> :
               <div className="user-description__info-details">
                 <div className="user-description__button-actions mb-one">
                   {
