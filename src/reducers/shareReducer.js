@@ -20,7 +20,7 @@ export default function shareReducer(state = defaultSession, action) {
         full: newShares.length === 0
       }}
     case CREATE_SHARE_SUCCESS:
-      return { ...state, shares: [action.payload, ...state.shares]}
+      return { ...state, shares: { ...state.shares, list: [action.payload, ...state.shares.list]}}
     default:
       return state
   }

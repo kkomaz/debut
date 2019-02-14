@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 import {
-  Button,
   Card,
   Columns,
   Container,
@@ -301,11 +300,6 @@ class UsernamePage extends Component {
           >
             <Columns>
               <Columns.Column size={12}>
-                <Button
-                  onClick={this.requestUserShares}
-                >
-                  Request Shares
-                </Button>
                 {
                   adminMode &&
                   <Card className="mb-one">
