@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 import {
+  Button,
   Card,
   Columns,
   Container,
@@ -68,7 +69,7 @@ class UsernamePage extends Component {
 
     if (user) {
       this.loadUserInfo(user)
-      this.props.requestUserShares(username)
+      // this.props.requestUserShares(username)
     }
   }
 
@@ -174,6 +175,12 @@ class UsernamePage extends Component {
 
   addDefaultSrc = (evt) => {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
+  }
+
+  requestUserShares = () => {
+    const { username, shares } = this.props
+    const sharesLength = shares.length
+    this.props.requestUserShares({ username, offset: sharesLength })
   }
 
   followUser = async () => {
@@ -311,6 +318,11 @@ class UsernamePage extends Component {
           >
             <Columns>
               <Columns.Column size={12}>
+                <Button
+                  onClick={this.requestUserShares}
+                >
+                  Request Shares
+                </Button>
                 {
                   adminMode &&
                   <Card className="mb-one">
