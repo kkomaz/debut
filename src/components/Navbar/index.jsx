@@ -23,7 +23,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     const { sessionUser } = this.context.state
     this.toggleNavbar()
-    history.push(`/admin/${sessionUser.username}`)
+    history.push(`/${sessionUser.username}`)
   }
 
   signOut = () => {
