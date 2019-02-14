@@ -43,7 +43,7 @@ class UsernamePage extends Component {
       loading: true,
       displayView: true,
       fileExists: false,
-      message: 'not at bottom',
+      bottomReached: false,
       style: {
         position: 'absolute',
         top: '0',
@@ -211,6 +211,7 @@ class UsernamePage extends Component {
   }
 
   handleScroll = () => {
+    const { bottomReached } = this.state
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
     // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
@@ -223,9 +224,9 @@ class UsernamePage extends Component {
      * if windowBottom is larger then you know you reached the bottom
     */
     if (windowBottom >= docHeight) {
-        this.setState({
-          message: 'bottom reached',
-        });
+      this.setState({ bottomReached: true });
+    } else if ((windowBottom < docHeight) && bottomReached) {
+      this.setState({ bottomReached: false });
     }
   }
 
@@ -235,6 +236,8 @@ class UsernamePage extends Component {
     const { adminMode, loading, userInfo, displayView, fileExists } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+
+    console.log(this.state.bottomReached)
 
     return (
       <Container>
