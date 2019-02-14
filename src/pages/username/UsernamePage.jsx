@@ -46,8 +46,6 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username
     }
-
-    this.requestUserShares = _.debounce(this.requestUserShares, 300)
   }
 
   static propTypes = {
@@ -225,8 +223,6 @@ class UsernamePage extends Component {
     } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
-
-    console.log(this.state.bottomReached)
 
     return (
       <Container>
