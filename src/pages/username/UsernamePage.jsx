@@ -290,6 +290,7 @@ class UsernamePage extends Component {
             <div className="username__dapps mb-one">
               <UserDapps
                 adminMode={adminMode}
+                loading={loading}
                 userInfo={userInfo}
               />
             </div>
@@ -298,6 +299,7 @@ class UsernamePage extends Component {
               <UserFollowing
                 adminMode={adminMode}
                 history={history}
+                loading={loading}
                 userInfo={userInfo}
               />
             </div>
