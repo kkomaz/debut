@@ -45,20 +45,17 @@ class UsernamePage extends Component {
       displayView: true,
       fileExists: false,
       bottomReached: false,
-      style: {
-        position: 'absolute',
-        top: '0',
-        left: '12px',
-      },
-      activateScroll: false,
       adminMode: props.username === sessionUser.username
     }
+
+    this.requestUserShares = _.debounce(this.requestUserShares, 300)
   }
 
   static propTypes = {
     shares: PropTypes.array.isRequired,
     username: PropTypes.string.isRequired,
-    blockstackApps: PropTypes.array.isRequired
+    blockstackApps: PropTypes.array.isRequired,
+    sharesFull: PropTypes.bool.isRequired,
   }
 
   async componentDidMount() {
@@ -69,7 +66,7 @@ class UsernamePage extends Component {
 
     if (user) {
       this.loadUserInfo(user)
-      // this.props.requestUserShares(username)
+      this.requestUserShares(username)
     }
   }
 
@@ -183,42 +180,10 @@ class UsernamePage extends Component {
     this.props.requestUserShares({ username, offset: sharesLength })
   }
 
-  followUser = async () => {
-    const { username } = this.props
-    const { sessionUser, defaultImgUrl } = this.context.state
-    const { setSessionUserState } = this.context
-    const { userInfo } = this.state
-
-    const options = { encrypt: false }
-    const user = {
-      username,
-      imageUrl: _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
-    }
-
-    const params = [...sessionUser.following, user]
-
-    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-
-    setSessionUserState('following', params)
-  }
-
-  unfollowUser = async () => {
-    const { username } = this.props
-    const { sessionUser } = this.context.state
-    const { setSessionUserState } = this.context
-    const options = { encrypt: false }
-
-    const params = _.filter(sessionUser.following, (user) => {
-      return user.username !== username
-    })
-
-    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-
-    setSessionUserState('following', params)
-  }
-
   handleScroll = () => {
     const { bottomReached } = this.state
+    const { sharesFull } = this.props
+
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
     // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
@@ -231,7 +196,11 @@ class UsernamePage extends Component {
      * if windowBottom is larger then you know you reached the bottom
     */
     if (windowBottom >= docHeight) {
-      this.setState({ bottomReached: true });
+      this.setState({ bottomReached: true }, () => {
+        if (!sharesFull) {
+          this.requestUserShares()
+        }
+      });
     } else if ((windowBottom < docHeight) && bottomReached) {
       this.setState({ bottomReached: false });
     }
@@ -239,8 +208,22 @@ class UsernamePage extends Component {
 
   render() {
     const { sessionUser, defaultImgUrl } = this.context.state
-    const { username, history, shares } = this.props
-    const { adminMode, loading, userInfo, displayView, fileExists } = this.state
+
+    const {
+      username,
+      history,
+      shares,
+      sharesFull,
+    } = this.props
+
+    const {
+      adminMode,
+      bottomReached,
+      loading,
+      userInfo,
+      displayView,
+      fileExists
+    } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
@@ -351,6 +334,9 @@ class UsernamePage extends Component {
                     )
                   })
                 }
+                {
+                  bottomReached && !sharesFull && <div>Loading...</div>
+                }
               </Columns.Column>
             </Columns>
           </Columns.Column>
@@ -363,10 +349,13 @@ class UsernamePage extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
 
-  const shares = _.filter(state.share.shares, (share) => share.username === username)
+  const shares = _.filter(state.share.shares.list, (share) => share.username === username)
+  const sharesFull = state.share.shares.full
+
   return {
     blockstackApps: state.blockstack.apps,
     shares,
+    sharesFull,
   }
 }
 
