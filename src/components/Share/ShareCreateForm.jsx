@@ -65,6 +65,7 @@ class ShareCreateForm extends Component {
 
   onCancel = (e) => {
     e.preventDefault()
+    this.fileInput.value = ''
     this.setState({ text: '', imageFile: '' })
   }
 
@@ -77,13 +78,13 @@ class ShareCreateForm extends Component {
   }
 
   storeFile = (event) => {
-      event.preventDefault();
-      const file = event.target.files[0];
-      const reader = new window.FileReader();
-      reader.readAsArrayBuffer(file);
-      reader.onloadend = () => {
-          this.setState({ imageFile: `data:image/jpeg;base64,${Buffer(reader.result).toString("base64")}`});
-      };
+    event.preventDefault();
+    const file = event.target.files[0];
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+        this.setState({ imageFile: `data:image/jpeg;base64,${Buffer(reader.result).toString("base64")}`});
+    };
   };
 
   render() {
@@ -138,7 +139,12 @@ class ShareCreateForm extends Component {
                   icon="IconCamera"
                   size={20}
                 />
-              <input type="file" onChange={this.storeFile} hidden/>
+                <input
+                  type="file"
+                  onChange={this.storeFile}
+                  hidden
+                  ref={fileInput => this.fileInput = fileInput}
+                />
               </Label>
             </div>
 

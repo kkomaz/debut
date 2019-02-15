@@ -228,11 +228,6 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log([
-      bottomReached,
-      !sharesFull
-    ])
-
     return (
       <Container>
         <Columns>
