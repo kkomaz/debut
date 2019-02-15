@@ -271,7 +271,7 @@ class UsernamePage extends Component {
           </Columns.Column>
         </Columns>
         <Columns>
-          <Columns.Column size={4}>
+          <Columns.Column size={5}>
             <div className="username__description mb-one">
               <UserDescription
                 adminMode={adminMode}
@@ -306,7 +306,7 @@ class UsernamePage extends Component {
           </Columns.Column>
 
           <Columns.Column
-            size={8}
+            size={7}
             ref={(rightElement) => this.rightElement = rightElement}
           >
             <Columns>

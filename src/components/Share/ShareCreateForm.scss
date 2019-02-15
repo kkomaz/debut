@@ -17,4 +17,18 @@
       color: $danger;
     }
   }
+
+  &__text-field {
+    margin-bottom: 0 !important;
+  }
+
+  &__image-uploaded {
+    border-left: 1px solid $shadow;
+    border-right: 1px solid $shadow;
+    border-bottom: 1px solid $shadow;
+  }
+
+  &__camera-icon {
+    cursor: pointer;
+  }
 }

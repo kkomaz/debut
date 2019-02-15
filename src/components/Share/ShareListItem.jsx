@@ -25,6 +25,10 @@ const shareItemListItem = (props) => {
       <Card.Content>
         <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
         <p className="mt-quarter">{linkifyText(share.text)}</p>
+        {
+          share.imageFile &&
+          <img alt='' src={share.imageFile} />
+        }
       </Card.Content>
     </Card>
   )

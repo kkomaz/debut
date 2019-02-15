@@ -8,7 +8,8 @@ class Share extends Model {
       type: String,
       required: true,
       decrypted: true
-    }
+    },
+    imageFile: { type: String }
   }
 }
 
