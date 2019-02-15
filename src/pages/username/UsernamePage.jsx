@@ -28,6 +28,7 @@ import {
   NoShares,
   ShareListItem,
 } from 'components/Share'
+import { BarLoader, HeroAvatarLoader } from 'components/Loader'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -46,6 +47,9 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username
     }
+
+    this.requestUserShares = _.debounce(this.requestUserShares, 300)
+    this.handleScroll = _.debounce(this.handleScroll, 300)
   }
 
   static propTypes = {
@@ -224,19 +228,28 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
+    console.log([
+      bottomReached,
+      !sharesFull
+    ])
+
     return (
       <Container>
         <Columns>
           <Columns.Column size={12}>
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
-                <Image
-                  className="username__avatar"
-                  alt="100x100"
-                  renderAs="p"
-                  src={src}
-                  style={{ margin: 0 }}
-                  />
+                {
+                  loading ?
+                  <HeroAvatarLoader /> :
+                  <Image
+                    className="username__avatar"
+                    alt="100x100"
+                    renderAs="p"
+                    src={src}
+                    style={{ margin: 0 }}
+                    />
+                }
               </Media.Item>
               <Media.Item
                 position="center"
@@ -277,6 +290,7 @@ class UsernamePage extends Component {
             <div className="username__dapps mb-one">
               <UserDapps
                 adminMode={adminMode}
+                loading={loading}
                 userInfo={userInfo}
               />
             </div>
@@ -285,6 +299,7 @@ class UsernamePage extends Component {
               <UserFollowing
                 adminMode={adminMode}
                 history={history}
+                loading={loading}
                 userInfo={userInfo}
               />
             </div>
@@ -325,7 +340,7 @@ class UsernamePage extends Component {
                   })
                 }
                 {
-                  bottomReached && !sharesFull && <div>Loading...</div>
+                  bottomReached && !sharesFull && <BarLoader style={{ height: '200px' }} />
                 }
               </Columns.Column>
             </Columns>
