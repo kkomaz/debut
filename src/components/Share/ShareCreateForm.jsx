@@ -5,11 +5,13 @@ import { connect } from 'react-redux'
 import classNames from 'classnames';
 import {
   Field,
+  Label,
   Textarea,
   Help,
 } from 'react-bulma-components/lib/components/form'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { requestCreateShare } from 'actions/share'
+import { Icon } from 'components/icon'
 import './ShareCreateForm.scss'
 
 class ShareCreateForm extends Component {
@@ -17,6 +19,7 @@ class ShareCreateForm extends Component {
     text: '',
     characterLength: 0,
     valid: true,
+    imageFile: '',
   }
 
   static propTypes = {
@@ -39,12 +42,13 @@ class ShareCreateForm extends Component {
   onSubmit = async (e) => {
     e.preventDefault()
 
-    const { text } = this.state
+    const { text, imageFile } = this.state
     const { username } = this.props
 
     const params = {
       text,
       username,
+      imageFile
     }
 
     if (_.isEmpty(text)) {
@@ -52,12 +56,17 @@ class ShareCreateForm extends Component {
     }
 
     this.props.requestCreateShare(params)
-    this.setState({ text: '', characterLength: 0 })
+    this.setState({
+      text: '',
+      characterLength: 0,
+      imageFile: ''
+    })
   }
 
   onCancel = (e) => {
     e.preventDefault()
-    this.setState({ text: '' })
+    this.fileInput.value = ''
+    this.setState({ text: '', imageFile: '' })
   }
 
   onEnterPress = (e) => {
@@ -68,6 +77,16 @@ class ShareCreateForm extends Component {
     }
   }
 
+  storeFile = (event) => {
+    event.preventDefault();
+    const file = event.target.files[0];
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+        this.setState({ imageFile: `data:image/jpeg;base64,${Buffer(reader.result).toString("base64")}`});
+    };
+  };
+
   render() {
     const { characterLength, valid } = this.state
     const leftoverLength = 150 - characterLength
@@ -76,37 +95,69 @@ class ShareCreateForm extends Component {
       'share-create-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
       'share-create-form__character-length--danger': leftoverLength < 30
     })
+
     return (
-      <form
-        className="share-create-form"
-        onSubmit={this.onSubmit}
-      >
-        <Field>
-          <Textarea
-            name="text"
-            onChange={this.onChange}
-            placeholder="Share a moment here!"
-            rows={2}
-            value={this.state.text}
-            onKeyDown={this.onEnterPress}
-            maxLength={150}
-            color={valid ? null : 'danger'}
-          />
-        </Field>
+      <React.Fragment>
+        <form
+          className="share-create-form"
+          onSubmit={this.onSubmit}
+        >
+          <Field className="share-create-form__text-field">
+            <Textarea
+              name="text"
+              onChange={this.onChange}
+              placeholder="Share a moment here!"
+              rows={2}
+              value={this.state.text}
+              onKeyDown={this.onEnterPress}
+              maxLength={150}
+              color={valid ? null : 'danger'}
+              style={{ borderRadius: 0, borderColor: '#E0E3DA'}}
+            />
+          </Field>
 
-        {
-          !valid && <Help color="danger">Field can not be empty!</Help>
-        }
+          {
+            !valid && <Help color="danger">Field can not be empty!</Help>
+          }
 
-        <div className="share-create-form__submit-wrapper">
-          <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
+          {
+            this.state.imageFile &&
+            <div className="share-create-form__image-uploaded">
+              <img alt='' src={this.state.imageFile} />
+            </div>
+          }
 
-          <SubmitFooter
-            onCancel={this.onCancel}
-            onSubmit={this.onSubmit}
-          />
-        </div>
-      </form>
+          <div className="share-create-form__characters">
+            <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
+          </div>
+
+          <div className="share-create-form__submit-wrapper">
+            <div className="share-create-form__options">
+              <Label>
+                <Icon
+                  className="share-create-form__camera-icon mt-half"
+                  icon="IconCamera"
+                  size={20}
+                />
+                <input
+                  type="file"
+                  onChange={this.storeFile}
+                  hidden
+                  ref={fileInput => this.fileInput = fileInput}
+                />
+              </Label>
+            </div>
+
+            <div>
+              <SubmitFooter
+                onCancel={this.onCancel}
+                onSubmit={this.onSubmit}
+              />
+            </div>
+
+          </div>
+        </form>
+      </React.Fragment>
     )
   }
 }
