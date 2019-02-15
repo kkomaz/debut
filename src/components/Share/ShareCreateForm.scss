@@ -17,4 +17,22 @@
       color: $danger;
     }
   }
+
+  &__text-field {
+    margin-bottom: 0 !important;
+  }
+
+  &__image-uploaded {
+    align-items: center;
+    border-bottom: 1px solid $shadow;
+    border-left: 1px solid $shadow;
+    border-right: 1px solid $shadow;
+    display: flex;
+    padding: 10px 0;
+    justify-content: center;
+  }
+
+  &__camera-icon {
+    cursor: pointer;
+  }
 }

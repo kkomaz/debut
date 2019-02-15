@@ -228,11 +228,6 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log([
-      bottomReached,
-      !sharesFull
-    ])
-
     return (
       <Container>
         <Columns>
@@ -271,7 +266,7 @@ class UsernamePage extends Component {
           </Columns.Column>
         </Columns>
         <Columns>
-          <Columns.Column size={4}>
+          <Columns.Column size={5}>
             <div className="username__description mb-one">
               <UserDescription
                 adminMode={adminMode}
@@ -306,7 +301,7 @@ class UsernamePage extends Component {
           </Columns.Column>
 
           <Columns.Column
-            size={8}
+            size={7}
             ref={(rightElement) => this.rightElement = rightElement}
           >
             <Columns>
@@ -327,7 +322,7 @@ class UsernamePage extends Component {
                 }
                 {
                   _.map(shares, (share, index) => {
-                    const cardClass = _.isEqual(index, 0) ? 'username__share' : 'username__share mt-one'
+                    const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
 
                     return (
                       <ShareListItem
