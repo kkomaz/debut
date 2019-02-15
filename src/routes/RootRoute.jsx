@@ -29,14 +29,14 @@ class RootRoute extends Component {
     this.fetchDapps()
   }
 
-  fetchDapps() {
-    const result = Dapp.fetchList()
+  fetchDapps = async () => {
+    const result = await Dapp.fetchList()
     this.setState({ radiksDapps: result, loading: false })
   }
 
   render() {
-    const { userSession, blockstackAppsLoading, radiksDapps } = this.props
-
+    const { userSession, blockstackAppsLoading } = this.props
+    const { radiksDapps } = this.state
     if (blockstackAppsLoading || this.state.loading) {
       return <div>Loading...</div>
     }

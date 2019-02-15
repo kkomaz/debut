@@ -14,7 +14,7 @@ import {
   Heading,
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
-import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
+import { fetchUserBlockstackApps, returnFilteredUrls, fetchUserBlockstackApps2 } from 'utils/apps'
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
@@ -104,11 +104,12 @@ class UsernamePage extends Component {
   }
 
   async loadUserInfo(profile) {
-    const { username, blockstackApps } = this.props
+    const { username, blockstackApps, radiksDapps } = this.props
     const options = { decrypt: false, username }
     const { sessionUser } = this.context.state
     let userIntro
-    let userDapps
+    // let userDapps
+    let userDappsRadiks
     let following
 
     try {
@@ -120,21 +121,19 @@ class UsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
 
-      const radiksDapps = returnFilteredUrls(apps)
-
-      console.log(radiksDapps)
-      userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
+      userDappsRadiks = await fetchUserBlockstackApps2(radiksDapps, filteredDapps)
+      // userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
 
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
 
-      if (!userIntro || !userDapps || !following) {
+      if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
       }
 
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDapps,
+          apps: userDappsRadiks,
           following: JSON.parse(following),
           profile,
         },
@@ -145,7 +144,7 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDapps || [],
+          apps: userDappsRadiks || [],
           following: JSON.parse(following) || [],
           profile
         },

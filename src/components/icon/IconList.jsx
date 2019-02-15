@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import { UserContext } from 'components/User/UserProvider'
 import './IconList.scss'
 
 class IconList extends Component {
@@ -9,15 +10,16 @@ class IconList extends Component {
 
   render() {
     const { apps } = this.props
+    const { defaultImgUrl } = this.context.state
 
     return (
       <ul className="icon-list">
         {
           _.map(apps, (app, index) => {
             return (
-              <li className="icon-list__single" key={`${app}-${index}`}>
-                <a href={app.url} target="_blank" rel='noreferrer noopener'>
-                  <img onError={this.addDefaultSrc} src={app.icons[0].src} alt="dapp" height="42" width="42" />
+              <li className="icon-list__single" key={`${app.attrs.url}-${index}`}>
+                <a href={app.attrs.url} target="_blank" rel='noreferrer noopener'>
+                  <img onError={this.addDefaultSrc} src={_.get(app, 'attrs.icons[0].src', defaultImgUrl)} alt="dapp" height="42" width="42" />
                 </a>
               </li>
             )
@@ -27,5 +29,5 @@ class IconList extends Component {
     )
   }
 }
-
+IconList.contextType = UserContext
 export default IconList
