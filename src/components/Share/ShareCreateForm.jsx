@@ -52,7 +52,7 @@ class ShareCreateForm extends Component {
     }
 
     this.props.requestCreateShare(params)
-    this.setState({ text: '' })
+    this.setState({ text: '', characterLength: 0 })
   }
 
   onCancel = (e) => {

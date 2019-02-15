@@ -28,6 +28,7 @@ import {
   NoShares,
   ShareListItem,
 } from 'components/Share'
+import { BarLoader, HeroAvatarLoader } from 'components/Loader'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -43,21 +44,19 @@ class UsernamePage extends Component {
       loading: true,
       displayView: true,
       fileExists: false,
-      message: 'not at bottom',
-      style: {
-        position: 'absolute',
-        top: '0',
-        left: '12px',
-      },
-      activateScroll: false,
+      bottomReached: false,
       adminMode: props.username === sessionUser.username
     }
+
+    this.requestUserShares = _.debounce(this.requestUserShares, 300)
+    this.handleScroll = _.debounce(this.handleScroll, 300)
   }
 
   static propTypes = {
     shares: PropTypes.array.isRequired,
     username: PropTypes.string.isRequired,
-    blockstackApps: PropTypes.array.isRequired
+    blockstackApps: PropTypes.array.isRequired,
+    sharesFull: PropTypes.bool.isRequired,
   }
 
   async componentDidMount() {
@@ -68,7 +67,7 @@ class UsernamePage extends Component {
 
     if (user) {
       this.loadUserInfo(user)
-      this.props.requestUserShares(username)
+      this.requestUserShares(username)
     }
   }
 
@@ -176,60 +175,63 @@ class UsernamePage extends Component {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
-  followUser = async () => {
-    const { username } = this.props
-    const { sessionUser, defaultImgUrl } = this.context.state
-    const { setSessionUserState } = this.context
-    const { userInfo } = this.state
-
-    const options = { encrypt: false }
-    const user = {
-      username,
-      imageUrl: _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
-    }
-
-    const params = [...sessionUser.following, user]
-
-    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-
-    setSessionUserState('following', params)
-  }
-
-  unfollowUser = async () => {
-    const { username } = this.props
-    const { sessionUser } = this.context.state
-    const { setSessionUserState } = this.context
-    const options = { encrypt: false }
-
-    const params = _.filter(sessionUser.following, (user) => {
-      return user.username !== username
-    })
-
-    await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-
-    setSessionUserState('following', params)
+  requestUserShares = () => {
+    const { username, shares } = this.props
+    const sharesLength = shares.length
+    this.props.requestUserShares({ username, offset: sharesLength })
   }
 
   handleScroll = () => {
-    const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-    const body = document.body;
-    const html = document.documentElement;
-    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-    const windowBottom = windowHeight + window.pageYOffset;
+    const { bottomReached } = this.state
+    const { sharesFull } = this.props
 
+    const html = document.documentElement; // get the html element
+    // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
+    // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
+    const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
+    const body = document.body; // get the document body
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
+    const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
+
+    /**
+     * if windowBottom is larger then you know you reached the bottom
+    */
     if (windowBottom >= docHeight) {
-        this.setState({
-          message: 'bottom reached',
-        });
+      this.setState({ bottomReached: true }, () => {
+        if (!sharesFull) {
+          this.requestUserShares()
+        }
+      });
+    } else if ((windowBottom < docHeight) && bottomReached) {
+      this.setState({ bottomReached: false });
     }
   }
 
   render() {
     const { sessionUser, defaultImgUrl } = this.context.state
-    const { username, history, shares } = this.props
-    const { adminMode, loading, userInfo, displayView, fileExists } = this.state
+
+    const {
+      username,
+      history,
+      shares,
+      sharesFull,
+    } = this.props
+
+    const {
+      adminMode,
+      bottomReached,
+      loading,
+      userInfo,
+      displayView,
+      fileExists
+    } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+
+    console.log([
+      bottomReached,
+      !sharesFull
+    ])
 
     return (
       <Container>
@@ -237,13 +239,17 @@ class UsernamePage extends Component {
           <Columns.Column size={12}>
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
-                <Image
-                  className="username__avatar"
-                  alt="100x100"
-                  renderAs="p"
-                  src={src}
-                  style={{ margin: 0 }}
-                  />
+                {
+                  loading ?
+                  <HeroAvatarLoader /> :
+                  <Image
+                    className="username__avatar"
+                    alt="100x100"
+                    renderAs="p"
+                    src={src}
+                    style={{ margin: 0 }}
+                    />
+                }
               </Media.Item>
               <Media.Item
                 position="center"
@@ -284,6 +290,7 @@ class UsernamePage extends Component {
             <div className="username__dapps mb-one">
               <UserDapps
                 adminMode={adminMode}
+                loading={loading}
                 userInfo={userInfo}
               />
             </div>
@@ -292,6 +299,7 @@ class UsernamePage extends Component {
               <UserFollowing
                 adminMode={adminMode}
                 history={history}
+                loading={loading}
                 userInfo={userInfo}
               />
             </div>
@@ -331,6 +339,9 @@ class UsernamePage extends Component {
                     )
                   })
                 }
+                {
+                  bottomReached && !sharesFull && <BarLoader style={{ height: '200px' }} />
+                }
               </Columns.Column>
             </Columns>
           </Columns.Column>
@@ -343,10 +354,13 @@ class UsernamePage extends Component {
 const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
 
-  const shares = _.filter(state.share.shares, (share) => share.username === username)
+  const shares = _.filter(state.share.shares.list, (share) => share.username === username)
+  const sharesFull = state.share.shares.full
+
   return {
     blockstackApps: state.blockstack.apps,
     shares,
+    sharesFull,
   }
 }
 

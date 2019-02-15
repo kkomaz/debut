@@ -8,16 +8,18 @@ import {
   Heading,
 } from 'components/bulma'
 import { UserList } from 'components/icon'
+import { List } from 'react-content-loader'
 
 class UserFollowing extends Component {
   static propTypes = {
     adminMode: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
     userInfo: PropTypes.object.isRequired,
   }
 
   render() {
-    const { userInfo, history, adminMode } = this.props
+    const { userInfo, history, adminMode, loading } = this.props
 
     if (!adminMode) {
       return (
@@ -25,9 +27,8 @@ class UserFollowing extends Component {
           <Card.Content>
             <Content>
               <Heading size={4}>Following Users</Heading>
-
                 {
-                  _.get(userInfo, 'following.length', 0) ?
+                  loading ? <List /> : _.get(userInfo, 'following.length', 0) ?
                   <UserList users={userInfo.following} history={history} /> :
                   <Heading size={6}>Not following anyone!</Heading>
                 }
@@ -43,7 +44,7 @@ class UserFollowing extends Component {
           <Content>
             <Heading size={4}>Following Users</Heading>
             {
-              _.get(userInfo, 'following.length', 0) ?
+              loading ? <List /> : _.get(userInfo, 'following.length', 0) ?
               <UserList users={userInfo.following} history={history} /> :
               <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
             }
