@@ -33,7 +33,7 @@ const Icon = (props) => {
   const onKeyPress = (e) => {
     e.preventDefault();
     if (e.charCode === 13 || e.charCode === 32) {
-      props.onTouchTap(e);
+      props.onClick(e);
     }
   };
 
@@ -41,12 +41,12 @@ const Icon = (props) => {
     return <p>Icon viewBox or markup does not exist!</p>;
   }
 
-  if (props.onTouchTap && !props.disabled) {
+  if (props.onClick && !props.disabled) {
     return (
       <a
         role="button"
         aria-label={ariaLabel}
-        onClick={props.onTouchTap}
+        onClick={props.onClick}
         tabIndex={0}
         onKeyPress={onKeyPress}
       >
@@ -85,7 +85,7 @@ Icon.propTypes = {
   icon: PropTypes.string.isRequired,
   color: PropTypes.string,
   size: PropTypes.number,
-  onTouchTap: PropTypes.func,
+  onClick: PropTypes.func,
   icons: PropTypes.object,
   style: PropTypes.object,
   disabled: PropTypes.bool,
@@ -98,7 +98,7 @@ Icon.defaultProps = {
   icon: '',
   color: '',
   size: 16,
-  onTouchTap: null,
+  onClick: null,
   icons: {},
   style: {},
   disabled: false,
