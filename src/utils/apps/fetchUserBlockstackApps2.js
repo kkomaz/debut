@@ -1,11 +1,11 @@
 import _ from 'lodash'
 import Dapp from 'model/Dapp'
 
-async function fetchUserBlockstackApps2(blockstackDapps, userDapps) {
+async function fetchUserBlockstackApps(blockstackDapps, userDapps) {
   const result = []
 
   for (const userDapp of userDapps) {
-    const blockstackDapp = _.find(blockstackDapps, (bDapp) => bDapp.attrs.url === userDapp)
+    const blockstackDapp = _.find(blockstackDapps, (bDapp) => bDapp.url === userDapp)
 
     if (blockstackDapp) {
       result.push(blockstackDapp)
@@ -22,4 +22,4 @@ async function fetchUserBlockstackApps2(blockstackDapps, userDapps) {
   return result;
 }
 
-export default fetchUserBlockstackApps2
+export default fetchUserBlockstackApps

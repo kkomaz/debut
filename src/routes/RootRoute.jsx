@@ -6,12 +6,13 @@ import { connect } from 'react-redux'
 import UserProvider from 'components/User/UserProvider'
 import RootPage from 'pages'
 import Navbar from 'components/Navbar'
-import { requestBlockstackApps } from 'actions/blockstack'
+import {
+  requestBlockstackDapps,
+} from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import UsernamePage from 'pages/username/UsernamePage'
-import Dapp from 'model/Dapp'
 
 class RootRoute extends Component {
   static propTypes = {
@@ -19,25 +20,19 @@ class RootRoute extends Component {
     requestAllUsers: PropTypes.func.isRequired
   }
 
-  state = {
-    loading: true
-  }
-
   componentDidMount() {
-    this.props.requestBlockstackApps()
+    this.props.requestBlockstackDapps()
     this.props.requestAllUsers()
-    this.fetchDapps()
-  }
-
-  fetchDapps = async () => {
-    const result = await Dapp.fetchList()
-    this.setState({ radiksDapps: result, loading: false })
   }
 
   render() {
-    const { userSession, blockstackAppsLoading } = this.props
-    const { radiksDapps } = this.state
-    if (blockstackAppsLoading || this.state.loading) {
+    const {
+      userSession,
+      blockstackDappsLoading,
+      dapps,
+    } = this.props
+
+    if (blockstackDappsLoading) {
       return <div>Loading...</div>
     }
 
@@ -57,7 +52,11 @@ class RootRoute extends Component {
           <Route
             exact
             path="/:username"
-            render={({ match, location }) => <UsernamePage username={match.params.username} radiksDapps={radiksDapps} />}
+            render={({ match, location }) =>
+              <UsernamePage
+                username={match.params.username}
+                dapps={dapps} />
+            }
           />
         </Switch>
       </UserProvider>
@@ -67,12 +66,13 @@ class RootRoute extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    blockstackAppsLoading: state.blockstack.loading
+    blockstackDappsLoading: state.blockstack.dapps.loading,
+    dapps: state.blockstack.dapps.list,
   }
 }
 
 
 export default withRouter(connect(mapStateToProps, {
-  requestBlockstackApps,
+  requestBlockstackDapps,
   requestAllUsers,
 })(RootRoute))

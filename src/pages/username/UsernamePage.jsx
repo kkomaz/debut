@@ -14,7 +14,7 @@ import {
   Heading,
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
-import { fetchUserBlockstackApps, returnFilteredUrls, fetchUserBlockstackApps2 } from 'utils/apps'
+import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
@@ -104,14 +104,12 @@ class UsernamePage extends Component {
   }
 
   async loadUserInfo(profile) {
-    const { username, blockstackApps, radiksDapps } = this.props
+    const { username, dapps } = this.props
     const options = { decrypt: false, username }
     const { sessionUser } = this.context.state
     let userIntro
-    // let userDapps
     let userDappsRadiks
     let following
-    let dapps
 
     try {
       userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
@@ -121,12 +119,8 @@ class UsernamePage extends Component {
       })
 
       const filteredDapps = returnFilteredUrls(apps)
-
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
-      userDappsRadiks = await fetchUserBlockstackApps2(radiksDapps, filteredDapps)
-      dapps = _.map(userDappsRadiks, 'attrs') || []
-      // userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
-
+      userDappsRadiks = await fetchUserBlockstackApps(dapps, filteredDapps)
 
       if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
@@ -135,7 +129,7 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: dapps,
+          apps: userDappsRadiks,
           following: JSON.parse(following),
           profile,
         },
@@ -148,7 +142,7 @@ class UsernamePage extends Component {
           ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
           profile,
-          apps: dapps,
+          apps: userDappsRadiks,
         },
         loading: false,
       })
@@ -361,7 +355,6 @@ const mapStateToProps = (state, ownProps) => {
   const sharesFull = state.share.shares.full
 
   return {
-    blockstackApps: state.blockstack.apps,
     shares,
     sharesFull,
   }
