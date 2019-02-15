@@ -111,6 +111,7 @@ class UsernamePage extends Component {
     // let userDapps
     let userDappsRadiks
     let following
+    let dapps
 
     try {
       userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
@@ -121,10 +122,11 @@ class UsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
 
+      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
       userDappsRadiks = await fetchUserBlockstackApps2(radiksDapps, filteredDapps)
+      dapps = _.map(userDappsRadiks, 'attrs') || []
       // userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
 
-      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
 
       if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
@@ -133,7 +135,7 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDappsRadiks,
+          apps: dapps,
           following: JSON.parse(following),
           profile,
         },
@@ -144,9 +146,9 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDappsRadiks || [],
           following: JSON.parse(following) || [],
-          profile
+          profile,
+          apps: dapps,
         },
         loading: false,
       })

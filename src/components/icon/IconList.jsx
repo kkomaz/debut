@@ -17,9 +17,9 @@ class IconList extends Component {
         {
           _.map(apps, (app, index) => {
             return (
-              <li className="icon-list__single" key={`${app.attrs.url}-${index}`}>
-                <a href={app.attrs.url} target="_blank" rel='noreferrer noopener'>
-                  <img onError={this.addDefaultSrc} src={_.get(app, 'attrs.icons[0].src', defaultImgUrl)} alt="dapp" height="42" width="42" />
+              <li className="icon-list__single" key={`${app.url}-${index}`}>
+                <a href={app.url} target="_blank" rel='noreferrer noopener'>
+                  <img onError={this.addDefaultSrc} src={_.get(app, 'icons[0].src', defaultImgUrl)} alt="dapp" height="42" width="42" />
                 </a>
               </li>
             )

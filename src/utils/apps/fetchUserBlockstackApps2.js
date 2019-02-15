@@ -14,8 +14,8 @@ async function fetchUserBlockstackApps2(blockstackDapps, userDapps) {
         url: userDapp
       }
       const dapp = new Dapp(params)
-      const result = await dapp.save()
-      result.push(result)
+      const savedDapp = await dapp.save()
+      result.push(savedDapp)
     }
   }
 
