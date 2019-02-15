@@ -1,0 +1,12 @@
+.share-list-item {
+  &__image-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__image {
+    max-width: 500px;
+    max-height: 500px;
+  }
+}

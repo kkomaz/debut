@@ -12,7 +12,6 @@ import {
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { requestCreateShare } from 'actions/share'
 import { Icon } from 'components/icon'
-
 import './ShareCreateForm.scss'
 
 class ShareCreateForm extends Component {
@@ -66,7 +65,7 @@ class ShareCreateForm extends Component {
 
   onCancel = (e) => {
     e.preventDefault()
-    this.setState({ text: '' })
+    this.setState({ text: '', imageFile: '' })
   }
 
   onEnterPress = (e) => {

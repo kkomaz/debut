@@ -327,7 +327,7 @@ class UsernamePage extends Component {
                 }
                 {
                   _.map(shares, (share, index) => {
-                    const cardClass = _.isEqual(index, 0) ? 'username__share' : 'username__share mt-one'
+                    const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
 
                     return (
                       <ShareListItem
