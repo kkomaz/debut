@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 import {
+  Button,
   Card,
   Columns,
   Container,
@@ -119,6 +120,9 @@ class UsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
 
+      const radiksDapps = returnFilteredUrls(apps)
+
+      console.log(radiksDapps)
       userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
 
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
@@ -310,6 +314,9 @@ class UsernamePage extends Component {
                   adminMode &&
                   <Card className="mb-one">
                     <Card.Content>
+                      <Button onClick={this.generateRadiksDapps}>
+                        Dapp
+                      </Button>
                       {
                         <ShareCreateForm username={username} />
                       }

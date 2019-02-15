@@ -11,6 +11,7 @@ import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import UsernamePage from 'pages/username/UsernamePage'
+import Dapp from 'model/Dapp'
 
 class RootRoute extends Component {
   static propTypes = {
@@ -18,15 +19,25 @@ class RootRoute extends Component {
     requestAllUsers: PropTypes.func.isRequired
   }
 
+  state = {
+    loading: true
+  }
+
   componentDidMount() {
     this.props.requestBlockstackApps()
     this.props.requestAllUsers()
+    this.fetchDapps()
+  }
+
+  fetchDapps() {
+    const result = Dapp.fetchList()
+    this.setState({ radiksDapps: result, loading: false })
   }
 
   render() {
-    const { userSession, blockstackAppsLoading } = this.props
+    const { userSession, blockstackAppsLoading, radiksDapps } = this.props
 
-    if (blockstackAppsLoading) {
+    if (blockstackAppsLoading || this.state.loading) {
       return <div>Loading...</div>
     }
 
@@ -46,7 +57,7 @@ class RootRoute extends Component {
           <Route
             exact
             path="/:username"
-            render={({ match, location }) => <UsernamePage username={match.params.username} />}
+            render={({ match, location }) => <UsernamePage username={match.params.username} radiksDapps={radiksDapps} />}
           />
         </Switch>
       </UserProvider>
