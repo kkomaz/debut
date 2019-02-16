@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 import {
+  Button,
   Card,
   Columns,
   Container,
@@ -103,11 +104,11 @@ class UsernamePage extends Component {
   }
 
   async loadUserInfo(profile) {
-    const { username, blockstackApps } = this.props
+    const { username, dapps } = this.props
     const options = { decrypt: false, username }
     const { sessionUser } = this.context.state
     let userIntro
-    let userDapps
+    let userDappsRadiks
     let following
 
     try {
@@ -118,19 +119,17 @@ class UsernamePage extends Component {
       })
 
       const filteredDapps = returnFilteredUrls(apps)
-
-      userDapps = await fetchUserBlockstackApps(blockstackApps, filteredDapps)
-
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
+      userDappsRadiks = await fetchUserBlockstackApps(dapps, filteredDapps)
 
-      if (!userIntro || !userDapps || !following) {
+      if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
       }
 
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDapps,
+          apps: userDappsRadiks,
           following: JSON.parse(following),
           profile,
         },
@@ -141,9 +140,9 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDapps || [],
           following: JSON.parse(following) || [],
-          profile
+          profile,
+          apps: userDappsRadiks,
         },
         loading: false,
       })
@@ -310,6 +309,9 @@ class UsernamePage extends Component {
                   adminMode &&
                   <Card className="mb-one">
                     <Card.Content>
+                      <Button onClick={this.generateRadiksDapps}>
+                        Dapp
+                      </Button>
                       {
                         <ShareCreateForm username={username} />
                       }
@@ -353,7 +355,6 @@ const mapStateToProps = (state, ownProps) => {
   const sharesFull = state.share.shares.full
 
   return {
-    blockstackApps: state.blockstack.apps,
     shares,
     sharesFull,
   }

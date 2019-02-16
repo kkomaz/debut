@@ -22,3 +22,7 @@ p {
 .container {
   margin-top: 10px;
 }
+
+.content li + li {
+  margin-top: 0;
+}
