@@ -13,6 +13,7 @@ import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { requestCreateShare } from 'actions/share'
 import { Icon } from 'components/icon'
 import './ShareCreateForm.scss'
+import { compactArrayOrObject } from 'utils/obj'
 
 class ShareCreateForm extends Component {
   state = {
@@ -45,11 +46,11 @@ class ShareCreateForm extends Component {
     const { text, imageFile } = this.state
     const { username } = this.props
 
-    const params = {
+    const params = compactArrayOrObject({
       text,
       username,
       imageFile
-    }
+    })
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
@@ -124,6 +125,13 @@ class ShareCreateForm extends Component {
             this.state.imageFile &&
             <div className="share-create-form__image-uploaded">
               <img alt='' src={this.state.imageFile} />
+              <Icon
+                className="share-create-form__image-remove-button debut-icon debut-icon--pointer"
+                icon="IconX"
+                color="#E71D36"
+                size={20}
+                onClick={this.onCancel}
+              />
             </div>
           }
 
@@ -135,7 +143,7 @@ class ShareCreateForm extends Component {
             <div className="share-create-form__options">
               <Label>
                 <Icon
-                  className="share-create-form__camera-icon mt-half"
+                  className="debut-icon debut-icon--pointer mt-half"
                   icon="IconCamera"
                   size={20}
                 />

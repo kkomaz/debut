@@ -30,9 +30,9 @@
     display: flex;
     padding: 10px 0;
     justify-content: center;
-  }
 
-  &__camera-icon {
-    cursor: pointer;
+    a {
+      align-self: end;
+    }
   }
 }
