@@ -262,7 +262,8 @@ class UsernamePage extends Component {
             </Media>
           </Columns.Column>
         </Columns>
-        <Columns>
+
+        <Columns className="mt-half">
           <Columns.Column size={5}>
             <div className="username__description mb-one">
               <UserDescription

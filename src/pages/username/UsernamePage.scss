@@ -15,9 +15,12 @@
   }
 
   &__hero {
+    // background: url('http://i.imgur.com/ikxbnvc.png');
     background: $primary;
-    color: white;
     padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
   }
 
   &__profile-info {
