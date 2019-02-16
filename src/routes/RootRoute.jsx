@@ -6,7 +6,9 @@ import { connect } from 'react-redux'
 import UserProvider from 'components/User/UserProvider'
 import RootPage from 'pages'
 import Navbar from 'components/Navbar'
-import { requestBlockstackApps } from 'actions/blockstack'
+import {
+  requestBlockstackDapps,
+} from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
@@ -19,14 +21,18 @@ class RootRoute extends Component {
   }
 
   componentDidMount() {
-    this.props.requestBlockstackApps()
+    this.props.requestBlockstackDapps()
     this.props.requestAllUsers()
   }
 
   render() {
-    const { userSession, blockstackAppsLoading } = this.props
+    const {
+      userSession,
+      blockstackDappsLoading,
+      dapps,
+    } = this.props
 
-    if (blockstackAppsLoading) {
+    if (blockstackDappsLoading) {
       return <div>Loading...</div>
     }
 
@@ -46,7 +52,11 @@ class RootRoute extends Component {
           <Route
             exact
             path="/:username"
-            render={({ match, location }) => <UsernamePage username={match.params.username} />}
+            render={({ match, location }) =>
+              <UsernamePage
+                username={match.params.username}
+                dapps={dapps} />
+            }
           />
         </Switch>
       </UserProvider>
@@ -56,12 +66,13 @@ class RootRoute extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    blockstackAppsLoading: state.blockstack.loading
+    blockstackDappsLoading: state.blockstack.dapps.loading,
+    dapps: state.blockstack.dapps.list,
   }
 }
 
 
 export default withRouter(connect(mapStateToProps, {
-  requestBlockstackApps,
+  requestBlockstackDapps,
   requestAllUsers,
 })(RootRoute))

@@ -8,6 +8,7 @@ import {
 import UserIntroDisplay from 'components/User/IntroDisplay'
 import UserIntroForm from 'components/User/UserIntroForm'
 import { List } from 'react-content-loader'
+import { Loadable } from 'components/Loader'
 
 class UserDescription extends Component {
   static propTypes = {
@@ -55,8 +56,7 @@ class UserDescription extends Component {
         <Card.Content>
           <Content>
             <h4>About Myself</h4>
-            {
-              loading ? <List /> :
+            <Loadable loading={loading}>
               <div className="user-description__info-details">
                 <div className="user-description__button-actions mb-one">
                   {
@@ -82,7 +82,7 @@ class UserDescription extends Component {
                     />
                 }
               </div>
-            }
+            </Loadable>
           </Content>
         </Card.Content>
       </Card>
