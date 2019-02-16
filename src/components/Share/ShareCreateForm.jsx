@@ -8,7 +8,7 @@ import {
   Label,
   Textarea,
   Help,
-} from 'react-bulma-components/lib/components/form'
+} from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { requestCreateShare } from 'actions/share'
 import { Icon } from 'components/icon'

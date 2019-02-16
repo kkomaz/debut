@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import _ from 'lodash'
 import {
   Card,
+  Help,
 } from 'components/bulma'
 import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
@@ -21,35 +22,70 @@ const formatDate = (input) => {
   return postedDate
 }
 class ShareListItem extends Component {
+  state = {
+    showDeleteConfirmation: false
+  }
+
+  revertDelete = () => {
+    this.setState({ showDeleteConfirmation: false })
+  }
+
+  setDeleteConfirmation = () => {
+    this.setState({ showDeleteConfirmation: true })
+  }
+
   render() {
     const { cardClass, share, username } = this.props
     const { sessionUser } = this.context.state
+    const { showDeleteConfirmation } = this.state
 
     const shareListItemClass = classNames({
       [cardClass]: true,
       'share-list-item': true
     })
 
+    const shareListItemTextClass = classNames({
+      'share-list-item__text': true,
+      'mt-quarter': !showDeleteConfirmation,
+      'share-list-item__text--show-delete': showDeleteConfirmation,
+      'mb-one': true
+    })
+
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content>
-          <div className="share-list-item__user-details">
+          <div className="share-list-item__user-details" style={{ position: 'relative' }}>
             <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
             {
               _.isEqual(sessionUser.username, username) &&
-              <div className="share-list-item__edit-delete ml-one">
-                <Icon
-                  className="debut-icon debut-icon--pointer mr-half"
-                  icon="IconPencil"
-                />
-                <Icon
-                  className="debut-icon debut-icon--pointer"
-                  icon="IconTrash"
-                />
+              <div className="share-list-item__edit-delete">
+                <div className="share-list-item__edit-delete-icons ml-one">
+                  <Icon
+                    className="debut-icon debut-icon--pointer mr-half"
+                    icon="IconPencil"
+                    />
+                  <Icon
+                    className="debut-icon debut-icon--pointer"
+                    icon="IconTrash"
+                    onClick={this.setDeleteConfirmation}
+                  />
+                </div>
+                {
+                  showDeleteConfirmation &&
+                  <div className="share-list-item__delete-confirmation">
+                    <p className="share-list-item__delete-confirmation-text small">
+                      Are you sure you want to delete this moment?
+                    </p>
+                    <div className="share-list-item__delete-yes-no">
+                      <p className="cursor small mr-half share-list-item__delete" onClick={() => console.log('YES')}>DELETE</p>
+                      <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
+                    </div>
+                  </div>
+                }
               </div>
             }
           </div>
-          <p className="mt-quarter mb-one">{linkifyText(share.text)}</p>
+          <p className={shareListItemTextClass}>{linkifyText(share.text)}</p>
           {
             share.imageFile &&
             <div className="share-list-item__image-container">
