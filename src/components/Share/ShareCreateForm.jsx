@@ -16,11 +16,15 @@ import './ShareCreateForm.scss'
 import { compactArrayOrObject } from 'utils/obj'
 
 class ShareCreateForm extends Component {
-  state = {
-    text: '',
-    characterLength: 0,
-    valid: true,
-    imageFile: '',
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      text: '',
+      characterLength: 0,
+      valid: true,
+      imageFile: '',
+    }
   }
 
   static propTypes = {

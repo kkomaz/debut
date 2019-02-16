@@ -10,6 +10,9 @@ import Media from 'react-bulma-components/lib/components/media'
 import Table from 'react-bulma-components/lib/components/table'
 import Container from 'react-bulma-components/lib/components/container'
 import Hero from 'react-bulma-components/lib/components/hero'
+import Modal from 'react-bulma-components/lib/components/modal';
+import Section from 'react-bulma-components/lib/components/section';
+
 import {
   Field,
   Label,
@@ -32,6 +35,8 @@ export {
   Radio,
   Image,
   Media,
+  Modal,
+  Section,
   Table,
   Textarea,
 }

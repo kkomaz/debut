@@ -26,6 +26,13 @@ class ShareListItem extends Component {
     showDeleteConfirmation: false
   }
 
+  static propTypes = {
+    cardClass: PropTypes.string.isRequired,
+    share: PropTypes.object.isRequired,
+    username: PropTypes.string.isRequired,
+    onEditClick: PropTypes.func,
+  }
+
   revertDelete = () => {
     this.setState({ showDeleteConfirmation: false })
   }
@@ -63,6 +70,7 @@ class ShareListItem extends Component {
                   <Icon
                     className="debut-icon debut-icon--pointer mr-half"
                     icon="IconPencil"
+                    onClick={this.props.onEditClick}
                     />
                   <Icon
                     className="debut-icon debut-icon--pointer"
@@ -98,10 +106,9 @@ class ShareListItem extends Component {
   }
 }
 
-ShareListItem.propTypes = {
-  cardClass: PropTypes.string.isRequired,
-  share: PropTypes.object.isRequired,
-  username: PropTypes.string.isRequired,
+ShareListItem.defaultProps = {
+  onEditClick: _.noop,
 }
+
 ShareListItem.contextType = UserContext
 export default ShareListItem
