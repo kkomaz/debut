@@ -7,7 +7,7 @@ import {
   Heading,
 } from 'components/bulma'
 import { IconList } from 'components/icon'
-import { List } from 'react-content-loader'
+import { Loadable } from 'components/Loader'
 
 class UserDapps extends Component {
   static propTypes = {
@@ -24,12 +24,14 @@ class UserDapps extends Component {
         <Card className="user-dapps">
           <Card.Content>
             <Content>
-              <Heading size={4}>My Blockstack Dapps</Heading>
+              <Loadable loading={loading}>
+                <Heading size={4}>My Blockstack Dapps</Heading>
                 {
-                  loading ? <List /> : _.get(userInfo, 'apps.length', 0) > 0 ?
+                  _.get(userInfo, 'apps.length', 0) > 0 ?
                   <IconList apps={userInfo.apps} /> :
                     <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                 }
+              </Loadable>
             </Content>
           </Card.Content>
         </Card>
@@ -40,18 +42,18 @@ class UserDapps extends Component {
       <Card className="user-dapps">
         <Card.Content>
           <Content>
-            <Heading size={4}>My Blockstack Dapps</Heading>
-              {
-                loading ? <List /> : _.get(userInfo, 'apps.length', 0) > 0 ?
-                <IconList apps={userInfo.apps} /> :
-                <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
-              }
-              {
-                !loading &&
+            <Loadable loading={loading}>
+              <React.Fragment>
+                <Heading size={4}>My Blockstack Dapps</Heading>
+                {
+                  _.get(userInfo, 'apps.length', 0) > 0 ? <IconList apps={userInfo.apps} /> :
+                  <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
+                }
                 <Heading size={6}>
                   Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
                 </Heading>
-              }
+              </React.Fragment>
+            </Loadable>
           </Content>
         </Card.Content>
       </Card>

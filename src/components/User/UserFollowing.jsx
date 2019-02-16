@@ -8,7 +8,7 @@ import {
   Heading,
 } from 'components/bulma'
 import { UserList } from 'components/icon'
-import { List } from 'react-content-loader'
+import { Loadable } from 'components/Loader'
 
 class UserFollowing extends Component {
   static propTypes = {
@@ -27,11 +27,13 @@ class UserFollowing extends Component {
           <Card.Content>
             <Content>
               <Heading size={4}>Following Users</Heading>
-                {
-                  loading ? <List /> : _.get(userInfo, 'following.length', 0) ?
-                  <UserList users={userInfo.following} history={history} /> :
-                  <Heading size={6}>Not following anyone!</Heading>
-                }
+                <Loadable loading={loading}>
+                  {
+                    _.get(userInfo, 'following.length', 0) ?
+                    <UserList users={userInfo.following} history={history} /> :
+                    <Heading size={6}>Not following anyone!</Heading>
+                  }
+                </Loadable>
             </Content>
           </Card.Content>
         </Card>
@@ -43,11 +45,13 @@ class UserFollowing extends Component {
         <Card.Content>
           <Content>
             <Heading size={4}>Following Users</Heading>
-            {
-              loading ? <List /> : _.get(userInfo, 'following.length', 0) ?
-              <UserList users={userInfo.following} history={history} /> :
-              <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
-            }
+            <Loadable loading={loading}>
+              {
+                _.get(userInfo, 'following.length', 0) ?
+                <UserList users={userInfo.following} history={history} /> :
+                <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
+              }
+            </Loadable>
           </Content>
         </Card.Content>
       </Card>
