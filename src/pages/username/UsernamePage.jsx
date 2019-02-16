@@ -5,10 +5,10 @@ import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
 import { UserContext } from 'components/User/UserProvider'
 import {
-  Button,
   Card,
   Columns,
   Container,
+  Content,
   Media,
   Image,
   Heading,
@@ -29,7 +29,7 @@ import {
   NoShares,
   ShareListItem,
 } from 'components/Share'
-import { BarLoader, HeroAvatarLoader } from 'components/Loader'
+import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -54,10 +54,9 @@ class UsernamePage extends Component {
   }
 
   static propTypes = {
-    shares: PropTypes.array.isRequired,
+    shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     blockstackApps: PropTypes.array.isRequired,
-    sharesFull: PropTypes.bool.isRequired,
   }
 
   async componentDidMount() {
@@ -176,13 +175,13 @@ class UsernamePage extends Component {
 
   requestUserShares = () => {
     const { username, shares } = this.props
-    const sharesLength = shares.length
+    const sharesLength = shares.list.length
     this.props.requestUserShares({ username, offset: sharesLength })
   }
 
   handleScroll = () => {
     const { bottomReached } = this.state
-    const { sharesFull } = this.props
+    const { shares } = this.props
 
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
@@ -197,7 +196,7 @@ class UsernamePage extends Component {
     */
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true }, () => {
-        if (!sharesFull) {
+        if (!shares.full) {
           this.requestUserShares()
         }
       });
@@ -213,7 +212,6 @@ class UsernamePage extends Component {
       username,
       history,
       shares,
-      sharesFull,
     } = this.props
 
     const {
@@ -309,12 +307,11 @@ class UsernamePage extends Component {
                   adminMode &&
                   <Card className="mb-one">
                     <Card.Content>
-                      <Button onClick={this.generateRadiksDapps}>
-                        Dapp
-                      </Button>
-                      {
-                        <ShareCreateForm username={username} />
-                      }
+                      <Content>
+                        <Loadable loading={shares.loading && shares.list.length === 0}>
+                          <ShareCreateForm username={username} />
+                        </Loadable>
+                      </Content>
                     </Card.Content>
                   </Card>
                 }
@@ -323,7 +320,7 @@ class UsernamePage extends Component {
                   <NoShares username={username} />
                 }
                 {
-                  _.map(shares, (share, index) => {
+                  _.map(shares.list, (share, index) => {
                     const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
 
                     return (
@@ -337,7 +334,7 @@ class UsernamePage extends Component {
                   })
                 }
                 {
-                  bottomReached && !sharesFull && <BarLoader style={{ height: '200px' }} />
+                  bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
                 }
               </Columns.Column>
             </Columns>
@@ -350,13 +347,16 @@ class UsernamePage extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
+  const { share } = state
 
-  const shares = _.filter(state.share.shares.list, (share) => share.username === username)
-  const sharesFull = state.share.shares.full
+  const shares = {
+    list: _.filter(state.share.shares.list, (share) => share.username === username),
+    full: share.shares.full,
+    loading: share.shares.loading
+  }
 
   return {
     shares,
-    sharesFull,
   }
 }
 
