@@ -9,4 +9,10 @@
     max-width: 500px;
     max-height: 500px;
   }
+
+  &__user-details {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
 }
