@@ -11,14 +11,20 @@ async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
       console.log('already found')
       result.push(blockstackDapp)
     } else {
-      console.log(`adding ${blockstackDapp} to db`)
+      console.log(`adding ${userDapp} to db`)
       const params = {
         url: userDapp
       }
-      const dapp = new Dapp(params)
-      const savedDapp = await dapp.save()
-      result.push(savedDapp)
-      console.log(`completed ${blockstackDapp} to db`)
+
+      try {
+        const dapp = new Dapp(params)
+        const savedDapp = await dapp.save()
+        console.log(savedDapp, 'savedDapp')
+        result.push(savedDapp)
+        console.log(`completed ${userDapp} to db`)
+      } catch (e) {
+        console.log(e.message)
+      }
     }
   }
 

@@ -113,6 +113,8 @@ class UsernamePageTemp extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
+      console.log(dapps, 'dapps')
+      console.log(filteredDapps, 'filteredDapps')
       userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
 
       if (!userIntro || !userDappsRadiks || !following) {
