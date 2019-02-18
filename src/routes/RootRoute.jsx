@@ -13,6 +13,7 @@ import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import UsernamePageTemp from 'pages/username/UsernamePageTemp'
+import UsernamePage from 'pages/username/UsernamePage'
 
 class RootRoute extends Component {
   static propTypes = {
@@ -53,7 +54,7 @@ class RootRoute extends Component {
             exact
             path="/:username"
             render={({ match, location }) =>
-              <UsernamePageTemp
+              <UsernamePage
                 username={match.params.username}
                 dapps={dapps} />
             }
