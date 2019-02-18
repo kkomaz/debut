@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
+import { CSSTransitionGroup } from 'react-transition-group'
 import { UserContext } from 'components/User/UserProvider'
 import {
   Card,
@@ -339,21 +340,27 @@ class UsernamePage extends Component {
                   !adminMode && _.isEqual(shares.length, 0) &&
                   <NoShares username={username} />
                 }
-                {
-                  _.map(shares.list, (share, index) => {
-                    const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
+                <CSSTransitionGroup
+                  transitionName="share-list-item-transition"
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={300}
+                >
+                  {
+                    _.map(shares.list, (share, index) => {
+                      const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
 
-                    return (
-                      <ShareListItem
-                        key={share._id}
-                        cardClass={cardClass}
-                        share={share}
-                        username={username}
-                        onEditClick={this.openModal}
-                      />
-                    )
-                  })
-                }
+                      return (
+                        <ShareListItem
+                          key={share._id}
+                          cardClass={cardClass}
+                          share={share}
+                          username={username}
+                          onEditClick={this.openModal}
+                        />
+                      )
+                    })
+                  }
+                </CSSTransitionGroup>
                 {
                   bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
                 }
