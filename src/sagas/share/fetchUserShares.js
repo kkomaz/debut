@@ -22,7 +22,7 @@ function* fetchUserSharesSaga(action) {
 
     yield put({ type: FETCH_USER_SHARES_SUCCESS, payload: shares })
   } catch (error) {
-    yield put({ type: FETCH_USER_SHARES_FAIL })
+    yield put({ type: FETCH_USER_SHARES_FAIL, payload: error.message })
   }
 }
 

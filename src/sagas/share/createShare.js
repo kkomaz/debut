@@ -13,7 +13,7 @@ function* createShareSaga(action) {
     const share = yield call(createShare, action)
     yield put({ type: CREATE_SHARE_SUCCESS, payload: share.attrs })
   } catch (error) {
-    yield put({ type: CREATE_SHARE_FAIL })
+    yield put({ type: CREATE_SHARE_FAIL, payload: error.message })
   }
 }
 

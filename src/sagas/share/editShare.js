@@ -14,7 +14,8 @@ function* editShareSaga(action) {
     const share = yield call(editShare, action)
     yield put({ type: EDIT_SHARE_SUCCESS, payload: share.attrs })
   } catch (error) {
-    yield put({ type: EDIT_SHARE_FAIL })
+    console.log(error.message)
+    yield put({ type: EDIT_SHARE_FAIL, payload: error.message })
   }
 }
 
