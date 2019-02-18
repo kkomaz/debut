@@ -5,6 +5,7 @@ import Login from 'components/Login'
 import RootRoute from 'routes/RootRoute'
 import { User } from 'radiks';
 import 'stylesheets/main.scss'
+
 class App extends Component {
   state = {
     userSession: new UserSession({ appConfig })
