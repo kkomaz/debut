@@ -132,7 +132,7 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDappsRadiks,
+          dapps: _.slice(userDappsRadiks, 0, 21),
           following: JSON.parse(following),
           profile,
         },
@@ -145,7 +145,7 @@ class UsernamePage extends Component {
           ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
           profile,
-          apps: userDappsRadiks,
+          dapps: _.slice(userDappsRadiks, 0, 21),
         },
         loading: false,
       })

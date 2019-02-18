@@ -27,8 +27,8 @@ class UserDapps extends Component {
               <Loadable loading={loading}>
                 <Heading size={4}>My Blockstack Dapps</Heading>
                 {
-                  _.get(userInfo, 'apps.length', 0) > 0 ?
-                  <IconList apps={userInfo.apps} /> :
+                  _.get(userInfo, 'dapps.length', 0) > 0 ?
+                  <IconList apps={userInfo.dapps} /> :
                     <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                 }
               </Loadable>
@@ -46,7 +46,7 @@ class UserDapps extends Component {
               <React.Fragment>
                 <Heading size={4}>My Blockstack Dapps</Heading>
                 {
-                  _.get(userInfo, 'apps.length', 0) > 0 ? <IconList apps={userInfo.apps} /> :
+                  _.get(userInfo, 'dapps.length', 0) > 0 ? <IconList dapps={userInfo.dapps} /> :
                   <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                 }
                 <Heading size={6}>
