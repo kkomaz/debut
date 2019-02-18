@@ -70,11 +70,11 @@ class ShareForm extends Component {
     const { id, text, imageFile } = this.state
     const { username } = this.props
 
-    const params = compactArrayOrObject({
+    const params = {
       text,
       username,
-      imageFile,
-    })
+      imageFile
+    }
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
@@ -88,11 +88,11 @@ class ShareForm extends Component {
     const { text, imageFile } = this.state
     const { username } = this.props
 
-    const params = compactArrayOrObject({
+    const params = {
       text,
       username,
       imageFile
-    })
+    }
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
@@ -116,6 +116,17 @@ class ShareForm extends Component {
       valid: true,
       imageFile: ''
     }, this.props.onCancel)
+  }
+
+  onCancelImage = (e) => {
+    e.preventDefault()
+    const { editMode } = this.state
+    this.fileInput.value = ''
+    this.setState({
+      imageFile: ''
+    })
+
+    return editMode && this.props.onCancel
   }
 
   onEnterPress = (e) => {
@@ -178,7 +189,7 @@ class ShareForm extends Component {
                 icon="IconX"
                 color="#E71D36"
                 size={20}
-                onClick={this.onCancel}
+                onClick={this.onCancelImage}
               />
             </div>
           }
