@@ -12,6 +12,8 @@ import {
   Media,
   Image,
   Heading,
+  Modal,
+  Section,
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
@@ -46,7 +48,8 @@ class UsernamePage extends Component {
       displayView: true,
       fileExists: false,
       bottomReached: false,
-      adminMode: props.username === sessionUser.username
+      adminMode: props.username === sessionUser.username,
+      showModal: false,
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -205,6 +208,14 @@ class UsernamePage extends Component {
     }
   }
 
+  closeModal = () => {
+    this.setState({ showModal: false })
+  }
+
+  openModal = () => {
+    this.setState({ showModal: true})
+  }
+
   render() {
     const { sessionUser, defaultImgUrl } = this.context.state
 
@@ -220,7 +231,8 @@ class UsernamePage extends Component {
       loading,
       userInfo,
       displayView,
-      fileExists
+      fileExists,
+      showModal
     } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
@@ -329,6 +341,7 @@ class UsernamePage extends Component {
                         cardClass={cardClass}
                         share={share}
                         username={username}
+                        onEditClick={this.openModal}
                       />
                     )
                   })
@@ -340,6 +353,17 @@ class UsernamePage extends Component {
             </Columns>
           </Columns.Column>
         </Columns>
+        <Modal
+          show={showModal}
+          onClose={this.closeModal}
+          closeOnEsc
+        >
+          <Modal.Content>
+            <Section style={{ backgroundColor: 'white' }}>
+              Me!
+            </Section>
+          </Modal.Content>
+        </Modal>
       </Container>
     )
   }

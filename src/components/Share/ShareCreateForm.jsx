@@ -8,7 +8,7 @@ import {
   Label,
   Textarea,
   Help,
-} from 'react-bulma-components/lib/components/form'
+} from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { requestCreateShare } from 'actions/share'
 import { Icon } from 'components/icon'
@@ -16,11 +16,15 @@ import './ShareCreateForm.scss'
 import { compactArrayOrObject } from 'utils/obj'
 
 class ShareCreateForm extends Component {
-  state = {
-    text: '',
-    characterLength: 0,
-    valid: true,
-    imageFile: '',
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      text: '',
+      characterLength: 0,
+      valid: true,
+      imageFile: '',
+    }
   }
 
   static propTypes = {
