@@ -16,7 +16,6 @@ import {
 } from 'actions/share'
 import { Icon } from 'components/icon'
 import './ShareForm.scss'
-import { compactArrayOrObject } from 'utils/obj'
 
 class ShareForm extends Component {
   constructor(props) {
@@ -42,7 +41,7 @@ class ShareForm extends Component {
       id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
-    }).isRequired
+    })
   }
 
   onChange = (e) => {

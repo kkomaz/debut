@@ -60,7 +60,6 @@ class UsernamePage extends Component {
   static propTypes = {
     shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
-    blockstackApps: PropTypes.array.isRequired,
   }
 
   async componentDidMount() {
