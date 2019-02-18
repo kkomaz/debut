@@ -76,28 +76,15 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, searchedProfile, history } = this.props
+    const { username } = this.props
     const { sessionUser } = this.context.state
-    const { loading } = this.state
 
     if (prevProps.username !== username) {
       const user = await lookupProfile(username)
       if (user) {
-        this.setState({ adminMode: sessionUser === username }, () => {
+        this.setState({ adminMode: sessionUser === username, loading: true }, () => {
           this.loadUserInfo(user)
         })
-      }
-    }
-
-    if (prevProps.searchedProfile !== searchedProfile && loading) {
-      const apps = _.map((searchedProfile.apps), (k,v) => {
-        return v
-      })
-
-      const filteredDapps = returnFilteredUrls(apps)
-      if (!_.includes(filteredDapps, 'https://debutapp_social')) {
-        toggleNotification('error', 'User profile is compromised!  Blockstack team is addressing this issue!')
-        history.push('/')
       }
     }
   }
