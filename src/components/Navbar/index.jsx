@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
+import './Navbar.scss';
 
 class NavbarComp extends Component {
   state = {
@@ -22,7 +23,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     const { sessionUser } = this.context.state
     this.toggleNavbar()
-    history.push(`/admin/${sessionUser.username}`)
+    history.push(`/${sessionUser.username}`)
   }
 
   signOut = () => {
@@ -42,6 +43,7 @@ class NavbarComp extends Component {
 
     return (
       <Navbar
+        className="debut-nav-bar"
         color="primary"
         fixed="top"
         active={open}
@@ -55,7 +57,7 @@ class NavbarComp extends Component {
             onClick={this.toggleNavbar}
           />
         </Navbar.Brand>
-        <Navbar.Menu>
+        <Navbar.Menu className="debut-nav-bar__menu">
           <Navbar.Container position="end">
               {
                 isSignedIn &&

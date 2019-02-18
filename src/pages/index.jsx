@@ -2,10 +2,37 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Table from 'react-bulma-components/lib/components/table'
+import {
+  Card,
+  Columns,
+  Container,
+  Heading,
+  Hero,
+  Media,
+  Table,
+} from 'components/bulma'
+import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
+import { requestUserIntro } from 'actions/blockstack'
+import requestAllUsers from 'actions/user/requestAllUsers'
+import Switch from 'react-bulma-switch/lib';
 
 class Page extends Component {
+  state = {
+    showTileView: true,
+  }
+
+  // TODO: Commented out but might need later
+  // componentDidMount = async () => {
+  //   const { sessionUser } = this.context.state
+  //   const { userState } = this.props;
+  //
+  //   _.each(userState.users, (user) => {
+  //     console.log(user)
+  //     this.props.requestUserIntro(user.username, sessionUser.userSession)
+  //   })
+  // }
+
   onBoxClick = (user) => {
     const { history } = this.props
 
@@ -17,22 +44,96 @@ class Page extends Component {
     })
   }
 
+  onChange = (val) => {
+    this.setState({
+      showTileView: val
+    })
+  }
+
+  onClick = () => {
+    this.props.requestAllUsers()
+  }
+
+  toggleSwitch = () => {
+    this.setState({ showTileView: !this.state.showTileView })
+  }
+
   render() {
-    const { users } = this.props
+    const { userState } = this.props
+    const { showTileView } = this.state
+    const { defaultImgUrl } = this.context.state
 
     return (
       <div className="page">
-        <Table>
-          <tbody>
+        <Hero color="primary" className="mb-two">
+         <Hero.Body>
+           <Container>
+             <Heading>Choose your user's view!</Heading>
+              <Switch
+                className="page__slider"
+                color="success"
+                onChange={this.toggleSwitch}
+                checked={showTileView}
+                rounded
+              >
+                  Tile View
+              </Switch>
+              <Switch
+                className="page__slider"
+                color="success"
+                onChange={this.toggleSwitch}
+                checked={!showTileView}
+                rounded
+              >
+                  Table View
+              </Switch>
+           </Container>
+         </Hero.Body>
+       </Hero>
+          <Container>
             {
-              _.map(users, (user) => {
-                return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
-                  <td>{user.username} has joined debut!</td>
-                </tr>
-              })
+              showTileView ?
+                <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
+                  {
+                    _.map(userState.users, (user) => {
+                      return (
+                        <Columns.Column
+                          key={user.username}
+                          tablet={{
+                            size: 3,
+                          }}
+                        >
+                          <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                            <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
+                            <Card.Content className="page__content">
+                              <Media>
+                                <Media.Item style={{ textAlign: 'center' }}>
+                                  <p className="page__username-text">{user.username}</p>
+                                  <p className="page__join-text">joined debut!</p>
+                                </Media.Item>
+                              </Media>
+                            </Card.Content>
+                          </Card>
+                        </Columns.Column>
+                      )
+                    })
+                  }
+                </Columns> :
+                <div style={{ padding: '0 150px' }}>
+                  <Table>
+                    <tbody>
+                      {
+                        _.map(userState.users, (user) => {
+                          return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
+                            <td>{user.username} has joined debut!</td>
+                          </tr>
+                        })
+                      }
+                    </tbody>
+                  </Table>
+                </div>
             }
-          </tbody>
-        </Table>
+          </Container>
       </div>
     )
   }
@@ -40,8 +141,12 @@ class Page extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    users: state.user.users
+    userState: state.user,
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Page))
+export default withRouter(connect(mapStateToProps, {
+  requestUserIntro,
+  requestAllUsers,
+})(Page))
+Page.contextType = UserContext

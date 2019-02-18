@@ -1,5 +1,6 @@
 @import "./utility";
 @import "~react-bulma-components/src/index.sass";
+@import './common.scss';
 
 html {
   background: #f0f5f9;
@@ -10,6 +11,10 @@ p {
   white-space: pre-wrap
 }
 
+.small {
+  font-size: 13px;
+}
+
 .content ul {
   list-style: none;
 }
@@ -17,4 +22,8 @@ p {
 // bulma component styles
 .container {
   margin-top: 10px;
+}
+
+.content li + li {
+  margin-top: 0;
 }

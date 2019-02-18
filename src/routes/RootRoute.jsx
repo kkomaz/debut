@@ -3,16 +3,16 @@ import { Switch, Route, withRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import Container from 'react-bulma-components/lib/components/container'
 import UserProvider from 'components/User/UserProvider'
-import AdminUsernameRoute from 'routes/AdminUsernameRoute'
 import RootPage from 'pages'
-import UsernamePage from 'pages/username'
 import Navbar from 'components/Navbar'
-import { requestBlockstackApps } from 'actions/blockstack'
+import {
+  requestBlockstackDapps,
+} from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
+import UsernamePageTemp from 'pages/username/UsernamePageTemp'
 
 class RootRoute extends Component {
   static propTypes = {
@@ -21,41 +21,44 @@ class RootRoute extends Component {
   }
 
   componentDidMount() {
-    this.props.requestBlockstackApps()
+    this.props.requestBlockstackDapps()
     this.props.requestAllUsers()
   }
 
   render() {
-    const { userSession, blockstackAppsLoading } = this.props
+    const {
+      userSession,
+      blockstackDappsLoading,
+      dapps,
+    } = this.props
 
-    if (blockstackAppsLoading) {
+    if (blockstackDappsLoading) {
       return <div>Loading...</div>
     }
 
     return (
       <UserProvider userSession={userSession}>
         <Navbar />
-        <Container>
-          <ToastContainer
-            className='toast-container'
+        <ToastContainer
+          className='toast-container'
+        />
+
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={({ location }) => <RootPage />}
           />
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={({ location }) => <RootPage />}
-            />
-            <Route
-              exact
-              path="/:username"
-              render={({ match, location }) => <UsernamePage username={match.params.username} location={location} />}
-            />
-            <Route
-              path="/admin/:username"
-              render={({ match }) => <AdminUsernameRoute match={match} />}
-            />
-          </Switch>
-        </Container>
+          <Route
+            exact
+            path="/:username"
+            render={({ match, location }) =>
+              <UsernamePageTemp
+                username={match.params.username}
+                dapps={dapps} />
+            }
+          />
+        </Switch>
       </UserProvider>
     )
   }
@@ -63,12 +66,13 @@ class RootRoute extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    blockstackAppsLoading: state.blockstack.loading
+    blockstackDappsLoading: state.blockstack.dapps.loading,
+    dapps: state.blockstack.dapps.list,
   }
 }
 
 
 export default withRouter(connect(mapStateToProps, {
-  requestBlockstackApps,
+  requestBlockstackDapps,
   requestAllUsers,
 })(RootRoute))
