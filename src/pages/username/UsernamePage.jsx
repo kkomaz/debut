@@ -373,6 +373,7 @@ class UsernamePage extends Component {
                 username={username}
                 currentShare={this.state.currentShare}
                 onCancel={this.closeModal}
+                onComplete={this.closeModal}
               />
             </Section>
           </Modal.Content>

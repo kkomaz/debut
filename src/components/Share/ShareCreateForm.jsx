@@ -10,11 +10,13 @@ import {
   Help,
 } from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
-import { requestCreateShare } from 'actions/share'
+import {
+  requestCreateShare,
+  requestEditShare
+} from 'actions/share'
 import { Icon } from 'components/icon'
 import './ShareCreateForm.scss'
 import { compactArrayOrObject } from 'utils/obj'
-import Share from 'model/share'
 
 class ShareCreateForm extends Component {
   constructor(props) {
@@ -67,7 +69,6 @@ class ShareCreateForm extends Component {
   editShare = async () => {
     const { id, text, imageFile } = this.state
     const { username } = this.props
-    const share = await Share.findById(id)
 
     const params = compactArrayOrObject({
       text,
@@ -79,7 +80,8 @@ class ShareCreateForm extends Component {
       return this.setState({ valid: false })
     }
 
-    console.log('editing a share')
+    this.props.requestEditShare(id, params)
+    this.props.onComplete()
   }
 
   createShare = async () => {
@@ -223,4 +225,5 @@ ShareCreateForm.defaultProps = {
 
 export default connect(null, {
   requestCreateShare,
+  requestEditShare,
 })(ShareCreateForm)

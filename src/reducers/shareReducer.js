@@ -1,7 +1,8 @@
 import {
   REQUEST_USER_SHARES,
   FETCH_USER_SHARES_SUCCESS,
-  CREATE_SHARE_SUCCESS
+  CREATE_SHARE_SUCCESS,
+  EDIT_SHARE_SUCCESS,
 } from 'actions'
 import { filterListFromList } from 'reducers/utils'
 
@@ -11,6 +12,23 @@ const defaultSession = {
     full: false,
     loading: true,
   }
+}
+
+function updateSingleObjectFromList(payload, list) {
+  const updatedList = list.reduce((acc, current) => {
+    if (current._id === payload._id) {
+      return [
+        ...acc,
+        payload
+      ];
+    }
+    return [
+      ...acc,
+      current,
+    ];
+  }, []);
+
+  return updatedList
 }
 
 export default function shareReducer(state = defaultSession, action) {
@@ -26,6 +44,9 @@ export default function shareReducer(state = defaultSession, action) {
       }}
     case CREATE_SHARE_SUCCESS:
       return { ...state, shares: { ...state.shares, list: [action.payload, ...state.shares.list]}}
+    case EDIT_SHARE_SUCCESS:
+      const sharesList = updateSingleObjectFromList(action.payload, state.shares.list)
+      return { ...state, shares: { ...state.shares, list: sharesList }}
     default:
       return state
   }
