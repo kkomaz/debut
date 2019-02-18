@@ -15,10 +15,10 @@ import {
   requestEditShare
 } from 'actions/share'
 import { Icon } from 'components/icon'
-import './ShareCreateForm.scss'
+import './ShareForm.scss'
 import { compactArrayOrObject } from 'utils/obj'
 
-class ShareCreateForm extends Component {
+class ShareForm extends Component {
   constructor(props) {
     super(props)
 
@@ -140,18 +140,18 @@ class ShareCreateForm extends Component {
     const { characterLength, valid } = this.state
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
-      'share-create-form__character-length': true,
-      'share-create-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
-      'share-create-form__character-length--danger': leftoverLength < 30
+      'share-form__character-length': true,
+      'share-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
+      'share-form__character-length--danger': leftoverLength < 30
     })
 
     return (
       <React.Fragment>
         <form
-          className="share-create-form"
+          className="share-form"
           onSubmit={this.onSubmit}
         >
-          <Field className="share-create-form__text-field">
+          <Field className="share-form__text-field">
             <Textarea
               name="text"
               onChange={this.onChange}
@@ -171,10 +171,10 @@ class ShareCreateForm extends Component {
 
           {
             this.state.imageFile &&
-            <div className="share-create-form__image-uploaded">
+            <div className="share-form__image-uploaded">
               <img alt='' src={this.state.imageFile} />
               <Icon
-                className="share-create-form__image-remove-button debut-icon debut-icon--pointer"
+                className="share-form__image-remove-button debut-icon debut-icon--pointer"
                 icon="IconX"
                 color="#E71D36"
                 size={20}
@@ -183,12 +183,12 @@ class ShareCreateForm extends Component {
             </div>
           }
 
-          <div className="share-create-form__characters">
+          <div className="share-form__characters">
             <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
           </div>
 
-          <div className="share-create-form__submit-wrapper">
-            <div className="share-create-form__options">
+          <div className="share-form__submit-wrapper">
+            <div className="share-form__options">
               <Label>
                 <Icon
                   className="debut-icon debut-icon--pointer mt-half"
@@ -218,7 +218,7 @@ class ShareCreateForm extends Component {
   }
 }
 
-ShareCreateForm.defaultProps = {
+ShareForm.defaultProps = {
   onCancel: _.noop,
   onComplete: _.noop,
 }
@@ -226,4 +226,4 @@ ShareCreateForm.defaultProps = {
 export default connect(null, {
   requestCreateShare,
   requestEditShare,
-})(ShareCreateForm)
+})(ShareForm)

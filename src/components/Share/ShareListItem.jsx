@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import _ from 'lodash'
 import {
   Card,
-  Help,
 } from 'components/bulma'
 import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
