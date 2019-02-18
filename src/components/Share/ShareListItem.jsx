@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import _ from 'lodash'
 import {
   Card,
-  Help,
 } from 'components/bulma'
 import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
@@ -41,6 +40,11 @@ class ShareListItem extends Component {
     this.setState({ showDeleteConfirmation: true })
   }
 
+  onEditClick = () => {
+    const { share } = this.props
+    this.props.onEditClick(share)
+  }
+
   render() {
     const { cardClass, share, username } = this.props
     const { sessionUser } = this.context.state
@@ -70,7 +74,7 @@ class ShareListItem extends Component {
                   <Icon
                     className="debut-icon debut-icon--pointer mr-half"
                     icon="IconPencil"
-                    onClick={this.props.onEditClick}
+                    onClick={this.onEditClick}
                     />
                   <Icon
                     className="debut-icon debut-icon--pointer"

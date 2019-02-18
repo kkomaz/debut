@@ -17,7 +17,6 @@ import {
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
-import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
 import toggleNotification from 'utils/notifier/toggleNotification'
@@ -30,6 +29,7 @@ import {
 import {
   NoShares,
   ShareListItem,
+  ShareForm,
 } from 'components/Share'
 import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 
@@ -50,6 +50,7 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
+      currentShare: {}
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -212,8 +213,15 @@ class UsernamePage extends Component {
     this.setState({ showModal: false })
   }
 
-  openModal = () => {
-    this.setState({ showModal: true})
+  openModal = (share) => {
+    this.setState({
+      showModal: true,
+      currentShare: {
+        id: share._id,
+        text: share.text,
+        imageFile: share.imageFile,
+      }
+    })
   }
 
   render() {
@@ -322,7 +330,7 @@ class UsernamePage extends Component {
                     <Card.Content>
                       <Content>
                         <Loadable loading={shares.loading && shares.list.length === 0}>
-                          <ShareCreateForm username={username} />
+                          <ShareForm username={username} />
                         </Loadable>
                       </Content>
                     </Card.Content>
@@ -361,7 +369,12 @@ class UsernamePage extends Component {
         >
           <Modal.Content>
             <Section style={{ backgroundColor: 'white' }}>
-              Me!
+              <ShareForm
+                username={username}
+                currentShare={this.state.currentShare}
+                onCancel={this.closeModal}
+                onComplete={this.closeModal}
+              />
             </Section>
           </Modal.Content>
         </Modal>
