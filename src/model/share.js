@@ -1,6 +1,8 @@
 import { Model } from 'radiks'
 
 class Share extends Model {
+  static className = "Share"
+
   static schema = {
     text: { type: String, required: true },
     valid: { type: Boolean, default: true },

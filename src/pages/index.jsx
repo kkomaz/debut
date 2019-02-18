@@ -63,8 +63,6 @@ class Page extends Component {
     const { showTileView } = this.state
     const { defaultImgUrl } = this.context.state
 
-    console.log(userState)
-
     return (
       <div className="page">
         <Hero color="primary" className="mb-two">

@@ -16,7 +16,7 @@ import {
   Section,
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
-import { fetchUserBlockstackApps, returnFilteredUrls } from 'utils/apps'
+import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
@@ -122,7 +122,7 @@ class UsernamePage extends Component {
 
       const filteredDapps = returnFilteredUrls(apps)
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
-      userDappsRadiks = await fetchUserBlockstackApps(dapps, filteredDapps)
+      userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
 
       if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
