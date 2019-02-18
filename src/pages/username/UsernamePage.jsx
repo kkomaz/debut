@@ -50,6 +50,7 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
+      currentShare: {}
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -212,8 +213,15 @@ class UsernamePage extends Component {
     this.setState({ showModal: false })
   }
 
-  openModal = () => {
-    this.setState({ showModal: true})
+  openModal = (share) => {
+    this.setState({
+      showModal: true,
+      currentShare: {
+        id: share._id,
+        text: share.text,
+        imageFile: share.imageFile,
+      }
+    })
   }
 
   render() {
@@ -361,7 +369,11 @@ class UsernamePage extends Component {
         >
           <Modal.Content>
             <Section style={{ backgroundColor: 'white' }}>
-              Me!
+              <ShareCreateForm
+                username={username}
+                currentShare={this.state.currentShare}
+                onCancel={this.closeModal}
+              />
             </Section>
           </Modal.Content>
         </Modal>

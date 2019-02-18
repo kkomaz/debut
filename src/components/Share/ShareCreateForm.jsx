@@ -14,21 +14,33 @@ import { requestCreateShare } from 'actions/share'
 import { Icon } from 'components/icon'
 import './ShareCreateForm.scss'
 import { compactArrayOrObject } from 'utils/obj'
+import Share from 'model/share'
 
 class ShareCreateForm extends Component {
   constructor(props) {
     super(props)
 
+    const { currentShare = {} } = props
+
     this.state = {
-      text: '',
-      characterLength: 0,
+      id: currentShare.id || '',
+      text: currentShare.text || '',
+      characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
-      imageFile: '',
+      imageFile: currentShare.imageFile || '',
+      editMode: !!currentShare.id
     }
   }
 
   static propTypes = {
-    username: PropTypes.string.isRequired
+    username: PropTypes.string.isRequired,
+    onCancel: PropTypes.func,
+    onComplete: PropTypes.func,
+    currentShare: PropTypes.shape({
+      id: PropTypes.string,
+      text: PropTypes.string,
+      imageFile: PropTypes.string,
+    }).isRequired
   }
 
   onChange = (e) => {
@@ -44,9 +56,33 @@ class ShareCreateForm extends Component {
     })
   }
 
-  onSubmit = async (e) => {
+  onSubmit = (e) => {
     e.preventDefault()
 
+    const { editMode } = this.state
+
+    return editMode ? this.editShare() : this.createShare()
+  }
+
+  editShare = async () => {
+    const { id, text, imageFile } = this.state
+    const { username } = this.props
+    const share = await Share.findById(id)
+
+    const params = compactArrayOrObject({
+      text,
+      username,
+      imageFile,
+    })
+
+    if (_.isEmpty(text)) {
+      return this.setState({ valid: false })
+    }
+
+    console.log('editing a share')
+  }
+
+  createShare = async () => {
     const { text, imageFile } = this.state
     const { username } = this.props
 
@@ -71,7 +107,13 @@ class ShareCreateForm extends Component {
   onCancel = (e) => {
     e.preventDefault()
     this.fileInput.value = ''
-    this.setState({ text: '', imageFile: '' })
+    this.setState({
+      id: '',
+      text: '',
+      characterLength: 0,
+      valid: true,
+      imageFile: ''
+    }, this.props.onCancel)
   }
 
   onEnterPress = (e) => {
@@ -172,6 +214,11 @@ class ShareCreateForm extends Component {
       </React.Fragment>
     )
   }
+}
+
+ShareCreateForm.defaultProps = {
+  onCancel: _.noop,
+  onComplete: _.noop,
 }
 
 export default connect(null, {
