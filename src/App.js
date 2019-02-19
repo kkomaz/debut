@@ -16,19 +16,13 @@ class App extends Component {
     const { userSession } = this.state
 
     if (userSession.isUserSignedIn()) {
-      console.log('logging in via localStorage save')
       this.setState({ loggedIn: true })
     }
 
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
-      console.log('initiate handle pending sign in')
       const userData = await userSession.handlePendingSignIn()
       const user = User.currentUser()
       await user.fetch({ decrypt: false })
-      console.log(user.attrs, 'user.attrs')
-
-      console.log('userData here!')
-      console.log(userData)
 
       try {
         await User.createWithCurrentUser()
@@ -36,25 +30,10 @@ class App extends Component {
         console.log(e.message)
       }
 
-      console.log('createdCurrentUser!')
-
       if (!userData.username) {
         throw new Error('This app requires a username')
       }
 
-      console.log('logging in via pending sign in')
-
-      this.setState({ loggedIn: true })
-    } else {
-      console.log('not loggin in')
-    }
-  }
-
-  componentDidUpdate() {
-    const { userSession, loggedIn } = this.state
-
-    if (!loggedIn && userSession.isUserSignedIn()) {
-      console.log('hitting the componentDidUpdate')
       this.setState({ loggedIn: true })
     }
   }

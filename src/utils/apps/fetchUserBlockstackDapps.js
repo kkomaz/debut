@@ -20,7 +20,7 @@ async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
         const dapp = new Dapp(params)
         const savedDapp = await dapp.save()
         console.log(savedDapp, 'savedDapp')
-        result.push(savedDapp)
+        result.push(userDapp)
         console.log(`completed ${userDapp} to db`)
       } catch (e) {
         console.log(e.message)
