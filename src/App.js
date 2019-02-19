@@ -21,13 +21,22 @@ class App extends Component {
     }
 
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
+      console.log('initiate handle pending sign in')
       const userData = await userSession.handlePendingSignIn()
+      const user = User.currentUser()
+      await user.fetch({ decrypt: false })
+      console.log(user.attrs, 'user.attrs')
+
+      console.log('userData here!')
+      console.log(userData)
 
       try {
         await User.createWithCurrentUser()
       } catch (e) {
         console.log(e.message)
       }
+
+      console.log('createdCurrentUser!')
 
       if (!userData.username) {
         throw new Error('This app requires a username')
@@ -38,6 +47,15 @@ class App extends Component {
       this.setState({ loggedIn: true })
     } else {
       console.log('not loggin in')
+    }
+  }
+
+  componentDidUpdate() {
+    const { userSession, loggedIn } = this.state
+
+    if (!loggedIn && userSession.isUserSignedIn()) {
+      console.log('hitting the componentDidUpdate')
+      this.setState({ loggedIn: true })
     }
   }
 
