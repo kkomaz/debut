@@ -8,30 +8,48 @@ import 'stylesheets/main.scss'
 
 class App extends Component {
   state = {
-    userSession: new UserSession({ appConfig })
+    userSession: new UserSession({ appConfig }),
+    loggedIn: false,
   }
 
   componentDidMount = async () => {
     const { userSession } = this.state
 
+    if (userSession.isUserSignedIn()) {
+      console.log('logging in via localStorage save')
+      this.setState({ loggedIn: true })
+    }
+
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
       const userData = await userSession.handlePendingSignIn()
-      await User.createWithCurrentUser();
+
+      try {
+        await User.createWithCurrentUser()
+      } catch (e) {
+        console.log(e.message)
+      }
 
       if (!userData.username) {
         throw new Error('This app requires a username')
       }
-      window.location = '/'
+
+      console.log('logging in via pending sign in')
+
+      this.setState({ loggedIn: true })
+    } else {
+      console.log('not loggin in')
     }
   }
 
   render() {
     const { userSession } = this.state
 
+    console.log(this.state.loggedIn)
+
     return (
       <div className="App">
         {
-          userSession.isUserSignedIn() ?
+          this.state.loggedIn ?
           <RootRoute userSession={userSession} /> :
           <Login userSession={userSession} />
         }
