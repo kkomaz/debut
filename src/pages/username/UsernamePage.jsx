@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { lookupProfile } from 'blockstack'
+import { CSSTransitionGroup } from 'react-transition-group'
 import { UserContext } from 'components/User/UserProvider'
 import {
   Card,
@@ -17,10 +18,9 @@ import {
 } from 'components/bulma'
 import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
-import ShareCreateForm from 'components/Share/ShareCreateForm'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
-import toggleNotification from 'utils/notifier/toggleNotification'
+import { addDappsToList } from 'actions/blockstack'
 import './UsernamePage.scss';
 import {
   UserDapps,
@@ -30,6 +30,7 @@ import {
 import {
   NoShares,
   ShareListItem,
+  ShareForm,
 } from 'components/Share'
 import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 
@@ -42,7 +43,7 @@ class UsernamePage extends Component {
     this.state = {
       userInfo: {
         description: '',
-        apps: [],
+        dapps: [],
       },
       loading: true,
       displayView: true,
@@ -50,6 +51,7 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
+      currentShare: {}
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -59,7 +61,6 @@ class UsernamePage extends Component {
   static propTypes = {
     shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
-    blockstackApps: PropTypes.array.isRequired,
   }
 
   async componentDidMount() {
@@ -75,28 +76,15 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, searchedProfile, history } = this.props
+    const { username } = this.props
     const { sessionUser } = this.context.state
-    const { loading } = this.state
 
     if (prevProps.username !== username) {
       const user = await lookupProfile(username)
       if (user) {
-        this.setState({ adminMode: sessionUser === username }, () => {
+        this.setState({ adminMode: sessionUser === username, loading: true }, () => {
           this.loadUserInfo(user)
         })
-      }
-    }
-
-    if (prevProps.searchedProfile !== searchedProfile && loading) {
-      const apps = _.map((searchedProfile.apps), (k,v) => {
-        return v
-      })
-
-      const filteredDapps = returnFilteredUrls(apps)
-      if (!_.includes(filteredDapps, 'https://debutapp_social')) {
-        toggleNotification('error', 'User profile is compromised!  Blockstack team is addressing this issue!')
-        history.push('/')
       }
     }
   }
@@ -124,6 +112,10 @@ class UsernamePage extends Component {
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
       userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
 
+      if (userDappsRadiks.newDapps.length > 0) {
+        this.props.addDappsToList(userDappsRadiks.newDapps)
+      }
+
       if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
       }
@@ -131,12 +123,12 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          apps: userDappsRadiks,
+          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
           following: JSON.parse(following),
           profile,
         },
         loading: false,
-        fileExists: true,
+        fileExists: !!userIntro,
       })
     } catch (e) {
       this.setState({
@@ -144,9 +136,10 @@ class UsernamePage extends Component {
           ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
           profile,
-          apps: userDappsRadiks,
+          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
+        fileExists: !!userIntro,
       })
     }
   }
@@ -212,8 +205,15 @@ class UsernamePage extends Component {
     this.setState({ showModal: false })
   }
 
-  openModal = () => {
-    this.setState({ showModal: true})
+  openModal = (share) => {
+    this.setState({
+      showModal: true,
+      currentShare: {
+        id: share._id,
+        text: share.text,
+        imageFile: share.imageFile,
+      }
+    })
   }
 
   render() {
@@ -277,20 +277,26 @@ class UsernamePage extends Component {
 
         <Columns className="mt-half">
           <Columns.Column size={5}>
-            <div className="username__description mb-one">
-              <UserDescription
-                adminMode={adminMode}
-                displayView={displayView}
-                fileExists={fileExists}
-                loading={loading}
-                sessionUser={sessionUser}
-                userInfo={userInfo}
-                usename={username}
-                onCreateEdit={this.onCreateEdit}
-                onCancel={this.onCancel}
-                onSubmit={this.onSubmit}
-              />
-            </div>
+            {
+              /*
+              <div className="username__description mb-one">
+                <Loadable loading={loading}>
+                  <UserDescription
+                    adminMode={adminMode}
+                    displayView={displayView}
+                    fileExists={fileExists}
+                    loading={loading}
+                    sessionUser={sessionUser}
+                    userInfo={userInfo}
+                    usename={username}
+                    onCreateEdit={this.onCreateEdit}
+                    onCancel={this.onCancel}
+                    onSubmit={this.onSubmit}
+                    />
+                </Loadable>
+              </div>
+              */
+            }
 
             <div className="username__dapps mb-one">
               <UserDapps
@@ -317,39 +323,61 @@ class UsernamePage extends Component {
             <Columns>
               <Columns.Column size={12}>
                 {
-                  adminMode &&
-                  <Card className="mb-one">
-                    <Card.Content>
-                      <Content>
-                        <Loadable loading={shares.loading && shares.list.length === 0}>
-                          <ShareCreateForm username={username} />
-                        </Loadable>
-                      </Content>
-                    </Card.Content>
-                  </Card>
-                }
-                {
-                  !adminMode && _.isEqual(shares.length, 0) &&
-                  <NoShares username={username} />
-                }
-                {
-                  _.map(shares.list, (share, index) => {
-                    const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
+                  /*
+                  {
+                    adminMode &&
+                    <Card className="mb-one">
+                      <Card.Content>
+                        <Content>
+                          <Loadable loading={shares.loading && shares.list.length === 0}>
+                            <ShareForm username={username} />
+                          </Loadable>
+                        </Content>
+                      </Card.Content>
+                    </Card>
+                  }
+                  {
+                    !adminMode && _.isEqual(shares.length, 0) &&
+                    <NoShares username={username} />
+                  }
+                  <CSSTransitionGroup
+                    transitionName="share-list-item-transition"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}
+                  >
+                    {
+                      _.map(shares.list, (share, index) => {
+                        const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
 
-                    return (
-                      <ShareListItem
-                        key={share._id}
-                        cardClass={cardClass}
-                        share={share}
-                        username={username}
-                        onEditClick={this.openModal}
-                      />
-                    )
-                  })
+                        return (
+                          <ShareListItem
+                            key={share._id}
+                            cardClass={cardClass}
+                            share={share}
+                            username={username}
+                            onEditClick={this.openModal}
+                          />
+                        )
+                      })
+                    }
+                  </CSSTransitionGroup>
+                  {
+                    bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
+                  }
+                  */
                 }
-                {
-                  bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
-                }
+                <UserDescription
+                  adminMode={adminMode}
+                  displayView={displayView}
+                  fileExists={fileExists}
+                  loading={loading}
+                  sessionUser={sessionUser}
+                  userInfo={userInfo}
+                  usename={username}
+                  onCreateEdit={this.onCreateEdit}
+                  onCancel={this.onCancel}
+                  onSubmit={this.onSubmit}
+                />
               </Columns.Column>
             </Columns>
           </Columns.Column>
@@ -361,7 +389,12 @@ class UsernamePage extends Component {
         >
           <Modal.Content>
             <Section style={{ backgroundColor: 'white' }}>
-              Me!
+              <ShareForm
+                username={username}
+                currentShare={this.state.currentShare}
+                onCancel={this.closeModal}
+                onComplete={this.closeModal}
+              />
             </Section>
           </Modal.Content>
         </Modal>
@@ -387,5 +420,6 @@ const mapStateToProps = (state, ownProps) => {
 
 UsernamePage.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
-  requestUserShares
+  requestUserShares,
+  addDappsToList,
 })(UsernamePage))

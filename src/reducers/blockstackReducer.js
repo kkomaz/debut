@@ -1,7 +1,7 @@
 import {
   FETCH_BLOCKSTACK_DAPPS_FAIL,
   FETCH_BLOCKSTACK_DAPPS_SUCCESS,
-  FETCH_PROFILE_SEARCH_SUCCESS,
+  ADD_DAPPS_TO_LIST,
 } from 'actions'
 
 const defaultSession = {
@@ -9,11 +9,15 @@ const defaultSession = {
     list: [],
     loading: true,
   },
-  searchedProfile: {},
 }
 
 export default function blockstack(state = defaultSession, action) {
   switch (action.type) {
+    case ADD_DAPPS_TO_LIST:
+      return { ...state, dapps: {
+        list: [...state.dapps.list, ...action.payload],
+        loading: false
+      }}
     case FETCH_BLOCKSTACK_DAPPS_SUCCESS:
       return { ...state, dapps: {
         list: action.payload,
@@ -23,8 +27,6 @@ export default function blockstack(state = defaultSession, action) {
       return { ...state, dapps: {
         ...state.dapps, loading: false
       }}
-    case FETCH_PROFILE_SEARCH_SUCCESS:
-      return { ...state, searchedProfile: action.payload }
     default:
       return state
   }

@@ -9,17 +9,17 @@ class IconList extends Component {
   }
 
   render() {
-    const { apps } = this.props
+    const { dapps } = this.props
     const { defaultImgUrl } = this.context.state
 
     return (
       <ul className="icon-list">
         {
-          _.map(apps, (app, index) => {
+          _.map(dapps, (dapp, index) => {
             return (
-              <li className="icon-list__single" key={`${app.url}-${index}`}>
-                <a href={app.url} target="_blank" rel='noreferrer noopener'>
-                  <img onError={this.addDefaultSrc} src={_.get(app, 'icons[0].src', defaultImgUrl)} alt="dapp" height="42" width="42" />
+              <li className="icon-list__single" key={`${dapp.url}-${index}`}>
+                <a href={dapp.url} target="_blank" rel='noreferrer noopener'>
+                  <img onError={this.addDefaultSrc} src={_.get(dapp, 'icons[0].src', defaultImgUrl)} alt="dapp" height="42" width="42" />
                 </a>
               </li>
             )
