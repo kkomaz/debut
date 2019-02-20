@@ -1,6 +1,10 @@
 import _ from 'lodash'
 import Dapp from 'model/Dapp'
 
+const hasNumber = (myString) => {
+  return /\d/.test(myString);
+}
+
 async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
   const result = []
   const newDapps = []
@@ -10,6 +14,8 @@ async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
 
     if (blockstackDapp) {
       result.push(blockstackDapp)
+    } else if (hasNumber(userDapp)) {
+      console.log('ignoring localhosts')
     } else {
       console.log(`adding ${userDapp} to db`)
       const params = {
