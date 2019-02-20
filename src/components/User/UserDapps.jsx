@@ -19,8 +19,6 @@ class UserDapps extends Component {
   render() {
     const { userInfo, adminMode, loading } = this.props
 
-    console.log(userInfo)
-
     if (!adminMode) {
       return (
         <Card className="user-dapps">

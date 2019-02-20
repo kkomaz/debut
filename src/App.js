@@ -41,8 +41,6 @@ class App extends Component {
   render() {
     const { userSession } = this.state
 
-    console.log(this.state.loggedIn)
-
     return (
       <div className="App">
         {
