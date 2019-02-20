@@ -4,7 +4,10 @@ import Share from 'model/share'
 
 const createShare = (action) => {
   const { params } = action
-  const share = new Share(params)
+  const share = new Share({
+    ...params,
+    valid: true,
+  })
   share.save()
 
   // attrs does not contain id so making a new object this way
