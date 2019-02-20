@@ -124,7 +124,7 @@ class UsernamePage extends Component {
           profile,
         },
         loading: false,
-        fileExists: true,
+        fileExists: !!userIntro,
       })
     } catch (e) {
       this.setState({
@@ -135,6 +135,7 @@ class UsernamePage extends Component {
           dapps: _.slice(userDappsRadiks, 0, 21),
         },
         loading: false,
+        fileExists: !!userIntro,
       })
     }
   }

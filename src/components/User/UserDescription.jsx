@@ -51,6 +51,8 @@ class UserDescription extends Component {
       )
     }
 
+    console.log(fileExists)
+
     return (
       <Card className="user-description">
         <Card.Content>
