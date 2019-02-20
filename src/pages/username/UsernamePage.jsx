@@ -33,6 +33,7 @@ import {
   ShareForm,
 } from 'components/Share'
 import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
+import toggleNotification from 'utils/notifier/toggleNotification'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -51,7 +52,10 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
-      currentShare: {}
+      currentShare: {},
+      longLoad: setTimeout(() => {
+        toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient')
+      }, 8000)
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -86,6 +90,10 @@ class UsernamePage extends Component {
           this.loadUserInfo(user)
         })
       }
+    }
+
+    if (this.state.loading === false) {
+      clearTimeout(this.state.longLoad)
     }
   }
 
