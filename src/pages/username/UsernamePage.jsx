@@ -323,26 +323,22 @@ class UsernamePage extends Component {
 
         <Columns className="mt-half">
           <Columns.Column size={5}>
-            {
-              /*
-              <div className="username__description mb-one">
-                <Loadable loading={loading}>
-                  <UserDescription
-                    adminMode={adminMode}
-                    displayView={displayView}
-                    fileExists={fileExists}
-                    loading={loading}
-                    sessionUser={sessionUser}
-                    userInfo={userInfo}
-                    usename={username}
-                    onCreateEdit={this.onCreateEdit}
-                    onCancel={this.onCancel}
-                    onSubmit={this.onSubmit}
-                    />
-                </Loadable>
-              </div>
-              */
-            }
+            <div className="username__description mb-one">
+              <Loadable loading={loading}>
+                <UserDescription
+                  adminMode={adminMode}
+                  displayView={displayView}
+                  fileExists={fileExists}
+                  loading={loading}
+                  sessionUser={sessionUser}
+                  userInfo={userInfo}
+                  usename={username}
+                  onCreateEdit={this.onCreateEdit}
+                  onCancel={this.onCancel}
+                  onSubmit={this.onSubmit}
+                  />
+              </Loadable>
+            </div>
 
             <div className="username__dapps mb-one">
               <UserDapps
@@ -369,61 +365,45 @@ class UsernamePage extends Component {
             <Columns>
               <Columns.Column size={12}>
                 {
-                  /*
-                  {
-                    adminMode &&
-                    <Card className="mb-one">
-                      <Card.Content>
-                        <Content>
-                          <Loadable loading={shares.loading && shares.list.length === 0}>
-                            <ShareForm username={username} />
-                          </Loadable>
-                        </Content>
-                      </Card.Content>
-                    </Card>
-                  }
-                  {
-                    !adminMode && _.isEqual(shares.length, 0) &&
-                    <NoShares username={username} />
-                  }
-                  <CSSTransitionGroup
-                    transitionName="share-list-item-transition"
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={300}
-                  >
-                    {
-                      _.map(shares.list, (share, index) => {
-                        const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
-
-                        return (
-                          <ShareListItem
-                            key={share._id}
-                            cardClass={cardClass}
-                            share={share}
-                            username={username}
-                            onEditClick={this.openModal}
-                          />
-                        )
-                      })
-                    }
-                  </CSSTransitionGroup>
-                  {
-                    bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
-                  }
-                  */
+                  adminMode &&
+                  <Card className="mb-one">
+                    <Card.Content>
+                      <Content>
+                        <Loadable loading={shares.loading && shares.list.length === 0}>
+                          <ShareForm username={username} />
+                        </Loadable>
+                      </Content>
+                    </Card.Content>
+                  </Card>
                 }
-                <UserDescription
-                  adminMode={adminMode}
-                  displayView={displayView}
-                  fileExists={fileExists}
-                  loading={loading}
-                  sessionUser={sessionUser}
-                  userInfo={userInfo}
-                  usename={username}
-                  onCreateEdit={this.onCreateEdit}
-                  onCancel={this.onCancel}
-                  onSubmit={this.onSubmit}
-                />
+                {
+                  !adminMode && _.isEqual(shares.length, 0) &&
+                  <NoShares username={username} />
+                }
+                <CSSTransitionGroup
+                  transitionName="share-list-item-transition"
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={300}
+                >
+                  {
+                    _.map(shares.list, (share, index) => {
+                      const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
+
+                      return (
+                        <ShareListItem
+                          key={share._id}
+                          cardClass={cardClass}
+                          share={share}
+                          username={username}
+                          onEditClick={this.openModal}
+                        />
+                      )
+                    })
+                  }
+                </CSSTransitionGroup>
+                {
+                  bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
+                }
               </Columns.Column>
             </Columns>
           </Columns.Column>
