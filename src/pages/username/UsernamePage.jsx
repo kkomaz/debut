@@ -54,7 +54,7 @@ class UsernamePage extends Component {
       showModal: false,
       currentShare: {},
       longLoad: setTimeout(() => {
-        toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient')
+        toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient or refresh the page!')
       }, 8000)
     }
 
@@ -99,6 +99,7 @@ class UsernamePage extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
+    clearTimeout(this.state.longLoad)
   }
 
   async loadUserInfo(profile) {
