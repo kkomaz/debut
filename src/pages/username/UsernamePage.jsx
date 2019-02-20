@@ -286,6 +286,8 @@ class UsernamePage extends Component {
       )
     }
 
+    console.log(shares)
+
     return (
       <Container>
         <Columns>
@@ -386,7 +388,7 @@ class UsernamePage extends Component {
                   </Card>
                 }
                 {
-                  !adminMode && _.isEqual(shares.length, 0) &&
+                  !adminMode && _.isEqual(shares.list.length, 0) &&
                   <NoShares username={username} />
                 }
                 <CSSTransitionGroup
