@@ -34,6 +34,8 @@ import {
 } from 'components/Share'
 import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
+import { forceUserSignOut, forceRedirect } from 'utils/auth'
+import { List } from 'react-content-loader'
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -55,7 +57,8 @@ class UsernamePage extends Component {
       currentShare: {},
       longLoad: setTimeout(() => {
         toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient or refresh the page!')
-      }, 8000)
+      }, 8000),
+      error: false,
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -68,8 +71,32 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { username } = this.props
-    const user = await lookupProfile(username)
+    const { username, history } = this.props
+    const { sessionUser } = this.context.state
+    let user
+
+    try {
+      user = await lookupProfile(username)
+
+      if (process.env.NODE_ENV === 'production' &&
+      (!user.apps || (user.apps && !_.includes(returnFilteredUrls(user.apps), 'https://debutapp.social')))
+      ) {
+        if (sessionUser.username === username) {
+          throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
+        } else {
+          throw new Error("User does not own a gaia hub for this app!  Redirecting back to the main page!")
+        }
+      }
+    } catch (e) {
+      this.setState({ error: true })
+      clearTimeout(this.state.longLoad)
+
+      if (sessionUser.username !== username) {
+        toggleNotification('warning', e.message)
+        return forceRedirect(history)
+      }
+      return forceUserSignOut(sessionUser.userSession, e.message)
+    }
 
     window.addEventListener('scroll', this.handleScroll)
 
@@ -113,6 +140,8 @@ class UsernamePage extends Component {
     try {
       userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
 
+      console.log(userIntro)
+
       const apps = _.map(profile.apps, (k,v) => {
         return v
       })
@@ -140,7 +169,7 @@ class UsernamePage extends Component {
         fileExists: !!userIntro,
       })
     } catch (e) {
-      this.setState({
+      return this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
@@ -245,6 +274,14 @@ class UsernamePage extends Component {
     } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+
+    if (this.state.error) {
+      return (
+        <div>
+          <List />
+        </div>
+      )
+    }
 
     return (
       <Container>
