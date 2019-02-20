@@ -324,20 +324,26 @@ class UsernamePage extends Component {
         <Columns className="mt-half">
           <Columns.Column size={5}>
             <div className="username__description mb-one">
-              <Loadable loading={loading}>
-                <UserDescription
-                  adminMode={adminMode}
-                  displayView={displayView}
-                  fileExists={fileExists}
-                  loading={loading}
-                  sessionUser={sessionUser}
-                  userInfo={userInfo}
-                  usename={username}
-                  onCreateEdit={this.onCreateEdit}
-                  onCancel={this.onCancel}
-                  onSubmit={this.onSubmit}
-                  />
-              </Loadable>
+              <Card className="user-description">
+                <Card.Content>
+                  <Content>
+                    <Loadable loading={loading}>
+                      <UserDescription
+                        adminMode={adminMode}
+                        displayView={displayView}
+                        fileExists={fileExists}
+                        loading={loading}
+                        sessionUser={sessionUser}
+                        userInfo={userInfo}
+                        usename={username}
+                        onCreateEdit={this.onCreateEdit}
+                        onCancel={this.onCancel}
+                        onSubmit={this.onSubmit}
+                        />
+                    </Loadable>
+                  </Content>
+                </Card.Content>
+              </Card>
             </div>
 
             <div className="username__dapps mb-one">
