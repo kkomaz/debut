@@ -3,12 +3,12 @@ import Dapp from 'model/Dapp'
 
 async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
   const result = []
+  const newDapps = []
 
   for (const userDapp of userDapps) {
     const blockstackDapp = _.find(blockstackDapps, (bDapp) => bDapp.url === userDapp)
 
     if (blockstackDapp) {
-      console.log('already found')
       result.push(blockstackDapp)
     } else {
       console.log(`adding ${userDapp} to db`)
@@ -19,8 +19,8 @@ async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
       try {
         const dapp = new Dapp(params)
         const savedDapp = await dapp.save()
-        console.log(savedDapp, 'savedDapp')
-        result.push(userDapp)
+        result.push(savedDapp)
+        newDapps.push(savedDapp)
         console.log(`completed ${userDapp} to db`)
       } catch (e) {
         console.log(e.message)
@@ -28,7 +28,10 @@ async function fetchUserBlockstackDapps(blockstackDapps, userDapps) {
     }
   }
 
-  return result;
+  return {
+    dapps: result,
+    newDapps: _.map(newDapps, 'attrs')
+  }
 }
 
 export default fetchUserBlockstackDapps

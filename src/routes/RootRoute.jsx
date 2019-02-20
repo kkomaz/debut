@@ -12,7 +12,7 @@ import {
 import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
-import UsernamePageTemp from 'pages/username/UsernamePageTemp'
+// import UsernamePageTemp from 'pages/username/UsernamePageTemp'
 import UsernamePage from 'pages/username/UsernamePage'
 
 class RootRoute extends Component {
@@ -56,7 +56,8 @@ class RootRoute extends Component {
             render={({ match, location }) =>
               <UsernamePage
                 username={match.params.username}
-                dapps={dapps} />
+                dapps={dapps}
+              />
             }
           />
         </Switch>

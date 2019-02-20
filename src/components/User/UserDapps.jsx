@@ -19,6 +19,8 @@ class UserDapps extends Component {
   render() {
     const { userInfo, adminMode, loading } = this.props
 
+    console.log(userInfo)
+
     if (!adminMode) {
       return (
         <Card className="user-dapps">
@@ -28,7 +30,7 @@ class UserDapps extends Component {
                 <Heading size={4}>My Blockstack Dapps</Heading>
                 {
                   _.get(userInfo, 'dapps.length', 0) > 0 ?
-                  <IconList apps={userInfo.dapps} /> :
+                  <IconList dapps={userInfo.dapps} /> :
                     <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                 }
               </Loadable>

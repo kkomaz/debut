@@ -20,7 +20,7 @@ import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
 import { requestUserShares } from 'actions/share'
-import toggleNotification from 'utils/notifier/toggleNotification'
+import { addDappsToList } from 'actions/blockstack'
 import './UsernamePage.scss';
 import {
   UserDapps,
@@ -43,7 +43,7 @@ class UsernamePage extends Component {
     this.state = {
       userInfo: {
         description: '',
-        apps: [],
+        dapps: [],
       },
       loading: true,
       displayView: true,
@@ -112,6 +112,10 @@ class UsernamePage extends Component {
       following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
       userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
 
+      if (userDappsRadiks.newDapps.length > 0) {
+        this.props.addDappsToList(userDappsRadiks.newDapps)
+      }
+
       if (!userIntro || !userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
       }
@@ -119,7 +123,7 @@ class UsernamePage extends Component {
       this.setState({
         userInfo: {
           ...JSON.parse(userIntro) || {},
-          dapps: _.slice(userDappsRadiks, 0, 21),
+          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
           following: JSON.parse(following),
           profile,
         },
@@ -132,7 +136,7 @@ class UsernamePage extends Component {
           ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
           profile,
-          dapps: _.slice(userDappsRadiks, 0, 21),
+          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
         fileExists: !!userIntro,
@@ -394,5 +398,6 @@ const mapStateToProps = (state, ownProps) => {
 
 UsernamePage.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
-  requestUserShares
+  requestUserShares,
+  addDappsToList,
 })(UsernamePage))
