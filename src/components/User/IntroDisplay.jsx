@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
+import { linkifyText } from 'utils/decorator'
 
 const generateDescription = (props) => {
   if (props.adminMode) {
@@ -16,7 +17,7 @@ const introDisplay = (props) => {
   return (
     <div className="user-intro-display">
       <p className="user-intro-display__description">
-        {description}
+        {linkifyText(description)}
       </p>
     </div>
   )
