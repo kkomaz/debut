@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _ from 'lodash'
-import {
-  Card,
-} from 'components/bulma'
+import { Card } from 'components/bulma'
 import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
 import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
+import { requestDeleteShare } from 'actions/share'
+import { connect} from 'react-redux'
 import './ShareListItem.scss'
 
 const formatDate = (input) => {
@@ -43,6 +43,11 @@ class ShareListItem extends Component {
   onEditClick = () => {
     const { share } = this.props
     this.props.onEditClick(share)
+  }
+
+  deleteShare = () => {
+    const { share } = this.props
+    this.props.requestDeleteShare(share)
   }
 
   render() {
@@ -89,7 +94,7 @@ class ShareListItem extends Component {
                       Are you sure you want to delete this moment?
                     </p>
                     <div className="share-list-item__delete-yes-no">
-                      <p className="cursor small mr-half share-list-item__delete" onClick={() => console.log('YES')}>DELETE</p>
+                      <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
                       <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
                     </div>
                   </div>
@@ -115,4 +120,6 @@ ShareListItem.defaultProps = {
 }
 
 ShareListItem.contextType = UserContext
-export default ShareListItem
+export default connect(null, {
+  requestDeleteShare,
+})(ShareListItem)
