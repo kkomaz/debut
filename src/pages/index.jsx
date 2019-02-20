@@ -8,7 +8,6 @@ import {
   Container,
   Heading,
   Hero,
-  Media,
   Table,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
@@ -106,12 +105,7 @@ class Page extends Component {
                           <Card className="page__card" onClick={() => this.onBoxClick(user)}>
                             <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
                             <Card.Content className="page__content">
-                              <Media>
-                                <Media.Item style={{ textAlign: 'center' }}>
-                                  <p className="page__username-text">{user.username}</p>
-                                  <p className="page__join-text">joined debut!</p>
-                                </Media.Item>
-                              </Media>
+                              <p className="page__username-text">{user.username}</p>
                             </Card.Content>
                           </Card>
                         </Columns.Column>
