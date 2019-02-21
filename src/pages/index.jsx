@@ -36,6 +36,14 @@ class Page extends Component {
     }
   }
 
+  componentWillUnmount() {
+    const { userState } = this.props
+
+    if (userState.paginatedObj.full) {
+      this.props.revertPaginatedUsersFull()
+    }
+  }
+
   onBoxClick = (user) => {
     const { history } = this.props
 
@@ -60,7 +68,7 @@ class Page extends Component {
   fetchPaginatedUsers = (nextPage = 0) => {
     const { userState } = this.props
     this.props.requestPaginatedUsers(nextPage, userState.paginatedObj.offset)
-    this.setState({ page: nextPage })
+    this.setState({ page: nextPage }, () => {})
   }
 
   onNextClick = () => {
@@ -89,28 +97,12 @@ class Page extends Component {
     const { showTileView, page } = this.state
     const { defaultImgUrl } = this.context.state
 
-    console.log(this.state.page)
-
     if (userState.paginatedObj.loading) {
       return <div>Loading...</div>
     }
 
-    if (userState.paginatedObj.full) {
-      return (
-        <NoUsers
-          onPreviousClick={this.onPreviousClick}
-          onNextClick={this.onNextClick}
-          loading={userState.paginatedObj.loading}
-          full={userState.paginatedObj.full}
-        />
-      )
-    }
-
     return (
       <div className="page">
-        <Button onClick={this.fetchPaginatedUsers}>
-          Fetch Paginated Response
-        </Button>
         <Hero color="primary" className="mb-two">
          <Hero.Body>
            <Container>
@@ -146,7 +138,14 @@ class Page extends Component {
               />
             }
             {
-              showTileView ?
+              userState.paginatedObj.full ? (
+                <NoUsers
+                  onPreviousClick={this.onPreviousClick}
+                  onNextClick={this.onNextClick}
+                  loading={userState.paginatedObj.loading}
+                  full={userState.paginatedObj.full}
+                />
+              ): showTileView ?
                 <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
                   {
                     _.map(userState.paginatedUsers[page].list, (user) => {
@@ -182,7 +181,11 @@ class Page extends Component {
                   </Table>
                 </div>
             }
-            <nav className="pagination" role="navigation" aria-label="pagination">
+            <nav
+              className="pagination mt-two"
+              role="navigation"
+              aria-label="pagination"
+            >
               <Button
                 className="pagination-previous"
                 onClick={this.onPreviousClick}

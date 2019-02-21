@@ -1,45 +1,54 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import {
-  Button,
   Card,
-  Container,
+  Columns,
   Content,
+  Heading
 } from 'components/bulma'
+import PropTypes from 'prop-types'
+import './NoUsers.scss'
+import glasses from 'assets/glasses.png'
 
-const NoUsers = (props) => {
-  return (
-    <Container>
-      <Card>
+class NoUsers extends Component {
+  componentDidMount() {
+    window.twttr.widgets.load()
+  }
+
+  render() {
+    return (
+      <Card className="no-users">
         <Card.Content>
           <Content>
-            <p>No more users in debut</p>
-            <nav className="pagination" role="navigation" aria-label="pagination">
-              <Button
-                className="pagination-previous"
-                onClick={props.onPreviousClick}
-                disabled={props.loading}
-              >
-                {"<"}
-              </Button>
-              <Button
-                className="pagination-next"
-                onClick={props.onNextClick}
-                disabled={props.loading || props.full}
-              >
-                {">"}
-              </Button>
-            </nav>
+            <Columns>
+              <Columns.Column size="6">
+                <img src={glasses} alt="Logo" height={1000} width={1000} />
+              </Columns.Column>
+              <Columns.Column size="6" className="no-users__text-column">
+                <div className="no-users__more-info">
+                  <Heading size={5}>
+                    No more users in Debut!
+                  </Heading>
+                  <Heading size={5}>
+                    Tweet out and let others know about the community!
+                  </Heading>
+                  <a
+                    className="twitter-share-button"
+                    href="https://twitter.com/intent/tweet?text=Introduce%20yourself%20to%20the%20decentralized%20community%20and%20take%20ownership%20of%20your%20data!&url=my_url&via=debutDapp&related=debutDapp"
+                    data-size="large"
+                  >
+                    Tweet
+                  </a>
+                </div>
+              </Columns.Column>
+            </Columns>
           </Content>
         </Card.Content>
       </Card>
-    </Container>
-  )
+    )
+  }
 }
 
 NoUsers.propTypes = {
-  onPreviousClick: PropTypes.func.isRequired,
-  onNextClick: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   full: PropTypes.bool.isRequired
 }
