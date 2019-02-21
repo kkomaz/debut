@@ -77,9 +77,12 @@ class UsernamePage extends Component {
 
     try {
       user = await lookupProfile(username)
+      const apps = _.map(user.apps, (k,v) => {
+        return v
+      })
 
-      if (process.env.NODE_ENV === 'production' &&
-      (!user.apps || (user.apps && !_.includes(returnFilteredUrls(user.apps), 'https://debutapp.social')))
+      if (process.env.NODE_ENV === 'development' &&
+      (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
       ) {
         if (sessionUser.username === username) {
           throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
