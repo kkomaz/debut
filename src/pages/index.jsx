@@ -14,7 +14,6 @@ import {
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
-import requestAllUsers from 'actions/user/requestAllUsers'
 import Switch from 'react-bulma-switch/lib';
 import { Loader } from 'components/Loader'
 import { requestPaginatedUsers, revertPaginatedUsersFull } from 'actions/user'
@@ -29,7 +28,6 @@ class Page extends Component {
   componentDidMount() {
     const { userState } = this.props
     const { page } = this.state
-    this.props.requestAllUsers()
 
     if (_.isEmpty(userState.paginatedUsers[page].list)) {
       this.fetchPaginatedUsers()
@@ -140,7 +138,7 @@ class Page extends Component {
        </Hero>
           <Container>
             {
-              userState.loading &&
+              userState.paginatedObj.loading &&
               <Loader
                 cardWrapped
                 contained
@@ -225,7 +223,6 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestUserIntro,
-  requestAllUsers,
   requestPaginatedUsers,
   revertPaginatedUsersFull,
 })(Page))

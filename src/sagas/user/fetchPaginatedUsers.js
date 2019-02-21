@@ -1,6 +1,10 @@
 import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
-import { FETCH_PAGINATED_USERS_SUCCESS, FETCH_PAGINATED_USERS_FAIL } from 'actions'
+import {
+  FETCH_PAGINATED_USERS_SUCCESS,
+  FETCH_PAGINATED_USERS_FAIL,
+  FETCH_ALL_USERS_SUCCESS
+} from 'actions'
 import { User } from 'radiks'
 
 const fetchPaginatedUsers = (action) => {
@@ -26,6 +30,7 @@ function* fetchPaginatedUsersSaga(action) {
     }
 
     yield put({ type: FETCH_PAGINATED_USERS_SUCCESS, payload });
+    yield put({ type: FETCH_ALL_USERS_SUCCESS, payload })
   } catch (error) {
     console.log(error.message)
     yield put({ type: FETCH_PAGINATED_USERS_FAIL });

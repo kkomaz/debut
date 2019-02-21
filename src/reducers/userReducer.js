@@ -1,15 +1,14 @@
 import {
-  REQUEST_ALL_USERS,
   REQUEST_PAGINATED_USERS,
   REVERT_PAGINATED_USERS_FULL,
   FETCH_ALL_USERS_SUCCESS,
   FETCH_USER_INTRO_SUCCESS,
   FETCH_PAGINATED_USERS_SUCCESS,
 } from 'actions'
+import { filterListFromList } from 'reducers/utils'
 
 const defaultSession = {
   users: [],
-  loading: true,
   paginatedUsers: [
     { list: [] }
   ],
@@ -22,10 +21,8 @@ const defaultSession = {
 
 export default function userReducer(state = defaultSession, action) {
   switch (action.type) {
-    case REQUEST_ALL_USERS:
-      return { ...state, loading: true }
     case FETCH_ALL_USERS_SUCCESS:
-      return { ...state, users: action.payload, loading: false }
+      return { ...state, users: filterListFromList(state.users, action.payload.users)}
     case REQUEST_PAGINATED_USERS:
       return { ...state,
         paginatedObj: { ...state.paginatedObj, loading: true }
