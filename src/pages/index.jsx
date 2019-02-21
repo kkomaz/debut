@@ -76,7 +76,7 @@ class Page extends Component {
   fetchPaginatedUsers = (nextPage = 0) => {
     const { userState } = this.props
     this.props.requestPaginatedUsers(nextPage, userState.paginatedObj.offset)
-    this.setState({ page: nextPage }, () => {})
+    return this.setState({ page: nextPage })
   }
 
   onNextClick = () => {
@@ -109,30 +109,37 @@ class Page extends Component {
       return <div>Loading...</div>
     }
 
+    console.log(this.state.page)
+
     return (
       <div className="page">
         <Hero color="primary" className="mb-two">
          <Hero.Body>
            <Container>
-             <Heading>Choose your user's view!</Heading>
-              <Switch
-                className="page__slider"
-                color="success"
-                onChange={this.toggleSwitch}
-                checked={showTileView}
-                rounded
-              >
-                  Tile View
-              </Switch>
-              <Switch
-                className="page__slider"
-                color="success"
-                onChange={this.toggleSwitch}
-                checked={!showTileView}
-                rounded
-              >
-                  Table View
-              </Switch>
+             {
+               !userState.paginatedObj.full &&
+               <React.Fragment>
+                 <Heading>Choose your user's view!</Heading>
+                 <Switch
+                   className="page__slider"
+                   color="success"
+                   onChange={this.toggleSwitch}
+                   checked={showTileView}
+                   rounded
+                   >
+                   Tile View
+                 </Switch>
+                 <Switch
+                   className="page__slider"
+                   color="success"
+                   onChange={this.toggleSwitch}
+                   checked={!showTileView}
+                   rounded
+                   >
+                   Table View
+                 </Switch>
+               </React.Fragment>
+             }
            </Container>
          </Hero.Body>
        </Hero>

@@ -20,7 +20,7 @@ class NoUsers extends Component {
         <Card.Content>
           <Content>
             <Columns>
-              <Columns.Column size="6">
+              <Columns.Column size={6}>
                 <img src={glasses} alt="Logo" height={1000} width={1000} />
               </Columns.Column>
               <Columns.Column size="6" className="no-users__text-column">
@@ -33,7 +33,7 @@ class NoUsers extends Component {
                   </Heading>
                   <a
                     className="twitter-share-button"
-                    href="https://twitter.com/intent/tweet?text=Introduce%20yourself%20to%20the%20decentralized%20community%20and%20take%20ownership%20of%20your%20data!&url=my_url&via=debutDapp&related=debutDapp"
+                    href="https://twitter.com/intent/tweet?text=Join%20me%20and%20introduce%20yourself%20to%20the%20decentralized%20community%20and%20take%20ownership%20of%20your%20data!&url=my_url&via=debutDapp&related=debutDapp"
                     data-size="large"
                   >
                     Tweet

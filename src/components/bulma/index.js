@@ -13,6 +13,7 @@ import Hero from 'react-bulma-components/lib/components/hero'
 import Modal from 'react-bulma-components/lib/components/modal';
 import Section from 'react-bulma-components/lib/components/section';
 import Pagination from 'react-bulma-components/lib/components/pagination';
+import Footer from 'react-bulma-components/lib/components/footer';
 
 import {
   Field,
@@ -29,6 +30,7 @@ export {
   Container,
   Control,
   Field,
+  Footer,
   Help,
   Label,
   Heading,
