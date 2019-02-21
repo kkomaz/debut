@@ -10,7 +10,6 @@ import {
   Heading,
   Hero,
   Table,
-  Pagination,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
@@ -18,16 +17,23 @@ import { requestUserIntro } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import Switch from 'react-bulma-switch/lib';
 import { Loader } from 'components/Loader'
-import { requestPaginatedUsers } from 'actions/user'
+import { requestPaginatedUsers, revertPaginatedUsersFull } from 'actions/user'
+import { NoUsers } from 'components/User'
 
 class Page extends Component {
   state = {
     showTileView: true,
-    page: 1,
+    page: 0,
   }
 
   componentDidMount() {
+    const { userState } = this.props
+    const { page } = this.state
     this.props.requestAllUsers()
+
+    if (_.isEmpty(userState.paginatedUsers[page].list)) {
+      this.fetchPaginatedUsers()
+    }
   }
 
   onBoxClick = (user) => {
@@ -51,21 +57,58 @@ class Page extends Component {
     this.setState({ showTileView: !this.state.showTileView })
   }
 
-  fetchPaginatedResponse = () => {
+  fetchPaginatedUsers = (nextPage = 0) => {
+    const { userState } = this.props
+    this.props.requestPaginatedUsers(nextPage, userState.paginatedObj.offset)
+    this.setState({ page: nextPage })
+  }
+
+  onNextClick = () => {
     const { page } = this.state
     const { userState } = this.props
-    this.props.requestPaginatedUsers(page, userState.offset)
-    this.setState({ page: page + 1 })
+
+    if (!userState.paginatedUsers[page + 1]) {
+      const nextPage = page + 1
+      return this.fetchPaginatedUsers(nextPage)
+    }
+
+    return this.setState({ page: page + 1 })
+  }
+
+  onPreviousClick = () => {
+    const { page } = this.state
+    const { userState } = this.props
+    if (userState.paginatedObj.full) {
+      this.props.revertPaginatedUsersFull()
+    }
+    return this.setState({ page: page - 1 })
   }
 
   render() {
     const { userState } = this.props
-    const { showTileView } = this.state
+    const { showTileView, page } = this.state
     const { defaultImgUrl } = this.context.state
+
+    console.log(this.state.page)
+
+    if (userState.paginatedObj.loading) {
+      return <div>Loading...</div>
+    }
+
+    if (userState.paginatedObj.full) {
+      return (
+        <NoUsers
+          onPreviousClick={this.onPreviousClick}
+          onNextClick={this.onNextClick}
+          loading={userState.paginatedObj.loading}
+          full={userState.paginatedObj.full}
+        />
+      )
+    }
 
     return (
       <div className="page">
-        <Button onClick={this.fetchPaginatedResponse}>
+        <Button onClick={this.fetchPaginatedUsers}>
           Fetch Paginated Response
         </Button>
         <Hero color="primary" className="mb-two">
@@ -106,7 +149,7 @@ class Page extends Component {
               showTileView ?
                 <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
                   {
-                    _.map(userState.users, (user) => {
+                    _.map(userState.paginatedUsers[page].list, (user) => {
                       return (
                         <Columns.Column
                           key={user.username}
@@ -139,12 +182,22 @@ class Page extends Component {
                   </Table>
                 </div>
             }
-            <Pagination
-              current={1}
-              total={5}
-              onChange={(argument) => console.log(argument)}
-              delta={0}
-            />
+            <nav className="pagination" role="navigation" aria-label="pagination">
+              <Button
+                className="pagination-previous"
+                onClick={this.onPreviousClick}
+                disabled={userState.paginatedObj.loading || page === 0}
+              >
+                {"<"}
+              </Button>
+              <Button
+                className="pagination-next"
+                onClick={this.onNextClick}
+                disabled={userState.paginatedObj.loading || userState.paginatedObj.full}
+              >
+                {">"}
+              </Button>
+            </nav>
           </Container>
       </div>
     )
@@ -161,5 +214,6 @@ export default withRouter(connect(mapStateToProps, {
   requestUserIntro,
   requestAllUsers,
   requestPaginatedUsers,
+  revertPaginatedUsersFull,
 })(Page))
 Page.contextType = UserContext
