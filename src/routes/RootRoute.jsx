@@ -14,6 +14,7 @@ import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
 // import UsernamePageTemp from 'pages/username/UsernamePageTemp'
 import UsernamePage from 'pages/username/UsernamePage'
+import { Loader } from 'components/Loader'
 
 class RootRoute extends Component {
   static propTypes = {
@@ -33,10 +34,6 @@ class RootRoute extends Component {
       dapps,
     } = this.props
 
-    if (blockstackDappsLoading) {
-      return <div>Loading...</div>
-    }
-
     return (
       <UserProvider userSession={userSession}>
         <Navbar />
@@ -50,16 +47,24 @@ class RootRoute extends Component {
             path="/"
             render={({ location }) => <RootPage />}
           />
-          <Route
-            exact
-            path="/:username"
-            render={({ match, location }) =>
-              <UsernamePage
-                username={match.params.username}
-                dapps={dapps}
-              />
-            }
-          />
+          {
+            blockstackDappsLoading ?
+            <Loader
+              cardWrapped
+              contained
+              text="App is warming up..."
+            /> :
+            <Route
+              exact
+              path="/:username"
+              render={({ match, location }) =>
+                <UsernamePage
+                  username={match.params.username}
+                  dapps={dapps}
+                />
+              }
+            />
+          }
         </Switch>
       </UserProvider>
     )

@@ -21,16 +21,9 @@ class Page extends Component {
     showTileView: true,
   }
 
-  // TODO: Commented out but might need later
-  // componentDidMount = async () => {
-  //   const { sessionUser } = this.context.state
-  //   const { userState } = this.props;
-  //
-  //   _.each(userState.users, (user) => {
-  //     console.log(user)
-  //     this.props.requestUserIntro(user.username, sessionUser.userSession)
-  //   })
-  // }
+  componentDidMount() {
+    this.props.requestAllUsers()
+  }
 
   onBoxClick = (user) => {
     const { history } = this.props
