@@ -3,12 +3,14 @@ import _ from 'lodash'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
+  Button,
   Card,
   Columns,
   Container,
   Heading,
   Hero,
   Table,
+  Pagination,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import './Page.scss'
@@ -16,10 +18,12 @@ import { requestUserIntro } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import Switch from 'react-bulma-switch/lib';
 import { Loader } from 'components/Loader'
+import { requestPaginatedUsers } from 'actions/user'
 
 class Page extends Component {
   state = {
     showTileView: true,
+    page: 1,
   }
 
   componentDidMount() {
@@ -43,12 +47,15 @@ class Page extends Component {
     })
   }
 
-  onClick = () => {
-    this.props.requestAllUsers()
-  }
-
   toggleSwitch = () => {
     this.setState({ showTileView: !this.state.showTileView })
+  }
+
+  fetchPaginatedResponse = () => {
+    const { page } = this.state
+    const { userState } = this.props
+    this.props.requestPaginatedUsers(page, userState.offset)
+    this.setState({ page: page + 1 })
   }
 
   render() {
@@ -58,6 +65,9 @@ class Page extends Component {
 
     return (
       <div className="page">
+        <Button onClick={this.fetchPaginatedResponse}>
+          Fetch Paginated Response
+        </Button>
         <Hero color="primary" className="mb-two">
          <Hero.Body>
            <Container>
@@ -129,6 +139,12 @@ class Page extends Component {
                   </Table>
                 </div>
             }
+            <Pagination
+              current={1}
+              total={5}
+              onChange={(argument) => console.log(argument)}
+              delta={0}
+            />
           </Container>
       </div>
     )
@@ -144,5 +160,6 @@ const mapStateToProps = (state) => {
 export default withRouter(connect(mapStateToProps, {
   requestUserIntro,
   requestAllUsers,
+  requestPaginatedUsers,
 })(Page))
 Page.contextType = UserContext

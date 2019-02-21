@@ -9,7 +9,6 @@ import Navbar from 'components/Navbar'
 import {
   requestBlockstackDapps,
 } from 'actions/blockstack'
-import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
 // import UsernamePageTemp from 'pages/username/UsernamePageTemp'
@@ -19,12 +18,10 @@ import { Loader } from 'components/Loader'
 class RootRoute extends Component {
   static propTypes = {
     userSession: PropTypes.object.isRequired,
-    requestAllUsers: PropTypes.func.isRequired
   }
 
   componentDidMount() {
     this.props.requestBlockstackDapps()
-    this.props.requestAllUsers()
   }
 
   render() {
@@ -81,5 +78,4 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestBlockstackDapps,
-  requestAllUsers,
 })(RootRoute))
