@@ -44,6 +44,16 @@ class Page extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.homePageClicked && this.props.homePageClicked) {
+      this.props.setHomePageClickedFalse()
+      if (this.props.userState.paginatedObj.full) {
+        this.props.revertPaginatedUsersFull()
+      }
+      this.setState({ page: 0 })
+    }
+  }
+
   onBoxClick = (user) => {
     const { history } = this.props
 
@@ -171,7 +181,7 @@ class Page extends Component {
                   <Table>
                     <tbody>
                       {
-                        _.map(userState.users, (user) => {
+                        _.map(userState.paginatedUsers[page].list, (user) => {
                           return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
                             <td>{user.username} has joined debut!</td>
                           </tr>

@@ -16,6 +16,7 @@ class NavbarComp extends Component {
 
   goToHome = () => {
     const { history } = this.props
+    this.props.setHomePageClickedTrue()
     history.push('/')
   }
 

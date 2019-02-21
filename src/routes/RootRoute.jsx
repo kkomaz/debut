@@ -16,12 +16,24 @@ import UsernamePage from 'pages/username/UsernamePage'
 import { Loader } from 'components/Loader'
 
 class RootRoute extends Component {
+  state = {
+    homePageClicked: false
+  }
+
   static propTypes = {
     userSession: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
     this.props.requestBlockstackDapps()
+  }
+
+  setHomePageClickedTrue = () => {
+    this.setState({ homePageClicked: true })
+  }
+
+  setHomePageClickedFalse = () => {
+    this.setState({ homePageClicked: false })
   }
 
   render() {
@@ -33,7 +45,9 @@ class RootRoute extends Component {
 
     return (
       <UserProvider userSession={userSession}>
-        <Navbar />
+        <Navbar
+          setHomePageClickedTrue={this.setHomePageClickedTrue}
+        />
         <ToastContainer
           className='toast-container'
         />
@@ -42,7 +56,12 @@ class RootRoute extends Component {
           <Route
             exact
             path="/"
-            render={({ location }) => <RootPage />}
+            render={({ location }) =>
+              <RootPage
+                homePageClicked={this.state.homePageClicked}
+                setHomePageClickedFalse={this.setHomePageClickedFalse}
+              />
+            }
           />
           {
             blockstackDappsLoading ?
