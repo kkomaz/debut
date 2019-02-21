@@ -15,6 +15,7 @@ import './Page.scss'
 import { requestUserIntro } from 'actions/blockstack'
 import requestAllUsers from 'actions/user/requestAllUsers'
 import Switch from 'react-bulma-switch/lib';
+import { Loader } from 'components/Loader'
 
 class Page extends Component {
   state = {
@@ -83,6 +84,14 @@ class Page extends Component {
          </Hero.Body>
        </Hero>
           <Container>
+            {
+              userState.loading &&
+              <Loader
+                cardWrapped
+                contained
+                text="App is warming up..."
+              />
+            }
             {
               showTileView ?
                 <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
