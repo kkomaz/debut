@@ -51,7 +51,7 @@ class NavbarComp extends Component {
       >
         <Navbar.Brand>
           <Navbar.Item onClick={this.goToHome}>
-            Debut
+            debut
           </Navbar.Item>
 
           <Navbar.Burger

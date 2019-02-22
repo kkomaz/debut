@@ -43,13 +43,17 @@ class Page extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!prevProps.homePageClicked && this.props.homePageClicked) {
+    if (this.props.homePageClicked) {
       this.props.setHomePageClickedFalse()
       if (this.props.userState.paginatedObj.full) {
         this.props.revertPaginatedUsersFull()
       }
       this.setState({ page: 0 })
     }
+    // if (!prevProps.homePageClicked && this.props.homePageClicked) {
+    //   this.props.setHomePageClickedFalse()
+    //   this.setState({ page: 0 })
+    // }
   }
 
   onBoxClick = (user) => {

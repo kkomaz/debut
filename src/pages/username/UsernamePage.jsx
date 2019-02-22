@@ -81,7 +81,7 @@ class UsernamePage extends Component {
         return v
       })
 
-      if (process.env.NODE_ENV === 'development' &&
+      if (process.env.NODE_ENV === 'production' &&
       (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
       ) {
         if (sessionUser.username === username) {

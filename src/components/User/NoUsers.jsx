@@ -26,7 +26,7 @@ class NoUsers extends Component {
               <Columns.Column size="6" className="no-users__text-column">
                 <div className="no-users__more-info">
                   <Heading size={5}>
-                    No more users in Debut!
+                    No more users in debut!
                   </Heading>
                   <Heading size={5}>
                     Tweet out and let others know about the community!
