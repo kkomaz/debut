@@ -50,10 +50,6 @@ class Page extends Component {
       }
       this.setState({ page: 0 })
     }
-    // if (!prevProps.homePageClicked && this.props.homePageClicked) {
-    //   this.props.setHomePageClickedFalse()
-    //   this.setState({ page: 0 })
-    // }
   }
 
   onBoxClick = (user) => {
@@ -113,8 +109,6 @@ class Page extends Component {
       return <div>Loading...</div>
     }
 
-    console.log(this.state.page)
-
     return (
       <div className="page">
         <Hero color="primary" className="mb-two">
@@ -122,27 +116,33 @@ class Page extends Component {
            <Container>
              {
                !userState.paginatedObj.full &&
-               <React.Fragment>
-                 <Heading>Choose your user's view!</Heading>
-                 <Switch
-                   className="page__slider"
-                   color="success"
-                   onChange={this.toggleSwitch}
-                   checked={showTileView}
-                   rounded
-                   >
-                   Tile View
-                 </Switch>
-                 <Switch
-                   className="page__slider"
-                   color="success"
-                   onChange={this.toggleSwitch}
-                   checked={!showTileView}
-                   rounded
-                   >
-                   Table View
-                 </Switch>
-               </React.Fragment>
+               <Columns style={{ padding: '0 150px'}}>
+                 <Columns.Column size={7}>
+                   <Heading>Welcome to debut!</Heading>
+                   <Heading size={5}>Here are the list of user currently signed up!</Heading>
+                   <Heading size={6}>Feel free to adjust your view, explore profiles, and introduce yourself by updating your profile via "My Page"!</Heading>
+                 </Columns.Column>
+                 <Columns.Column size={5}>
+                   <Switch
+                     className="page__slider"
+                     color="success"
+                     onChange={this.toggleSwitch}
+                     checked={showTileView}
+                     rounded
+                     >
+                     Tile View
+                   </Switch>
+                   <Switch
+                     className="page__slider"
+                     color="success"
+                     onChange={this.toggleSwitch}
+                     checked={!showTileView}
+                     rounded
+                     >
+                     Table View
+                   </Switch>
+                 </Columns.Column>
+               </Columns>
              }
            </Container>
          </Hero.Body>

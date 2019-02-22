@@ -49,7 +49,14 @@ class UserFollowing extends Component {
               {
                 _.get(userInfo, 'following.length', 0) ?
                 <UserList users={userInfo.following} history={history} /> :
-                <Heading size={6}>Add users <Link to="/">here!</Link></Heading>
+                <div>
+                  <Heading size={6}>Not following anyone!</Heading>
+                  <p className="small">
+                    By following other debut users, you can quickly go to profiles and get updates about their moments!
+                    Click on the follow button next to their profile image to follow a user!.  You can view users via home
+                    <Link to="/">page!</Link>
+                  </p>
+                </div>
               }
             </Loadable>
           </Content>

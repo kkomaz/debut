@@ -49,9 +49,14 @@ class UserDapps extends Component {
                   _.get(userInfo, 'dapps.length', 0) > 0 ? <IconList dapps={userInfo.dapps} /> :
                   <Heading style={{ color: '#401457' }} size={6}>No installed Blockstack Dapps!</Heading>
                 }
-                <Heading size={6}>
-                  Explore and add other Blockstack Dapps <a href="https://app.co/mining" rel="noopener noreferrer" target="_blank">here!</a>
-                </Heading>
+                <p className="small">
+                  New to Blockstack?  To have your decentralized apps show up,
+                  you can add them by signing into different applications!
+                </p>
+                <p className="small">
+                  The list of blockstack apps are located <a href="https://app.co/blockstack" rel="noopener noreferrer" target="_blank">here!  </a>
+                  Keep in mind it will take some time for your apps to show up in debut but rest assured it will arrive!
+                </p>
               </React.Fragment>
             </Loadable>
           </Content>

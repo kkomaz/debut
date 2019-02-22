@@ -182,7 +182,7 @@ class ShareForm extends Component {
           {
             this.state.imageFile &&
             <div className="share-form__image-uploaded">
-              <img alt='' src={this.state.imageFile} />
+              <img style={{ maxWidth: '500px', maxHeight: '500px' }} alt='' src={this.state.imageFile} />
               <Icon
                 className="share-form__image-remove-button debut-icon debut-icon--pointer"
                 icon="IconX"
