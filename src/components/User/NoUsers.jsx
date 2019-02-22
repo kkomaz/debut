@@ -33,7 +33,7 @@ class NoUsers extends Component {
                   </Heading>
                   <a
                     className="twitter-share-button"
-                    href="https://twitter.com/intent/tweet?text=Join%20me%20and%20introduce%20yourself%20to%20the%20decentralized%20community%20and%20take%20ownership%20of%20your%20data!&url=my_url&via=debutDapp&related=debutDapp"
+                    href="https://twitter.com/intent/tweet?text=Join%20me%20and%20introduce%20yourself%20to%20the%20decentralized%20community%20and%20take%20ownership%20of%20your%20data!&url=my_url&via=the_debut_app &related=the_debut_app"
                     data-size="large"
                   >
                     Tweet

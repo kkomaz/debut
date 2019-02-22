@@ -41,7 +41,7 @@ class Login extends Component {
                         Mission
                       </Heading>
                       <p>
-                        debut is a social networking app alternative that ensures your data is safe and encrypted.  Only <strong>YOU</strong> as the user have access to your data.  By signing in, you can <strong>confidently</strong> share your <strong>secured</strong> moments and connect with friends and family.
+                        debut is a social networking app alternative that ensures your data is safe. Only <strong>YOU</strong> as the user have access to your data.  By signing in, you can <strong>confidently</strong> share your <strong>secured</strong> moments and connect with friends and family.
                       </p>
                       <p>
                         Follow us on twitter <a href="https://twitter.com/the_debut_app" rel="noopener noreferrer" target="_blank">here!</a>
