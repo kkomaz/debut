@@ -80,7 +80,7 @@ class ShareListItem extends Component {
                     className="debut-icon debut-icon--pointer mr-half"
                     icon="IconPencil"
                     onClick={this.onEditClick}
-                    />
+                  />
                   <Icon
                     className="debut-icon debut-icon--pointer"
                     icon="IconTrash"

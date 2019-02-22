@@ -13,6 +13,7 @@ const Icon = (props) => {
     className,
     style,
     ariaLabel,
+    linkStyles
   } = props;
 
   const iconClass = () => classNames({
@@ -49,6 +50,7 @@ const Icon = (props) => {
         onClick={props.onClick}
         tabIndex={0}
         onKeyPress={onKeyPress}
+        style={linkStyles}
       >
         <svg
           id={id}
@@ -102,6 +104,9 @@ Icon.defaultProps = {
   icons: {},
   style: {},
   disabled: false,
+  linkStyles: {
+    height: '30px'
+  }
 };
 
 export default Icon;

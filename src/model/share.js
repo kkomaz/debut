@@ -4,7 +4,11 @@ class Share extends Model {
   static className = "Share"
 
   static schema = {
-    text: { type: String, required: true },
+    text: {
+      type: String,
+      required: true,
+      decrypted: true,
+    },
     valid: {
       type: Boolean,
       default: true,
@@ -15,7 +19,10 @@ class Share extends Model {
       required: true,
       decrypted: true
     },
-    imageFile: { type: String }
+    imageFile: {
+      type: String,
+      decrypted: true,
+    }
   }
 }
 

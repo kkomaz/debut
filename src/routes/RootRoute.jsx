@@ -9,7 +9,6 @@ import Navbar from 'components/Navbar'
 import {
   requestBlockstackDapps,
 } from 'actions/blockstack'
-import requestAllUsers from 'actions/user/requestAllUsers'
 import './RootRoute.scss'
 import 'react-toastify/dist/ReactToastify.css'
 // import UsernamePageTemp from 'pages/username/UsernamePageTemp'
@@ -17,14 +16,24 @@ import UsernamePage from 'pages/username/UsernamePage'
 import { Loader } from 'components/Loader'
 
 class RootRoute extends Component {
+  state = {
+    homePageClicked: false
+  }
+
   static propTypes = {
     userSession: PropTypes.object.isRequired,
-    requestAllUsers: PropTypes.func.isRequired
   }
 
   componentDidMount() {
     this.props.requestBlockstackDapps()
-    this.props.requestAllUsers()
+  }
+
+  setHomePageClickedTrue = () => {
+    this.setState({ homePageClicked: true })
+  }
+
+  setHomePageClickedFalse = () => {
+    this.setState({ homePageClicked: false })
   }
 
   render() {
@@ -36,7 +45,9 @@ class RootRoute extends Component {
 
     return (
       <UserProvider userSession={userSession}>
-        <Navbar />
+        <Navbar
+          setHomePageClickedTrue={this.setHomePageClickedTrue}
+        />
         <ToastContainer
           className='toast-container'
         />
@@ -45,7 +56,12 @@ class RootRoute extends Component {
           <Route
             exact
             path="/"
-            render={({ location }) => <RootPage />}
+            render={({ location }) =>
+              <RootPage
+                homePageClicked={this.state.homePageClicked}
+                setHomePageClickedFalse={this.setHomePageClickedFalse}
+              />
+            }
           />
           {
             blockstackDappsLoading ?
@@ -81,5 +97,4 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestBlockstackDapps,
-  requestAllUsers,
 })(RootRoute))

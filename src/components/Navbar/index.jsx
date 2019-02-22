@@ -16,6 +16,7 @@ class NavbarComp extends Component {
 
   goToHome = () => {
     const { history } = this.props
+    this.props.setHomePageClickedTrue()
     history.push('/')
   }
 
@@ -50,7 +51,7 @@ class NavbarComp extends Component {
       >
         <Navbar.Brand>
           <Navbar.Item onClick={this.goToHome}>
-            Debut
+            debut
           </Navbar.Item>
 
           <Navbar.Burger
