@@ -49,6 +49,7 @@ const Icon = (props) => {
         onClick={props.onClick}
         tabIndex={0}
         onKeyPress={onKeyPress}
+        style={{ height: '30px' }}
       >
         <svg
           id={id}

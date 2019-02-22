@@ -143,8 +143,6 @@ class UsernamePage extends Component {
     try {
       userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
 
-      console.log(userIntro)
-
       const apps = _.map(profile.apps, (k,v) => {
         return v
       })
@@ -273,7 +271,7 @@ class UsernamePage extends Component {
       userInfo,
       displayView,
       fileExists,
-      showModal
+      showModal,
     } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
@@ -285,8 +283,6 @@ class UsernamePage extends Component {
         </div>
       )
     }
-
-    console.log(shares)
 
     return (
       <Container>
