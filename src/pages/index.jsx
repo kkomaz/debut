@@ -105,10 +105,6 @@ class Page extends Component {
     const { showTileView, page } = this.state
     const { defaultImgUrl } = this.context.state
 
-    if (userState.paginatedObj.loading) {
-      return <div>Loading...</div>
-    }
-
     return (
       <div className="page">
         <Hero color="primary" className="mb-two">
@@ -149,14 +145,12 @@ class Page extends Component {
        </Hero>
           <Container>
             {
-              userState.paginatedObj.loading &&
+              userState.paginatedObj.loading ?
               <Loader
                 cardWrapped
                 contained
                 text="App is warming up..."
-              />
-            }
-            {
+              /> :
               userState.paginatedObj.full ? (
                 <NoUsers
                   onPreviousClick={this.onPreviousClick}
