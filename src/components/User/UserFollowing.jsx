@@ -90,7 +90,6 @@ class UserFollowing extends Component {
       <Card className="user-following">
         <Card.Content>
           <Content>
-            <Heading size={4}>Following Users</Heading>
             <div className="user-following__info-section">
               <Heading className="mr-one" size={4}>Following Users</Heading>
                 <Popover

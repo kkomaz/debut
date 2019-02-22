@@ -34,42 +34,47 @@ class UserDapps extends Component {
               <Loadable loading={loading}>
                 <div className="user-dapps__info-section">
                   <Heading className="mr-one" size={4}>My Blockstack Dapps</Heading>
-                  <Popover
-                      isOpen={this.state.isPopoverOpen}
-                      position="right"
-                      padding={30}
-                      onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                      content={({ position, targetRect, popoverRect }) => (
-                          <ArrowContainer
-                            position={position}
-                            targetRect={targetRect}
-                            popoverRect={popoverRect}
-                            arrowColor={'#518DCA'}
-                            arrowSize={10}
-                          >
-                              <div
-                                  style={{ backgroundColor: '#518DCA', padding: '20px', color: 'white' }}
-                                  onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                              >
-                                <p className="small">
-                                  New to Blockstack?  To have your decentralized apps show up,
-                                  you can add them by signing into different applications!
-                                </p>
-                                <p className="small">
-                                  The list of blockstack apps are located <a style={{ color: '#281134'}}href="https://app.co/blockstack" rel="noopener noreferrer" target="_blank">here!  </a>
-                                Keep in mind it will take some time for your apps to show up in debut but rest assured it will arrive!
-                                </p>
-                              </div>
-                          </ArrowContainer>
-                      )}
-                  >
-                    <Icon
-                      className="debut-icon debut-icon--pointer"
-                      icon="IconQuestionCircle"
-                      onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                      size={16}
-                    />
-                  </Popover>
+                    <Popover
+                        isOpen={this.state.isPopoverOpen}
+                        position="right"
+                        padding={30}
+                        onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                        content={({ position, targetRect, popoverRect }) => (
+                            <ArrowContainer
+                              position={position}
+                              targetRect={targetRect}
+                              popoverRect={popoverRect}
+                              arrowColor={'#383A3F'}
+                              arrowSize={10}
+                            >
+                                <div
+                                    style={{
+                                      backgroundColor: '#383A3F',
+                                      padding: '20px',
+                                      color: 'white',
+                                      width: '300px',
+                                    }}
+                                    onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                                >
+                                  <p className="small">
+                                    New to Blockstack?  To have your decentralized apps show up,
+                                    you can add them by signing into different applications!
+                                  </p>
+                                  <p className="small">
+                                    The list of blockstack apps are located <a style={{ color: '#518DCA'}}href="https://app.co/blockstack" rel="noopener noreferrer" target="_blank">here!  </a>
+                                  Keep in mind it will take some time for your apps to show up in debut but rest assured it will arrive!
+                                  </p>
+                                </div>
+                            </ArrowContainer>
+                        )}
+                    >
+                      <Icon
+                        className="debut-icon debut-icon--pointer"
+                        icon="IconQuestionCircle"
+                        onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                        size={16}
+                      />
+                    </Popover>
                 </div>
                 {
                   _.get(userInfo, 'dapps.length', 0) > 0 ?
