@@ -10,6 +10,7 @@ class App extends Component {
   state = {
     userSession: new UserSession({ appConfig }),
     loggedIn: false,
+    loggingIn: false,
   }
 
   componentDidMount = async () => {
@@ -21,6 +22,7 @@ class App extends Component {
 
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
       const userData = await userSession.handlePendingSignIn()
+      this.setState({ loggingIn: true })
       const user = User.currentUser()
       await user.fetch({ decrypt: false })
 
@@ -34,7 +36,7 @@ class App extends Component {
         throw new Error('This app requires a username')
       }
 
-      this.setState({ loggedIn: true })
+      this.setState({ loggedIn: true, loggingIn: false })
     }
   }
 
@@ -46,7 +48,7 @@ class App extends Component {
         {
           this.state.loggedIn ?
           <RootRoute userSession={userSession} /> :
-          <Login userSession={userSession} />
+          <Login userSession={userSession} loggingIn={this.state.loggingIn} />
         }
       </div>
     );

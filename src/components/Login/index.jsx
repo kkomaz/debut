@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
   Button,
   Columns,
@@ -8,10 +9,15 @@ import {
 } from 'components/bulma'
 import "./_login.scss"
 import logo from 'assets/debut-app-icon-text.svg'
+import { Loader } from 'components/Loader'
 
 class Login extends Component {
   state = {
     loadingUser: false,
+  }
+
+  static propTypes = {
+    loggingIn: PropTypes.bool.isRequired,
   }
 
   signIn = (e) => {
@@ -24,6 +30,17 @@ class Login extends Component {
 
   render() {
     const { loadingUser } = this.state;
+    const { loggingIn } = this.props
+
+    if (loggingIn) {
+      return (
+        <Loader
+          cardWrapped
+          contained
+          text="Logging user in...."
+        />
+      )
+    }
 
     return (
       <Columns className="login">
