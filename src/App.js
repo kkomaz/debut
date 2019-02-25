@@ -6,7 +6,8 @@ import { UserSession } from 'blockstack'
 import { appConfig } from 'utils/constants'
 import RootRoute from 'routes/RootRoute'
 import { User } from 'radiks';
-import { forceUserSignOut } from 'utils/auth'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 // Component/Styles Imports
 import Login from 'components/Login'
@@ -31,9 +32,9 @@ class App extends Component {
       this.setState({ loggingIn: true })
 
       if (!userData.username) {
-        return forceUserSignOut(userSession,
-          'This app requires a username!  Please go back to the Blockstack browser and register a username! Signing out in 5 seconds...'
-        )
+        return this.setState({
+          loggedIn: true
+        })
       }
 
       const user = User.currentUser()
@@ -57,9 +58,12 @@ class App extends Component {
 
     return (
       <div className="App">
+        <ToastContainer className='toast-container' />
         {
           this.state.loggedIn ?
-          <RootRoute userSession={userSession} /> :
+          <RootRoute
+            userSession={userSession}
+          /> :
           <Login
             userSession={userSession}
             loggingIn={this.state.loggingIn}

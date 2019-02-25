@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-
-// first we will make a new context
 export const UserContext = React.createContext();
 
 class UserProvider extends Component {
