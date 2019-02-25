@@ -6,8 +6,12 @@ import {
   CREATE_SHARE_FAIL,
   EDIT_SHARE_SUCCESS,
   EDIT_SHARE_FAIL,
+  DELETE_SHARE_SUCCESS,
 } from 'actions'
-import { filterListFromList } from 'reducers/utils'
+import {
+  filterListFromList,
+  removeObjFromList
+} from 'reducers/utils'
 import toggleNotification from 'utils/notifier/toggleNotification'
 
 const defaultSession = {
@@ -53,6 +57,8 @@ export default function shareReducer(state = defaultSession, action) {
       toggleNotification('success', 'Moment successfully edited')
       const sharesList = updateSingleObjectFromList(action.payload, state.shares.list)
       return { ...state, shares: { ...state.shares, list: sharesList }}
+    case DELETE_SHARE_SUCCESS:
+      return { ...state, shares: { ...state.shares, list: removeObjFromList(state.shares.list, action.payload)}}
     case FETCH_USER_SHARES_FAIL:
     case EDIT_SHARE_FAIL:
     case CREATE_SHARE_FAIL:

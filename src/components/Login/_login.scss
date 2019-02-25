@@ -3,20 +3,35 @@
 .login {
   height: 100vh;
 
-  &__column-left {
-    background: $primary;
+  &__left-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 
+  &__card-container {
+    display: flex;
+  }
+
+  &__sign-in-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__column-left {
+    background: #E0E3DA;
+    background: $primary;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 50px;
   }
 
-  &__column-left-blockstack-info {
-    align-self: flex-end;
-  }
-
-  .login-column-right {
+  &__column-right {
+    background: $primary;
+    background: #E0E3DA;
     display: flex;
     align-items: center;
     justify-content: center;

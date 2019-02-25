@@ -9,6 +9,7 @@ const fetchUserShares = (action) => {
     sort: '-createdAt',
     limit: 5,
     offset: action.payload.offset,
+    valid: true,
   })
 }
 

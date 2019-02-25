@@ -15,6 +15,7 @@ import {
   requestEditShare
 } from 'actions/share'
 import { Icon } from 'components/icon'
+import toggleNotification from 'utils/notifier/toggleNotification'
 import './ShareForm.scss'
 
 class ShareForm extends Component {
@@ -139,10 +140,16 @@ class ShareForm extends Component {
   storeFile = (event) => {
     event.preventDefault();
     const file = event.target.files[0];
+
+    if (file.size >= 5000000) {
+      return toggleNotification('error', 'File size must be lower than 5mb!')
+    }
+
     const reader = new window.FileReader();
     reader.readAsArrayBuffer(file);
-    reader.onloadend = () => {
-        this.setState({ imageFile: `data:image/jpeg;base64,${Buffer(reader.result).toString("base64")}`});
+
+    return reader.onloadend = () => {
+      return this.setState({ imageFile: `data:image/jpeg;base64,${Buffer(reader.result).toString("base64")}`});
     };
   };
 
@@ -182,7 +189,7 @@ class ShareForm extends Component {
           {
             this.state.imageFile &&
             <div className="share-form__image-uploaded">
-              <img alt='' src={this.state.imageFile} />
+              <img style={{ maxWidth: '500px', maxHeight: '500px' }} alt='' src={this.state.imageFile} />
               <Icon
                 className="share-form__image-remove-button debut-icon debut-icon--pointer"
                 icon="IconX"
@@ -209,6 +216,7 @@ class ShareForm extends Component {
                   type="file"
                   onChange={this.storeFile}
                   hidden
+                  accept="image/*"
                   ref={fileInput => this.fileInput = fileInput}
                 />
               </Label>

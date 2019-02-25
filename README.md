@@ -1,5 +1,5 @@
 ## About 
-Debut is designed to help introduce yourself to the blockstack community, create a profile and upload your apps and discover other people's apps.
+debut is designed to help introduce yourself to the blockstack community, create a profile and upload your apps and discover other people's apps.
 
 Production Url: http://debutapp.social
 
