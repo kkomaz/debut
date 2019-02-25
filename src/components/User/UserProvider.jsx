@@ -9,6 +9,8 @@ class UserProvider extends Component {
 
     const userData = props.userSession.loadUserData()
 
+    console.log(userData, 'userData')
+
     this.state = {
       sessionUser: {
         userSession: props.userSession,
