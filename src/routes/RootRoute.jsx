@@ -1,23 +1,26 @@
 import React, { Component } from 'react'
 import { Switch, Route, withRouter } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import UserProvider from 'components/User/UserProvider'
 import RootPage from 'pages'
 import Navbar from 'components/Navbar'
-import {
-  requestBlockstackDapps,
-} from 'actions/blockstack'
+import { requestBlockstackDapps } from 'actions/blockstack'
 import './RootRoute.scss'
-import 'react-toastify/dist/ReactToastify.css'
-// import UsernamePageTemp from 'pages/username/UsernamePageTemp'
 import UsernamePage from 'pages/username/UsernamePage'
 import { Loader } from 'components/Loader'
+import { NoUsername } from 'components/User'
 
 class RootRoute extends Component {
-  state = {
-    homePageClicked: false
+  constructor(props) {
+    super(props)
+
+    const userData = props.userSession.loadUserData()
+
+    this.state = {
+      homePageClicked: false,
+      username: userData.username,
+    }
   }
 
   static propTypes = {
@@ -43,15 +46,17 @@ class RootRoute extends Component {
       dapps,
     } = this.props
 
+    const { username } = this.state
+
+    if (!username) {
+      return <NoUsername />
+    }
+
     return (
       <UserProvider userSession={userSession}>
         <Navbar
           setHomePageClickedTrue={this.setHomePageClickedTrue}
         />
-        <ToastContainer
-          className='toast-container'
-        />
-
         <Switch>
           <Route
             exact
