@@ -209,6 +209,7 @@ class ShareForm extends Component {
                   type="file"
                   onChange={this.storeFile}
                   hidden
+                  accept="image/*"
                   ref={fileInput => this.fileInput = fileInput}
                 />
               </Label>
