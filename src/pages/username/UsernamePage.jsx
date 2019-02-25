@@ -339,7 +339,7 @@ class UsernamePage extends Component {
                         loading={loading}
                         sessionUser={sessionUser}
                         userInfo={userInfo}
-                        usename={username}
+                        username={username}
                         onCreateEdit={this.onCreateEdit}
                         onCancel={this.onCancel}
                         onSubmit={this.onSubmit}

@@ -68,7 +68,7 @@ class UserDescription extends Component {
             identityAddress={sessionUser.userData.identityAddress}
             userSession={sessionUser.userSession}
             username={username}
-            />
+          />
         }
       </div>
     )
