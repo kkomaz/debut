@@ -1,12 +1,12 @@
 import toggleNotification from 'utils/notifier/toggleNotification'
 
-const forceUserSignOut = (userSession, message) => {
+const forceUserSignOut = (userSession, message, timer = 5000) => {
   toggleNotification('error', message)
 
   setTimeout(() => {
     userSession.signUserOut()
     window.location = '/'
-  }, 5000)
+  }, timer)
 }
 
 export default forceUserSignOut
