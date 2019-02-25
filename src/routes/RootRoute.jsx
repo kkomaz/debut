@@ -49,7 +49,7 @@ class RootRoute extends Component {
     const { username } = this.state
 
     if (!username) {
-      return <NoUsername />
+      return <NoUsername userSession={userSession} />
     }
 
     return (
