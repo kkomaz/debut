@@ -194,12 +194,13 @@ class Page extends Component {
                   </Table>
                 </div>
             }
-            <nav
-              className="pagination mt-two"
+            <div
+              className="page__pagination pagination mt-two"
               role="navigation"
               aria-label="pagination"
             >
               <Button
+                color="link"
                 className="pagination-previous"
                 onClick={this.onPreviousClick}
                 disabled={userState.paginatedObj.loading || page === 0}
@@ -207,13 +208,14 @@ class Page extends Component {
                 {"<"}
               </Button>
               <Button
+                color="link"
                 className="pagination-next"
                 onClick={this.onNextClick}
                 disabled={userState.paginatedObj.loading || userState.paginatedObj.full}
               >
                 {">"}
               </Button>
-            </nav>
+            </div>
           </Container>
       </div>
     )

@@ -31,10 +31,10 @@ class NoUsername extends Component {
         <Card>
           <Card.Content>
             <Content>
-              <Heading size={4}>You are logged in without a username!</Heading>
+              <Heading size={4}>You are logged in without a user name!</Heading>
               <div className="no-username__warning mb-two">
                 <p>
-                  Thanks for checking out debut!  Unfortunately your current blockstack id does not have an associated username!  That's okay! Just follow the steps below and your id should be generated! After you finish reading the instructions you can log below
+                  Thanks for checking out debut!  Unfortunately your current blockstack id does not have an associated username!  That's okay! Just follow the steps below and your user name should be generated! After you finish reading the instructions you can log below
                 </p>
 
                 <Button
