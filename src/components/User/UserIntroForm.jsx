@@ -25,11 +25,8 @@ class UserIntroForm extends Component {
 
   static propTypes = {
     description: PropTypes.string,
-    fileExists: PropTypes.bool.isRequired,
     onCancel: PropTypes.func,
     onSubmit: PropTypes.func,
-    identityAddress: PropTypes.string.isRequired,
-    userSession: PropTypes.object.isRequired,
   }
 
   onChange = (e) => {
@@ -58,14 +55,12 @@ class UserIntroForm extends Component {
       return this.setState({ valid: false })
     }
 
-    const type = basicInformation._id ? 'edit' : 'create'
-
     const blockstackData = {
       description,
       username,
     }
 
-    this.props.requestSetBasicInformation(username, type, blockstackData, basicInformation._id)
+    this.props.requestSetBasicInformation(username, blockstackData, basicInformation._id)
     this.props.onSubmit({ description })
   }
 

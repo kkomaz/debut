@@ -209,11 +209,8 @@ class UserDescription extends Component {
           <UserIntroForm
             basicInformation={basicInformation}
             description={basicInformation.description}
-            fileExists={!!basicInformation}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
-            identityAddress={sessionUser.userData.identityAddress}
-            userSession={sessionUser.userSession}
             username={username}
           />
         }

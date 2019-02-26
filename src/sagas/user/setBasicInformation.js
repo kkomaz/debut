@@ -6,10 +6,10 @@ import {
 import BasicInformation from 'model/basicInformation'
 
 const setBasicInformation = async (action) => {
-  const { id, type, params } = action.payload
+  const { id, params } = action.payload
 
   // Edit, id included in attrs
-  if (type === 'edit') {
+  if (id) {
     const basicInformation = await BasicInformation.findById(id)
     basicInformation.update(params)
     basicInformation.save()

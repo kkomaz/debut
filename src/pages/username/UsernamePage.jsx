@@ -143,13 +143,10 @@ class UsernamePage extends Component {
     const { username, dapps } = this.props
     const options = { decrypt: false, username }
     const { sessionUser } = this.context.state
-    let userIntro
     let userDappsRadiks
     let following
 
     try {
-      userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
-
       const apps = _.map(profile.apps, (k,v) => {
         return v
       })
@@ -162,13 +159,12 @@ class UsernamePage extends Component {
         this.props.addDappsToList(userDappsRadiks.newDapps)
       }
 
-      if (!userIntro || !userDappsRadiks || !following) {
+      if (!userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
       }
 
       this.setState({
         userInfo: {
-          ...JSON.parse(userIntro) || {},
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
           following: JSON.parse(following),
           profile,
@@ -178,7 +174,6 @@ class UsernamePage extends Component {
     } catch (e) {
       return this.setState({
         userInfo: {
-          ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
           profile,
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
