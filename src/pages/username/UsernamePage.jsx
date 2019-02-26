@@ -19,9 +19,6 @@ import {
 import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
-import { requestUserShares } from 'actions/share'
-import { addDappsToList } from 'actions/blockstack'
-import './UsernamePage.scss';
 import {
   UserDapps,
   UserDescription,
@@ -38,6 +35,13 @@ import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { List } from 'react-content-loader'
 import Popover, { ArrowContainer } from 'react-tiny-popover'
 import { Icon } from 'components/icon'
+
+// Action Imports
+import { requestUserShares } from 'actions/share'
+import { addDappsToList } from 'actions/blockstack'
+import { requestSingleUser } from 'actions/user'
+
+import './UsernamePage.scss';
 
 class UsernamePage extends Component {
   constructor(props, context) {
@@ -80,6 +84,7 @@ class UsernamePage extends Component {
 
     try {
       user = await lookupProfile(username)
+      this.props.requestSingleUser(username)
       const apps = _.map(user.apps, (k,v) => {
         return v
       })
@@ -506,4 +511,5 @@ UsernamePage.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
   requestUserShares,
   addDappsToList,
+  requestSingleUser,
 })(UsernamePage))

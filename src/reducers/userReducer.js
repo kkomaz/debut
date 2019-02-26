@@ -2,10 +2,13 @@ import {
   REQUEST_PAGINATED_USERS,
   REVERT_PAGINATED_USERS_FULL,
   FETCH_ALL_USERS_SUCCESS,
-  FETCH_USER_INTRO_SUCCESS,
   FETCH_PAGINATED_USERS_SUCCESS,
+  FETCH_SINGLE_USER_SUCCESS,
 } from 'actions'
-import { filterListFromList } from 'reducers/utils'
+import {
+  filterListFromList,
+  updateObjFromList,
+} from 'reducers/utils'
 
 const defaultSession = {
   users: [],
@@ -61,8 +64,8 @@ export default function userReducer(state = defaultSession, action) {
           loading: false
         }
       }
-    case FETCH_USER_INTRO_SUCCESS:
-      return { ...state, [action.params.username]: JSON.parse(action.payload) }
+    case FETCH_SINGLE_USER_SUCCESS:
+      return { ...state, users: updateObjFromList(state.users, action.payload)}
     default:
       return state
   }

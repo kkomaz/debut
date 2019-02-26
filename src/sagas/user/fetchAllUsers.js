@@ -17,7 +17,6 @@ function* fetchAllUsersSaga(action) {
 
     yield put({ type: FETCH_ALL_USERS_SUCCESS, payload: users });
   } catch (error) {
-    console.log(error.message)
     yield put({ type: FETCH_ALL_USERS_FAIL });
   }
 }
