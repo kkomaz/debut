@@ -47,7 +47,13 @@ class UserDescription extends Component {
           descriptionLoading: false,
         })
       } catch (e) {
-        console.log(e.message)
+        this.setState({
+          basicInfo: {
+            description: '',
+            username,
+          },
+          descriptionLoading: false,
+        })
       }
     }
   }
