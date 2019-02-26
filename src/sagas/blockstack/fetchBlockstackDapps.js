@@ -1,4 +1,4 @@
-import Dapp from 'model/Dapp'
+import Dapp from 'model/dapp'
 import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
 import { FETCH_BLOCKSTACK_DAPPS_SUCCESS, FETCH_BLOCKSTACK_DAPPS_FAIL } from 'actions'
