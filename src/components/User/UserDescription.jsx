@@ -25,7 +25,6 @@ class UserDescription extends Component {
   static propTypes = {
     adminMode: PropTypes.bool.isRequired,
     displayView: PropTypes.bool.isRequired,
-    fileExists: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
@@ -57,7 +56,6 @@ class UserDescription extends Component {
     const {
       adminMode,
       displayView,
-      fileExists,
       loading,
       sessionUser,
       username,
@@ -169,7 +167,7 @@ class UserDescription extends Component {
         </div>
         <div className="user-description__button-actions mb-one">
           {
-            fileExists ?
+            basicInfo ?
             <Button
               onClick={this.props.onCreateEdit}
               color="primary"
@@ -192,7 +190,7 @@ class UserDescription extends Component {
           displayView ? <UserIntroDisplay description={basicInfo.description} /> :
           <UserIntroForm
             description={basicInfo.description}
-            fileExists={fileExists}
+            fileExists={basicInfo}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
             identityAddress={sessionUser.userData.identityAddress}

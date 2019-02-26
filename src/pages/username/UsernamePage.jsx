@@ -56,7 +56,6 @@ class UsernamePage extends Component {
       },
       loading: true,
       displayView: true,
-      fileExists: false,
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
@@ -175,7 +174,6 @@ class UsernamePage extends Component {
           profile,
         },
         loading: false,
-        fileExists: !!userIntro,
       })
     } catch (e) {
       return this.setState({
@@ -186,7 +184,6 @@ class UsernamePage extends Component {
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
-        fileExists: !!userIntro,
       })
     }
   }
@@ -282,7 +279,6 @@ class UsernamePage extends Component {
       loading,
       userInfo,
       displayView,
-      fileExists,
       showModal,
     } = this.state
 
@@ -346,7 +342,6 @@ class UsernamePage extends Component {
                       <UserDescription
                         adminMode={adminMode}
                         displayView={displayView}
-                        fileExists={fileExists}
                         loading={loading}
                         sessionUser={sessionUser}
                         user={user}
