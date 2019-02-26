@@ -279,8 +279,6 @@ class UsernamePage extends Component {
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
 
-    console.log(this.state.adminMode)
-
     if (this.state.error) {
       return (
         <div>

@@ -63,8 +63,8 @@ class UserDescription extends Component {
       const { user } = this.props
       return this.setState({
         basicInformation: {
-          description: user.data.basicInformation.description,
-          username: user.data.basicInformation.username,
+          ...user.data.basicInformation,
+          username: user.data.basicInformation.username
         }
       })
     }
