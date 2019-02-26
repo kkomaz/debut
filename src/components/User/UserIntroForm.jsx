@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import { requestSetBasicInformation } from 'actions/user'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import {
@@ -50,51 +51,22 @@ class UserIntroForm extends Component {
 
   onSubmit = async (e) => {
     const { description } = this.state
-    const { fileExists } = this.props
+    const { username, basicInformation } = this.props
     e.preventDefault()
 
     if (_.isEmpty(description)) {
       return this.setState({ valid: false })
     }
 
-    try {
-      fileExists ? this.editUserIndexer() : this.createUserIndexer()
-      this.props.onSubmit({ description })
-    } catch (e) {
-      console.log(e.message)
-    }
-  }
-
-  async createUserIndexer() {
-    const options = { encrypt: false }
-    const { description } = this.state
-    const {
-      userSession,
-      identityAddress,
-      username
-    } = this.props
-
-    const result = await axios.post('/users.json', { blockstackId: identityAddress, username })
+    const type = basicInformation._id ? 'edit' : 'create'
 
     const blockstackData = {
       description,
-      firebaseId: result.data.name
-    }
-    await userSession.putFile(`user-intro-${username}.json`, JSON.stringify(blockstackData), options)
-  }
-
-  async editUserIndexer() {
-    const options = { encrypt: false }
-    const { description } = this.state
-    const {
-      userSession,
       username,
-    } = this.props
-
-    const blockstackData = {
-      description,
     }
-    await userSession.putFile(`user-intro-${username}.json`, JSON.stringify(blockstackData), options)
+
+    this.props.requestSetBasicInformation(username, type, blockstackData, basicInformation._id)
+    this.props.onSubmit({ description })
   }
 
   onEnterPress = (e) => {
@@ -140,4 +112,6 @@ UserIntroForm.defaultProps = {
   onCancel: _.noop,
 }
 
-export default UserIntroForm
+export default connect(null, {
+  requestSetBasicInformation
+})(UserIntroForm)

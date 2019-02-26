@@ -8,8 +8,13 @@ class DebutUser extends User {
   }
 
   async addBasicInfo() {
-    const basicInformation = await BasicInformation.findOne({ username: this._id }) || null
-    return {...this.data, basicInformation }
+    const basicInformation = await BasicInformation.findOne({ username: this.data._id }) || null
+
+    if (basicInformation) {
+      return {...this.data, basicInformation: basicInformation.attrs }
+    }
+
+    return this.data
   }
 }
 

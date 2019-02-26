@@ -17,8 +17,8 @@ class UserDescription extends Component {
 
     this.state = {
       isPopoverOpen: false,
-      basicInfo: props.user.basicInfo,
-      descriptionLoading: !props.user.basicInfo,
+      basicInformation: props.user.data.basicInformation,
+      descriptionLoading: !props.user.data.basicInformation,
     }
   }
 
@@ -32,15 +32,15 @@ class UserDescription extends Component {
   }
 
   async componentDidMount() {
-    const { basicInfo } = this.state
+    const { basicInformation } = this.state
     const { sessionUser, username } = this.props
     const options = { decrypt: false, username }
 
-    if (!basicInfo) {
+    if (!basicInformation) {
       try {
         const userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
         this.setState({
-          basicInfo: {
+          basicInformation: {
             description: JSON.parse(userIntro).description,
             username,
           },
@@ -48,13 +48,25 @@ class UserDescription extends Component {
         })
       } catch (e) {
         this.setState({
-          basicInfo: {
+          basicInformation: {
             description: '',
             username,
           },
           descriptionLoading: false,
         })
       }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.user.data.basicInformation !== this.props.user.data.basicInformation) {
+      const { user } = this.props
+      return this.setState({
+        basicInformation: {
+          description: user.data.basicInformation.description,
+          username: user.data.basicInformation.username,
+        }
+      })
     }
   }
 
@@ -71,7 +83,7 @@ class UserDescription extends Component {
       descriptionLoading,
     } = this.state
 
-    const { basicInfo } = this.state
+    const { basicInformation } = this.state
 
     if (descriptionLoading) {
       return <div>Loading...</div>
@@ -123,7 +135,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={basicInfo.description}
+              description={basicInformation.description}
               />
           }
         </div>
@@ -173,7 +185,7 @@ class UserDescription extends Component {
         </div>
         <div className="user-description__button-actions mb-one">
           {
-            basicInfo ?
+            basicInformation ?
             <Button
               onClick={this.props.onCreateEdit}
               color="primary"
@@ -193,10 +205,11 @@ class UserDescription extends Component {
           }
         </div>
         {
-          displayView ? <UserIntroDisplay description={basicInfo.description} /> :
+          displayView ? <UserIntroDisplay description={basicInformation.description} /> :
           <UserIntroForm
-            description={basicInfo.description}
-            fileExists={basicInfo}
+            basicInformation={basicInformation}
+            description={basicInformation.description}
+            fileExists={!!basicInformation}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
             identityAddress={sessionUser.userData.identityAddress}

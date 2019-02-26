@@ -13,6 +13,7 @@ function* fetchSingleUserSaga(action) {
     const user = yield call(fetchSingleUser, action)
     yield put({ type: FETCH_SINGLE_USER_SUCCESS, payload: user })
   } catch (error) {
+    console.log(error.message, 'ERROR')
     yield put({ type: FETCH_SINGLE_USER_FAIL });
   }
 }

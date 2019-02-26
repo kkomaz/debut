@@ -5,6 +5,7 @@ import {
   FETCH_ALL_USERS_SUCCESS,
   FETCH_PAGINATED_USERS_SUCCESS,
   FETCH_SINGLE_USER_SUCCESS,
+  SET_BASIC_INFO_SUCCESS,
 } from 'actions'
 import {
   filterListFromList,
@@ -73,6 +74,10 @@ export default function userReducer(state = defaultSession, action) {
         users: updateObjFromList(state.users, action.payload),
         loading: false,
       }
+    case SET_BASIC_INFO_SUCCESS:
+      const searchedUser = state.users.find((user) => user._id === action.payload.username)
+      const updatedUser = { ...searchedUser, basicInformation: action.payload.basicInformation }
+      return { ...state, users: updateObjFromList(state.users, updatedUser)}
     default:
       return state
   }
