@@ -119,7 +119,7 @@ class UsernamePage extends Component {
     if (prevProps.username !== username) {
       const user = await lookupProfile(username)
       if (user) {
-        this.setState({ adminMode: sessionUser === username, loading: true }, () => {
+        this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
           this.loadUserInfo(user)
         })
       }
@@ -278,6 +278,8 @@ class UsernamePage extends Component {
     } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+
+    console.log(this.state.adminMode)
 
     if (this.state.error) {
       return (
