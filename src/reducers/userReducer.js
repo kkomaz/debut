@@ -1,11 +1,17 @@
 import {
+  REQUEST_SINGLE_USER,
   REQUEST_PAGINATED_USERS,
   REVERT_PAGINATED_USERS_FULL,
   FETCH_ALL_USERS_SUCCESS,
-  FETCH_USER_INTRO_SUCCESS,
   FETCH_PAGINATED_USERS_SUCCESS,
+  FETCH_SINGLE_USER_SUCCESS,
+  SET_BASIC_INFO_SUCCESS,
 } from 'actions'
-import { filterListFromList } from 'reducers/utils'
+import {
+  filterListFromList,
+  updateObjFromList,
+} from 'reducers/utils'
+import toggleNotification from 'utils/notifier/toggleNotification'
 
 const defaultSession = {
   users: [],
@@ -16,7 +22,8 @@ const defaultSession = {
     offset: 0,
     loading: true,
     full: false,
-  }
+  },
+  loading: true
 }
 
 export default function userReducer(state = defaultSession, action) {
@@ -61,8 +68,18 @@ export default function userReducer(state = defaultSession, action) {
           loading: false
         }
       }
-    case FETCH_USER_INTRO_SUCCESS:
-      return { ...state, [action.params.username]: JSON.parse(action.payload) }
+    case REQUEST_SINGLE_USER:
+      return { ...state, loading: true }
+    case FETCH_SINGLE_USER_SUCCESS:
+      return { ...state,
+        users: updateObjFromList(state.users, action.payload),
+        loading: false,
+      }
+    case SET_BASIC_INFO_SUCCESS:
+      const searchedUser = state.users.find((user) => user._id === action.payload.username)
+      const updatedUser = { ...searchedUser, basicInformation: action.payload.basicInformation }
+      toggleNotification('success', `${updatedUser.username}'s bio successfully updated!`)
+      return { ...state, users: updateObjFromList(state.users, updatedUser)}
     default:
       return state
   }

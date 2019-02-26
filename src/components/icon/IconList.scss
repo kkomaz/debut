@@ -14,5 +14,9 @@
       border-radius: 100%;
       border: 3px solid $shadow;
     }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }

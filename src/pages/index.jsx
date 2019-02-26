@@ -12,12 +12,11 @@ import {
   Table,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
-import './Page.scss'
-import { requestUserIntro } from 'actions/blockstack'
 import Switch from 'react-bulma-switch/lib';
 import { Loader } from 'components/Loader'
 import { requestPaginatedUsers, revertPaginatedUsersFull } from 'actions/user'
 import { NoUsers } from 'components/User'
+import './Page.scss'
 
 class Page extends Component {
   state = {
@@ -229,7 +228,6 @@ const mapStateToProps = (state) => {
 }
 
 export default withRouter(connect(mapStateToProps, {
-  requestUserIntro,
   requestPaginatedUsers,
   revertPaginatedUsersFull,
 })(Page))

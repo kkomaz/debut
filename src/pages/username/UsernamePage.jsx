@@ -19,9 +19,6 @@ import {
 import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
-import { requestUserShares } from 'actions/share'
-import { addDappsToList } from 'actions/blockstack'
-import './UsernamePage.scss';
 import {
   UserDapps,
   UserDescription,
@@ -39,6 +36,13 @@ import { List } from 'react-content-loader'
 import Popover, { ArrowContainer } from 'react-tiny-popover'
 import { Icon } from 'components/icon'
 
+// Action Imports
+import { requestUserShares } from 'actions/share'
+import { addDappsToList } from 'actions/blockstack'
+import { requestSingleUser } from 'actions/user'
+
+import './UsernamePage.scss';
+
 class UsernamePage extends Component {
   constructor(props, context) {
     super(props)
@@ -52,7 +56,6 @@ class UsernamePage extends Component {
       },
       loading: true,
       displayView: true,
-      fileExists: false,
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
@@ -80,6 +83,7 @@ class UsernamePage extends Component {
 
     try {
       user = await lookupProfile(username)
+      this.props.requestSingleUser(username)
       const apps = _.map(user.apps, (k,v) => {
         return v
       })
@@ -142,13 +146,10 @@ class UsernamePage extends Component {
     const { username, dapps } = this.props
     const options = { decrypt: false, username }
     const { sessionUser } = this.context.state
-    let userIntro
     let userDappsRadiks
     let following
 
     try {
-      userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
-
       const apps = _.map(profile.apps, (k,v) => {
         return v
       })
@@ -161,30 +162,26 @@ class UsernamePage extends Component {
         this.props.addDappsToList(userDappsRadiks.newDapps)
       }
 
-      if (!userIntro || !userDappsRadiks || !following) {
+      if (!userDappsRadiks || !following) {
         throw new Error('User intro data does not exist')
       }
 
       this.setState({
         userInfo: {
-          ...JSON.parse(userIntro) || {},
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
           following: JSON.parse(following),
           profile,
         },
         loading: false,
-        fileExists: !!userIntro,
       })
     } catch (e) {
       return this.setState({
         userInfo: {
-          ...JSON.parse(userIntro) || {},
           following: JSON.parse(following) || [],
           profile,
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
-        fileExists: !!userIntro,
       })
     }
   }
@@ -262,12 +259,16 @@ class UsernamePage extends Component {
   }
 
   render() {
-    const { sessionUser, defaultImgUrl } = this.context.state
+    const {
+      sessionUser,
+      defaultImgUrl
+    } = this.context.state
 
     const {
-      username,
       history,
       shares,
+      username,
+      user,
     } = this.props
 
     const {
@@ -276,13 +277,10 @@ class UsernamePage extends Component {
       loading,
       userInfo,
       displayView,
-      fileExists,
       showModal,
     } = this.state
 
     const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
-
-    console.log(this.state.adminMode)
 
     if (this.state.error) {
       return (
@@ -336,14 +334,13 @@ class UsernamePage extends Component {
               <Card className="user-description">
                 <Card.Content>
                   <Content>
-                    <Loadable loading={loading}>
+                    <Loadable loading={user.loading}>
                       <UserDescription
                         adminMode={adminMode}
                         displayView={displayView}
-                        fileExists={fileExists}
                         loading={loading}
                         sessionUser={sessionUser}
-                        userInfo={userInfo}
+                        user={user}
                         username={username}
                         onCreateEdit={this.onCreateEdit}
                         onCancel={this.onCancel}
@@ -494,6 +491,11 @@ const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
   const { share } = state
 
+  const user = {
+    data: _.find(state.user.users, (user) => user._id === username),
+    loading: state.user.loading
+  }
+
   const shares = {
     list: _.filter(state.share.shares.list, (share) => share.username === username),
     full: share.shares.full,
@@ -502,6 +504,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     shares,
+    user,
   }
 }
 
@@ -509,4 +512,5 @@ UsernamePage.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
   requestUserShares,
   addDappsToList,
+  requestSingleUser,
 })(UsernamePage))

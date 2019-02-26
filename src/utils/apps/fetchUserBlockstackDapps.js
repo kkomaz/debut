@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import Dapp from 'model/Dapp'
+import Dapp from 'model/dapp'
 
 const hasNumber = (myString) => {
   return /\d/.test(myString);

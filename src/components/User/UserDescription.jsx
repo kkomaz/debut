@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import {
   Button,
@@ -12,30 +13,84 @@ import { Icon } from 'components/icon'
 import './UserDescription.scss'
 
 class UserDescription extends Component {
+  constructor(props) {
+    super(props)
+
+    console.log(props.user.data.basicInformation)
+
+    this.state = {
+      isPopoverOpen: false,
+      basicInformation: _.get(props, 'user.data.basicInformation', null),
+      descriptionLoading: !_.get(props, 'user.data.basicInformation', null),
+    }
+  }
+
   static propTypes = {
     adminMode: PropTypes.bool.isRequired,
     displayView: PropTypes.bool.isRequired,
-    fileExists: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
-    userInfo: PropTypes.object.isRequired,
-    username: PropTypes.string
+    user: PropTypes.object.isRequired,
+    username: PropTypes.string,
   }
 
-  state = {
-    isPopoverOpen: false,
+  async componentDidMount() {
+    const { basicInformation } = this.state
+    const { sessionUser, username } = this.props
+    const options = { decrypt: false, username }
+
+    if (!basicInformation) {
+      try {
+        const userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
+        this.setState({
+          basicInformation: {
+            description: JSON.parse(userIntro).description,
+            username,
+          },
+          descriptionLoading: false,
+        })
+      } catch (e) {
+        this.setState({
+          basicInformation: {
+            description: '',
+            username,
+          },
+          descriptionLoading: false,
+        })
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.user.data.basicInformation !== this.props.user.data.basicInformation) {
+      const { user } = this.props
+      return this.setState({
+        basicInformation: {
+          ...user.data.basicInformation,
+          username: user.data.basicInformation.username
+        }
+      })
+    }
   }
 
   render() {
     const {
       adminMode,
       displayView,
-      fileExists,
       loading,
       sessionUser,
-      userInfo,
       username,
     } = this.props
+
+    const {
+      descriptionLoading,
+    } = this.state
+
+    const { basicInformation } = this.state
+
+    if (descriptionLoading) {
+      return <div>Loading...</div>
+    }
 
     if (!adminMode) {
       return (
@@ -83,7 +138,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={userInfo.description}
+              description={basicInformation.description}
               />
           }
         </div>
@@ -133,7 +188,7 @@ class UserDescription extends Component {
         </div>
         <div className="user-description__button-actions mb-one">
           {
-            fileExists ?
+            basicInformation ?
             <Button
               onClick={this.props.onCreateEdit}
               color="primary"
@@ -153,14 +208,12 @@ class UserDescription extends Component {
           }
         </div>
         {
-          displayView ? <UserIntroDisplay description={userInfo.description} /> :
+          displayView ? <UserIntroDisplay description={basicInformation.description} /> :
           <UserIntroForm
-            description={userInfo.description}
-            fileExists={fileExists}
+            basicInformation={basicInformation}
+            description={basicInformation.description}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
-            identityAddress={sessionUser.userData.identityAddress}
-            userSession={sessionUser.userSession}
             username={username}
           />
         }
