@@ -18,7 +18,7 @@ class UserDescription extends Component {
     this.state = {
       isPopoverOpen: false,
       basicInfo: props.user.basicInfo,
-      loading: !props.user.basicInfo,
+      descriptionLoading: !props.user.basicInfo,
     }
   }
 
@@ -29,7 +29,6 @@ class UserDescription extends Component {
     loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    userInfo: PropTypes.object.isRequired,
     username: PropTypes.string,
   }
 
@@ -45,7 +44,8 @@ class UserDescription extends Component {
           basicInfo: {
             description: JSON.parse(userIntro).description,
             username,
-          }
+          },
+          descriptionLoading: false,
         })
       } catch (e) {
         console.log(e.message)
@@ -60,11 +60,18 @@ class UserDescription extends Component {
       fileExists,
       loading,
       sessionUser,
-      userInfo,
       username,
     } = this.props
 
+    const {
+      descriptionLoading,
+    } = this.state
+
     const { basicInfo } = this.state
+
+    if (descriptionLoading) {
+      return <div>Loading...</div>
+    }
 
     if (!adminMode) {
       return (
