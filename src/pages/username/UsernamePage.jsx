@@ -264,12 +264,16 @@ class UsernamePage extends Component {
   }
 
   render() {
-    const { sessionUser, defaultImgUrl } = this.context.state
+    const {
+      sessionUser,
+      defaultImgUrl
+    } = this.context.state
 
     const {
-      username,
       history,
       shares,
+      username,
+      user,
     } = this.props
 
     const {
@@ -338,13 +342,14 @@ class UsernamePage extends Component {
               <Card className="user-description">
                 <Card.Content>
                   <Content>
-                    <Loadable loading={loading}>
+                    <Loadable loading={user.loading}>
                       <UserDescription
                         adminMode={adminMode}
                         displayView={displayView}
                         fileExists={fileExists}
                         loading={loading}
                         sessionUser={sessionUser}
+                        user={user}
                         userInfo={userInfo}
                         username={username}
                         onCreateEdit={this.onCreateEdit}
@@ -496,6 +501,11 @@ const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
   const { share } = state
 
+  const user = {
+    data: _.find(state.user.users, (user) => user._id === username),
+    loading: state.user.loading
+  }
+
   const shares = {
     list: _.filter(state.share.shares.list, (share) => share.username === username),
     full: share.shares.full,
@@ -504,6 +514,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     shares,
+    user,
   }
 }
 

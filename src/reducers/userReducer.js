@@ -1,4 +1,5 @@
 import {
+  REQUEST_SINGLE_USER,
   REQUEST_PAGINATED_USERS,
   REVERT_PAGINATED_USERS_FULL,
   FETCH_ALL_USERS_SUCCESS,
@@ -19,7 +20,8 @@ const defaultSession = {
     offset: 0,
     loading: true,
     full: false,
-  }
+  },
+  loading: true
 }
 
 export default function userReducer(state = defaultSession, action) {
@@ -64,8 +66,13 @@ export default function userReducer(state = defaultSession, action) {
           loading: false
         }
       }
+    case REQUEST_SINGLE_USER:
+      return { ...state, loading: true }
     case FETCH_SINGLE_USER_SUCCESS:
-      return { ...state, users: updateObjFromList(state.users, action.payload)}
+      return { ...state,
+        users: updateObjFromList(state.users, action.payload),
+        loading: false,
+      }
     default:
       return state
   }

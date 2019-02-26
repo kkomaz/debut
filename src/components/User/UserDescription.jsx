@@ -12,18 +12,45 @@ import { Icon } from 'components/icon'
 import './UserDescription.scss'
 
 class UserDescription extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isPopoverOpen: false,
+      basicInfo: props.user.basicInfo,
+      loading: !props.user.basicInfo,
+    }
+  }
+
   static propTypes = {
     adminMode: PropTypes.bool.isRequired,
     displayView: PropTypes.bool.isRequired,
     fileExists: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     userInfo: PropTypes.object.isRequired,
-    username: PropTypes.string
+    username: PropTypes.string,
   }
 
-  state = {
-    isPopoverOpen: false,
+  async componentDidMount() {
+    const { basicInfo } = this.state
+    const { sessionUser, username } = this.props
+    const options = { decrypt: false, username }
+
+    if (!basicInfo) {
+      try {
+        const userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
+        this.setState({
+          basicInfo: {
+            description: JSON.parse(userIntro).description,
+            username,
+          }
+        })
+      } catch (e) {
+        console.log(e.message)
+      }
+    }
   }
 
   render() {
@@ -36,6 +63,8 @@ class UserDescription extends Component {
       userInfo,
       username,
     } = this.props
+
+    const { basicInfo } = this.state
 
     if (!adminMode) {
       return (
@@ -83,7 +112,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={userInfo.description}
+              description={basicInfo.description}
               />
           }
         </div>
@@ -153,9 +182,9 @@ class UserDescription extends Component {
           }
         </div>
         {
-          displayView ? <UserIntroDisplay description={userInfo.description} /> :
+          displayView ? <UserIntroDisplay description={basicInfo.description} /> :
           <UserIntroForm
-            description={userInfo.description}
+            description={basicInfo.description}
             fileExists={fileExists}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
