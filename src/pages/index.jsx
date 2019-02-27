@@ -28,6 +28,15 @@ class Page extends Component {
     const { userState } = this.props
     const { page } = this.state
 
+    // Another hot fix will fix/refactor for april
+    if (this.props.homePageClicked) {
+      this.props.setHomePageClickedFalse()
+
+      if (this.props.userState.paginatedObj.full) {
+        this.props.revertPaginatedUsersFull()
+      }
+    }
+
     if (_.isEmpty(userState.paginatedUsers[page].list)) {
       this.fetchPaginatedUsers()
     }
