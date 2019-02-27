@@ -121,6 +121,9 @@ class UsernamePage extends Component {
       if (user) {
         this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
           this.loadUserInfo(user)
+          if (_.isEmpty(this.props.shares.list)) {
+            this.requestUserShares()
+          }
         })
       }
     }
