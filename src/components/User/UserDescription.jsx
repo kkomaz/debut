@@ -39,10 +39,6 @@ class UserDescription extends Component {
 
     const { user } = this.props
 
-    if (!user.data) {
-      return <div>Loading...</div>
-    }
-
     if (!adminMode) {
       return (
         <div className="user-description">

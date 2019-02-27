@@ -9,7 +9,6 @@ import {
 } from 'actions'
 import {
   filterListFromList,
-  updateObjFromList,
   updateOrAddObjFromList,
 } from 'reducers/utils'
 import toggleNotification from 'utils/notifier/toggleNotification'

@@ -335,7 +335,7 @@ class UsernamePage extends Component {
               <Card className="user-description">
                 <Card.Content>
                   <Content>
-                    <Loadable loading={user.loading}>
+                    <Loadable loading={user.loading || !user.data}>
                       <UserDescription
                         adminMode={adminMode}
                         displayView={displayView}
