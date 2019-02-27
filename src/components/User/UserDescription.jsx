@@ -39,6 +39,11 @@ class UserDescription extends Component {
 
     const { user } = this.props
 
+    // Hot Fix - need to find a cleaner way to handle this
+    if (!user.data.basicInformation) {
+      return <List />
+    }
+
     if (!adminMode) {
       return (
         <div className="user-description">
