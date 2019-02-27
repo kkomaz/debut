@@ -16,8 +16,6 @@ class UserDescription extends Component {
   constructor(props) {
     super(props)
 
-    console.log(props.user.data.basicInformation)
-
     this.state = {
       isPopoverOpen: false,
       basicInformation: _.get(props, 'user.data.basicInformation', null),
@@ -37,38 +35,61 @@ class UserDescription extends Component {
   async componentDidMount() {
     const { basicInformation } = this.state
     const { sessionUser, username } = this.props
-    const options = { decrypt: false, username }
 
     if (!basicInformation) {
-      try {
-        const userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
-        this.setState({
-          basicInformation: {
-            description: JSON.parse(userIntro).description,
-            username,
-          },
-          descriptionLoading: false,
-        })
-      } catch (e) {
-        this.setState({
-          basicInformation: {
-            description: '',
-            username,
-          },
-          descriptionLoading: false,
-        })
-      }
+      this.setBasicInformation(sessionUser, username)
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.user.data.basicInformation !== this.props.user.data.basicInformation) {
-      const { user } = this.props
-      return this.setState({
+    // if same user, data is updated
+    if (prevProps.username === this.props.username) {
+      if (this.props.user.data && this.props.user.data.basicInformation && (this.props.user.data.basicInformation !== prevProps.user.data.basicInformation)) {
+        return this.setState({
+          basicInformation: {
+            ...this.props.user.data.basicInformation,
+            username: this.props.user.data.basicInformation.username
+          }
+        })
+      }
+    }
+
+    // Changing Users
+    if (prevProps.username !== this.props.username) {
+      debugger
+      if (this.props.user.data && this.props.user.data.basicInformation && (this.props.user.data.basicInformation !== prevProps.user.data.basicInformation)) {
+        debugger
+        return this.setState({
+          basicInformation: {
+            ...this.props.user.data.basicInformation,
+            username: this.props.user.data.basicInformation.username
+          }
+        })
+      } else{
+        return this.setBasicInformation(this.props.sessionUser, this.props.username)
+      }
+    }
+  }
+
+  async setBasicInformation(sessionUser, username) {
+    const options = { decrypt: false, username }
+
+    try {
+      const userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
+      this.setState({
         basicInformation: {
-          ...user.data.basicInformation,
-          username: user.data.basicInformation.username
-        }
+          description: JSON.parse(userIntro).description,
+          username,
+        },
+        descriptionLoading: false,
+      })
+    } catch (e) {
+      this.setState({
+        basicInformation: {
+          description: '',
+          username,
+        },
+        descriptionLoading: false,
       })
     }
   }

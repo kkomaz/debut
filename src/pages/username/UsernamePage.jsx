@@ -112,7 +112,7 @@ class UsernamePage extends Component {
 
     if (user) {
       this.loadUserInfo(user)
-      this.requestUserShares(username)
+      this.requestUserShares()
     }
   }
 
@@ -121,9 +121,11 @@ class UsernamePage extends Component {
     const { sessionUser } = this.context.state
 
     if (prevProps.username !== username) {
+      debugger
       const user = await lookupProfile(username)
       if (user) {
         this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
+          this.props.requestSingleUser(username)
           this.loadUserInfo(user)
           if (_.isEmpty(this.props.shares.list)) {
             this.requestUserShares()
