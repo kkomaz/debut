@@ -1,5 +1,7 @@
 import { User } from 'radiks'
 import BasicInformation from './basicInformation'
+import { UserSession } from 'blockstack'
+import { appConfig } from 'utils/constants'
 
 class DebutUser extends User {
   constructor(data) {
@@ -12,9 +14,25 @@ class DebutUser extends User {
 
     if (basicInformation) {
       return {...this.data, basicInformation: basicInformation.attrs }
-    }
+    } else {
+      const username = this.data._id
+      const options = { decrypt: false, username }
+      const userSession = new UserSession({ appConfig })
 
-    return this.data
+      const userIntro = await userSession.getFile(`user-intro-${username}.json`, options)
+
+      if (!userIntro) {
+        return { ...this.data, basicInformation: {
+          description: '',
+          username,
+        }}
+      }
+
+      return { ...this.data, basicInformation: {
+        description: JSON.parse(userIntro).description,
+        username,
+      }}
+    }
   }
 }
 

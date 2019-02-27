@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
 import PropTypes from 'prop-types'
 import {
   Button,
@@ -18,8 +17,6 @@ class UserDescription extends Component {
 
     this.state = {
       isPopoverOpen: false,
-      basicInformation: _.get(props, 'user.data.basicInformation', null),
-      descriptionLoading: !_.get(props, 'user.data.basicInformation', null),
     }
   }
 
@@ -32,84 +29,17 @@ class UserDescription extends Component {
     username: PropTypes.string,
   }
 
-  async componentDidMount() {
-    const { basicInformation } = this.state
-    const { sessionUser, username } = this.props
-
-    if (!basicInformation) {
-      this.setBasicInformation(sessionUser, username)
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // if same user, data is updated
-    if (prevProps.username === this.props.username) {
-      if (this.props.user.data && this.props.user.data.basicInformation && (this.props.user.data.basicInformation !== prevProps.user.data.basicInformation)) {
-        return this.setState({
-          basicInformation: {
-            ...this.props.user.data.basicInformation,
-            username: this.props.user.data.basicInformation.username
-          }
-        })
-      }
-    }
-
-    // Changing Users
-    if (prevProps.username !== this.props.username) {
-      debugger
-      if (this.props.user.data && this.props.user.data.basicInformation && (this.props.user.data.basicInformation !== prevProps.user.data.basicInformation)) {
-        debugger
-        return this.setState({
-          basicInformation: {
-            ...this.props.user.data.basicInformation,
-            username: this.props.user.data.basicInformation.username
-          }
-        })
-      } else{
-        return this.setBasicInformation(this.props.sessionUser, this.props.username)
-      }
-    }
-  }
-
-  async setBasicInformation(sessionUser, username) {
-    const options = { decrypt: false, username }
-
-    try {
-      const userIntro = await sessionUser.userSession.getFile(`user-intro-${username}.json`, options)
-      this.setState({
-        basicInformation: {
-          description: JSON.parse(userIntro).description,
-          username,
-        },
-        descriptionLoading: false,
-      })
-    } catch (e) {
-      this.setState({
-        basicInformation: {
-          description: '',
-          username,
-        },
-        descriptionLoading: false,
-      })
-    }
-  }
-
   render() {
     const {
       adminMode,
       displayView,
       loading,
-      sessionUser,
       username,
     } = this.props
 
-    const {
-      descriptionLoading,
-    } = this.state
+    const { user } = this.props
 
-    const { basicInformation } = this.state
-
-    if (descriptionLoading) {
+    if (!user.data) {
       return <div>Loading...</div>
     }
 
@@ -159,7 +89,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={basicInformation.description}
+              description={user.data.basicInformation.description}
               />
           }
         </div>
@@ -209,7 +139,7 @@ class UserDescription extends Component {
         </div>
         <div className="user-description__button-actions mb-one">
           {
-            basicInformation ?
+            user.data.basicInformation ?
             <Button
               onClick={this.props.onCreateEdit}
               color="primary"
@@ -229,10 +159,10 @@ class UserDescription extends Component {
           }
         </div>
         {
-          displayView ? <UserIntroDisplay description={basicInformation.description} /> :
+          displayView ? <UserIntroDisplay description={user.data.basicInformation.description} /> :
           <UserIntroForm
-            basicInformation={basicInformation}
-            description={basicInformation.description}
+            basicInformation={user.data.basicInformation}
+            description={user.data.basicInformation.description}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
             username={username}

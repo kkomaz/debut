@@ -10,6 +10,7 @@ import {
 import {
   filterListFromList,
   updateObjFromList,
+  updateOrAddObjFromList,
 } from 'reducers/utils'
 import toggleNotification from 'utils/notifier/toggleNotification'
 
@@ -72,14 +73,14 @@ export default function userReducer(state = defaultSession, action) {
       return { ...state, loading: true }
     case FETCH_SINGLE_USER_SUCCESS:
       return { ...state,
-        users: updateObjFromList(state.users, action.payload),
+        users: updateOrAddObjFromList(state.users, action.payload),
         loading: false,
       }
     case SET_BASIC_INFO_SUCCESS:
       const searchedUser = state.users.find((user) => user._id === action.payload.username)
       const updatedUser = { ...searchedUser, basicInformation: action.payload.basicInformation }
       toggleNotification('success', `${updatedUser.username}'s bio successfully updated!`)
-      return { ...state, users: updateObjFromList(state.users, updatedUser)}
+      return { ...state, users: updateOrAddObjFromList(state.users, updatedUser)}
     default:
       return state
   }

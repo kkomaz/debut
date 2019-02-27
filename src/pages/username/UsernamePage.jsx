@@ -121,7 +121,6 @@ class UsernamePage extends Component {
     const { sessionUser } = this.context.state
 
     if (prevProps.username !== username) {
-      debugger
       const user = await lookupProfile(username)
       if (user) {
         this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
