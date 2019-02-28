@@ -33,7 +33,8 @@ import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { List } from 'react-content-loader'
-import Popover, { ArrowContainer } from 'react-tiny-popover'
+import Popover from 'react-tiny-popover'
+import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
 
 // Action Imports
@@ -284,6 +285,10 @@ class UsernamePage extends Component {
     })
   }
 
+  togglePopover = () => {
+    return this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
+  }
+
   render() {
     const {
       sessionUser,
@@ -410,36 +415,21 @@ class UsernamePage extends Component {
                         <Loadable loading={shares.loading && shares.list.length === 0}>
                           <div>
                             <Popover
-                                isOpen={this.state.isPopoverOpen}
-                                position="right"
-                                padding={30}
-                                onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                                content={({ position, targetRect, popoverRect }) => (
-                                    <ArrowContainer
-                                      position={position}
-                                      targetRect={targetRect}
-                                      popoverRect={popoverRect}
-                                      arrowColor={'#383A3F'}
-                                      arrowSize={10}
-                                    >
-                                        <div
-                                            style={{
-                                              backgroundColor: '#383A3F',
-                                              padding: '20px',
-                                              color: 'white',
-                                              width: '300px',
-                                            }}
-                                            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                                        >
-                                          <p className="small">
-                                            Share gives you the ability to express yourself with pictures or just text!  Let others know you feel!
-                                          </p>
-                                        </div>
-                                    </ArrowContainer>
-                                )}
+                              isOpen={this.state.isPopoverOpen}
+                              position="right"
+                              padding={30}
+                              onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                              content={({ position, targetRect, popoverRect }) => (
+                                <SharePopoverContainer
+                                  position={position}
+                                  targetRect={targetRect}
+                                  popoverRect={popoverRect}
+                                  togglePopover={this.togglePopover}
+                                />
+                              )}
                             >
                               <Icon
-                                className="debut-icon debut-icon--pointer"
+                                className="debut-icon debut-icon--pointer username__share-icon-question"
                                 icon="IconQuestionCircle"
                                 onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
                                 size={16}
