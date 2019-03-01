@@ -156,7 +156,7 @@ class UsernamePage extends Component {
       })
 
       const filteredDapps = returnFilteredUrls(apps)
-      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options)
+      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options) || '[]'
       userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
 
       if (userDappsRadiks.newDapps.length > 0) {
@@ -178,7 +178,7 @@ class UsernamePage extends Component {
     } catch (e) {
       return this.setState({
         userInfo: {
-          following: JSON.parse(following) || [],
+          following: JSON.parse(following),
           profile,
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
