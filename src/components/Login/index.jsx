@@ -4,8 +4,6 @@ import {
   Button,
   Columns,
   Heading,
-  Hero,
-  Container,
   Card,
   Content,
 } from 'components/bulma'
@@ -66,19 +64,6 @@ class Login extends Component {
 
     return (
       <Columns className="login">
-        {
-          !isChrome &&
-          <Hero color="danger" style={{ width: '100%'}}>
-            <Hero.Body>
-              <Container>
-                <Heading>Login is currently disabled for your browser!</Heading>
-                <Heading subtitle size={6}>
-                  Currently a bug exists with login specific to your browser!  The Blockstack team is addressing this issue but for now Debut is Chrome compatible.  You can download it <a href="https://www.google.com/chrome/?brand=CHBD&gclid=Cj0KCQiAzePjBRCRARIsAGkrSm41my5SQgEvV46dGIsStOgaIg61R2Jo52faG3mI1VPakLp9z-pDWRAaAvalEALw_wcB&gclsrc=aw.ds" rel="noopener noreferrer" target="_blank" style={{ color: '#3ac569' }}>here</a>
-                </Heading>
-              </Container>
-            </Hero.Body>
-          </Hero>
-        }
         <Columns.Column className="login__column-left" size={6}>
           <div className="login__column-left-blockstack-details">
             <div className="login__left-container">
@@ -162,7 +147,6 @@ class Login extends Component {
                     className="mt-half login__button-sign-in"
                     color="link"
                     onClick={this.signIn}
-                    disabled={!isChrome}
                     >
                     Sign in with Blockstack
                   </Button>
