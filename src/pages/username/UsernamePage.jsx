@@ -94,7 +94,7 @@ class UsernamePage extends Component {
         if (sessionUser.username === username) {
           throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
         } else {
-          throw new Error("User does not own a gaia hub for this app!  Redirecting back to the main page!")
+          throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
         }
       }
     } catch (e) {
@@ -117,19 +117,44 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username } = this.props
+    const { username, history } = this.props
     const { sessionUser } = this.context.state
 
     if (prevProps.username !== username) {
-      const user = await lookupProfile(username)
-      if (user) {
-        this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
-          this.props.requestSingleUser(username)
-          this.loadUserInfo(user)
-          if (_.isEmpty(this.props.shares.list)) {
-            this.requestUserShares()
-          }
+      try {
+        const user = await lookupProfile(username)
+        const apps = _.map(user.apps, (k,v) => {
+          return v
         })
+
+        if (process.env.NODE_ENV === 'production' &&
+        (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
+        ) {
+          if (sessionUser.username === username) {
+            throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
+          } else {
+            throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
+          }
+        }
+
+        if (user) {
+          this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
+            this.props.requestSingleUser(username)
+            this.loadUserInfo(user)
+            if (_.isEmpty(this.props.shares.list)) {
+              this.requestUserShares()
+            }
+          })
+        }
+      } catch (e) {
+        this.setState({ error: true })
+        clearTimeout(this.state.longLoad)
+
+        if (sessionUser.username !== username) {
+          toggleNotification('warning', e.message)
+          return forceRedirect(history)
+        }
+        return forceUserSignOut(sessionUser.userSession, e.message)
       }
     }
 
