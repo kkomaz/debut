@@ -19,4 +19,18 @@
     justify-content: center;
     flex-direction: column;
   }
+
+  &__invalid-blockstack-id {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__invalid-debut-id {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
 }
