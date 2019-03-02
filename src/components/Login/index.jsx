@@ -132,6 +132,9 @@ class Login extends Component {
                   </Button>
                 </Content>
               <Heading size={6}>
+                Currently, debut is in <span style={{ color: '#EA1D64'}}> Beta</span> phase.  <span className="italic">Certain existing features are subject to change</span>
+              </Heading>
+              <Heading size={6}>
                 Curious about our technical roadmap? Click <a href="https://trello.com/b/he3qvtA0/debut" rel="noopener noreferrer" target="_blank">here!</a>
               </Heading>
             </div>
