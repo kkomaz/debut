@@ -10,7 +10,7 @@ import { User } from 'radiks'
 const fetchPaginatedUsers = (action) => {
   return User.fetchList({
     sort: '-createdAt',
-    limit: 8,
+    limit: 16,
     offset: action.payload.offset,
   })
 }

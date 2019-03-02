@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { lookupProfile } from 'blockstack'
 import { CSSTransitionGroup } from 'react-transition-group'
 import { UserContext } from 'components/User/UserProvider'
 import {
@@ -78,83 +77,46 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { username, history } = this.props
-    const { sessionUser } = this.context.state
-    let user
-
-    try {
-      user = await lookupProfile(username)
-      this.props.requestSingleUser(username)
-      const apps = _.map(user.apps, (k,v) => {
-        return v
-      })
-
-      if (process.env.NODE_ENV === 'production' &&
-      (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
-      ) {
-        if (sessionUser.username === username) {
-          throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
-        } else {
-          throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
-        }
-      }
-    } catch (e) {
-      this.setState({ error: true })
-      clearTimeout(this.state.longLoad)
-
-      if (sessionUser.username !== username) {
-        toggleNotification('warning', e.message)
-        return forceRedirect(history)
-      }
-      return forceUserSignOut(sessionUser.userSession, e.message)
-    }
-
-    window.addEventListener('scroll', this.handleScroll)
-
-    if (user) {
-      this.loadUserInfo(user)
-      this.requestUserShares()
-    }
+    const { username } = this.props
+    this.props.requestSingleUser(username)
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, history } = this.props
+    const { username, history, user } = this.props
     const { sessionUser } = this.context.state
 
-    if (prevProps.username !== username) {
+    // Changing User Profiles
+    if (username !== prevProps.username) {
+      this.props.requestSingleUser(username)
+      this.setState({ adminMode: sessionUser.username === username })
+    }
+
+    // Loading of single user complete
+    if (!user.loading && prevProps.user.loading) {
       try {
-        const user = await lookupProfile(username)
-        const apps = _.map(user.apps, (k,v) => {
+        const apps = _.map(user.data.profile.apps, (k,v) => {
           return v
         })
 
-        if (process.env.NODE_ENV === 'production' &&
-        (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
-        ) {
+        if (process.env.NODE_ENV === 'production' && (
+          !user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))
+        )) {
           if (sessionUser.username === username) {
             throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
           } else {
             throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
           }
         }
-
-        if (user) {
-          this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
-            this.props.requestSingleUser(username)
-            this.loadUserInfo(user)
-            if (_.isEmpty(this.props.shares.list)) {
-              this.requestUserShares()
-            }
-          })
-        }
+        this.loadUserInfo(user.data.profile)
+        this.requestUserShares()
       } catch (e) {
         this.setState({ error: true })
-        clearTimeout(this.state.longLoad)
 
-        if (sessionUser.username !== username) {
+        if (sessionUser !== username) {
           toggleNotification('warning', e.message)
           return forceRedirect(history)
         }
+
         return forceUserSignOut(sessionUser.userSession, e.message)
       }
     }
