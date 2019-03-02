@@ -26,4 +26,13 @@
     align-items: center;
     flex-direction: column;
   }
+
+  &__invalid-debut-id {
+    &--flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+  }
 }

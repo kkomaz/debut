@@ -17,6 +17,7 @@ import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceRedirect } from 'utils/auth'
 import { List } from 'react-content-loader'
 import { nodeEnv } from 'utils/constants'
+import classNames from 'classnames'
 
 const keys = {
   twitter: {
@@ -112,6 +113,11 @@ class UnsignedUsers extends Component {
       )
     }
 
+    const invalidDebutIdClass = classNames({
+      'unsigned-user__invalid-debut-id': true,
+      'unsigned-user__invalid-debut-id--flex': userProofs.length > 1
+    })
+
     return (
       <Container>
         <Card className="unsigned-user">
@@ -137,7 +143,7 @@ class UnsignedUsers extends Component {
                           Tweet
                         </a>
                       </div> :
-                      <div className="unsigned-user__invalid-debut-id">
+                      <div className={invalidDebutIdClass}>
                         <p>
                           <strong>{username}</strong> is a blockstack user but is <strong>not</strong> using debut!  Let the user know about debut via social proofs below!
                         </p>
