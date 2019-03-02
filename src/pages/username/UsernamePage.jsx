@@ -83,6 +83,7 @@ class UsernamePage extends Component {
 
     try {
       user = await lookupProfile(username)
+      console.log(user, 'user')
       this.props.requestSingleUser(username)
       const apps = _.map(user.apps, (k,v) => {
         return v
