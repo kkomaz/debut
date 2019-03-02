@@ -27,6 +27,12 @@ class NavbarComp extends Component {
     history.push(`/${sessionUser.username}`)
   }
 
+  goToHelp = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/help')
+  }
+
   signOut = () => {
     const { sessionUser } = this.context.state
     sessionUser.userSession.signUserOut()
@@ -63,6 +69,9 @@ class NavbarComp extends Component {
               {
                 isSignedIn &&
                 <React.Fragment>
+                  <Navbar.Item onClick={this.goToHelp}>
+                    Help
+                  </Navbar.Item>
                   <Navbar.Item onClick={this.goToProfile}>
                     My Page
                   </Navbar.Item>
