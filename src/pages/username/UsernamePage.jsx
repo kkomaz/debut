@@ -325,7 +325,7 @@ class UsernamePage extends Component {
                   defaultImgUrl={defaultImgUrl}
                   sessionUser={sessionUser}
                   setSessionUserState={this.context.setSessionUserState}
-                  userInfo={userInfo}
+                  user={user}
                   username={username}
                 />
               </Media.Item>

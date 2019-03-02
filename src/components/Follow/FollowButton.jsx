@@ -9,19 +9,19 @@ class FollowButton extends Component {
     defaultImgUrl: PropTypes.string.isRequired,
     sessionUser: PropTypes.object.isRequired,
     setSessionUserState: PropTypes.func.isRequired,
-    userInfo: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
   }
 
   followUser = async () => {
-    const { username, setSessionUserState, userInfo, sessionUser, defaultImgUrl } = this.props
+    const { username, setSessionUserState, user, sessionUser, defaultImgUrl } = this.props
     const options = { encrypt: false }
-    const user = {
+    const userObj = {
       username,
-      imageUrl: _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+      imageUrl: _.get(user, 'data.profile.image[0].contentUrl', defaultImgUrl)
     }
 
-    const params = [...sessionUser.following, user]
+    const params = [...sessionUser.following, userObj]
 
     try {
       const result = await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
