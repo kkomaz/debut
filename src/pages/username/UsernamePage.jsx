@@ -92,10 +92,17 @@ class UsernamePage extends Component {
     // Loading of single user complete
     if (!user.loading && prevProps.user.loading) {
       try {
+        if (!user.data) {
+          return history.push({
+            pathname: `/unsigned/${username}`,
+          })
+        }
+
         const apps = _.map(user.data.profile.apps, (k,v) => {
           return v
         })
 
+        // This is a check to determine "bad" users
         if (process.env.NODE_ENV === 'production' && (
           !user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))
         )) {
@@ -110,11 +117,13 @@ class UsernamePage extends Component {
       } catch (e) {
         this.setState({ error: true })
 
+        // If current user is viewing, redirect
         if (sessionUser !== username) {
           toggleNotification('warning', e.message)
           return forceRedirect(history)
         }
 
+        // If current user is the bad user, sign him out
         return forceUserSignOut(sessionUser.userSession, e.message)
       }
     }

@@ -5,6 +5,7 @@ import {
   FETCH_ALL_USERS_SUCCESS,
   FETCH_PAGINATED_USERS_SUCCESS,
   FETCH_SINGLE_USER_SUCCESS,
+  FETCH_SINGLE_USER_FAIL,
   SET_BASIC_INFO_SUCCESS,
 } from 'actions'
 import {
@@ -70,6 +71,8 @@ export default function userReducer(state = defaultSession, action) {
       }
     case REQUEST_SINGLE_USER:
       return { ...state, loading: true }
+    case FETCH_SINGLE_USER_FAIL:
+      return { ...state, loading: false }
     case FETCH_SINGLE_USER_SUCCESS:
       return { ...state,
         users: updateOrAddObjFromList(state.users, action.payload),
