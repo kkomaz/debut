@@ -40,7 +40,6 @@ import { Icon } from 'components/icon'
 import { requestUserShares } from 'actions/share'
 import { addDappsToList } from 'actions/blockstack'
 import { requestSingleUser } from 'actions/user'
-
 import './UsernamePage.scss';
 
 class UsernamePage extends Component {
@@ -51,7 +50,6 @@ class UsernamePage extends Component {
 
     this.state = {
       userInfo: {
-        description: '',
         dapps: [],
       },
       loading: true,
@@ -159,7 +157,6 @@ class UsernamePage extends Component {
         userInfo: {
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
           following: JSON.parse(following),
-          profile,
         },
         loading: false,
       })
@@ -167,7 +164,6 @@ class UsernamePage extends Component {
       return this.setState({
         userInfo: {
           following: JSON.parse(following),
-          profile,
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
@@ -273,7 +269,7 @@ class UsernamePage extends Component {
       showModal,
     } = this.state
 
-    const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+    const src = _.get(user, 'data.profile.image[0].contentUrl', defaultImgUrl)
 
     if (this.state.error) {
       return (
@@ -305,7 +301,7 @@ class UsernamePage extends Component {
                 position="center"
                 style={{ alignSelf: 'center' }}
               >
-                <Heading size={4} style={{ color: 'white' }}>{_.get(userInfo, 'profile.name', username)}</Heading>
+                <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
                 <Heading subtitle size={6} style={{ color: 'white' }}>
                   {username}
                 </Heading>
