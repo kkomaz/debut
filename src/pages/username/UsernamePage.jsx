@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { lookupProfile } from 'blockstack'
 import { CSSTransitionGroup } from 'react-transition-group'
 import { UserContext } from 'components/User/UserProvider'
 import {
@@ -33,14 +32,15 @@ import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { List } from 'react-content-loader'
-import Popover, { ArrowContainer } from 'react-tiny-popover'
+import Popover from 'react-tiny-popover'
+import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
+import { lookupProfile } from 'blockstack'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
 import { addDappsToList } from 'actions/blockstack'
 import { requestSingleUser } from 'actions/user'
-
 import './UsernamePage.scss';
 
 class UsernamePage extends Component {
@@ -51,7 +51,6 @@ class UsernamePage extends Component {
 
     this.state = {
       userInfo: {
-        description: '',
         dapps: [],
       },
       loading: true,
@@ -77,84 +76,57 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { username, history } = this.props
-    const { sessionUser } = this.context.state
-    let user
-
-    try {
-      user = await lookupProfile(username)
-      console.log(user, 'user')
-      this.props.requestSingleUser(username)
-      const apps = _.map(user.apps, (k,v) => {
-        return v
-      })
-
-      if (process.env.NODE_ENV === 'production' &&
-      (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
-      ) {
-        if (sessionUser.username === username) {
-          throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
-        } else {
-          throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
-        }
-      }
-    } catch (e) {
-      this.setState({ error: true })
-      clearTimeout(this.state.longLoad)
-
-      if (sessionUser.username !== username) {
-        toggleNotification('warning', e.message)
-        return forceRedirect(history)
-      }
-      return forceUserSignOut(sessionUser.userSession, e.message)
-    }
-
-    window.addEventListener('scroll', this.handleScroll)
-
-    if (user) {
-      this.loadUserInfo(user)
-      this.requestUserShares()
-    }
+    const { username } = this.props
+    this.props.requestSingleUser(username)
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, history } = this.props
+    const { username, history, user } = this.props
     const { sessionUser } = this.context.state
 
-    if (prevProps.username !== username) {
+    // Changing User Profiles
+    if (username !== prevProps.username) {
+      this.props.requestSingleUser(username)
+      this.setState({ adminMode: sessionUser.username === username })
+    }
+
+    // Loading of single user complete
+    if (!user.loading && prevProps.user.loading) {
       try {
-        const user = await lookupProfile(username)
-        const apps = _.map(user.apps, (k,v) => {
+        if (!user.data) {
+          return history.push({
+            pathname: `/unsigned/${username}`,
+          })
+        }
+
+        const profile = await lookupProfile(username) // User look up is because apps return different data from radiks userfetchList
+
+        const apps = _.map(profile.apps, (k,v) => {
           return v
         })
 
-        if (process.env.NODE_ENV === 'production' &&
-        (!user.apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social')))
-        ) {
+        // This is a check to determine "bad" users
+        if (process.env.NODE_ENV === 'production' && (
+          !apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))
+        )) {
           if (sessionUser.username === username) {
             throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
           } else {
             throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
           }
         }
-
-        if (user) {
-          this.setState({ adminMode: sessionUser.username === username, loading: true }, () => {
-            this.props.requestSingleUser(username)
-            this.loadUserInfo(user)
-            if (_.isEmpty(this.props.shares.list)) {
-              this.requestUserShares()
-            }
-          })
-        }
+        this.loadUserInfo(profile)
+        this.requestUserShares()
       } catch (e) {
         this.setState({ error: true })
-        clearTimeout(this.state.longLoad)
 
-        if (sessionUser.username !== username) {
+        // If current user is viewing, redirect
+        if (sessionUser !== username) {
           toggleNotification('warning', e.message)
           return forceRedirect(history)
         }
+
+        // If current user is the bad user, sign him out
         return forceUserSignOut(sessionUser.userSession, e.message)
       }
     }
@@ -197,7 +169,6 @@ class UsernamePage extends Component {
         userInfo: {
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
           following: JSON.parse(following),
-          profile,
         },
         loading: false,
       })
@@ -205,7 +176,6 @@ class UsernamePage extends Component {
       return this.setState({
         userInfo: {
           following: JSON.parse(following),
-          profile,
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
@@ -285,6 +255,10 @@ class UsernamePage extends Component {
     })
   }
 
+  togglePopover = () => {
+    return this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
+  }
+
   render() {
     const {
       sessionUser,
@@ -307,7 +281,7 @@ class UsernamePage extends Component {
       showModal,
     } = this.state
 
-    const src = _.get(userInfo, 'profile.image[0].contentUrl', defaultImgUrl)
+    const src = _.get(user, 'data.profile.image[0].contentUrl', defaultImgUrl)
 
     if (this.state.error) {
       return (
@@ -339,7 +313,7 @@ class UsernamePage extends Component {
                 position="center"
                 style={{ alignSelf: 'center' }}
               >
-                <Heading size={4} style={{ color: 'white' }}>{_.get(userInfo, 'profile.name', username)}</Heading>
+                <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
                 <Heading subtitle size={6} style={{ color: 'white' }}>
                   {username}
                 </Heading>
@@ -411,36 +385,21 @@ class UsernamePage extends Component {
                         <Loadable loading={shares.loading && shares.list.length === 0}>
                           <div>
                             <Popover
-                                isOpen={this.state.isPopoverOpen}
-                                position="right"
-                                padding={30}
-                                onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                                content={({ position, targetRect, popoverRect }) => (
-                                    <ArrowContainer
-                                      position={position}
-                                      targetRect={targetRect}
-                                      popoverRect={popoverRect}
-                                      arrowColor={'#383A3F'}
-                                      arrowSize={10}
-                                    >
-                                        <div
-                                            style={{
-                                              backgroundColor: '#383A3F',
-                                              padding: '20px',
-                                              color: 'white',
-                                              width: '300px',
-                                            }}
-                                            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                                        >
-                                          <p className="small">
-                                            Share gives you the ability to express yourself with pictures or just text!  Let others know you feel!
-                                          </p>
-                                        </div>
-                                    </ArrowContainer>
-                                )}
+                              isOpen={this.state.isPopoverOpen}
+                              position="right"
+                              padding={30}
+                              onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                              content={({ position, targetRect, popoverRect }) => (
+                                <SharePopoverContainer
+                                  position={position}
+                                  targetRect={targetRect}
+                                  popoverRect={popoverRect}
+                                  togglePopover={this.togglePopover}
+                                />
+                              )}
                             >
                               <Icon
-                                className="debut-icon debut-icon--pointer"
+                                className="debut-icon debut-icon--pointer username__share-icon-question"
                                 icon="IconQuestionCircle"
                                 onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
                                 size={16}

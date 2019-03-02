@@ -8,6 +8,8 @@ import Navbar from 'components/Navbar'
 import { requestBlockstackDapps } from 'actions/blockstack'
 import './RootRoute.scss'
 import UsernamePage from 'pages/username/UsernamePage'
+import UnsignedUser from 'pages/unsigned/UnsignedUser'
+import HelpPage from 'pages/help/HelpPage'
 import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
 
@@ -67,6 +69,16 @@ class RootRoute extends Component {
                 setHomePageClickedFalse={this.setHomePageClickedFalse}
               />
             }
+          />
+          <Route
+            exact
+            path="/help"
+            render={() => <HelpPage />}
+          />
+          <Route
+            exact
+            path="/unsigned/:username"
+            render={({ match }) => <UnsignedUser match={match} />}
           />
           {
             blockstackDappsLoading ?

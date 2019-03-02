@@ -23,7 +23,7 @@ class NoUsers extends Component {
               <Columns.Column size={6}>
                 <img src={glasses} alt="Logo" height={1000} width={1000} />
               </Columns.Column>
-              <Columns.Column size="6" className="no-users__text-column">
+              <Columns.Column size={6} className="no-users__text-column">
                 <div className="no-users__more-info">
                   <Heading size={5}>
                     No more users in debut!

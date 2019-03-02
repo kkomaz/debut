@@ -29,6 +29,13 @@
     justify-content: center;
     flex-direction: column;
   }
+
+  &__popover-container {
+    background: $pitch-dark;
+    padding: 20px;
+    color: $white;
+    width: 300px;
+  }
 }
 
 .share-list-item-transition-enter {
