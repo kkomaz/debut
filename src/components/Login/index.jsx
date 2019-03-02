@@ -81,7 +81,7 @@ class Login extends Component {
                         debut is a social networking app alternative that ensures your data is safe. Only <strong>YOU</strong> as the user have access to your data.  By signing in, you can <strong>confidently</strong> share your <strong>secured</strong> moments and connect with friends and family.
                       </p>
                       <p>
-                        Follow us on twitter <a href="https://twitter.com/the_debut_app" rel="noopener noreferrer" target="_blank">here!</a>
+                        Follow us on twitter <a href="https://twitter.com/the_debut_app" rel="noopener noreferrer" target="_blank">here.</a>
                       </p>
                     </Content>
                   </Card.Content>
@@ -97,7 +97,7 @@ class Login extends Component {
                       </p>
                       <br />
                       <p>
-                        For more information click <a href="https://github.com/blockstack/gaia" rel="noopener noreferrer" target="_blank">here!</a>
+                        For more information click <a href="https://github.com/blockstack/gaia" rel="noopener noreferrer" target="_blank">here.</a>
                       </p>
                     </Content>
                   </Card.Content>
@@ -113,7 +113,7 @@ class Login extends Component {
                       Blockstack is a new internet that provides infrastructure for decentralized apps(dapps) where users own their data directly.
                     </p>
                     <p>
-                      For more information click <a href="https://youtu.be/qtOIh93Hvuw?t=449" rel="noopener noreferrer" target="_blank">here!</a>
+                      For more information click <a href="https://youtu.be/qtOIh93Hvuw?t=449" rel="noopener noreferrer" target="_blank">here.</a>
                     </p>
                   </Card.Content>
                 </Card>
@@ -127,7 +127,7 @@ class Login extends Component {
                         A Blockstack app/browser needs to be installed before you can use debut
                       </p>
                       <p style={{ marginTop: '30px'}}>
-                        View or install the browswer <a href="https://blockstack.org/install/" rel="noopener noreferrer" target="_blank">here!</a>
+                        View or install the browswer <a href="https://blockstack.org/install/" rel="noopener noreferrer" target="_blank">here.</a>
                       </p>
                     </Content>
                   </Card.Content>
@@ -152,7 +152,10 @@ class Login extends Component {
                   </Button>
                 </Content>
               <Heading size={6}>
-                Curious about our technical roadmap? Click <a href="https://trello.com/b/he3qvtA0/debut" rel="noopener noreferrer" target="_blank">here!</a>
+                debut is an <span style={{ color: '#EA1D64'}}> indie</span> project built by <a href="https://twitter.com/kkomaz" rel="noopener noreferrer" target="_blank">me!</a> <span className="italic">Certain existing features are subject to change.</span>
+              </Heading>
+              <Heading size={6}>
+                Curious about our technical roadmap? Click <a href="https://trello.com/b/he3qvtA0/debut" rel="noopener noreferrer" target="_blank">here.</a>
               </Heading>
             </div>
           }
