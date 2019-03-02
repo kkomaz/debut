@@ -36,6 +36,7 @@ import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
 import { lookupProfile } from 'blockstack'
+import { nodeEnv } from 'utils/constants'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
@@ -92,21 +93,24 @@ class UsernamePage extends Component {
 
     // Loading of single user complete
     if (!user.loading && prevProps.user.loading) {
-      try {
-        if (!user.data) {
-          return history.push({
-            pathname: `/unsigned/${username}`,
-          })
-        }
+      // If radiks user does not exist send to unsigned page
+      if (!user.data) {
+        return history.push({
+          pathname: `/unsigned/${username}`,
+        })
+      }
 
-        const profile = await lookupProfile(username) // User look up is because apps return different data from radiks userfetchList
+      try {
+        // User look up is because apps return different data from radiks userfetchList
+        // Guranteed user will exist
+        const profile = await lookupProfile(username)
 
         const apps = _.map(profile.apps, (k,v) => {
           return v
         })
 
-        // This is a check to determine "bad" users
-        if (process.env.NODE_ENV === 'production' && (
+        // Check for older browsers
+        if (process.env.NODE_ENV === nodeEnv && (
           !apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))
         )) {
           if (sessionUser.username === username) {

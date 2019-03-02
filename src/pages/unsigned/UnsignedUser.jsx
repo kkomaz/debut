@@ -13,6 +13,10 @@ import './UnsignedUser.scss'
 import unsignedUserImage from 'assets/unsigned-user.png'
 import { lookupProfile } from 'blockstack'
 import { User } from 'radiks'
+import toggleNotification from 'utils/notifier/toggleNotification'
+import { forceRedirect } from 'utils/auth'
+import { List } from 'react-content-loader'
+import { nodeEnv } from 'utils/constants'
 
 const keys = {
   twitter: {
@@ -43,14 +47,49 @@ class UnsignedUsers extends Component {
   async componentDidMount() {
     const { match, history } = this.props
     const username = match.params.username
+    let profile
 
-    // Initial Radiks check -- if true - redirect
+    // Radiks Check
     const radiksCheck = await User.findOne({ username }) // Tell Hank about User.findById() works with any Id
+
+    // Profile lookup -- certain users return different apps array.
+    // if profile does not exist go directly to proofs
+    try {
+      profile = await lookupProfile(username) // User look up is because apps return different data from radiks userfetchList
+    } catch (e) {
+      return this.setProofs(username)
+    }
+
+    const apps = _.map(profile.apps, (k,v) => {
+      return v
+    })
+
+    // Check for older browsers
+    if (process.env.NODE_ENV === nodeEnv && (
+      (!apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))) &&
+      radiksCheck
+    )) {
+      toggleNotification('warning', 'This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!')
+      this.setState({ error: true })
+      return forceRedirect(history)
+    }
+
     if (radiksCheck) {
       return history.push(`/${username}`)
     }
 
-    // Lookup Profile
+    // set proofs
+    return this.setProofs(username)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (window.twttr.widgets && !this.state.twitterLoaded) {
+      window.twttr.widgets.load()
+      this.setState({ twitterLoaded: true })
+    }
+  }
+
+  async setProofs(username) {
     try {
       const result = await lookupProfile(username)
       const allowableProofs = ['facebook', 'twitter', 'github', 'linkedIn']
@@ -61,16 +100,17 @@ class UnsignedUsers extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (window.twttr.widgets && !this.state.twitterLoaded) {
-      window.twttr.widgets.load()
-      this.setState({ twitterLoaded: true })
-    }
-  }
-
   render() {
     const { userProofs, nonBlockstackId } = this.state
     const { username } = this.props.match.params
+
+    if (this.state.error) {
+      return (
+        <div>
+          <List />
+        </div>
+      )
+    }
 
     return (
       <Container>
