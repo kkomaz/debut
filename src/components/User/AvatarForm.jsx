@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
   Section,
+  Heading,
 } from 'components/bulma'
 import { Icon } from 'components/icon'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
@@ -89,6 +90,7 @@ class AvatarForm extends Component {
 
   render() {
     const { showModal } = this.state
+    const { user } = this.props
 
     const iconAvatarClassNames = classNames({
       'debut-icon': true,
@@ -97,10 +99,15 @@ class AvatarForm extends Component {
       'avatar-form__camera-icon--hovered': this.state.avatarHovered,
     })
 
+    const avatarFormImageClass = classNames({
+      'avatar-form__image': true,
+      'avatar-form__image--hovered': this.state.avatarHovered
+    })
+
     return (
       <div className="avatar-form">
         <Image
-          className="avatar-form__image"
+          className={avatarFormImageClass}
           alt="100x100"
           renderAs="p"
           src={this.props.user.data.profileImgUrl}
@@ -124,7 +131,13 @@ class AvatarForm extends Component {
           closeOnEsc
         >
           <Modal.Content>
-            <Section style={{ backgroundColor: 'white' }}>
+            <Section className="avatar-form__section">
+              <Heading
+                className="avatar-form__section-title"
+                size={4}
+              >
+                {user.data.username} avatar form
+              </Heading>
               <form
                 className="avatar-form__image-form"
                 onSubmit={this.onSubmit}

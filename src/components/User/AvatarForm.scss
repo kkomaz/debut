@@ -11,6 +11,10 @@
       height: 200px;
       width: 200px;
     }
+
+    &--hovered {
+      opacity: 0.7;
+    }
   }
 
   &__image-items {
@@ -20,11 +24,11 @@
   }
 
   &__input {
-    margin-left: 50px;
+    margin-left: 90px;
   }
 
   &__submit-footer {
-    padding: 0 129px;
+    padding: 0 130px;
   }
 
   &__camera-icon {
@@ -37,5 +41,18 @@
     &--hovered {
       visibility: inherit;
     }
+  }
+
+  &__section {
+    background-color: $white;
+    padding: 20px 0 10px 0;
+    border-bottom: 1px solid black;
+    padding-bottom: 20px;
+  }
+
+  &__section-title {
+    border-bottom: 1px solid $dusty;
+    padding-left: 20px;
+    padding-bottom: 20px;
   }
 }
