@@ -40,6 +40,7 @@ class UserDescription extends Component {
     const { user } = this.props
 
     // Hot Fix - need to find a cleaner way to handle this
+    console.log(user)
     if (!user.data.basicInformation) {
       return <List />
     }

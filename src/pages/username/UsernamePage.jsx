@@ -296,6 +296,8 @@ class UsernamePage extends Component {
       )
     }
 
+    console.log(user, 'user')
+
     return (
       <Container>
         <Columns>

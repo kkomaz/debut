@@ -1,12 +1,14 @@
 import {
   REQUEST_SINGLE_USER,
   REQUEST_PAGINATED_USERS,
+  REQUEST_SET_USER_AVATAR,
   REVERT_PAGINATED_USERS_FULL,
   FETCH_ALL_USERS_SUCCESS,
   FETCH_PAGINATED_USERS_SUCCESS,
   FETCH_SINGLE_USER_SUCCESS,
   FETCH_SINGLE_USER_FAIL,
   SET_BASIC_INFO_SUCCESS,
+  SET_USER_AVATAR_FAIL,
   SET_USER_AVATAR_SUCCESS,
 } from 'actions'
 import {
@@ -25,7 +27,8 @@ const defaultSession = {
     loading: true,
     full: false,
   },
-  loading: true
+  loading: true,
+  avatarLoading: false,
 }
 
 export default function userReducer(state = defaultSession, action) {
@@ -84,10 +87,15 @@ export default function userReducer(state = defaultSession, action) {
       const updatedUser = { ...searchedUser, basicInformation: action.payload.basicInformation }
       toggleNotification('success', `${updatedUser.username}'s bio successfully updated!`)
       return { ...state, users: updateOrAddObjFromList(state.users, updatedUser)}
+    case REQUEST_SET_USER_AVATAR:
+      return { ...state, avatarLoading: true }
+    case SET_USER_AVATAR_FAIL:
+      return { ...state, avatarLoading: false }
     case SET_USER_AVATAR_SUCCESS:
+      toggleNotification('success', `${action.payload.username}'s avatar successfully updated!`)
       return { ...state,
         users: updateOrAddObjFromList(state.users, action.payload),
-        loading: false,
+        avatarLoading: false,
       }
     default:
       return state
