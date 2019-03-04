@@ -10,7 +10,6 @@ import {
   Container,
   Content,
   Media,
-  Image,
   Heading,
   Modal,
   Section,
@@ -37,6 +36,7 @@ import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
 import { lookupProfile } from 'blockstack'
 import { nodeEnv } from 'utils/constants'
+import { AvatarForm } from 'components/User'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
@@ -65,6 +65,7 @@ class UsernamePage extends Component {
       }, 8000),
       error: false,
       isPopoverOpen: false,
+      avatarHovered: false,
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -304,13 +305,10 @@ class UsernamePage extends Component {
                 {
                   loading ?
                   <HeroAvatarLoader /> :
-                  <Image
-                    className="username__avatar"
-                    alt="100x100"
-                    renderAs="p"
+                  <AvatarForm
                     src={src}
-                    style={{ margin: 0 }}
-                    />
+                    user={user}
+                  />
                 }
               </Media.Item>
               <Media.Item

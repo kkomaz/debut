@@ -5,15 +5,6 @@
     color: $dark_purple;
   }
 
-  &__avatar {
-    img {
-      border: 10px solid $pink;
-      border-radius: 100%;
-      height: 200px;
-      width: 200px;
-    }
-  }
-
   &__hero {
     // background: url('http://i.imgur.com/ikxbnvc.png');
     background: $primary;

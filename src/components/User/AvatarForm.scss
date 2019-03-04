@@ -1,0 +1,27 @@
+@import 'src/variables';
+
+.avatar-form {
+  position: relative;
+
+  &__image {
+    img {
+      border: 10px solid $pink;
+      border-radius: 100%;
+      cursor: pointer;
+      height: 200px;
+      width: 200px;
+    }
+  }
+
+  &__camera-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    visibility: hidden;
+
+    &--hovered {
+      visibility: inherit;
+    }
+  }
+}
