@@ -9,6 +9,11 @@ class DebutUser extends User {
     this.data = data
   }
 
+  static schema = {
+    ...DebutUser.schema,
+    profileImgUrl: { type: String, decrypted: true },
+  }
+
   async addBasicInfo() {
     const basicInformation = await BasicInformation.findOne({ username: this.data._id }) || null
 

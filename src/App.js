@@ -41,7 +41,12 @@ class App extends Component {
       await user.fetch({ decrypt: false })
 
       try {
-        await User.createWithCurrentUser()
+        const radiksUser = await User.findOne({ username: userData.username })
+
+        if (!radiksUser) {
+          const currentUser = await User.createWithCurrentUser()
+          console.log(currentUser)
+        }
       } catch (e) {
         console.log(e.message)
       }
