@@ -7,6 +7,7 @@ import {
   FETCH_SINGLE_USER_SUCCESS,
   FETCH_SINGLE_USER_FAIL,
   SET_BASIC_INFO_SUCCESS,
+  SET_USER_AVATAR_SUCCESS,
 } from 'actions'
 import {
   filterListFromList,
@@ -83,6 +84,11 @@ export default function userReducer(state = defaultSession, action) {
       const updatedUser = { ...searchedUser, basicInformation: action.payload.basicInformation }
       toggleNotification('success', `${updatedUser.username}'s bio successfully updated!`)
       return { ...state, users: updateOrAddObjFromList(state.users, updatedUser)}
+    case SET_USER_AVATAR_SUCCESS:
+      return { ...state,
+        users: updateOrAddObjFromList(state.users, action.payload),
+        loading: false,
+      }
     default:
       return state
   }

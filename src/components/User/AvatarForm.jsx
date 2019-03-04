@@ -1,7 +1,11 @@
+// Library imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import classNames from 'classnames'
+import { connect } from 'react-redux'
+
+// Component Imports
 import {
   Image,
   Modal,
@@ -9,6 +13,9 @@ import {
 } from 'components/bulma'
 import { Icon } from 'components/icon'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
+
+// Action & util imports
+import { requestSetUserAvatar } from 'actions/user'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import './AvatarForm.scss'
 
@@ -30,10 +37,6 @@ class AvatarForm extends Component {
     user: PropTypes.object.isRequired,
   }
 
-  componentWillUnmount() {
-    console.log('unmounting')
-  }
-
   setAvatarHoveredTrue = () => {
     this.setState({ avatarHovered: true })
   }
@@ -53,6 +56,18 @@ class AvatarForm extends Component {
   onCancel = () => {
     const { user, defaultImgUrl } = this.props
     this.setState({ imageFile: _.get(user, 'data.profileImgUrl', defaultImgUrl)})
+    this.closeModal()
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault()
+    const { imageFile } = this.state
+    const { user } = this.props
+
+    this.props.requestSetUserAvatar(
+      imageFile,
+      user.data.username,
+    )
     this.closeModal()
   }
 
@@ -110,7 +125,10 @@ class AvatarForm extends Component {
         >
           <Modal.Content>
             <Section style={{ backgroundColor: 'white' }}>
-              <form className="avatar-form__image-form">
+              <form
+                className="avatar-form__image-form"
+                onSubmit={this.onSubmit}
+              >
                 <div className="avatar-form__image-items">
                   <Image
                     className="avatar-form__image"
@@ -143,4 +161,6 @@ class AvatarForm extends Component {
   }
 }
 
-export default AvatarForm
+export default connect(null, {
+  requestSetUserAvatar
+})(AvatarForm)
