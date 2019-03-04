@@ -308,6 +308,7 @@ class UsernamePage extends Component {
                   <AvatarForm
                     src={src}
                     user={user}
+                    defaultImgUrl={defaultImgUrl}
                   />
                 }
               </Media.Item>

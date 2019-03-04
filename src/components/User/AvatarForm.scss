@@ -13,6 +13,20 @@
     }
   }
 
+  &__image-items {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__input {
+    margin-left: 50px;
+  }
+
+  &__submit-footer {
+    padding: 0 129px;
+  }
+
   &__camera-icon {
     position: absolute;
     top: 50%;
