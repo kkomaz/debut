@@ -90,6 +90,7 @@ export default function userReducer(state = defaultSession, action) {
     case REQUEST_SET_USER_AVATAR:
       return { ...state, avatarLoading: true }
     case SET_USER_AVATAR_FAIL:
+      toggleNotification('error', action.error)
       return { ...state, avatarLoading: false }
     case SET_USER_AVATAR_SUCCESS:
       toggleNotification('success', `${action.payload.username}'s avatar successfully updated!`)

@@ -22,7 +22,7 @@ function* setUserAvatarSaga(action) {
     const user = yield call(setUserAvatar, action)
     yield put({ type: SET_USER_AVATAR_SUCCESS, payload: user })
   } catch (e) {
-    yield put({ type: SET_USER_AVATAR_FAIL })
+    yield put({ type: SET_USER_AVATAR_FAIL, error: e.message })
   }
 }
 
