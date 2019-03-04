@@ -305,7 +305,7 @@ class UsernamePage extends Component {
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
                 {
-                  loading ?
+                  (loading || user.avatarLoading) ?
                   <HeroAvatarLoader /> :
                   <AvatarForm
                     src={src}
@@ -484,7 +484,8 @@ const mapStateToProps = (state, ownProps) => {
 
   const user = {
     data: _.find(state.user.users, (user) => user._id === username),
-    loading: state.user.loading
+    loading: state.user.loading,
+    avatarLoading: state.user.avatarLoading,
   }
 
   const shares = {
