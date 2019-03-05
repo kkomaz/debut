@@ -178,7 +178,7 @@ class Page extends Component {
                           }}
                         >
                           <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                            <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
+                            <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
                             <Card.Content className="page__content">
                               <p className="page__username-text">{user.username}</p>
                             </Card.Content>

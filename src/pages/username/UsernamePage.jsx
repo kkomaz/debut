@@ -35,7 +35,7 @@ import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
 import { lookupProfile } from 'blockstack'
-import { nodeEnv, appUrl } from 'utils/constants'
+import { appUrl } from 'utils/constants'
 import { AvatarForm } from 'components/User'
 
 // Action Imports
@@ -303,12 +303,13 @@ class UsernamePage extends Component {
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
                 {
-                  (loading || user.avatarLoading) ?
+                  (user.loading || loading || user.avatarLoading) ?
                   <HeroAvatarLoader /> :
                   <AvatarForm
                     src={src}
                     user={user}
                     defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
                   />
                 }
               </Media.Item>

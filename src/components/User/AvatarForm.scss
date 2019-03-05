@@ -7,13 +7,18 @@
     img {
       border: 10px solid $pink;
       border-radius: 100%;
-      cursor: pointer;
       height: 200px;
       width: 200px;
     }
 
     &--hovered {
       opacity: 0.7;
+    }
+
+    &--clickable {
+      img {
+        cursor: pointer;
+      }
     }
   }
 

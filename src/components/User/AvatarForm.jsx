@@ -14,6 +14,7 @@ import {
 } from 'components/bulma'
 import { Icon } from 'components/icon'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
+import { HeroAvatarLoader } from 'components/Loader'
 
 // Action & util imports
 import { requestSetUserAvatar } from 'actions/user'
@@ -36,6 +37,7 @@ class AvatarForm extends Component {
   static propTypes = {
     src: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
+    sessionUser: PropTypes.object.isRequired,
   }
 
   setAvatarHoveredTrue = () => {
@@ -51,7 +53,10 @@ class AvatarForm extends Component {
   }
 
   openModal = () => {
-    this.setState({ showModal: true })
+    const { sessionUser, user } = this.props
+    if (sessionUser.username === user.data.username) {
+      this.setState({ showModal: true })
+    }
   }
 
   onCancel = () => {
@@ -90,18 +95,27 @@ class AvatarForm extends Component {
 
   render() {
     const { showModal } = this.state
-    const { user, defaultImgUrl } = this.props
+    const {
+      user,
+      defaultImgUrl,
+      sessionUser,
+    } = this.props
+
+    if (!user.data) {
+      return <HeroAvatarLoader />
+    }
 
     const iconAvatarClassNames = classNames({
       'debut-icon': true,
       'debut-icon--pointer': true,
       'avatar-form__camera-icon': true,
-      'avatar-form__camera-icon--hovered': this.state.avatarHovered,
+      'avatar-form__camera-icon--hovered': this.state.avatarHovered && sessionUser.username === user.data.username
     })
 
     const avatarFormImageClass = classNames({
       'avatar-form__image': true,
-      'avatar-form__image--hovered': this.state.avatarHovered
+      'avatar-form__image--clickable': sessionUser.username === user.data.username,
+      'avatar-form__image--hovered': this.state.avatarHovered && sessionUser.username === user.data.username
     })
 
     return (
