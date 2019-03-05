@@ -40,6 +40,7 @@ import { Icon } from 'components/icon'
 import { lookupProfile } from 'blockstack'
 import { appUrl } from 'utils/constants'
 import { AvatarForm } from 'components/User'
+import FollowingUser from 'components/Follow/FollowingUsers'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
@@ -283,6 +284,7 @@ class UsernamePage extends Component {
       shares,
       username,
       user,
+      follow,
     } = this.props
 
     const {
@@ -490,6 +492,13 @@ class UsernamePage extends Component {
             </Columns.Column>
           </Columns>
         }
+        {
+          activeTab === 'following' &&
+          <FollowingUser
+            follow={follow}
+            setActiveTab={this.setActiveTab}
+          />
+        }
       </Container>
     )
   }
@@ -511,9 +520,12 @@ const mapStateToProps = (state, ownProps) => {
     loading: share.shares.loading
   }
 
+  const follow = state.follow[username]
+
   return {
     shares,
     user,
+    follow,
   }
 }
 
