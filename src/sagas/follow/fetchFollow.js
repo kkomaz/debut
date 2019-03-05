@@ -11,7 +11,10 @@ const fetchFollow = (action) => {
 function* fetchFollowSaga(action) {
   try {
     const follow = yield call(fetchFollow, action)
-    yield put({ type: FETCH_FOLLOW_SUCCESS, payload: follow.attrs || {} })
+    yield put({ type: FETCH_FOLLOW_SUCCESS, payload: {
+      username: action.payload.username,
+      follow: follow || {},
+    }})
   } catch (error) {
     yield put({ type: FETCH_FOLLOW_FAIL, payload: error.message })
   }
