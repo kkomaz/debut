@@ -5,10 +5,7 @@ import { User } from 'radiks'
 
 const setUserAvatar = async (action) => {
   const { payload } = action
-  const dUser = await DebutUser.findOne({ username: payload.username })
   const user = await User.findOne({ username: payload.username })
-
-  debugger
 
   user.update({
     profileImgUrl: payload.profileImgUrl
