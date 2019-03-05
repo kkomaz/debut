@@ -5,14 +5,15 @@ import {
   FETCH_PAGINATED_USERS_FAIL,
   FETCH_ALL_USERS_SUCCESS
 } from 'actions'
-import { User } from 'radiks'
+import DebutUser from 'model/debutUser'
 
 const fetchPaginatedUsers = (action) => {
-  return User.fetchList({
+  const result = DebutUser.fetchList({
     sort: '-createdAt',
     limit: 16,
     offset: action.payload.offset,
   })
+  return result
 }
 
 function* fetchPaginatedUsersSaga(action) {
@@ -20,7 +21,7 @@ function* fetchPaginatedUsersSaga(action) {
     const radiksUsers = yield call(fetchPaginatedUsers, action);
 
     const users = _.map(radiksUsers, (user) => {
-      return user.attrs
+      return user.data
     })
 
     const payload = {

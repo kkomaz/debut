@@ -10,7 +10,6 @@ import {
   Container,
   Content,
   Media,
-  Image,
   Heading,
   Modal,
   Section,
@@ -36,7 +35,8 @@ import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
 import { lookupProfile } from 'blockstack'
-import { nodeEnv } from 'utils/constants'
+import { appUrl } from 'utils/constants'
+import { AvatarForm } from 'components/User'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
@@ -65,6 +65,7 @@ class UsernamePage extends Component {
       }, 8000),
       error: false,
       isPopoverOpen: false,
+      avatarHovered: false,
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -109,9 +110,9 @@ class UsernamePage extends Component {
           return v
         })
 
-        // Check for older browsers
-        if (process.env.NODE_ENV === nodeEnv && (
-          !apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))
+        // Check for older browsers -- TODO: Remove this after
+        if (process.env.NODE_ENV === 'production' && (
+          !apps || (apps.length > 0 && !_.includes(apps, appUrl))
         )) {
           if (sessionUser.username === username) {
             throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
@@ -302,15 +303,14 @@ class UsernamePage extends Component {
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
                 {
-                  loading ?
+                  (user.loading || loading || user.avatarLoading) ?
                   <HeroAvatarLoader /> :
-                  <Image
-                    className="username__avatar"
-                    alt="100x100"
-                    renderAs="p"
+                  <AvatarForm
                     src={src}
-                    style={{ margin: 0 }}
-                    />
+                    user={user}
+                    defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
+                  />
                 }
               </Media.Item>
               <Media.Item
@@ -483,7 +483,8 @@ const mapStateToProps = (state, ownProps) => {
 
   const user = {
     data: _.find(state.user.users, (user) => user._id === username),
-    loading: state.user.loading
+    loading: state.user.loading,
+    avatarLoading: state.user.avatarLoading,
   }
 
   const shares = {

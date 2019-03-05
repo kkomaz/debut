@@ -1,10 +1,10 @@
 import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
 import { FETCH_ALL_USERS_SUCCESS, FETCH_ALL_USERS_FAIL } from 'actions'
-import { User } from 'radiks'
+import DebutUser from 'model/debutUser'
 
 const fetchAllUsers = (action) => {
-  return User.fetchList()
+  return DebutUser.fetchList()
 }
 
 function* fetchAllUsersSaga(action) {
@@ -12,7 +12,7 @@ function* fetchAllUsersSaga(action) {
     const radiksUsers = yield call(fetchAllUsers, action);
 
     const users = _.map(radiksUsers, (user) => {
-      return user.attrs
+      return user.data
     })
 
     yield put({ type: FETCH_ALL_USERS_SUCCESS, payload: users });
