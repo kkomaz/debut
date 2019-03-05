@@ -1,11 +1,13 @@
 // Library imports
 import React, { Component } from 'react'
 import { UserSession } from 'blockstack'
+import _ from 'lodash'
 
 // Utility Imports
 import { appConfig } from 'utils/constants'
 import RootRoute from 'routes/RootRoute'
 import debutUser from 'model/debutUser'
+import { User } from 'radiks'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -41,11 +43,17 @@ class App extends Component {
       await user.fetch({ decrypt: false })
 
       try {
-        const radiksUser = await debutUser.findOne({ username: userData.username })
+        const radiksUser = await User.findOne({ username: userData.username })
 
         if (!radiksUser) {
-          const currentUser = await debutUser.createWithCurrentUser()
-          console.log(currentUser)
+          const currentUser = await User.createWithCurrentUser()
+          const profileImgUrl = _.get(currentUser, 'attrs.profile.image[0].contentUrl', null)
+          if (profileImgUrl) {
+            currentUser.update({
+              profileImgUrl,
+            })
+            await currentUser.save()
+          }
         }
       } catch (e) {
         console.log(e.message)

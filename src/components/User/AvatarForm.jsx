@@ -90,7 +90,7 @@ class AvatarForm extends Component {
 
   render() {
     const { showModal } = this.state
-    const { user } = this.props
+    const { user, defaultImgUrl } = this.props
 
     const iconAvatarClassNames = classNames({
       'debut-icon': true,
@@ -110,7 +110,7 @@ class AvatarForm extends Component {
           className={avatarFormImageClass}
           alt="100x100"
           renderAs="p"
-          src={this.props.user.data.profileImgUrl}
+          src={this.props.user.data.profileImgUrl || defaultImgUrl}
           style={{ margin: 0 }}
           onMouseEnter={this.setAvatarHoveredTrue}
           onMouseLeave={this.setAvatarHoveredFalse}

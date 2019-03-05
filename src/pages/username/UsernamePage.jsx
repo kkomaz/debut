@@ -35,7 +35,7 @@ import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
 import { lookupProfile } from 'blockstack'
-import { nodeEnv } from 'utils/constants'
+import { nodeEnv, appUrl } from 'utils/constants'
 import { AvatarForm } from 'components/User'
 
 // Action Imports
@@ -110,9 +110,9 @@ class UsernamePage extends Component {
           return v
         })
 
-        // Check for older browsers
-        if (process.env.NODE_ENV === nodeEnv && (
-          !apps || (apps.length > 0 && !_.includes(apps, 'https://debutapp.social'))
+        // Check for older browsers -- TODO: Remove this after
+        if (process.env.NODE_ENV === 'production' && (
+          !apps || (apps.length > 0 && !_.includes(apps, appUrl))
         )) {
           if (sessionUser.username === username) {
             throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
