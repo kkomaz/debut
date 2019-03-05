@@ -23,6 +23,9 @@ import {
   UserFollowing
 } from 'components/User'
 import {
+  UserTabs
+} from 'components/Tab'
+import {
   NoShares,
   ShareListItem,
   ShareForm,
@@ -299,7 +302,7 @@ class UsernamePage extends Component {
     return (
       <Container>
         <Columns>
-          <Columns.Column size={12}>
+          <Columns.Column size={12} style={{ paddingBottom: '0' }}>
             <Media className="username__hero">
               <Media.Item renderAs="figure" position="left">
                 {
@@ -330,6 +333,9 @@ class UsernamePage extends Component {
                 />
               </Media.Item>
             </Media>
+          </Columns.Column>
+          <Columns.Column size={12} style={{ paddingTop: '0' }}>
+            <UserTabs />
           </Columns.Column>
         </Columns>
 

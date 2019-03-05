@@ -1,0 +1,10 @@
+@import 'src/variables';
+
+.user-tabs {
+  background: $white;
+
+  &.tabs.is-boxed li.is-active a {
+    background: $blue;
+    color: $white;
+  }
+}
