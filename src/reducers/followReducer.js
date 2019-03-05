@@ -11,7 +11,6 @@ export default function followReducer(state = defaultState, action) {
     case FETCH_FOLLOW_SUCCESS:
       return { ...state, [action.payload.username]: action.payload.follow }
     case SET_UNFOLLOW_SUCCESS:
-      return { ...state, [action.payload.username]: action.payload }
     case SET_FOLLOW_SUCCESS:
       return { ...state,
         [action.payload.following.username]: action.payload.following,

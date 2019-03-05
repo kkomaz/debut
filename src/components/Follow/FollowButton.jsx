@@ -33,9 +33,10 @@ class FollowButton extends Component {
   }
 
   unfollowUser = async () => {
-    const { username, sessionFollow, sessionUser } = this.props
+    const { username, sessionFollow, viewedFollow, sessionUser } = this.props
     const following = _.get(sessionFollow, 'following', [])
-    this.props.requestUnfollow(sessionUser.username, username, following)
+    const followers = _.get(viewedFollow, 'followers', [])
+    this.props.requestUnfollow(sessionUser.username, username, following, followers)
   }
 
   render() {
