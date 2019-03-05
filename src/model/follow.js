@@ -6,7 +6,9 @@ class Follow extends Model {
   static schema = {
     username: { type: String, decrypted: true },
     followers: { type: Array, decrypted: true },
-    following: { type: Array, decrypted: true }
+    followersCount: { type: Number, decrypted: true },
+    following: { type: Array, decrypted: true },
+    followingCount: { type: Number, decrypted: true }
   }
 }
 
