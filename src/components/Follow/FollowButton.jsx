@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { Button } from 'components/bulma'
+import { connect } from 'react-redux'
+import { requestFollow, requestFetchFollow} from 'actions/follow'
 import './FollowButton.scss'
 
 class FollowButton extends Component {
@@ -13,26 +15,14 @@ class FollowButton extends Component {
     username: PropTypes.string.isRequired,
   }
 
+  componentDidMount = async () => {
+    const { username } = this.props
+
+    this.props.requestFetchFollow(username)
+  }
+
   followUser = async () => {
-    const { username, setSessionUserState, user, sessionUser, defaultImgUrl } = this.props
-    const options = { encrypt: false }
-    const userObj = {
-      username,
-      imageUrl: _.get(user, 'data.profile.image[0].contentUrl', defaultImgUrl)
-    }
-
-    const params = [...sessionUser.following, userObj]
-
-    try {
-      const result = await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-
-      if (!result) {
-        throw new Error('Unable to follow user.')
-      }
-      setSessionUserState('following', params)
-    } catch (e) {
-      setSessionUserState('following', sessionUser.following)
-    }
+    // this.props.requestFollow()
   }
 
   unfollowUser = async () => {
@@ -83,4 +73,7 @@ class FollowButton extends Component {
   }
 }
 
-export default FollowButton
+export default connect(null, {
+  requestFollow,
+  requestFetchFollow,
+})(FollowButton)
