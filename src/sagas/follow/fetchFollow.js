@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
 import { FETCH_FOLLOW_SUCCESS, FETCH_FOLLOW_FAIL } from 'actions'
 import Follow from 'model/follow'
@@ -13,7 +14,7 @@ function* fetchFollowSaga(action) {
     const follow = yield call(fetchFollow, action)
     yield put({ type: FETCH_FOLLOW_SUCCESS, payload: {
       username: action.payload.username,
-      follow: follow || {},
+      follow: _.get(follow, 'attrs', null) || {},
     }})
   } catch (error) {
     yield put({ type: FETCH_FOLLOW_FAIL, payload: error.message })

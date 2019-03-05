@@ -22,7 +22,9 @@ class FollowButton extends Component {
   }
 
   followUser = async () => {
-    // this.props.requestFollow()
+    const { username, followState, sessionUser } = this.props
+    const following = _.get(followState, 'following', [])
+    this.props.requestFollow(sessionUser.username, username, following)
   }
 
   unfollowUser = async () => {
@@ -73,7 +75,15 @@ class FollowButton extends Component {
   }
 }
 
-export default connect(null, {
+const mapStateToProps = (state, ownProps) => {
+  const followState = state.follow[ownProps.username]
+
+  return {
+    followState
+  }
+}
+
+export default connect(mapStateToProps, {
   requestFollow,
   requestFetchFollow,
 })(FollowButton)
