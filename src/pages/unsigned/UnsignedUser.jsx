@@ -12,7 +12,7 @@ import { Icon } from 'components/icon'
 import './UnsignedUser.scss'
 import unsignedUserImage from 'assets/unsigned-user.png'
 import { lookupProfile } from 'blockstack'
-import { User } from 'radiks'
+import DebutUser from 'model/debutUser'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceRedirect } from 'utils/auth'
 import { List } from 'react-content-loader'
@@ -51,7 +51,7 @@ class UnsignedUsers extends Component {
     let profile
 
     // Radiks Check
-    const radiksCheck = await User.findOne({ username }) // Tell Hank about User.findById() works with any Id
+    const radiksCheck = await DebutUser.findOne({ username }) // Tell Hank about User.findById() works with any Id
 
     // Profile lookup -- certain users return different apps array.
     // if profile does not exist go directly to proofs

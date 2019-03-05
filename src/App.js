@@ -5,7 +5,7 @@ import { UserSession } from 'blockstack'
 // Utility Imports
 import { appConfig } from 'utils/constants'
 import RootRoute from 'routes/RootRoute'
-import { User } from 'radiks';
+import debutUser from 'model/debutUser'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -37,14 +37,14 @@ class App extends Component {
         })
       }
 
-      const user = User.currentUser()
+      const user = debutUser.currentUser()
       await user.fetch({ decrypt: false })
 
       try {
-        const radiksUser = await User.findOne({ username: userData.username })
+        const radiksUser = await debutUser.findOne({ username: userData.username })
 
         if (!radiksUser) {
-          const currentUser = await User.createWithCurrentUser()
+          const currentUser = await debutUser.createWithCurrentUser()
           console.log(currentUser)
         }
       } catch (e) {

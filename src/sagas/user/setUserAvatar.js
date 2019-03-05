@@ -1,11 +1,10 @@
 import { put, call } from 'redux-saga/effects'
 import { SET_USER_AVATAR_SUCCESS, SET_USER_AVATAR_FAIL } from 'actions'
 import DebutUser from 'model/debutUser'
-import { User } from 'radiks'
 
 const setUserAvatar = async (action) => {
   const { payload } = action
-  const user = await User.findOne({ username: payload.username })
+  const user = await DebutUser.findOne({ username: payload.username })
 
   user.update({
     profileImgUrl: payload.profileImgUrl
