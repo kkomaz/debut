@@ -2,6 +2,8 @@
 
 .user-tabs {
   background: $white;
+  padding-left: 200px;
+  padding-right: 100px;
 
   &.tabs.is-boxed li.is-active a {
     background: $blue;

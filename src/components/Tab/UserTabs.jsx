@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { Tabs } from 'components/bulma'
 import { connect } from 'react-redux'
 import './UserTabs.scss'
 
 class UserTabs extends Component {
-  state = {
-    active: 'profile'
+  static propTypes = {
+    setActiveTab: PropTypes.func.isRequired,
+    activeTab: PropTypes.string.isRequired,
   }
 
   onClick = (value) => {
-    this.setState({ active: value })
+    this.props.setActiveTab(value)
   }
 
   render() {
-    const { active } = this.state
-    const { viewedFollow } = this.props
+    const { viewedFollow, activeTab } = this.props
 
     return (
       <Tabs
@@ -26,21 +27,21 @@ class UserTabs extends Component {
       >
         <Tabs.Tab
           className="user-tabs__tab"
-          active={active === 'profile'}
+          active={activeTab === 'profile'}
           onClick={() => this.onClick('profile')}
         >
           Profile
         </Tabs.Tab>
         <Tabs.Tab
           className="user-tabs__tab"
-          active={active === 'following'}
+          active={activeTab === 'following'}
           onClick={() => this.onClick('following')}
         >
           Following {_.get(viewedFollow, 'followingCount', 0)}
         </Tabs.Tab>
         <Tabs.Tab
           className="user-tabs__tab"
-          active={active === 'followers'}
+          active={activeTab === 'followers'}
           onClick={() => this.onClick('followers')}
         >
           Followers {_.get(viewedFollow, 'followerCount', 0)}

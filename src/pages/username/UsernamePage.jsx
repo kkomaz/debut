@@ -69,6 +69,7 @@ class UsernamePage extends Component {
       error: false,
       isPopoverOpen: false,
       avatarHovered: false,
+      activeTab: 'profile'
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -267,6 +268,10 @@ class UsernamePage extends Component {
     return this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
   }
 
+  setActiveTab = (value) => {
+    this.setState({ activeTab: value })
+  }
+
   render() {
     const {
       sessionUser,
@@ -282,6 +287,7 @@ class UsernamePage extends Component {
 
     const {
       adminMode,
+      activeTab,
       bottomReached,
       loading,
       userInfo,
@@ -335,149 +341,155 @@ class UsernamePage extends Component {
             </Media>
           </Columns.Column>
           <Columns.Column size={12} style={{ paddingTop: '0' }}>
-            <UserTabs username={username} />
+            <UserTabs
+              username={username}
+              setActiveTab={this.setActiveTab}
+              activeTab={activeTab}
+            />
           </Columns.Column>
         </Columns>
 
-        <Columns className="mt-half">
-          <Columns.Column size={5}>
-            <div className="username__description mb-one">
-              <Card className="user-description">
-                <Card.Content>
-                  <Content>
-                    <Loadable loading={user.loading || !user.data}>
-                      <UserDescription
-                        adminMode={adminMode}
-                        displayView={displayView}
-                        loading={loading}
-                        sessionUser={sessionUser}
-                        user={user}
-                        username={username}
-                        onCreateEdit={this.onCreateEdit}
-                        onCancel={this.onCancel}
-                        onSubmit={this.onSubmit}
-                        />
-                    </Loadable>
-                  </Content>
-                </Card.Content>
-              </Card>
-            </div>
-
-            <div className="username__dapps mb-one">
-              <UserDapps
-                adminMode={adminMode}
-                loading={loading}
-                userInfo={userInfo}
-              />
-            </div>
-
-            <div className="username__following mb-one">
-              <UserFollowing
-                adminMode={adminMode}
-                history={history}
-                loading={loading}
-                userInfo={userInfo}
-              />
-            </div>
-          </Columns.Column>
-
-          <Columns.Column
-            size={7}
-            ref={(rightElement) => this.rightElement = rightElement}
-          >
-            <Columns>
-              <Columns.Column size={12}>
-                {
-                  adminMode &&
-                  <Card className="mb-one">
-                    <Card.Content>
-                      <Content>
-                        <Loadable loading={shares.loading && shares.list.length === 0}>
-                          <div>
-                            <Popover
-                              isOpen={this.state.isPopoverOpen}
-                              position="right"
-                              padding={30}
-                              onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                              content={({ position, targetRect, popoverRect }) => (
-                                <SharePopoverContainer
-                                  position={position}
-                                  targetRect={targetRect}
-                                  popoverRect={popoverRect}
-                                  togglePopover={this.togglePopover}
-                                />
-                              )}
-                            >
-                              <Icon
-                                className="debut-icon debut-icon--pointer username__share-icon-question"
-                                icon="IconQuestionCircle"
-                                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                                size={16}
-                                linkStyles={{
-                                  position: 'absolute',
-                                  top: '0',
-                                  right: '5px',
-                                  height: '30px'
-                                }}
-                              />
-                            </Popover>
-                            <ShareForm username={username} />
-                          </div>
-                        </Loadable>
-                      </Content>
-                    </Card.Content>
-                  </Card>
-                }
-
-                {
-                  !adminMode && _.isEqual(shares.list.length, 0) &&
-                  <NoShares username={username} />
-                }
-
-                <CSSTransitionGroup
-                  transitionName="share-list-item-transition"
-                  transitionEnterTimeout={500}
-                  transitionLeaveTimeout={300}
-                >
-                  {
-                    _.map(shares.list, (share, index) => {
-                      const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
-
-                      return (
-                        <ShareListItem
-                          key={share._id}
-                          cardClass={cardClass}
-                          share={share}
+        {
+          activeTab === 'profile' && <Columns className="mt-half">
+            <Columns.Column size={5}>
+              <div className="username__description mb-one">
+                <Card className="user-description">
+                  <Card.Content>
+                    <Content>
+                      <Loadable loading={user.loading || !user.data}>
+                        <UserDescription
+                          adminMode={adminMode}
+                          displayView={displayView}
+                          loading={loading}
+                          sessionUser={sessionUser}
+                          user={user}
                           username={username}
-                          onEditClick={this.openModal}
-                        />
-                      )
-                    })
+                          onCreateEdit={this.onCreateEdit}
+                          onCancel={this.onCancel}
+                          onSubmit={this.onSubmit}
+                          />
+                      </Loadable>
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </div>
+
+              <div className="username__dapps mb-one">
+                <UserDapps
+                  adminMode={adminMode}
+                  loading={loading}
+                  userInfo={userInfo}
+                />
+              </div>
+
+              <div className="username__following mb-one">
+                <UserFollowing
+                  adminMode={adminMode}
+                  history={history}
+                  loading={loading}
+                  userInfo={userInfo}
+                />
+              </div>
+            </Columns.Column>
+
+            <Columns.Column
+              size={7}
+              ref={(rightElement) => this.rightElement = rightElement}
+            >
+              <Columns>
+                <Columns.Column size={12}>
+                  {
+                    adminMode &&
+                    <Card className="mb-one">
+                      <Card.Content>
+                        <Content>
+                          <Loadable loading={shares.loading && shares.list.length === 0}>
+                            <div>
+                              <Popover
+                                isOpen={this.state.isPopoverOpen}
+                                position="right"
+                                padding={30}
+                                onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                                content={({ position, targetRect, popoverRect }) => (
+                                  <SharePopoverContainer
+                                    position={position}
+                                    targetRect={targetRect}
+                                    popoverRect={popoverRect}
+                                    togglePopover={this.togglePopover}
+                                  />
+                                )}
+                              >
+                                <Icon
+                                  className="debut-icon debut-icon--pointer username__share-icon-question"
+                                  icon="IconQuestionCircle"
+                                  onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                                  size={16}
+                                  linkStyles={{
+                                    position: 'absolute',
+                                    top: '0',
+                                    right: '5px',
+                                    height: '30px'
+                                  }}
+                                />
+                              </Popover>
+                              <ShareForm username={username} />
+                            </div>
+                          </Loadable>
+                        </Content>
+                      </Card.Content>
+                    </Card>
                   }
-                </CSSTransitionGroup>
-                {
-                  bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
-                }
-              </Columns.Column>
-            </Columns>
-          </Columns.Column>
-        </Columns>
-        <Modal
-          show={showModal}
-          onClose={this.closeModal}
-          closeOnEsc
-        >
-          <Modal.Content>
-            <Section style={{ backgroundColor: 'white' }}>
-              <ShareForm
-                username={username}
-                currentShare={this.state.currentShare}
-                onCancel={this.closeModal}
-                onComplete={this.closeModal}
-              />
-            </Section>
-          </Modal.Content>
-        </Modal>
+
+                  {
+                    !adminMode && _.isEqual(shares.list.length, 0) &&
+                    <NoShares username={username} />
+                  }
+
+                  <CSSTransitionGroup
+                    transitionName="share-list-item-transition"
+                    transitionEnterTimeout={500}
+                    transitionLeaveTimeout={300}
+                  >
+                    {
+                      _.map(shares.list, (share, index) => {
+                        const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
+
+                        return (
+                          <ShareListItem
+                            key={share._id}
+                            cardClass={cardClass}
+                            share={share}
+                            username={username}
+                            onEditClick={this.openModal}
+                          />
+                        )
+                      })
+                    }
+                  </CSSTransitionGroup>
+                  {
+                    bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
+                  }
+                </Columns.Column>
+              </Columns>
+              <Modal
+                show={showModal}
+                onClose={this.closeModal}
+                closeOnEsc
+              >
+                <Modal.Content>
+                  <Section style={{ backgroundColor: 'white' }}>
+                    <ShareForm
+                      username={username}
+                      currentShare={this.state.currentShare}
+                      onCancel={this.closeModal}
+                      onComplete={this.closeModal}
+                    />
+                  </Section>
+                </Modal.Content>
+              </Modal>
+            </Columns.Column>
+          </Columns>
+        }
       </Container>
     )
   }
