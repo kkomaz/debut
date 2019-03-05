@@ -3,7 +3,11 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { Button } from 'components/bulma'
 import { connect } from 'react-redux'
-import { requestFollow, requestFetchFollow} from 'actions/follow'
+import {
+  requestFollow,
+  requestUnfollow,
+  requestFetchFollow,
+} from 'actions/follow'
 import './FollowButton.scss'
 
 class FollowButton extends Component {
@@ -23,27 +27,14 @@ class FollowButton extends Component {
 
   followUser = async () => {
     const { username, sessionFollow, sessionUser } = this.props
-    const following = _.get(sessionFollow, `following`, [])
+    const following = _.get(sessionFollow, 'following', [])
     this.props.requestFollow(sessionUser.username, username, following)
   }
 
   unfollowUser = async () => {
-    const { username, setSessionUserState, sessionUser } = this.props
-    const options = { encrypt: false }
-
-    const params = _.filter(sessionUser.following, (user) => {
-      return user.username !== username
-    })
-
-    try {
-      const result = await sessionUser.userSession.putFile(`users-following-${sessionUser.username}.json`, JSON.stringify(params), options)
-      if (!result) {
-        throw new Error('Unable to follow user.')
-      }
-      setSessionUserState('following', params)
-    } catch (e) {
-      setSessionUserState('following', sessionUser.following)
-    }
+    const { username, sessionFollow, sessionUser } = this.props
+    const following = _.get(sessionFollow, 'following', [])
+    this.props.requestUnfollow(sessionUser.username, username, following)
   }
 
   render() {
@@ -87,5 +78,6 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(mapStateToProps, {
   requestFollow,
+  requestUnfollow,
   requestFetchFollow,
 })(FollowButton)
