@@ -335,7 +335,7 @@ class UsernamePage extends Component {
             </Media>
           </Columns.Column>
           <Columns.Column size={12} style={{ paddingTop: '0' }}>
-            <UserTabs />
+            <UserTabs username={username} />
           </Columns.Column>
         </Columns>
 

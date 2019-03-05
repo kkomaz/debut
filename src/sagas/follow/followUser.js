@@ -18,20 +18,23 @@ const followUser = async (action) => {
     return { ...createdFollow.attrs, _id: createdFollow._id }
   }
 
-  const following = [...payload.following, payload.userame]
+  const following = [...payload.following, payload.username]
   follow.update({
     following,
     followingCount: following.length
   })
+
   const updatedFollow = follow.save()
-  return updatedFollow.attrs
+  return updatedFollow
 }
 
 function* followUserSaga(action) {
   try {
     const follow = yield call(followUser, action)
-    yield put({ type: SET_FOLLOW_SUCCESS, payload: follow })
+    const result = follow.attrs ? follow.attrs : follow
+    yield put({ type: SET_FOLLOW_SUCCESS, payload: result })
   } catch (error) {
+    console.log(error.message)
     yield put({ type: SET_FOLLOW_FAIL, payload: error.message })
   }
 }

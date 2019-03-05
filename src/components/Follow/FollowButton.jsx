@@ -22,8 +22,8 @@ class FollowButton extends Component {
   }
 
   followUser = async () => {
-    const { username, followState, sessionUser } = this.props
-    const following = _.get(followState, 'following', [])
+    const { username, sessionFollow, sessionUser } = this.props
+    const following = _.get(sessionFollow, `following`, [])
     this.props.requestFollow(sessionUser.username, username, following)
   }
 
@@ -47,7 +47,7 @@ class FollowButton extends Component {
   }
 
   render() {
-    const { sessionUser, username } = this.props
+    const { sessionUser, sessionFollow, username } = this.props
 
     if (_.isEqual(sessionUser.username, username)) {
       return null
@@ -56,7 +56,7 @@ class FollowButton extends Component {
     return (
       <React.Fragment>
         {
-          _.find(sessionUser.following, (user) => _.isEqual(user.username, username)) ?
+          _.includes(sessionFollow.following, username) ?
           <Button
             className="follow-button mt-one"
             onClick={this.unfollowUser}
@@ -76,10 +76,12 @@ class FollowButton extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const followState = state.follow[ownProps.username]
+  const viewedfollow = state.follow[ownProps.username] || {}
+  const sessionFollow = state.follow[ownProps.sessionUser.username] || {}
 
   return {
-    followState
+    viewedfollow,
+    sessionFollow
   }
 }
 

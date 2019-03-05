@@ -1,4 +1,4 @@
-import { takeLatest } from 'redux-saga/effects'
+import { takeLatest, takeEvery } from 'redux-saga/effects'
 import {
   REQUEST_FOLLOW,
   REQUEST_FETCH_FOLLOW,
@@ -9,7 +9,7 @@ import fetchFollow from './fetchFollow'
 
 export default function* shareSaga() {
   yield [
-    takeLatest(REQUEST_FETCH_FOLLOW, fetchFollow),
+    takeEvery(REQUEST_FETCH_FOLLOW, fetchFollow),
     takeLatest(REQUEST_FOLLOW, followUser),
   ]
 }

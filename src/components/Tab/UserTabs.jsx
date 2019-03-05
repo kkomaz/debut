@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import _ from 'lodash'
 import { Tabs } from 'components/bulma'
+import { connect } from 'react-redux'
 import './UserTabs.scss'
 
 class UserTabs extends Component {
@@ -10,8 +12,10 @@ class UserTabs extends Component {
   onClick = (value) => {
     this.setState({ active: value })
   }
+
   render() {
     const { active } = this.state
+    const { viewedFollow } = this.props
 
     return (
       <Tabs
@@ -32,18 +36,24 @@ class UserTabs extends Component {
           active={active === 'following'}
           onClick={() => this.onClick('following')}
         >
-          Following
+          Following {_.get(viewedFollow, 'followingCount', 0)}
         </Tabs.Tab>
         <Tabs.Tab
           className="user-tabs__tab"
           active={active === 'followers'}
           onClick={() => this.onClick('followers')}
         >
-          Followers
+          Followers {_.get(viewedFollow, 'followerCount', 0)}
         </Tabs.Tab>
       </Tabs>
     )
   }
 }
 
-export default UserTabs
+const mapStateToProps = (state, ownProps) => {
+  return {
+    viewedFollow: state.follow[ownProps.username] || {}
+  }
+}
+
+export default connect(mapStateToProps)(UserTabs)
