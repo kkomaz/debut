@@ -12,6 +12,7 @@ import { List } from 'react-content-loader'
 import UsernamePage from 'pages/username/UsernamePage'
 import { UserContext } from 'components/User/UserProvider'
 import { UserHero } from 'components/User'
+import FollowingUsers from 'pages/username/following/FollowingUsers'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -140,10 +141,13 @@ class UsernameRoute extends Component {
               />
             }
           />
-          <Route
-            path={`${match.url}/following`}
-            render={() => <div>Hello following</div>}
-          />
+          {
+            follow &&
+            <Route
+              path={`${match.url}/following`}
+              render={() => <FollowingUsers follow={follow} />}
+            />
+          }
           <Route
             path={`${match.url}/followers`}
             render={() => <div>Hello followers</div>}

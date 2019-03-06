@@ -19,7 +19,6 @@ class FollowingUsers extends Component {
 
   static propTypes = {
     follow: PropTypes.object.isRequired,
-    setActiveTab: PropTypes.func.isRequired,
   }
 
   componentDidMount = async () => {
@@ -55,7 +54,6 @@ class FollowingUsers extends Component {
 
   onBoxClick = (user) => {
     const { history } = this.props
-    this.props.setActiveTab('profile')
     history.push(`/${user.username}`)
   }
 

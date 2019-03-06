@@ -7,8 +7,20 @@ import { withRouter } from 'react-router-dom'
 import './UserTabs.scss'
 
 class UserTabs extends Component {
-  state = {
-    activeTab: 'profile'
+  constructor(props) {
+    super(props)
+
+    let activeTab
+    activeTab = _.last(props.history.location.pathname.split('/'))
+    const followArray = ['following', 'followers']
+
+    if (!_.includes(followArray, activeTab)) {
+      activeTab = 'profile'
+    }
+
+    this.state = {
+      activeTab
+    }
   }
 
   static propTypes = {
