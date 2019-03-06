@@ -32,13 +32,10 @@ import {
 } from 'components/Share'
 import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { List } from 'react-content-loader'
 import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
-import { lookupProfile } from 'blockstack'
-import { appUrl } from 'utils/constants'
 import { AvatarForm } from 'components/User'
 import FollowingUser from 'components/Follow/FollowingUsers'
 import FollowersUsers from 'components/Follow/FollowersUsers'
@@ -95,7 +92,7 @@ class UsernamePage extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, history, user } = this.props
+    const { username, user } = this.props
     const { sessionUser } = this.context.state
 
     // Changing User Profiles
@@ -107,12 +104,7 @@ class UsernamePage extends Component {
     // Loading of single user complete
     if (!user.loading && prevProps.user.loading) {
       // If radiks user does not exist send to unsigned page
-      if (!user.data) {
-        return history.push({
-          pathname: `/unsigned/${username}`,
-        })
-      }
-      
+
       this.loadUserInfo(this.props.profile)
       this.props.requestFetchFollow(username)
       this.requestUserShares()

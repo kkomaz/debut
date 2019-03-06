@@ -31,20 +31,28 @@ class UsernameRoute extends Component {
     user: PropTypes.object.isRequired,
   }
 
-  componentDidMount = async () => {
-    this.fetchProfileInfo()
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    const { username } = this.props
+    const { username, user } = this.props
+
     if (username !== prevProps.username) {
+      this.fetchProfileInfo()
+    }
+
+    if (!user.loading && prevProps.user.loading) {
       this.fetchProfileInfo()
     }
   }
 
   fetchProfileInfo = async () => {
-    const { username, history } = this.props
+    const { username, history, user } = this.props
     const { sessionUser } = this.context.state
+
+    if (!user.data) {
+      return history.push({
+        pathname: `/unsigned/${username}`
+      })
+    }
+
     try {
       const profile = await lookupProfile(username)
       const apps = _.map(profile.apps, (k, v) => {
