@@ -86,6 +86,10 @@ class UsernamePage extends Component {
 
   async componentDidMount() {
     const { username } = this.props
+    // (no data or slim data then make request for full data)
+    // if (!user.data || (user.data && !user.data.basicInformation)) {
+    //   this.props.requestSingleUser(username)
+    // }
     this.props.requestSingleUser(username)
     window.addEventListener('scroll', this.handleScroll)
   }
@@ -108,41 +112,10 @@ class UsernamePage extends Component {
           pathname: `/unsigned/${username}`,
         })
       }
-
-      try {
-        // User look up is because apps return different data from radiks userfetchList
-        // Guranteed user will exist
-        const profile = await lookupProfile(username)
-
-        const apps = _.map(profile.apps, (k,v) => {
-          return v
-        })
-
-        // Check for older browsers -- TODO: Remove this after
-        if (process.env.NODE_ENV === 'production' && (
-          !apps || (apps.length > 0 && !_.includes(apps, appUrl))
-        )) {
-          if (sessionUser.username === username) {
-            throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
-          } else {
-            throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
-          }
-        }
-        this.loadUserInfo(profile)
-        this.props.requestFetchFollow(username)
-        this.requestUserShares()
-      } catch (e) {
-        this.setState({ error: true })
-
-        // If current user is viewing, redirect
-        if (sessionUser !== username) {
-          toggleNotification('warning', e.message)
-          return forceRedirect(history)
-        }
-
-        // If current user is the bad user, sign him out
-        return forceUserSignOut(sessionUser.userSession, e.message)
-      }
+      
+      this.loadUserInfo(this.props.profile)
+      this.props.requestFetchFollow(username)
+      this.requestUserShares()
     }
 
     if (this.state.loading === false) {
@@ -310,8 +283,6 @@ class UsernamePage extends Component {
         </div>
       )
     }
-
-    console.log(this.props.user)
 
     return (
       <Container>
@@ -520,18 +491,9 @@ class UsernamePage extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
-  const { share } = state
-
-  const shares = {
-    list: _.filter(state.share.shares.list, (share) => share.username === username),
-    full: share.shares.full,
-    loading: share.shares.loading
-  }
-
   const follow = state.follow[username]
 
   return {
-    shares,
     follow,
   }
 }

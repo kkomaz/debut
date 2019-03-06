@@ -4,17 +4,75 @@ import PropTypes from 'prop-types'
 import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import _ from 'lodash';
+import { lookupProfile } from 'blockstack'
+import { withRouter } from 'react-router-dom'
+import { List } from 'react-content-loader'
 
 // Component Imports
 import UsernamePage from 'pages/username/UsernamePage'
 import { UserContext } from 'components/User/UserProvider'
 
+// Util imports
+import { appUrl } from 'utils/constants'
+import toggleNotification from 'utils/notifier/toggleNotification'
+import { forceUserSignOut, forceRedirect } from 'utils/auth'
+
 class UsernameRoute extends Component {
+  state = {
+    error: false,
+    profile: {},
+  }
+
   static propTypes = {
     dapps: PropTypes.array.isRequired,
     match: PropTypes.object.isRequired,
+    shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
+  }
+
+  componentDidMount = async () => {
+    this.fetchProfileInfo()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { username } = this.props
+    if (username !== prevProps.username) {
+      this.fetchProfileInfo()
+    }
+  }
+
+  fetchProfileInfo = async () => {
+    const { username, history } = this.props
+    const { sessionUser } = this.context.state
+    try {
+      const profile = await lookupProfile(username)
+      const apps = _.map(profile.apps, (k, v) => {
+        return v
+      })
+
+      if (process.env.NODE_ENV === 'development' && (
+        !apps || (apps.length > 0 && !_.includes(apps, appUrl))
+      )) {
+        if (sessionUser.username === username) {
+          throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
+        } else {
+          throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
+        }
+      }
+      return this.setState({ profile })
+    } catch (e) {
+      // If current user is viewing, redirect
+      if (sessionUser !== username) {
+        toggleNotification('warning', e.message)
+        this.setState({ error: true })
+        return forceRedirect(history)
+      }
+
+      // If current user is the bad user, sign him out
+      this.setState({ error: true })
+      return forceUserSignOut(sessionUser.userSession, e.message)
+    }
   }
 
   render() {
@@ -22,8 +80,19 @@ class UsernameRoute extends Component {
       dapps,
       match,
       user,
+      shares,
       username,
     } = this.props
+
+    const { error, profile } = this.state
+
+    if (error) {
+      return (
+        <div>
+          <List />
+        </div>
+      )
+    }
 
     return (
       <Switch>
@@ -35,6 +104,8 @@ class UsernameRoute extends Component {
               user={user}
               username={username}
               dapps={dapps}
+              profile={profile}
+              shares={shares}
             />
           }
         />
@@ -53,6 +124,7 @@ class UsernameRoute extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
+  const { share } = state
 
   const user = {
     data: _.find(state.user.users, (user) => user._id === username),
@@ -60,10 +132,17 @@ const mapStateToProps = (state, ownProps) => {
     avatarLoading: state.user.avatarLoading
   }
 
+  const shares = {
+    list: _.filter(state.share.shares.list, (share) => share.username === username),
+    full: share.shares.full,
+    loading: share.shares.loading
+  }
+
   return {
-    user
+    user,
+    shares,
   }
 }
 
-export default connect(mapStateToProps)(UsernameRoute)
+export default withRouter(connect(mapStateToProps)(UsernameRoute))
 UsernameRoute.contextType = UserContext
