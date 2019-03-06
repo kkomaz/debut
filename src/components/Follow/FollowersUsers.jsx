@@ -11,7 +11,7 @@ import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 
-class FollowingUsers extends Component {
+class FollowersUsers extends Component {
   state = {
     offset: 0,
     users: [],
@@ -38,9 +38,9 @@ class FollowingUsers extends Component {
     const { follow } = this.props
     const { offset } = this.state
 
-    if (_.get(follow, 'following.length', 0) > 0) {
+    if (_.get(follow, 'followers.length', 0) > 0) {
       const result = await User.fetchList({
-        username: follow.following,
+        username: follow.followers,
         sort: '-createdAt',
         limit: 10,
         offset,
@@ -92,5 +92,5 @@ class FollowingUsers extends Component {
   }
 }
 
-export default withRouter(connect()(FollowingUsers))
-FollowingUsers.contextType = UserContext
+export default withRouter(connect()(FollowersUsers))
+FollowersUsers.contextType = UserContext

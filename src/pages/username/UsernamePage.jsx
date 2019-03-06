@@ -41,6 +41,7 @@ import { lookupProfile } from 'blockstack'
 import { appUrl } from 'utils/constants'
 import { AvatarForm } from 'components/User'
 import FollowingUser from 'components/Follow/FollowingUsers'
+import FollowersUsers from 'components/Follow/FollowersUsers'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
@@ -498,6 +499,14 @@ class UsernamePage extends Component {
           follow &&
           <FollowingUser
             className={activeTab === 'following' ? 'following-user' : 'following-user hidden'}
+            follow={follow}
+            setActiveTab={this.setActiveTab}
+          />
+        }
+        {
+          follow &&
+          <FollowersUsers
+            className={activeTab === 'followers' ? 'followers-user' : 'followers-user hidden'}
             follow={follow}
             setActiveTab={this.setActiveTab}
           />

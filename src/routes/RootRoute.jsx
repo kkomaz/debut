@@ -12,7 +12,6 @@ import UnsignedUser from 'pages/unsigned/UnsignedUser'
 import HelpPage from 'pages/help/HelpPage'
 import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
-import { requestFetchFollow} from 'actions/follow'
 
 class RootRoute extends Component {
   constructor(props) {
