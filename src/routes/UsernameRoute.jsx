@@ -17,6 +17,7 @@ import { UserHero } from 'components/User'
 import { appUrl } from 'utils/constants'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceUserSignOut, forceRedirect } from 'utils/auth'
+import { requestSingleUser } from 'actions/user'
 
 class UsernameRoute extends Component {
   state = {
@@ -26,17 +27,28 @@ class UsernameRoute extends Component {
 
   static propTypes = {
     dapps: PropTypes.array.isRequired,
+    follow: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
   }
 
+  async componentDidMount() {
+    const { username } = this.props
+    // (no data or slim data then make request for full data)
+    // if (!user.data || (user.data && !user.data.basicInformation)) {
+    //   this.props.requestSingleUser(username)
+    // }
+    this.props.requestSingleUser(username)
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { username, user } = this.props
 
     if (username !== prevProps.username) {
-      this.fetchProfileInfo()
+      this.props.requestSingleUser(username)
+      // this.fetchProfileInfo()
     }
 
     if (!user.loading && prevProps.user.loading) {
@@ -90,6 +102,7 @@ class UsernameRoute extends Component {
 
     const {
       dapps,
+      follow,
       match,
       user,
       shares,
@@ -121,6 +134,7 @@ class UsernameRoute extends Component {
                 user={user}
                 username={username}
                 dapps={dapps}
+                follow={follow}
                 profile={profile}
                 shares={shares}
               />
@@ -156,11 +170,16 @@ const mapStateToProps = (state, ownProps) => {
     loading: share.shares.loading
   }
 
+  const follow = state.follow[username]
+
   return {
     user,
     shares,
+    follow,
   }
 }
 
-export default withRouter(connect(mapStateToProps)(UsernameRoute))
+export default withRouter(connect(mapStateToProps, {
+  requestSingleUser,
+})(UsernameRoute))
 UsernameRoute.contextType = UserContext

@@ -29,14 +29,10 @@ import toggleNotification from 'utils/notifier/toggleNotification'
 import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
-import FollowingUser from 'components/Follow/FollowingUsers'
-import FollowersUsers from 'components/Follow/FollowersUsers'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
 import { addDappsToList } from 'actions/blockstack'
-import { requestSingleUser } from 'actions/user'
-import { requestFetchFollow} from 'actions/follow'
 import './UsernamePage.scss';
 
 class UsernamePage extends Component {
@@ -60,7 +56,6 @@ class UsernamePage extends Component {
       }, 8000),
       isPopoverOpen: false,
       avatarHovered: false,
-      activeTab: 'profile'
     }
 
     this.requestUserShares = _.debounce(this.requestUserShares, 300)
@@ -73,12 +68,9 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { username } = this.props
-    // (no data or slim data then make request for full data)
-    // if (!user.data || (user.data && !user.data.basicInformation)) {
-    //   this.props.requestSingleUser(username)
-    // }
-    this.props.requestSingleUser(username)
+    const { profile } = this.props
+
+    this.loadUserInfo(profile)
     window.addEventListener('scroll', this.handleScroll)
   }
 
@@ -88,16 +80,10 @@ class UsernamePage extends Component {
 
     // Changing User Profiles
     if (username !== prevProps.username) {
-      this.props.requestSingleUser(username)
       this.setState({ adminMode: sessionUser.username === username })
     }
 
-    // Loading of single user complete
     if (!user.loading && prevProps.user.loading) {
-      // If radiks user does not exist send to unsigned page
-
-      this.loadUserInfo(this.props.profile)
-      this.props.requestFetchFollow(username)
       this.requestUserShares()
     }
 
@@ -229,10 +215,6 @@ class UsernamePage extends Component {
     return this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
   }
 
-  setActiveTab = (value) => {
-    this.setState({ activeTab: value })
-  }
-
   render() {
     const { sessionUser } = this.context.state
 
@@ -241,12 +223,10 @@ class UsernamePage extends Component {
       shares,
       username,
       user,
-      follow,
     } = this.props
 
     const {
       adminMode,
-      activeTab,
       bottomReached,
       loading,
       userInfo,
@@ -256,181 +236,152 @@ class UsernamePage extends Component {
 
     return (
       <Container>
-        {
-          activeTab === 'profile' && <Columns className="mt-half">
-            <Columns.Column size={5}>
-              <div className="username__description mb-one">
-                <Card className="user-description">
-                  <Card.Content>
-                    <Content>
-                      <Loadable loading={user.loading || !user.data}>
-                        <UserDescription
-                          adminMode={adminMode}
-                          displayView={displayView}
-                          loading={loading}
-                          sessionUser={sessionUser}
-                          user={user}
-                          username={username}
-                          onCreateEdit={this.onCreateEdit}
-                          onCancel={this.onCancel}
-                          onSubmit={this.onSubmit}
-                          />
-                      </Loadable>
-                    </Content>
-                  </Card.Content>
-                </Card>
-              </div>
+        <Columns className="mt-half">
+          <Columns.Column size={5}>
+            <div className="username__description mb-one">
+              <Card className="user-description">
+                <Card.Content>
+                  <Content>
+                    <Loadable loading={user.loading || !user.data}>
+                      <UserDescription
+                        adminMode={adminMode}
+                        displayView={displayView}
+                        loading={loading}
+                        sessionUser={sessionUser}
+                        user={user}
+                        username={username}
+                        onCreateEdit={this.onCreateEdit}
+                        onCancel={this.onCancel}
+                        onSubmit={this.onSubmit}
+                        />
+                    </Loadable>
+                  </Content>
+                </Card.Content>
+              </Card>
+            </div>
 
-              <div className="username__dapps mb-one">
-                <UserDapps
-                  adminMode={adminMode}
-                  loading={loading}
-                  userInfo={userInfo}
-                />
-              </div>
+            <div className="username__dapps mb-one">
+              <UserDapps
+                adminMode={adminMode}
+                loading={loading}
+                userInfo={userInfo}
+              />
+            </div>
 
-              <div className="username__following mb-one">
-                <UserFollowing
-                  adminMode={adminMode}
-                  history={history}
-                  loading={loading}
-                  userInfo={userInfo}
-                />
-              </div>
-            </Columns.Column>
+            <div className="username__following mb-one">
+              <UserFollowing
+                adminMode={adminMode}
+                history={history}
+                loading={loading}
+                userInfo={userInfo}
+              />
+            </div>
+          </Columns.Column>
 
-            <Columns.Column
-              size={7}
-              ref={(rightElement) => this.rightElement = rightElement}
-            >
-              <Columns>
-                <Columns.Column size={12}>
-                  {
-                    adminMode &&
-                    <Card className="mb-one">
-                      <Card.Content>
-                        <Content>
-                          <Loadable loading={shares.loading && shares.list.length === 0}>
-                            <div>
-                              <Popover
-                                isOpen={this.state.isPopoverOpen}
-                                position="right"
-                                padding={30}
-                                onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                                content={({ position, targetRect, popoverRect }) => (
-                                  <SharePopoverContainer
-                                    position={position}
-                                    targetRect={targetRect}
-                                    popoverRect={popoverRect}
-                                    togglePopover={this.togglePopover}
-                                  />
-                                )}
-                              >
-                                <Icon
-                                  className="debut-icon debut-icon--pointer username__share-icon-question"
-                                  icon="IconQuestionCircle"
-                                  onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                                  size={16}
-                                  linkStyles={{
-                                    position: 'absolute',
-                                    top: '0',
-                                    right: '5px',
-                                    height: '30px'
-                                  }}
+          <Columns.Column
+            size={7}
+            ref={(rightElement) => this.rightElement = rightElement}
+          >
+            <Columns>
+              <Columns.Column size={12}>
+                {
+                  adminMode &&
+                  <Card className="mb-one">
+                    <Card.Content>
+                      <Content>
+                        <Loadable loading={shares.loading && shares.list.length === 0}>
+                          <div>
+                            <Popover
+                              isOpen={this.state.isPopoverOpen}
+                              position="right"
+                              padding={30}
+                              onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                              content={({ position, targetRect, popoverRect }) => (
+                                <SharePopoverContainer
+                                  position={position}
+                                  targetRect={targetRect}
+                                  popoverRect={popoverRect}
+                                  togglePopover={this.togglePopover}
                                 />
-                              </Popover>
-                              <ShareForm username={username} />
-                            </div>
-                          </Loadable>
-                        </Content>
-                      </Card.Content>
-                    </Card>
-                  }
+                              )}
+                            >
+                              <Icon
+                                className="debut-icon debut-icon--pointer username__share-icon-question"
+                                icon="IconQuestionCircle"
+                                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                                size={16}
+                                linkStyles={{
+                                  position: 'absolute',
+                                  top: '0',
+                                  right: '5px',
+                                  height: '30px'
+                                }}
+                              />
+                            </Popover>
+                            <ShareForm username={username} />
+                          </div>
+                        </Loadable>
+                      </Content>
+                    </Card.Content>
+                  </Card>
+                }
 
+                {
+                  !adminMode && _.isEqual(shares.list.length, 0) &&
+                  <NoShares username={username} />
+                }
+
+                <CSSTransitionGroup
+                  transitionName="share-list-item-transition"
+                  transitionEnterTimeout={500}
+                  transitionLeaveTimeout={300}
+                >
                   {
-                    !adminMode && _.isEqual(shares.list.length, 0) &&
-                    <NoShares username={username} />
-                  }
+                    _.map(shares.list, (share, index) => {
+                      const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
 
-                  <CSSTransitionGroup
-                    transitionName="share-list-item-transition"
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={300}
-                  >
-                    {
-                      _.map(shares.list, (share, index) => {
-                        const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
-
-                        return (
-                          <ShareListItem
-                            key={share._id}
-                            cardClass={cardClass}
-                            share={share}
-                            username={username}
-                            onEditClick={this.openModal}
-                          />
-                        )
-                      })
-                    }
-                  </CSSTransitionGroup>
-                  {
-                    bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
+                      return (
+                        <ShareListItem
+                          key={share._id}
+                          cardClass={cardClass}
+                          share={share}
+                          username={username}
+                          onEditClick={this.openModal}
+                        />
+                      )
+                    })
                   }
-                </Columns.Column>
-              </Columns>
-              <Modal
-                show={showModal}
-                onClose={this.closeModal}
-                closeOnEsc
-              >
-                <Modal.Content>
-                  <Section style={{ backgroundColor: 'white' }}>
-                    <ShareForm
-                      username={username}
-                      currentShare={this.state.currentShare}
-                      onCancel={this.closeModal}
-                      onComplete={this.closeModal}
-                    />
-                  </Section>
-                </Modal.Content>
-              </Modal>
-            </Columns.Column>
-          </Columns>
-        }
-        {
-          follow && activeTab === 'following' &&
-          <FollowingUser
-            className={activeTab === 'following' ? 'following-user' : 'following-user hidden'}
-            follow={follow}
-            setActiveTab={this.setActiveTab}
-          />
-        }
-        {
-          follow && activeTab === 'followers' &&
-          <FollowersUsers
-            className={activeTab === 'followers' ? 'followers-user' : 'followers-user hidden'}
-            follow={follow}
-            setActiveTab={this.setActiveTab}
-          />
-        }
+                </CSSTransitionGroup>
+                {
+                  bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
+                }
+              </Columns.Column>
+            </Columns>
+            <Modal
+              show={showModal}
+              onClose={this.closeModal}
+              closeOnEsc
+            >
+              <Modal.Content>
+                <Section style={{ backgroundColor: 'white' }}>
+                  <ShareForm
+                    username={username}
+                    currentShare={this.state.currentShare}
+                    onCancel={this.closeModal}
+                    onComplete={this.closeModal}
+                  />
+                </Section>
+              </Modal.Content>
+            </Modal>
+          </Columns.Column>
+        </Columns>
       </Container>
     )
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const { username } = ownProps
-  const follow = state.follow[username]
-
-  return {
-    follow,
-  }
-}
-
 UsernamePage.contextType = UserContext
-export default withRouter(connect(mapStateToProps, {
+export default withRouter(connect(null, {
   requestUserShares,
   addDappsToList,
-  requestSingleUser,
-  requestFetchFollow,
 })(UsernamePage))

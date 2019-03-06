@@ -10,6 +10,7 @@ import PropTypes from 'prop-types'
 import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
+import { requestFetchFollow } from 'actions/follow'
 
 class FollowersUsers extends Component {
   constructor(props) {
@@ -26,11 +27,11 @@ class FollowersUsers extends Component {
 
   static propTypes = {
     follow: PropTypes.object.isRequired,
-    setActiveTab: PropTypes.func.isRequired,
   }
 
   componentDidMount = async () => {
-    console.log('mounting')
+    const { username } = this.props
+    this.props.requestFollow(username)
     this.fetchUsers()
   }
 
@@ -63,30 +64,30 @@ class FollowersUsers extends Component {
     }
   }
 
-  handleScroll = () => {
-    const { bottomReached } = this.state
-    const html = document.documentElement; // get the html element
-    // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
-    // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
-    const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
-    const body = document.body; // get the document body
-    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
-    const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
-
-    /**
-     * if windowBottom is larger then you know you reached the bottom
-    */
-    if (windowBottom >= docHeight) {
-      this.setState({ bottomReached: true }, () => {
-        console.log('bottom reached')
-        // if (!shares.full) {
-        //   this.requestUserShares()
-        // }
-      });
-    } else if ((windowBottom < docHeight) && bottomReached) {
-      this.setState({ bottomReached: false });
-    }
-  }
+  // handleScroll = () => {
+  //   const { bottomReached } = this.state
+  //   const html = document.documentElement; // get the html element
+  //   // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
+  //   // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
+  //   const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
+  //   const body = document.body; // get the document body
+  //   const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
+  //   const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
+  //
+  //   /**
+  //    * if windowBottom is larger then you know you reached the bottom
+  //   */
+  //   if (windowBottom >= docHeight) {
+  //     this.setState({ bottomReached: true }, () => {
+  //       console.log('bottom reached')
+  //       // if (!shares.full) {
+  //       //   this.requestUserShares()
+  //       // }
+  //     });
+  //   } else if ((windowBottom < docHeight) && bottomReached) {
+  //     this.setState({ bottomReached: false });
+  //   }
+  // }
 
   fetchUsers = async () => {
     const { follow } = this.props
@@ -109,7 +110,6 @@ class FollowersUsers extends Component {
 
   onBoxClick = (user) => {
     const { history } = this.props
-    this.props.setActiveTab('profile')
     history.push(`/${user.username}`)
   }
 
@@ -146,5 +146,8 @@ class FollowersUsers extends Component {
   }
 }
 
-export default withRouter(connect()(FollowersUsers))
+export default withRouter(connect(null, {
+  requestFetchFollow,
+})(FollowersUsers))
+
 FollowersUsers.contextType = UserContext
