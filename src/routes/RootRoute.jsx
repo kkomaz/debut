@@ -31,9 +31,7 @@ class RootRoute extends Component {
   }
 
   componentDidMount() {
-    const { username } = this.state
     this.props.requestBlockstackDapps()
-    this.props.requestFetchFollow(username)
   }
 
   setHomePageClickedTrue = () => {
@@ -117,5 +115,4 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestBlockstackDapps,
-  requestFetchFollow,
 })(RootRoute))

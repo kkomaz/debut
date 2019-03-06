@@ -9,10 +9,17 @@ class UserTabs extends Component {
   static propTypes = {
     setActiveTab: PropTypes.func.isRequired,
     activeTab: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired
   }
 
   onClick = (value) => {
     this.props.setActiveTab(value)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.username !== this.props.username) {
+      this.props.setActiveTab('profile')
+    }
   }
 
   render() {

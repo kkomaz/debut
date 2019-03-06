@@ -46,8 +46,8 @@ import FollowingUser from 'components/Follow/FollowingUsers'
 import { requestUserShares } from 'actions/share'
 import { addDappsToList } from 'actions/blockstack'
 import { requestSingleUser } from 'actions/user'
+import { requestFetchFollow} from 'actions/follow'
 import './UsernamePage.scss';
-
 class UsernamePage extends Component {
   constructor(props, context) {
     super(props)
@@ -85,6 +85,7 @@ class UsernamePage extends Component {
   async componentDidMount() {
     const { username } = this.props
     this.props.requestSingleUser(username)
+    this.props.requestFetchFollow(username)
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -126,6 +127,7 @@ class UsernamePage extends Component {
           }
         }
         this.loadUserInfo(profile)
+        this.props.requestFetchFollow(username)
         this.requestUserShares()
       } catch (e) {
         this.setState({ error: true })
@@ -534,4 +536,5 @@ export default withRouter(connect(mapStateToProps, {
   requestUserShares,
   addDappsToList,
   requestSingleUser,
+  requestFetchFollow,
 })(UsernamePage))
