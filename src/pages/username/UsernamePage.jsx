@@ -86,8 +86,8 @@ class UsernamePage extends Component {
 
   async componentDidMount() {
     const { username } = this.props
-    window.addEventListener('scroll', this.handleScroll)
     this.props.requestSingleUser(username)
+    window.addEventListener('scroll', this.handleScroll)
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -311,6 +311,8 @@ class UsernamePage extends Component {
       )
     }
 
+    console.log(this.props.user)
+
     return (
       <Container>
         <Columns>
@@ -520,12 +522,6 @@ const mapStateToProps = (state, ownProps) => {
   const { username } = ownProps
   const { share } = state
 
-  const user = {
-    data: _.find(state.user.users, (user) => user._id === username),
-    loading: state.user.loading,
-    avatarLoading: state.user.avatarLoading,
-  }
-
   const shares = {
     list: _.filter(state.share.shares.list, (share) => share.username === username),
     full: share.shares.full,
@@ -536,7 +532,6 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     shares,
-    user,
     follow,
   }
 }
