@@ -1,6 +1,10 @@
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route } from 'react-router-dom'
+import { connect } from 'react-redux'
+
+// Component Imports
 import UsernamePage from 'pages/username/UsernamePage'
 
 class UsernameRoute extends Component {
@@ -38,4 +42,4 @@ class UsernameRoute extends Component {
   }
 }
 
-export default UsernameRoute
+export default connect(null)(UsernameRoute)
