@@ -25,6 +25,14 @@ class UsernameRoute extends Component {
             />
           }
         />
+        <Route
+          path={`${match.url}/following`}
+          render={() => <div>Hello following</div>}
+        />
+        <Route
+          path={`${match.url}/followers`}
+          render={() => <div>Hello followers</div>}
+        />
       </Switch>
     )
   }
