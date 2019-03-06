@@ -9,12 +9,9 @@ import {
   Columns,
   Container,
   Content,
-  Media,
-  Heading,
   Modal,
   Section,
 } from 'components/bulma'
-import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
 import {
@@ -23,20 +20,15 @@ import {
   UserFollowing
 } from 'components/User'
 import {
-  UserTabs
-} from 'components/Tab'
-import {
   NoShares,
   ShareListItem,
   ShareForm,
 } from 'components/Share'
-import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
+import { BarLoader, Loadable } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import { List } from 'react-content-loader'
 import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
-import { AvatarForm } from 'components/User'
 import FollowingUser from 'components/Follow/FollowingUsers'
 import FollowersUsers from 'components/Follow/FollowersUsers'
 
@@ -66,7 +58,6 @@ class UsernamePage extends Component {
       longLoad: setTimeout(() => {
         toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient or refresh the page!')
       }, 8000),
-      error: false,
       isPopoverOpen: false,
       avatarHovered: false,
       activeTab: 'profile'
@@ -243,10 +234,7 @@ class UsernamePage extends Component {
   }
 
   render() {
-    const {
-      sessionUser,
-      defaultImgUrl
-    } = this.context.state
+    const { sessionUser } = this.context.state
 
     const {
       history,
@@ -265,16 +253,6 @@ class UsernamePage extends Component {
       displayView,
       showModal,
     } = this.state
-
-    const src = _.get(user, 'data.profile.image[0].contentUrl', defaultImgUrl)
-
-    if (this.state.error) {
-      return (
-        <div>
-          <List />
-        </div>
-      )
-    }
 
     return (
       <Container>
