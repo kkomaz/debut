@@ -94,7 +94,7 @@ class RootRoute extends Component {
               render={({ match, location }) =>
                 <UsernameRoute
                   match={match}
-                  username={username}
+                  username={match.params.username}
                   dapps={dapps}
                 />
               }

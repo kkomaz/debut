@@ -6,20 +6,21 @@ import UsernamePage from 'pages/username/UsernamePage'
 class UsernameRoute extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
-    dapps: PropTypes.array.isRequired
+    dapps: PropTypes.array.isRequired,
+    username: PropTypes.string.isRequired,
   }
 
   render() {
-    const { dapps, match } = this.props
+    const { dapps, match, username } = this.props
 
     return (
       <Switch>
         <Route
           exact
-          path={this.props.match.url}
+          path={match.url}
           render={() =>
             <UsernamePage
-              username={match.params.username}
+              username={username}
               dapps={dapps}
             />
           }
