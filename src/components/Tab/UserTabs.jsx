@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { Tabs } from 'components/bulma'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import './UserTabs.scss'
 
 class UserTabs extends Component {
@@ -15,7 +16,15 @@ class UserTabs extends Component {
   }
 
   setActiveTab = (value) => {
-    this.setState({ activeTab: value })
+    const { username } = this.props
+
+    this.setState({ activeTab: value }, () => {
+      if (value === 'profile') {
+        return this.props.history.push(`/${username}`)
+      }
+
+      return this.props.history.push(`/${username}/${value}`)
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -67,4 +76,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(UserTabs)
+export default withRouter(connect(mapStateToProps)(UserTabs))
