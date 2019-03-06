@@ -495,8 +495,9 @@ class UsernamePage extends Component {
           </Columns>
         }
         {
-          activeTab === 'following' &&
+          follow &&
           <FollowingUser
+            className={activeTab === 'following' ? 'following-user' : 'following-user hidden'}
             follow={follow}
             setActiveTab={this.setActiveTab}
           />

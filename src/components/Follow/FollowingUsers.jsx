@@ -26,7 +26,7 @@ class FollowingUsers extends Component {
     const { follow } = this.props
     const { offset } = this.state
 
-    if (follow.following.length > 0) {
+    if (_.get(follow, 'following.length', 0) > 0) {
       const result = await User.fetchList({
         username: follow.following,
         sort: '-createdAt',
@@ -50,10 +50,11 @@ class FollowingUsers extends Component {
   render() {
     const { users } = this.state
     const { defaultImgUrl } = this.context.state
+    const { className } = this.props
 
     return (
       <Container>
-        <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
+        <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
           {
             _.map(users, (user) => {
               return (
