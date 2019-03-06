@@ -12,6 +12,7 @@ import UnsignedUser from 'pages/unsigned/UnsignedUser'
 import HelpPage from 'pages/help/HelpPage'
 import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
+import { requestFetchFollow} from 'actions/follow'
 
 class RootRoute extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class RootRoute extends Component {
 
   componentDidMount() {
     this.props.requestBlockstackDapps()
+    this.props.requestFetchFollow(this.state.username)
   }
 
   setHomePageClickedTrue = () => {
@@ -114,4 +116,5 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestBlockstackDapps,
+  requestFetchFollow,
 })(RootRoute))

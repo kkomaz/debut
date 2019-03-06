@@ -26,11 +26,32 @@ class FollowersUsers extends Component {
     this.fetchUsers()
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate = async (prevProps, prevState) => {
     if (this.props.follow.username !== prevProps.follow.username) {
       this.setState({ users: [], offset: 0 }, () => {
         this.fetchUsers()
       })
+    }
+
+    if (this.props.follow.username === prevProps.follow.username) {
+      const { sessionUser } = this.context.state
+
+      if (this.props.follow.followerCount > prevProps.follow.followerCount) {
+        const user = await User.findOne({ username: sessionUser.username })
+        const users = [...this.state.users, user.attrs]
+        this.setState({
+          users,
+          offset: users.length
+        })
+      }
+
+      if (this.props.follow.followerCount < prevProps.follow.followerCount) {
+        const users = _.filter(this.state.users, (user) => user._id !== sessionUser.username)
+        this.setState({
+          users,
+          offset: users.length
+        })
+      }
     }
   }
 

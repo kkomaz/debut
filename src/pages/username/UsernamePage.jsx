@@ -49,6 +49,7 @@ import { addDappsToList } from 'actions/blockstack'
 import { requestSingleUser } from 'actions/user'
 import { requestFetchFollow} from 'actions/follow'
 import './UsernamePage.scss';
+
 class UsernamePage extends Component {
   constructor(props, context) {
     super(props)
