@@ -13,7 +13,6 @@ class FollowButton extends Component {
   static propTypes = {
     defaultImgUrl: PropTypes.string.isRequired,
     sessionUser: PropTypes.object.isRequired,
-    setSessionUserState: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
   }

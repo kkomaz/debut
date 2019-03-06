@@ -339,7 +339,6 @@ class UsernamePage extends Component {
                 <FollowButton
                   defaultImgUrl={defaultImgUrl}
                   sessionUser={sessionUser}
-                  setSessionUserState={this.context.setSessionUserState}
                   user={user}
                   username={username}
                 />

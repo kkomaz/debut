@@ -1,4 +1,3 @@
-export { default as FollowButton } from './FollowButton'
 export { default as IntroDisplay } from './IntroDisplay'
 export { default as UserDescription } from './UserDescription'
 export { default as UserIntroForm } from './UserIntroForm'
