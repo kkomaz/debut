@@ -6,24 +6,27 @@ import { connect } from 'react-redux'
 import './UserTabs.scss'
 
 class UserTabs extends Component {
+  state = {
+    activeTab: 'profile'
+  }
+
   static propTypes = {
-    setActiveTab: PropTypes.func.isRequired,
-    activeTab: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired
   }
 
-  onClick = (value) => {
-    this.props.setActiveTab(value)
+  setActiveTab = (value) => {
+    this.setState({ activeTab: value })
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.username !== this.props.username) {
-      this.props.setActiveTab('profile')
+      this.setActiveTab('profile')
     }
   }
 
   render() {
-    const { viewedFollow, activeTab } = this.props
+    const { viewedFollow } = this.props
+    const { activeTab } = this.state
 
     return (
       <Tabs
@@ -35,21 +38,21 @@ class UserTabs extends Component {
         <Tabs.Tab
           className="user-tabs__tab"
           active={activeTab === 'profile'}
-          onClick={() => this.onClick('profile')}
+          onClick={() => this.setActiveTab('profile')}
         >
           Profile
         </Tabs.Tab>
         <Tabs.Tab
           className="user-tabs__tab"
           active={activeTab === 'following'}
-          onClick={() => this.onClick('following')}
+          onClick={() => this.setActiveTab('following')}
         >
           Following {_.get(viewedFollow, 'followingCount', 0)}
         </Tabs.Tab>
         <Tabs.Tab
           className="user-tabs__tab"
           active={activeTab === 'followers'}
-          onClick={() => this.onClick('followers')}
+          onClick={() => this.setActiveTab('followers')}
         >
           Followers {_.get(viewedFollow, 'followerCount', 0)}
         </Tabs.Tab>

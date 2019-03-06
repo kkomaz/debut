@@ -278,47 +278,6 @@ class UsernamePage extends Component {
 
     return (
       <Container>
-        <Columns>
-          <Columns.Column size={12} style={{ paddingBottom: '0' }}>
-            <Media className="username__hero">
-              <Media.Item renderAs="figure" position="left">
-                {
-                  (user.loading || loading || user.avatarLoading) ?
-                  <HeroAvatarLoader /> :
-                  <AvatarForm
-                    src={src}
-                    user={user}
-                    defaultImgUrl={defaultImgUrl}
-                    sessionUser={sessionUser}
-                  />
-                }
-              </Media.Item>
-              <Media.Item
-                position="center"
-                style={{ alignSelf: 'center' }}
-              >
-                <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
-                <Heading subtitle size={6} style={{ color: 'white' }}>
-                  {username}
-                </Heading>
-                <FollowButton
-                  defaultImgUrl={defaultImgUrl}
-                  sessionUser={sessionUser}
-                  user={user}
-                  username={username}
-                />
-              </Media.Item>
-            </Media>
-          </Columns.Column>
-          <Columns.Column size={12} style={{ paddingTop: '0' }}>
-            <UserTabs
-              username={username}
-              setActiveTab={this.setActiveTab}
-              activeTab={activeTab}
-            />
-          </Columns.Column>
-        </Columns>
-
         {
           activeTab === 'profile' && <Columns className="mt-half">
             <Columns.Column size={5}>

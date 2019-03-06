@@ -11,6 +11,16 @@ import { List } from 'react-content-loader'
 // Component Imports
 import UsernamePage from 'pages/username/UsernamePage'
 import { UserContext } from 'components/User/UserProvider'
+import { HeroAvatarLoader } from 'components/Loader'
+import { AvatarForm } from 'components/User'
+import FollowButton from 'components/Follow/FollowButton'
+import { UserTabs } from 'components/Tab'
+import {
+  Container,
+  Columns,
+  Heading,
+  Media,
+} from 'components/bulma'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -84,6 +94,9 @@ class UsernameRoute extends Component {
   }
 
   render() {
+    const { error, profile } = this.state
+    const { sessionUser, defaultImgUrl } = this.context.state
+
     const {
       dapps,
       match,
@@ -91,8 +104,6 @@ class UsernameRoute extends Component {
       shares,
       username,
     } = this.props
-
-    const { error, profile } = this.state
 
     if (error) {
       return (
@@ -103,29 +114,68 @@ class UsernameRoute extends Component {
     }
 
     return (
-      <Switch>
-        <Route
-          exact
-          path={match.url}
-          render={() =>
-            <UsernamePage
-              user={user}
-              username={username}
-              dapps={dapps}
-              profile={profile}
-              shares={shares}
-            />
-          }
-        />
-        <Route
-          path={`${match.url}/following`}
-          render={() => <div>Hello following</div>}
-        />
-        <Route
-          path={`${match.url}/followers`}
-          render={() => <div>Hello followers</div>}
-        />
-      </Switch>
+      <div className="username-route">
+        <Container>
+          <Columns>
+            <Columns.Column size={12} style={{ paddingBottom: '0' }}>
+              <Media className="username__hero">
+                <Media.Item renderAs="figure" position="left">
+                  {
+                    (user.loading || user.avatarLoading) ?
+                    <HeroAvatarLoader /> :
+                    <AvatarForm
+                      user={user}
+                      defaultImgUrl={defaultImgUrl}
+                      sessionUser={sessionUser}
+                    />
+                  }
+                </Media.Item>
+                <Media.Item
+                  position="center"
+                  style={{ alignSelf: 'center' }}
+                >
+                  <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
+                  <Heading subtitle size={6} style={{ color: 'white' }}>
+                    {username}
+                  </Heading>
+                  <FollowButton
+                    defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
+                    user={user}
+                    username={username}
+                  />
+                </Media.Item>
+              </Media>
+            </Columns.Column>
+            <Columns.Column size={12} style={{ paddingTop: '0' }}>
+              <UserTabs username={username} />
+            </Columns.Column>
+          </Columns>
+        </Container>
+        <Switch>
+          <Route
+            exact
+            path={match.url}
+            render={() =>
+              <UsernamePage
+                user={user}
+                username={username}
+                dapps={dapps}
+                profile={profile}
+                shares={shares}
+              />
+            }
+          />
+          <Route
+            path={`${match.url}/following`}
+            render={() => <div>Hello following</div>}
+          />
+          <Route
+            path={`${match.url}/followers`}
+            render={() => <div>Hello followers</div>}
+          />
+        </Switch>
+      </div>
     )
   }
 }
