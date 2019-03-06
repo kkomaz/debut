@@ -86,8 +86,8 @@ class UsernamePage extends Component {
 
   async componentDidMount() {
     const { username } = this.props
+    window.addEventListener('scroll', this.handleScroll)
     this.props.requestSingleUser(username)
-    this.props.requestFetchFollow(username)
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -497,7 +497,7 @@ class UsernamePage extends Component {
           </Columns>
         }
         {
-          follow &&
+          follow && activeTab === 'following' &&
           <FollowingUser
             className={activeTab === 'following' ? 'following-user' : 'following-user hidden'}
             follow={follow}
@@ -505,7 +505,7 @@ class UsernamePage extends Component {
           />
         }
         {
-          follow &&
+          follow && activeTab === 'followers' &&
           <FollowersUsers
             className={activeTab === 'followers' ? 'followers-user' : 'followers-user hidden'}
             follow={follow}

@@ -12,9 +12,16 @@ import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 
 class FollowersUsers extends Component {
-  state = {
-    offset: 0,
-    users: [],
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      offset: 0,
+      users: [],
+      bottomReached: false,
+    }
+
+    this.handleScroll = _.debounce(this.handleScroll, 300)
   }
 
   static propTypes = {
@@ -52,6 +59,31 @@ class FollowersUsers extends Component {
           offset: users.length
         })
       }
+    }
+  }
+
+  handleScroll = () => {
+    const { bottomReached } = this.state
+    const html = document.documentElement; // get the html element
+    // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
+    // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
+    const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
+    const body = document.body; // get the document body
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
+    const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
+
+    /**
+     * if windowBottom is larger then you know you reached the bottom
+    */
+    if (windowBottom >= docHeight) {
+      this.setState({ bottomReached: true }, () => {
+        console.log('bottom reached')
+        // if (!shares.full) {
+        //   this.requestUserShares()
+        // }
+      });
+    } else if ((windowBottom < docHeight) && bottomReached) {
+      this.setState({ bottomReached: false });
     }
   }
 

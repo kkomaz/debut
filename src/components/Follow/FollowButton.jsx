@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import {
   requestFollow,
   requestUnfollow,
-  requestFetchFollow,
 } from 'actions/follow'
 import './FollowButton.scss'
 
@@ -17,12 +16,6 @@ class FollowButton extends Component {
     setSessionUserState: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
-  }
-
-  componentDidMount = async () => {
-    const { username } = this.props
-
-    this.props.requestFetchFollow(username)
   }
 
   followUser = async () => {
@@ -81,5 +74,4 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps, {
   requestFollow,
   requestUnfollow,
-  requestFetchFollow,
 })(FollowButton)
