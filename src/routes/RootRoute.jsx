@@ -6,13 +6,13 @@ import UserProvider from 'components/User/UserProvider'
 import RootPage from 'pages'
 import Navbar from 'components/Navbar'
 import { requestBlockstackDapps } from 'actions/blockstack'
-import './RootRoute.scss'
-import UsernamePage from 'pages/username/UsernamePage'
 import UnsignedUser from 'pages/unsigned/UnsignedUser'
 import HelpPage from 'pages/help/HelpPage'
 import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
 import { requestFetchFollow} from 'actions/follow'
+import UsernameRoute from './UsernameRoute'
+import './RootRoute.scss'
 
 class RootRoute extends Component {
   constructor(props) {
@@ -90,11 +90,11 @@ class RootRoute extends Component {
               text="App is warming up..."
             /> :
             <Route
-              exact
               path="/:username"
               render={({ match, location }) =>
-                <UsernamePage
-                  username={match.params.username}
+                <UsernameRoute
+                  match={match}
+                  username={username}
                   dapps={dapps}
                 />
               }

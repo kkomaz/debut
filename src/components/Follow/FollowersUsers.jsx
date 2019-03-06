@@ -30,6 +30,7 @@ class FollowersUsers extends Component {
   }
 
   componentDidMount = async () => {
+    console.log('mounting')
     this.fetchUsers()
   }
 
