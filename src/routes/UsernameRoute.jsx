@@ -13,12 +13,14 @@ import UsernamePage from 'pages/username/UsernamePage'
 import { UserContext } from 'components/User/UserProvider'
 import { UserHero } from 'components/User'
 import FollowingUsers from 'pages/username/following/FollowingUsers'
+import FollowersUsers from 'pages/username/followers/FollowersUsers'
 
 // Util imports
 import { appUrl } from 'utils/constants'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { requestSingleUser } from 'actions/user'
+import { requestFetchFollow } from 'actions/follow'
 
 class UsernameRoute extends Component {
   state = {
@@ -42,6 +44,7 @@ class UsernameRoute extends Component {
     //   this.props.requestSingleUser(username)
     // }
     this.props.requestSingleUser(username)
+    this.props.requestFetchFollow(username)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -49,7 +52,7 @@ class UsernameRoute extends Component {
 
     if (username !== prevProps.username) {
       this.props.requestSingleUser(username)
-      // this.fetchProfileInfo()
+      this.props.requestFetchFollow(username)
     }
 
     if (!user.loading && prevProps.user.loading) {
@@ -142,16 +145,19 @@ class UsernameRoute extends Component {
             }
           />
           {
-            follow &&
+            !_.isEmpty(follow) &&
             <Route
               path={`${match.url}/following`}
               render={() => <FollowingUsers follow={follow} />}
             />
           }
-          <Route
-            path={`${match.url}/followers`}
-            render={() => <div>Hello followers</div>}
-          />
+          {
+            !_.isEmpty(follow) &&
+            <Route
+              path={`${match.url}/followers`}
+              render={() => <FollowersUsers follow={follow} />}
+            />
+          }
         </Switch>
       </div>
     )
@@ -174,7 +180,7 @@ const mapStateToProps = (state, ownProps) => {
     loading: share.shares.loading
   }
 
-  const follow = state.follow[username]
+  const follow = state.follow[username] || {}
 
   return {
     user,
@@ -185,5 +191,6 @@ const mapStateToProps = (state, ownProps) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestSingleUser,
+  requestFetchFollow,
 })(UsernameRoute))
 UsernameRoute.contextType = UserContext
