@@ -8,6 +8,7 @@ import Navbar from 'components/Navbar'
 import { requestBlockstackDapps } from 'actions/blockstack'
 import UnsignedUser from 'pages/unsigned/UnsignedUser'
 import HelpPage from 'pages/help/HelpPage'
+import AdminPage from 'pages/admin/AdminPage'
 import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
 import { requestFetchFollow} from 'actions/follow'
@@ -91,9 +92,15 @@ class RootRoute extends Component {
             />
           <Route
             exact
+            path="/admin"
+            render={() => <AdminPage userSession={userSession} />}
+            userSession={userSession}
+          />
+          <Route
+            exact
             path="/help"
             render={() => <HelpPage />}
-            />
+          />
           <Route
             exact
             path="/unsigned/:username"
