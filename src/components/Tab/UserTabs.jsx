@@ -40,7 +40,11 @@ class UserTabs extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.username !== this.props.username) {
+    if (prevProps.username !== this.props.username || this.props.profileClicked) {
+      if (this.props.profileClicked) {
+        this.props.setProfileClickedFalse()
+      }
+
       this.setActiveTab('profile')
     }
   }

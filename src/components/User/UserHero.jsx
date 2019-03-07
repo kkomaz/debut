@@ -49,7 +49,11 @@ class UserHero extends Component {
             </Media>
           </Columns.Column>
           <Columns.Column size={12} style={{ paddingTop: '0' }}>
-            <UserTabs username={username} />
+            <UserTabs
+              username={username}
+              profileClicked={this.props.profileClicked}
+              setProfileClickedFalse={this.props.setProfileClickedFalse}
+            />
           </Columns.Column>
         </Columns>
       </Container>

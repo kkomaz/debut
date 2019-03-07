@@ -22,6 +22,7 @@ class RootRoute extends Component {
 
     this.state = {
       homePageClicked: false,
+      profileClicked: false,
       username: userData.username,
     }
   }
@@ -43,6 +44,14 @@ class RootRoute extends Component {
     this.setState({ homePageClicked: false })
   }
 
+  setProfileClickedTrue = () => {
+    this.setState({ profileClicked: true })
+  }
+
+  setProfileClickedFalse = () => {
+    this.setState({ profileClicked: false })
+  }
+
   render() {
     const {
       userSession,
@@ -60,6 +69,7 @@ class RootRoute extends Component {
       <UserProvider userSession={userSession}>
         <Navbar
           setHomePageClickedTrue={this.setHomePageClickedTrue}
+          setProfileClickedTrue={this.setProfileClickedTrue}
         />
         <Switch>
           <Route
@@ -93,9 +103,11 @@ class RootRoute extends Component {
               path="/:username"
               render={({ match, location }) =>
                 <UsernameRoute
-                  match={match}
-                  username={match.params.username}
                   dapps={dapps}
+                  match={match}
+                  profileClicked={this.state.profileClicked}
+                  setProfileClickedFalse={this.setProfileClickedFalse}
+                  username={match.params.username}
                 />
               }
             />
