@@ -115,6 +115,7 @@ export default function userReducer(state = defaultSession, action) {
 
       return { ...state,
         users: updateOrAddObjFromList(state.users, action.payload),
+        paginatedUsers: updatedPaginatedUsers,
         avatarLoading: false,
       }
     default:
