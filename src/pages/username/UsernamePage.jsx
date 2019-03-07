@@ -69,22 +69,20 @@ class UsernamePage extends Component {
 
   async componentDidMount() {
     const { profile } = this.props
-
+    this.requestUserShares()
     this.loadUserInfo(profile)
     window.addEventListener('scroll', this.handleScroll)
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, user } = this.props
+    const { username, profile } = this.props
     const { sessionUser } = this.context.state
 
     // Changing User Profiles
     if (username !== prevProps.username) {
       this.setState({ adminMode: sessionUser.username === username })
-    }
-
-    if (!user.loading && prevProps.user.loading) {
       this.requestUserShares()
+      this.loadUserInfo(profile)
     }
 
     if (this.state.loading === false) {
