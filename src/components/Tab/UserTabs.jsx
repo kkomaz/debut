@@ -82,7 +82,7 @@ class UserTabs extends Component {
           active={activeTab === 'followers'}
           onClick={() => this.setActiveTab('followers')}
         >
-          Followers {_.get(viewedFollow, 'followerCount', 0)}
+          Followers {_.get(viewedFollow, 'followersCount', 0)}
         </Tabs.Tab>
       </Tabs>
     )

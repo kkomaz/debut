@@ -21,7 +21,7 @@ const unfollowUser = async (action) => {
 
   viewedFollow.update({
     followers,
-    followerCount: followers.length
+    followersCount: followers.length
   })
   const updatedFollowers = await viewedFollow.save()
   result[`${payload.username}`] = updatedFollowers.attrs

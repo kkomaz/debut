@@ -42,7 +42,7 @@ class FollowersUsers extends Component {
     if (this.props.follow.username === prevProps.follow.username) {
       const { sessionUser } = this.context.state
 
-      if (this.props.follow.followerCount > prevProps.follow.followerCount) {
+      if (this.props.follow.followersCount > prevProps.follow.followersCount) {
         const user = await User.findOne({ username: sessionUser.username })
         const users = [...this.state.users, user.attrs]
         this.setState({
@@ -51,7 +51,7 @@ class FollowersUsers extends Component {
         })
       }
 
-      if (this.props.follow.followerCount < prevProps.follow.followerCount) {
+      if (this.props.follow.followersCount < prevProps.follow.followersCount) {
         const users = _.filter(this.state.users, (user) => user._id !== sessionUser.username)
         this.setState({
           users,

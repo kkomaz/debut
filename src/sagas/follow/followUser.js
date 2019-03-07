@@ -14,7 +14,7 @@ const followUser = async (action) => {
       following: [payload.username],
       followers: [],
       followingCount: 1,
-      followerCount: 0
+      followersCount: 0
     })
     createdFollow.save()
     result[`${payload.sessionUsername}`] = { ...createdFollow.attrs, _id: createdFollow._id }
@@ -26,7 +26,7 @@ const followUser = async (action) => {
       following: [],
       followers: [payload.sessionUsername],
       followingCount: 0,
-      followerCount: 1
+      followersCount: 1
     })
     createdFollow.save()
     result[`${payload.username}`] = { ...createdFollow.attrs, _id: createdFollow._id }
@@ -47,7 +47,7 @@ const followUser = async (action) => {
     const followers = [...payload.followers, payload.sessionUsername]
     viewedFollow.update({
       followers,
-      followerCount: followers.length
+      followersCount: followers.length
     })
 
     const updatedFollowers = await viewedFollow.save()

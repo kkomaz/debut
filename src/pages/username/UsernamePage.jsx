@@ -287,38 +287,36 @@ class UsernamePage extends Component {
                   <Card className="mb-one">
                     <Card.Content>
                       <Content>
-                        <Loadable loading={shares.loading && shares.list.length === 0}>
-                          <div>
-                            <Popover
-                              isOpen={this.state.isPopoverOpen}
-                              position="right"
-                              padding={30}
-                              onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                              content={({ position, targetRect, popoverRect }) => (
-                                <SharePopoverContainer
-                                  position={position}
-                                  targetRect={targetRect}
-                                  popoverRect={popoverRect}
-                                  togglePopover={this.togglePopover}
-                                />
-                              )}
-                            >
-                              <Icon
-                                className="debut-icon debut-icon--pointer username__share-icon-question"
-                                icon="IconQuestionCircle"
-                                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                                size={16}
-                                linkStyles={{
-                                  position: 'absolute',
-                                  top: '0',
-                                  right: '5px',
-                                  height: '30px'
-                                }}
+                        <div className="username-page__share-form-wrapper">
+                          <Popover
+                            isOpen={this.state.isPopoverOpen}
+                            position="right"
+                            padding={30}
+                            onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                            content={({ position, targetRect, popoverRect }) => (
+                              <SharePopoverContainer
+                                position={position}
+                                targetRect={targetRect}
+                                popoverRect={popoverRect}
+                                togglePopover={this.togglePopover}
                               />
-                            </Popover>
-                            <ShareForm username={username} />
-                          </div>
-                        </Loadable>
+                            )}
+                          >
+                            <Icon
+                              className="debut-icon debut-icon--pointer username__share-icon-question"
+                              icon="IconQuestionCircle"
+                              onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                              size={16}
+                              linkStyles={{
+                                position: 'absolute',
+                                top: '0',
+                                right: '5px',
+                                height: '30px'
+                              }}
+                            />
+                          </Popover>
+                          <ShareForm username={username} />
+                        </div>
                       </Content>
                     </Card.Content>
                   </Card>
