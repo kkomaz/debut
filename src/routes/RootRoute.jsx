@@ -12,6 +12,7 @@ import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
 import { requestFetchFollow} from 'actions/follow'
 import UsernameRoute from './UsernameRoute'
+import { RootContext } from 'components/context/DebutContext'
 import './RootRoute.scss'
 
 class RootRoute extends Component {
@@ -67,52 +68,57 @@ class RootRoute extends Component {
 
     return (
       <UserProvider userSession={userSession}>
-        <Navbar
-          setHomePageClickedTrue={this.setHomePageClickedTrue}
-          setProfileClickedTrue={this.setProfileClickedTrue}
-        />
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={({ location }) =>
+        <RootContext.Provider
+          value={{
+            state: this.state,
+            setProfileClickedFalse: this.setProfileClickedFalse
+          }}
+        >
+          <Navbar
+            setHomePageClickedTrue={this.setHomePageClickedTrue}
+            setProfileClickedTrue={this.setProfileClickedTrue}
+            />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={({ location }) =>
               <RootPage
                 homePageClicked={this.state.homePageClicked}
                 setHomePageClickedFalse={this.setHomePageClickedFalse}
-              />
+                />
             }
-          />
+            />
           <Route
             exact
             path="/help"
             render={() => <HelpPage />}
-          />
+            />
           <Route
             exact
             path="/unsigned/:username"
             render={({ match }) => <UnsignedUser match={match} />}
-          />
+            />
           {
             blockstackDappsLoading ?
             <Loader
               cardWrapped
               contained
               text="App is warming up..."
-            /> :
-            <Route
-              path="/:username"
-              render={({ match, location }) =>
+              /> :
+              <Route
+                path="/:username"
+                render={({ match, location }) =>
                 <UsernameRoute
                   dapps={dapps}
                   match={match}
-                  profileClicked={this.state.profileClicked}
-                  setProfileClickedFalse={this.setProfileClickedFalse}
                   username={match.params.username}
                 />
               }
-            />
+              />
           }
-        </Switch>
+          </Switch>
+        </RootContext.Provider>
       </UserProvider>
     )
   }

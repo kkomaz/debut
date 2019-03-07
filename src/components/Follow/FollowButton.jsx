@@ -45,7 +45,7 @@ class FollowButton extends Component {
           <Button
             className="follow-button mt-one"
             onClick={this.unfollowUser}
-            >
+          >
             Unfollow
           </Button> :
           <Button

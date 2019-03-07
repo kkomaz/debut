@@ -128,8 +128,6 @@ class UsernameRoute extends Component {
           user={user}
           defaultImgUrl={defaultImgUrl}
           sessionUser={sessionUser}
-          setProfileClickedFalse={this.props.setProfileClickedFalse}
-          profileClicked={this.props.profileClicked}
         />
         <Switch>
           <Route

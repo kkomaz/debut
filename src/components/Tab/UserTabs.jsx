@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { Tabs } from 'components/bulma'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { RootContext } from 'components/context/DebutContext'
 import './UserTabs.scss'
 
 class UserTabs extends Component {
@@ -27,6 +28,8 @@ class UserTabs extends Component {
     username: PropTypes.string.isRequired
   }
 
+  static contextType = RootContext
+
   setActiveTab = (value) => {
     const { username } = this.props
 
@@ -40,9 +43,9 @@ class UserTabs extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.username !== this.props.username || this.props.profileClicked) {
-      if (this.props.profileClicked) {
-        this.props.setProfileClickedFalse()
+    if (prevProps.username !== this.props.username || this.context.state.profileClicked) {
+      if (this.context.state.profileClicked) {
+        this.context.setProfileClickedFalse()
       }
 
       this.setActiveTab('profile')
