@@ -16,7 +16,8 @@ class NavbarComp extends Component {
       open: false,
       searchedUser: '',
       searchResults: [],
-      selected: ''
+      selected: '',
+      hovered: '',
     }
 
     this.fetchList = _.debounce(this.fetchList, 300)
@@ -26,6 +27,16 @@ class NavbarComp extends Component {
     history: PropTypes.object.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.dropdown.state.open) {
+      document.addEventListener('keydown', this.onKeyPress, false)
+    }
+
+    if (!this.dropdown.state.open) {
+      document.removeEventListener('keydown', this.onKeyPress)
+    }
   }
 
   goToHome = () => {
@@ -67,6 +78,42 @@ class NavbarComp extends Component {
     }, () => {
       history.push(`/${selected}`)
     })
+  }
+
+  onKeyPress = (e) => {
+    const { history } = this.props
+    if (this.dropdown.state.open && e.keyCode === 13) {
+      if (this.state.hovered) {
+        history.push(`/${this.state.hovered}`)
+        this.dropdown.toggle()
+      }
+    }
+
+    // Arrow up
+    if (this.dropdown.state.open && e.keyCode === 38) {
+      const index = _.findIndex(this.state.searchResults, (username) => {
+        return username === this.state.hovered
+      })
+
+      return this.setState({ hovered: this.state.searchResults[index - 1]})
+    }
+
+    // Arrow down
+    if (this.dropdown.state.open && e.keyCode === 40) {
+      if (this.state.hovered === '') {
+        return this.setState({ hovered: this.state.searchResults[0]})
+      } else {
+        const index = _.findIndex(this.state.searchResults, (username) => {
+          return username === this.state.hovered
+        })
+
+        if (index === this.state.searchResults.length - 1) {
+          return this.setState({ hovered: this.state.searchResults[index]})
+        } else {
+          return this.setState({ hovered: this.state.searchResults[index + 1]})
+        }
+      }
+    }
   }
 
   fetchList = async (searched) => {
@@ -116,7 +163,15 @@ class NavbarComp extends Component {
             >
               {
                 _.map(searchResults, (username) => {
-                  return <Dropdown.Item onClick={() => console.log('hi')} value={username}>{username}</Dropdown.Item>
+                  return (
+                    <Dropdown.Item
+                      onMouseEnter={() => this.setState({ hovered: username })}
+                      value={username}
+                      style={this.state.hovered === username ? { background: '#E0E3DA' } : {} }
+                    >
+                      {username}
+                    </Dropdown.Item>
+                  )
                 })
               }
             </Dropdown>
