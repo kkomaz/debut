@@ -64,6 +64,7 @@ class UsernameRoute extends Component {
     const { username, history, user } = this.props
     const { sessionUser } = this.context.state
     let profile
+
     if (!user.data) {
       return history.push({
         pathname: `/unsigned/${username}`

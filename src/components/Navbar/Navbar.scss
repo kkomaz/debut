@@ -2,4 +2,27 @@
 
 .debut-nav-bar {
   border-bottom: 1px solid hsla(0,0%,100%,.1);
+
+  input {
+    width: 400px;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 41px;
+  }
+
+  .dropdown-item {
+    &:hover {
+      background: $blue;
+    }
+  }
+
+  .dropdown-trigger {
+    display: none;
+  }
+
+  .dropdown-menu {
+    width: 400px;
+  }
 }

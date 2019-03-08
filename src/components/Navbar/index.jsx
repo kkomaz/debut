@@ -1,13 +1,25 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import Navbar from 'react-bulma-components/lib/components/navbar'
+import { Input, Dropdown } from 'components/bulma'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
+import axios from 'axios'
 import './Navbar.scss';
 
 class NavbarComp extends Component {
-  state = {
-    open: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      open: false,
+      searchedUser: '',
+      searchResults: [],
+      selected: ''
+    }
+
+    this.fetchList = _.debounce(this.fetchList, 300)
   }
 
   static propTypes = {
@@ -36,6 +48,33 @@ class NavbarComp extends Component {
     history.push('/help')
   }
 
+  onChange = (e) => {
+    e.preventDefault()
+    if (!this.dropdown.state.open) {
+      this.dropdown.toggle()
+    }
+
+    this.setState({ searchedUser: e.target.value })
+    this.fetchList(e.target.value)
+  }
+
+  onDropdownChange = (selected) => {
+    const { history } = this.props
+
+    this.setState({
+      searchedUser: selected,
+      selected,
+    }, () => {
+      history.push(`/${selected}`)
+    })
+  }
+
+  fetchList = async (searched) => {
+    const { data } = await axios.get(`https://core.blockstack.org/v1/search?query=${searched}`)
+    const result = _.map(data.results, 'fullyQualifiedName')
+    this.setState({ searchResults: result })
+  }
+
   signOut = () => {
     const { sessionUser } = this.context.state
     sessionUser.userSession.signUserOut()
@@ -47,7 +86,7 @@ class NavbarComp extends Component {
   }
 
   render() {
-    const { open } = this.state
+    const { open, searchResults } = this.state
     const { sessionUser } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
 
@@ -61,6 +100,26 @@ class NavbarComp extends Component {
         <Navbar.Brand>
           <Navbar.Item onClick={this.goToHome}>
             debut
+          </Navbar.Item>
+
+          <Navbar.Item>
+            <Input
+              onChange={this.onChange}
+              value={this.state.searchedUser}
+              placeholder="Search for debut user"
+            />
+            <Dropdown
+              ref={(dropdown) => this.dropdown = dropdown }
+              value={this.state.selected}
+              color="info"
+              onChange={this.onDropdownChange}
+            >
+              {
+                _.map(searchResults, (username) => {
+                  return <Dropdown.Item onClick={() => console.log('hi')} value={username}>{username}</Dropdown.Item>
+                })
+              }
+            </Dropdown>
           </Navbar.Item>
 
           <Navbar.Burger
