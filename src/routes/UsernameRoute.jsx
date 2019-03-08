@@ -77,7 +77,7 @@ class UsernameRoute extends Component {
       })
 
       if (process.env.NODE_ENV === 'development' && (
-        !apps || (apps.length > 0 && !_.includes(apps, appUrl))
+        _.isEmpty(apps) || (apps.length > 0 && !_.includes(apps, appUrl))
       )) {
         if (sessionUser.username === username) {
           throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
