@@ -14,10 +14,10 @@ import { UserContext } from 'components/User/UserProvider'
 import { UserHero } from 'components/User'
 import FollowingUsers from 'pages/username/following/FollowingUsers'
 import FollowersUsers from 'pages/username/followers/FollowersUsers'
+import IconProofs from 'components/SocialProofs/IconProofs'
 
 // Util imports
 import { appUrl } from 'utils/constants'
-import toggleNotification from 'utils/notifier/toggleNotification'
 import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { requestSingleUser } from 'actions/user'
 import { requestFetchFollow } from 'actions/follow'
@@ -63,7 +63,7 @@ class UsernameRoute extends Component {
   fetchProfileInfo = async () => {
     const { username, history, user } = this.props
     const { sessionUser } = this.context.state
-
+    let profile
     if (!user.data) {
       return history.push({
         pathname: `/unsigned/${username}`
@@ -71,7 +71,7 @@ class UsernameRoute extends Component {
     }
 
     try {
-      const profile = await lookupProfile(username)
+      profile = await lookupProfile(username)
       const apps = _.map(profile.apps, (k, v) => {
         return v
       })
@@ -82,16 +82,18 @@ class UsernameRoute extends Component {
         if (sessionUser.username === username) {
           throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
         } else {
-          throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
+          throw new Error(`${username} is currently using an older version of the Blockstack browser.  They have will have to update to newest version.  Located below are social proofs for ${username}.  Send a ping to let them know to stay up to date!`)
         }
       }
       return this.setState({ profile })
     } catch (e) {
       // If current user is viewing, redirect
       if (sessionUser !== username) {
-        toggleNotification('warning', e.message)
         this.setState({ error: true })
-        return forceRedirect(history)
+        const allowableProofs = ['facebook', 'twitter', 'github', 'linkedIn']
+        const userProofs = _.filter(profile.account, (account) => _.includes(allowableProofs, account.service))
+        const iconProofs = <IconProofs message={e.message} userProofs={userProofs} username={username} />
+        return forceRedirect(history, iconProofs)
       }
 
       // If current user is the bad user, sign him out
