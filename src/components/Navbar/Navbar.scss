@@ -2,6 +2,7 @@
 
 .debut-nav-bar {
   border-bottom: 1px solid hsla(0,0%,100%,.1);
+  padding-left: 278px;
 
   input {
     width: 400px;
@@ -12,17 +13,17 @@
     top: 41px;
   }
 
-  // .dropdown-item {
-  //   &:hover {
-  //     background: $blue;
-  //   }
-  // }
-
   .dropdown-trigger {
     display: none;
   }
 
   .dropdown-menu {
     width: 400px;
+  }
+}
+
+@media only screen and (max-width: 1500px) {
+  .debut-nav-bar {
+    padding-left: 0
   }
 }
