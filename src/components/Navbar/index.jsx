@@ -12,6 +12,8 @@ class NavbarComp extends Component {
 
   static propTypes = {
     history: PropTypes.object.isRequired,
+    setProfileClickedTrue: PropTypes.func.isRequired,
+    setHomePageClickedTrue: PropTypes.func.isRequired,
   }
 
   goToHome = () => {
@@ -24,6 +26,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     const { sessionUser } = this.context.state
     this.toggleNavbar()
+    this.props.setProfileClickedTrue()
     history.push(`/${sessionUser.username}`)
   }
 

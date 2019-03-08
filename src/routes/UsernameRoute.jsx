@@ -1,0 +1,196 @@
+// Library Imports
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Switch, Route } from 'react-router-dom'
+import { connect } from 'react-redux'
+import _ from 'lodash';
+import { lookupProfile } from 'blockstack'
+import { withRouter } from 'react-router-dom'
+import { List } from 'react-content-loader'
+
+// Component Imports
+import UsernamePage from 'pages/username/UsernamePage'
+import { UserContext } from 'components/User/UserProvider'
+import { UserHero } from 'components/User'
+import FollowingUsers from 'pages/username/following/FollowingUsers'
+import FollowersUsers from 'pages/username/followers/FollowersUsers'
+
+// Util imports
+import { appUrl } from 'utils/constants'
+import toggleNotification from 'utils/notifier/toggleNotification'
+import { forceUserSignOut, forceRedirect } from 'utils/auth'
+import { requestSingleUser } from 'actions/user'
+import { requestFetchFollow } from 'actions/follow'
+
+class UsernameRoute extends Component {
+  state = {
+    error: false,
+    profile: {},
+  }
+
+  static propTypes = {
+    dapps: PropTypes.array.isRequired,
+    follow: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
+    shares: PropTypes.object.isRequired,
+    username: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
+  }
+
+  async componentDidMount() {
+    const { username } = this.props
+    // (no data or slim data then make request for full data)
+    // if (!user.data || (user.data && !user.data.basicInformation)) {
+    //   this.props.requestSingleUser(username)
+    // }
+    this.props.requestSingleUser(username)
+    this.props.requestFetchFollow(username)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { username, user } = this.props
+
+    if (username !== prevProps.username) {
+      this.props.requestSingleUser(username)
+      this.props.requestFetchFollow(username)
+    }
+
+    if (!user.loading && prevProps.user.loading) {
+      this.fetchProfileInfo()
+    }
+  }
+
+  fetchProfileInfo = async () => {
+    const { username, history, user } = this.props
+    const { sessionUser } = this.context.state
+
+    if (!user.data) {
+      return history.push({
+        pathname: `/unsigned/${username}`
+      })
+    }
+
+    try {
+      const profile = await lookupProfile(username)
+      const apps = _.map(profile.apps, (k, v) => {
+        return v
+      })
+
+      if (process.env.NODE_ENV === 'development' && (
+        !apps || (apps.length > 0 && !_.includes(apps, appUrl))
+      )) {
+        if (sessionUser.username === username) {
+          throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
+        } else {
+          throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
+        }
+      }
+      return this.setState({ profile })
+    } catch (e) {
+      // If current user is viewing, redirect
+      if (sessionUser !== username) {
+        toggleNotification('warning', e.message)
+        this.setState({ error: true })
+        return forceRedirect(history)
+      }
+
+      // If current user is the bad user, sign him out
+      this.setState({ error: true })
+      return forceUserSignOut(sessionUser.userSession, e.message)
+    }
+  }
+
+  render() {
+    const { error, profile } = this.state
+    const { sessionUser, defaultImgUrl } = this.context.state
+
+    const {
+      dapps,
+      follow,
+      match,
+      user,
+      shares,
+      username,
+    } = this.props
+
+    if (error) {
+      return (
+        <div>
+          <List />
+        </div>
+      )
+    }
+
+    return (
+      <div className="username-route">
+        <UserHero
+          username={username}
+          user={user}
+          defaultImgUrl={defaultImgUrl}
+          sessionUser={sessionUser}
+        />
+        <Switch>
+          <Route
+            exact
+            path={match.url}
+            render={() =>
+              <UsernamePage
+                user={user}
+                username={username}
+                dapps={dapps}
+                follow={follow}
+                profile={profile}
+                shares={shares}
+              />
+            }
+          />
+          {
+            !_.isEmpty(follow) &&
+            <Route
+              path={`${match.url}/following`}
+              render={() => <FollowingUsers follow={follow} />}
+            />
+          }
+          {
+            !_.isEmpty(follow) &&
+            <Route
+              path={`${match.url}/followers`}
+              render={() => <FollowersUsers follow={follow} />}
+            />
+          }
+        </Switch>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  const { username } = ownProps
+  const { share } = state
+
+  const user = {
+    data: _.find(state.user.users, (user) => user._id === username),
+    loading: state.user.loading,
+    avatarLoading: state.user.avatarLoading
+  }
+
+  const shares = {
+    list: _.filter(state.share.shares.list, (share) => share.username === username),
+    full: share.shares.full,
+    loading: share.shares.loading
+  }
+
+  const follow = state.follow[username] || {}
+
+  return {
+    user,
+    shares,
+    follow,
+  }
+}
+
+export default withRouter(connect(mapStateToProps, {
+  requestSingleUser,
+  requestFetchFollow,
+})(UsernameRoute))
+UsernameRoute.contextType = UserContext

@@ -7,6 +7,7 @@ import Radio from 'react-bulma-components/lib/components/form/components/radio'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Image from 'react-bulma-components/lib/components/image'
 import Media from 'react-bulma-components/lib/components/media'
+import Tabs from 'react-bulma-components/lib/components/tabs'
 import Table from 'react-bulma-components/lib/components/table'
 import Container from 'react-bulma-components/lib/components/container'
 import Hero from 'react-bulma-components/lib/components/hero'
@@ -40,6 +41,7 @@ export {
   Media,
   Modal,
   Section,
+  Tabs,
   Table,
   Textarea,
   Pagination,

@@ -9,12 +9,9 @@ import {
   Columns,
   Container,
   Content,
-  Media,
-  Heading,
   Modal,
   Section,
 } from 'components/bulma'
-import FollowButton from 'components/Follow/FollowButton'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
 import {
@@ -27,21 +24,15 @@ import {
   ShareListItem,
   ShareForm,
 } from 'components/Share'
-import { BarLoader, HeroAvatarLoader, Loadable } from 'components/Loader'
+import { BarLoader, Loadable } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import { forceUserSignOut, forceRedirect } from 'utils/auth'
-import { List } from 'react-content-loader'
 import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
-import { lookupProfile } from 'blockstack'
-import { appUrl } from 'utils/constants'
-import { AvatarForm } from 'components/User'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
 import { addDappsToList } from 'actions/blockstack'
-import { requestSingleUser } from 'actions/user'
 import './UsernamePage.scss';
 
 class UsernamePage extends Component {
@@ -63,7 +54,6 @@ class UsernamePage extends Component {
       longLoad: setTimeout(() => {
         toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient or refresh the page!')
       }, 8000),
-      error: false,
       isPopoverOpen: false,
       avatarHovered: false,
     }
@@ -78,62 +68,21 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { username } = this.props
-    this.props.requestSingleUser(username)
+    const { profile } = this.props
+    this.requestUserShares()
+    this.loadUserInfo(profile)
+    window.addEventListener('scroll', this.handleScroll)
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { username, history, user } = this.props
+    const { username, profile } = this.props
     const { sessionUser } = this.context.state
 
     // Changing User Profiles
     if (username !== prevProps.username) {
-      this.props.requestSingleUser(username)
       this.setState({ adminMode: sessionUser.username === username })
-    }
-
-    // Loading of single user complete
-    if (!user.loading && prevProps.user.loading) {
-      // If radiks user does not exist send to unsigned page
-      if (!user.data) {
-        return history.push({
-          pathname: `/unsigned/${username}`,
-        })
-      }
-
-      try {
-        // User look up is because apps return different data from radiks userfetchList
-        // Guranteed user will exist
-        const profile = await lookupProfile(username)
-
-        const apps = _.map(profile.apps, (k,v) => {
-          return v
-        })
-
-        // Check for older browsers -- TODO: Remove this after
-        if (process.env.NODE_ENV === 'production' && (
-          !apps || (apps.length > 0 && !_.includes(apps, appUrl))
-        )) {
-          if (sessionUser.username === username) {
-            throw new Error("Your gaia hub does not exist!  Log back in and we'll reauthorize you!  Logging out now...")
-          } else {
-            throw new Error("This user is currently using an older version of the Blockstack browser.  They have will have to relog back in with the most up to date.  Redirecting back to the main page!")
-          }
-        }
-        this.loadUserInfo(profile)
-        this.requestUserShares()
-      } catch (e) {
-        this.setState({ error: true })
-
-        // If current user is viewing, redirect
-        if (sessionUser !== username) {
-          toggleNotification('warning', e.message)
-          return forceRedirect(history)
-        }
-
-        // If current user is the bad user, sign him out
-        return forceUserSignOut(sessionUser.userSession, e.message)
-      }
+      this.requestUserShares()
+      this.loadUserInfo(profile)
     }
 
     if (this.state.loading === false) {
@@ -265,10 +214,7 @@ class UsernamePage extends Component {
   }
 
   render() {
-    const {
-      sessionUser,
-      defaultImgUrl
-    } = this.context.state
+    const { sessionUser } = this.context.state
 
     const {
       history,
@@ -286,53 +232,8 @@ class UsernamePage extends Component {
       showModal,
     } = this.state
 
-    const src = _.get(user, 'data.profile.image[0].contentUrl', defaultImgUrl)
-
-    if (this.state.error) {
-      return (
-        <div>
-          <List />
-        </div>
-      )
-    }
-
     return (
       <Container>
-        <Columns>
-          <Columns.Column size={12}>
-            <Media className="username__hero">
-              <Media.Item renderAs="figure" position="left">
-                {
-                  (user.loading || loading || user.avatarLoading) ?
-                  <HeroAvatarLoader /> :
-                  <AvatarForm
-                    src={src}
-                    user={user}
-                    defaultImgUrl={defaultImgUrl}
-                    sessionUser={sessionUser}
-                  />
-                }
-              </Media.Item>
-              <Media.Item
-                position="center"
-                style={{ alignSelf: 'center' }}
-              >
-                <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
-                <Heading subtitle size={6} style={{ color: 'white' }}>
-                  {username}
-                </Heading>
-                <FollowButton
-                  defaultImgUrl={defaultImgUrl}
-                  sessionUser={sessionUser}
-                  setSessionUserState={this.context.setSessionUserState}
-                  user={user}
-                  username={username}
-                />
-              </Media.Item>
-            </Media>
-          </Columns.Column>
-        </Columns>
-
         <Columns className="mt-half">
           <Columns.Column size={5}>
             <div className="username__description mb-one">
@@ -386,38 +287,36 @@ class UsernamePage extends Component {
                   <Card className="mb-one">
                     <Card.Content>
                       <Content>
-                        <Loadable loading={shares.loading && shares.list.length === 0}>
-                          <div>
-                            <Popover
-                              isOpen={this.state.isPopoverOpen}
-                              position="right"
-                              padding={30}
-                              onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                              content={({ position, targetRect, popoverRect }) => (
-                                <SharePopoverContainer
-                                  position={position}
-                                  targetRect={targetRect}
-                                  popoverRect={popoverRect}
-                                  togglePopover={this.togglePopover}
-                                />
-                              )}
-                            >
-                              <Icon
-                                className="debut-icon debut-icon--pointer username__share-icon-question"
-                                icon="IconQuestionCircle"
-                                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                                size={16}
-                                linkStyles={{
-                                  position: 'absolute',
-                                  top: '0',
-                                  right: '5px',
-                                  height: '30px'
-                                }}
+                        <div className="username-page__share-form-wrapper">
+                          <Popover
+                            isOpen={this.state.isPopoverOpen}
+                            position="right"
+                            padding={30}
+                            onClickOutside={() => this.setState({ isPopoverOpen: false })}
+                            content={({ position, targetRect, popoverRect }) => (
+                              <SharePopoverContainer
+                                position={position}
+                                targetRect={targetRect}
+                                popoverRect={popoverRect}
+                                togglePopover={this.togglePopover}
                               />
-                            </Popover>
-                            <ShareForm username={username} />
-                          </div>
-                        </Loadable>
+                            )}
+                          >
+                            <Icon
+                              className="debut-icon debut-icon--pointer username__share-icon-question"
+                              icon="IconQuestionCircle"
+                              onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                              size={16}
+                              linkStyles={{
+                                position: 'absolute',
+                                top: '0',
+                                right: '5px',
+                                height: '30px'
+                              }}
+                            />
+                          </Popover>
+                          <ShareForm username={username} />
+                        </div>
                       </Content>
                     </Card.Content>
                   </Card>
@@ -454,54 +353,31 @@ class UsernamePage extends Component {
                 }
               </Columns.Column>
             </Columns>
+            <Modal
+              show={showModal}
+              onClose={this.closeModal}
+              closeOnEsc
+            >
+              <Modal.Content>
+                <Section style={{ backgroundColor: 'white' }}>
+                  <ShareForm
+                    username={username}
+                    currentShare={this.state.currentShare}
+                    onCancel={this.closeModal}
+                    onComplete={this.closeModal}
+                  />
+                </Section>
+              </Modal.Content>
+            </Modal>
           </Columns.Column>
         </Columns>
-        <Modal
-          show={showModal}
-          onClose={this.closeModal}
-          closeOnEsc
-        >
-          <Modal.Content>
-            <Section style={{ backgroundColor: 'white' }}>
-              <ShareForm
-                username={username}
-                currentShare={this.state.currentShare}
-                onCancel={this.closeModal}
-                onComplete={this.closeModal}
-              />
-            </Section>
-          </Modal.Content>
-        </Modal>
       </Container>
     )
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const { username } = ownProps
-  const { share } = state
-
-  const user = {
-    data: _.find(state.user.users, (user) => user._id === username),
-    loading: state.user.loading,
-    avatarLoading: state.user.avatarLoading,
-  }
-
-  const shares = {
-    list: _.filter(state.share.shares.list, (share) => share.username === username),
-    full: share.shares.full,
-    loading: share.shares.loading
-  }
-
-  return {
-    shares,
-    user,
-  }
-}
-
 UsernamePage.contextType = UserContext
-export default withRouter(connect(mapStateToProps, {
+export default withRouter(connect(null, {
   requestUserShares,
   addDappsToList,
-  requestSingleUser,
 })(UsernamePage))

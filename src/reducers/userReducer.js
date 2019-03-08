@@ -15,6 +15,7 @@ import {
   filterListFromList,
   updateOrAddObjFromList,
 } from 'reducers/utils'
+import _ from 'lodash'
 import toggleNotification from 'utils/notifier/toggleNotification'
 
 const defaultSession = {
@@ -94,8 +95,27 @@ export default function userReducer(state = defaultSession, action) {
       return { ...state, avatarLoading: false }
     case SET_USER_AVATAR_SUCCESS:
       toggleNotification('success', `${action.payload.username}'s avatar successfully updated!`)
+      let paginated
+      const updatedPaginatedUsers = state.paginatedUsers
+
+      _.each(state.paginatedUsers, (users, index) => {
+        if (_.find(users.list, (user) => user._id === action.payload._id)) {
+          paginated = {
+            list: users.list,
+            index
+          }
+        }
+      })
+
+      if (paginated) {
+        const paginatedIndex = paginated.index
+        const updatedList = updateOrAddObjFromList(paginated.list, action.payload)
+        updatedPaginatedUsers[paginatedIndex] = { list: updatedList }
+      }
+
       return { ...state,
         users: updateOrAddObjFromList(state.users, action.payload),
+        paginatedUsers: updatedPaginatedUsers,
         avatarLoading: false,
       }
     default:

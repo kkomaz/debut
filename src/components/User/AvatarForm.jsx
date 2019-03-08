@@ -35,7 +35,6 @@ class AvatarForm extends Component {
   }
 
   static propTypes = {
-    src: PropTypes.string.isRequired,
     user: PropTypes.object.isRequired,
     sessionUser: PropTypes.object.isRequired,
   }
