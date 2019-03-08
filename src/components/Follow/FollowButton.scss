@@ -1,5 +1,6 @@
 @import 'src/variables';
 
+.unfollow-button,
 .follow-button {
   background: inherit;
   font-weight: 700;
@@ -12,5 +13,9 @@
   &:focus {
     color: $white;
     border-color: $white;
+  }
+
+  &[disabled] {
+    background: inherit;
   }
 }
