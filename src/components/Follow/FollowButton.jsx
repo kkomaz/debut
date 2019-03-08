@@ -12,6 +12,7 @@ import './FollowButton.scss'
 class FollowButton extends Component {
   static propTypes = {
     defaultImgUrl: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
@@ -32,7 +33,7 @@ class FollowButton extends Component {
   }
 
   render() {
-    const { sessionUser, sessionFollow, username } = this.props
+    const { sessionUser, sessionFollow, username, loading } = this.props
 
     if (_.isEqual(sessionUser.username, username)) {
       return null
@@ -43,14 +44,16 @@ class FollowButton extends Component {
         {
           _.includes(sessionFollow.following, username) ?
           <Button
-            className="follow-button mt-one"
+            className="unfollow-button mt-one"
             onClick={this.unfollowUser}
+            disabled={loading}
           >
             Unfollow
           </Button> :
           <Button
             className="follow-button mt-one"
             onClick={this.followUser}
+            disabled={loading}
             >
             Follow
           </Button>
@@ -63,10 +66,12 @@ class FollowButton extends Component {
 const mapStateToProps = (state, ownProps) => {
   const viewedfollow = state.follow[ownProps.username] || {}
   const sessionFollow = state.follow[ownProps.sessionUser.username] || {}
+  const loading = state.follow.loading
 
   return {
     viewedfollow,
-    sessionFollow
+    sessionFollow,
+    loading
   }
 }
 

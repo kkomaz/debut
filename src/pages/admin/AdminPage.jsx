@@ -29,83 +29,16 @@ class AdminPage extends Component {
     }
   }
 
-  updateFollowers = (user) => {
-    console.log(user)
-  }
-
   updateFollowing = async () => {
     const { users } = this.state
-    const { userSession } = this.props
 
     for (let i = 0; i < users.length; i++) {
-      const options = { decrypt: false, username: users[i].username }
-      const following = await userSession.getFile(`users-following-${users[i].username}.json`, options)
-      if (!following) {
-        const follow = new Follow({
-          username: users[i].username,
-          followers: [],
-          followersCount: 0,
-          following: [],
-          followingCount: 0,
-        })
-        await follow.save()
-      } else {
-        const followingParsed = JSON.parse(following)
-        const result = _.map(followingParsed, 'username')
-
-        const follow = new Follow({
-          username: users[i].username,
-          followers: [],
-          followersCount: 0,
-          following: result,
-          followingCount: result.length,
-        })
-        await follow.save()
-      }
-    }
-  }
-
-  updateFollowers = async () => {
-    const { users } = this.state
-
-    for (let i = 0; i < users.length; i++) {
-      const follow = await Follow.findOne({ username: users[i].username })
-
-      if (!follow) {
-        debugger
-        console.log('ignoring bad user')
-      } else {
-        const following = follow.attrs.following
-        for (let j = 0; j < following.length; j++) {
-          const secondFollow = await Follow.findOne({ username: following[j].username})
-          if (!secondFollow) {
-            debugger
-            console.log('ignoring bad user')
-          } else {
-            const followers = [...secondFollow.attrs.followers, users[i].username]
-            secondFollow.update({
-              followers,
-              followersCount: followers.length
-            })
-            await secondFollow.save()
-          }
-        }
-      }
-    }
-  }
-
-  updateUserFollowers = async (username) => {
-    const follow = await Follow.findOne({ username })
-    const following = follow.attrs.following
-
-    for (let i = 0; i < following.length; i++) {
-      const follow = await Follow.findOne({ username: following[i]})
-      const followers = follow.attrs.followers
-      const newFollowers = [...followers, username]
-
-      follow.update({
-        followers: newFollowers,
-        followersCount: newFollowers.length
+      const follow = new Follow({
+        username: users[i].username,
+        followers: [],
+        followersCount: 0,
+        following: [],
+        followingCount: 0,
       })
       await follow.save()
     }
