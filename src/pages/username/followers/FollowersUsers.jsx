@@ -19,6 +19,7 @@ class FollowersUsers extends Component {
       offset: 0,
       users: [],
       bottomReached: false,
+      full: false,
     }
 
     this.handleScroll = _.debounce(this.handleScroll, 300)
@@ -30,6 +31,7 @@ class FollowersUsers extends Component {
 
   componentDidMount = async () => {
     this.fetchUsers()
+    window.addEventListener('scroll', this.handleScroll)
   }
 
   componentDidUpdate = async (prevProps, prevState) => {
@@ -61,6 +63,10 @@ class FollowersUsers extends Component {
     }
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
+
   handleScroll = () => {
     const { bottomReached } = this.state
     const html = document.documentElement; // get the html element
@@ -76,10 +82,9 @@ class FollowersUsers extends Component {
     */
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true }, () => {
-        console.log('bottom reached')
-        // if (!shares.full) {
-        //   this.requestUserShares()
-        // }
+        if (!this.state.full) {
+          this.fetchUsers()
+        }
       });
     } else if ((windowBottom < docHeight) && bottomReached) {
       this.setState({ bottomReached: false });
@@ -94,13 +99,20 @@ class FollowersUsers extends Component {
       const result = await User.fetchList({
         username: follow.followers,
         sort: '-createdAt',
-        limit: 10,
+        limit: 8,
         offset,
       })
 
-      this.setState({
-        users: _.map(result, 'attrs'),
-        offset: result.length
+      if (_.isEmpty(result)) {
+        return this.setState({ full: true })
+      }
+
+      const additionalUsers = _.map(result, 'attrs')
+      const finalUsers = [...this.state.users, ...additionalUsers]
+
+      return this.setState({
+        users: finalUsers,
+        offset: finalUsers.length
       })
     }
   }
