@@ -3,10 +3,12 @@ import Card from 'react-bulma-components/lib/components/card'
 import Columns from 'react-bulma-components/lib/components/columns'
 import Content from 'react-bulma-components/lib/components/content'
 import Control from 'react-bulma-components/lib/components/form/components/control'
+import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Radio from 'react-bulma-components/lib/components/form/components/radio'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Image from 'react-bulma-components/lib/components/image'
 import Media from 'react-bulma-components/lib/components/media'
+import Tabs from 'react-bulma-components/lib/components/tabs'
 import Table from 'react-bulma-components/lib/components/table'
 import Container from 'react-bulma-components/lib/components/container'
 import Hero from 'react-bulma-components/lib/components/hero'
@@ -20,6 +22,7 @@ import {
   Label,
   Textarea,
   Help,
+  Input,
 } from 'react-bulma-components/lib/components/form'
 
 export {
@@ -29,17 +32,20 @@ export {
   Content,
   Container,
   Control,
+  Dropdown,
   Field,
   Footer,
   Help,
   Label,
   Heading,
   Hero,
+  Input,
   Radio,
   Image,
   Media,
   Modal,
   Section,
+  Tabs,
   Table,
   Textarea,
   Pagination,

@@ -120,7 +120,7 @@ class Page extends Component {
            <Container>
              {
                !userState.paginatedObj.full &&
-               <Columns style={{ padding: '0 150px'}}>
+               <Columns>
                  <Columns.Column size={7}>
                    <Heading>Welcome to debut!</Heading>
                    <Heading size={5}>Here are the list of user currently signed up!</Heading>
@@ -167,7 +167,7 @@ class Page extends Component {
                   full={userState.paginatedObj.full}
                 />
               ): showTileView ?
-                <Columns breakpoint="tablet" style={{ padding: '0 150px' }}>
+                <Columns breakpoint="tablet">
                   {
                     _.map(userState.paginatedUsers[page].list, (user) => {
                       return (
@@ -178,7 +178,7 @@ class Page extends Component {
                           }}
                         >
                           <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                            <Card.Image size="4by3" src={_.get(user, 'profile.image[0].contentUrl', defaultImgUrl)} />
+                            <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
                             <Card.Content className="page__content">
                               <p className="page__username-text">{user.username}</p>
                             </Card.Content>

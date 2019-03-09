@@ -1,17 +1,42 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import Navbar from 'react-bulma-components/lib/components/navbar'
+import { Input, Dropdown } from 'components/bulma'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
+import axios from 'axios'
 import './Navbar.scss';
 
 class NavbarComp extends Component {
-  state = {
-    open: false
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      open: false,
+      searchedUser: '',
+      searchResults: [],
+      selected: '',
+      hovered: '',
+    }
+
+    this.fetchList = _.debounce(this.fetchList, 300)
   }
 
   static propTypes = {
     history: PropTypes.object.isRequired,
+    setProfileClickedTrue: PropTypes.func.isRequired,
+    setHomePageClickedTrue: PropTypes.func.isRequired,
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.dropdown.state.open) {
+      document.addEventListener('keydown', this.onKeyPress, false)
+    }
+
+    if (!this.dropdown.state.open) {
+      document.removeEventListener('keydown', this.onKeyPress)
+    }
   }
 
   goToHome = () => {
@@ -24,6 +49,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     const { sessionUser } = this.context.state
     this.toggleNavbar()
+    this.props.setProfileClickedTrue()
     history.push(`/${sessionUser.username}`)
   }
 
@@ -31,6 +57,69 @@ class NavbarComp extends Component {
     const { history } = this.props
     this.toggleNavbar()
     history.push('/help')
+  }
+
+  onChange = (e) => {
+    e.preventDefault()
+    if (!this.dropdown.state.open) {
+      this.dropdown.toggle()
+    }
+
+    this.setState({ searchedUser: e.target.value })
+    this.fetchList(e.target.value)
+  }
+
+  onDropdownChange = (selected) => {
+    const { history } = this.props
+
+    this.setState({
+      searchedUser: selected,
+      selected,
+    }, () => {
+      history.push(`/${selected}`)
+    })
+  }
+
+  onKeyPress = (e) => {
+    const { history } = this.props
+    if (this.dropdown.state.open && e.keyCode === 13) {
+      if (this.state.hovered) {
+        history.push(`/${this.state.hovered}`)
+        this.dropdown.toggle()
+      }
+    }
+
+    // Arrow up
+    if (this.dropdown.state.open && e.keyCode === 38) {
+      const index = _.findIndex(this.state.searchResults, (username) => {
+        return username === this.state.hovered
+      })
+
+      return this.setState({ hovered: this.state.searchResults[index - 1]})
+    }
+
+    // Arrow down
+    if (this.dropdown.state.open && e.keyCode === 40) {
+      if (this.state.hovered === '') {
+        return this.setState({ hovered: this.state.searchResults[0]})
+      } else {
+        const index = _.findIndex(this.state.searchResults, (username) => {
+          return username === this.state.hovered
+        })
+
+        if (index === this.state.searchResults.length - 1) {
+          return this.setState({ hovered: this.state.searchResults[index]})
+        } else {
+          return this.setState({ hovered: this.state.searchResults[index + 1]})
+        }
+      }
+    }
+  }
+
+  fetchList = async (searched) => {
+    const { data } = await axios.get(`https://core.blockstack.org/v1/search?query=${searched}`)
+    const result = _.map(data.results, 'fullyQualifiedName')
+    this.setState({ searchResults: result })
   }
 
   signOut = () => {
@@ -44,7 +133,7 @@ class NavbarComp extends Component {
   }
 
   render() {
-    const { open } = this.state
+    const { open, searchResults } = this.state
     const { sessionUser } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
 
@@ -58,6 +147,34 @@ class NavbarComp extends Component {
         <Navbar.Brand>
           <Navbar.Item onClick={this.goToHome}>
             debut
+          </Navbar.Item>
+
+          <Navbar.Item>
+            <Input
+              onChange={this.onChange}
+              value={this.state.searchedUser}
+              placeholder="Search for debut user"
+            />
+            <Dropdown
+              ref={(dropdown) => this.dropdown = dropdown }
+              value={this.state.selected}
+              color="info"
+              onChange={this.onDropdownChange}
+            >
+              {
+                _.map(searchResults, (username) => {
+                  return (
+                    <Dropdown.Item
+                      onMouseEnter={() => this.setState({ hovered: username })}
+                      value={username}
+                      style={this.state.hovered === username ? { background: '#E0E3DA' } : {} }
+                    >
+                      {username}
+                    </Dropdown.Item>
+                  )
+                })
+              }
+            </Dropdown>
           </Navbar.Item>
 
           <Navbar.Burger

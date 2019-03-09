@@ -51,6 +51,7 @@ const Icon = (props) => {
         tabIndex={0}
         onKeyPress={onKeyPress}
         style={linkStyles}
+        onMouseEnter={props.onMouseEnter}
       >
         <svg
           id={id}

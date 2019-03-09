@@ -6,12 +6,15 @@ import UserProvider from 'components/User/UserProvider'
 import RootPage from 'pages'
 import Navbar from 'components/Navbar'
 import { requestBlockstackDapps } from 'actions/blockstack'
-import './RootRoute.scss'
-import UsernamePage from 'pages/username/UsernamePage'
 import UnsignedUser from 'pages/unsigned/UnsignedUser'
 import HelpPage from 'pages/help/HelpPage'
+import AdminPage from 'pages/admin/AdminPage'
 import { Loader } from 'components/Loader'
 import { NoUsername } from 'components/User'
+import { requestFetchFollow} from 'actions/follow'
+import UsernameRoute from './UsernameRoute'
+import { RootContext } from 'components/context/DebutContext'
+import './RootRoute.scss'
 
 class RootRoute extends Component {
   constructor(props) {
@@ -21,6 +24,7 @@ class RootRoute extends Component {
 
     this.state = {
       homePageClicked: false,
+      profileClicked: false,
       username: userData.username,
     }
   }
@@ -31,6 +35,7 @@ class RootRoute extends Component {
 
   componentDidMount() {
     this.props.requestBlockstackDapps()
+    this.props.requestFetchFollow(this.state.username)
   }
 
   setHomePageClickedTrue = () => {
@@ -39,6 +44,14 @@ class RootRoute extends Component {
 
   setHomePageClickedFalse = () => {
     this.setState({ homePageClicked: false })
+  }
+
+  setProfileClickedTrue = () => {
+    this.setState({ profileClicked: true })
+  }
+
+  setProfileClickedFalse = () => {
+    this.setState({ profileClicked: false })
   }
 
   render() {
@@ -56,19 +69,32 @@ class RootRoute extends Component {
 
     return (
       <UserProvider userSession={userSession}>
-        <Navbar
-          setHomePageClickedTrue={this.setHomePageClickedTrue}
-        />
-        <Switch>
+        <RootContext.Provider
+          value={{
+            state: this.state,
+            setProfileClickedFalse: this.setProfileClickedFalse
+          }}
+        >
+          <Navbar
+            setHomePageClickedTrue={this.setHomePageClickedTrue}
+            setProfileClickedTrue={this.setProfileClickedTrue}
+            />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={({ location }) =>
+                <RootPage
+                  homePageClicked={this.state.homePageClicked}
+                  setHomePageClickedFalse={this.setHomePageClickedFalse}
+                />
+              }
+            />
           <Route
             exact
-            path="/"
-            render={({ location }) =>
-              <RootPage
-                homePageClicked={this.state.homePageClicked}
-                setHomePageClickedFalse={this.setHomePageClickedFalse}
-              />
-            }
+            path="/admin"
+            render={() => <AdminPage userSession={userSession} />}
+            userSession={userSession}
           />
           <Route
             exact
@@ -86,19 +112,20 @@ class RootRoute extends Component {
               cardWrapped
               contained
               text="App is warming up..."
-            /> :
-            <Route
-              exact
-              path="/:username"
-              render={({ match, location }) =>
-                <UsernamePage
-                  username={match.params.username}
+              /> :
+              <Route
+                path="/:username"
+                render={({ match, location }) =>
+                <UsernameRoute
                   dapps={dapps}
+                  match={match}
+                  username={match.params.username}
                 />
               }
-            />
+              />
           }
-        </Switch>
+          </Switch>
+        </RootContext.Provider>
       </UserProvider>
     )
   }
@@ -114,4 +141,5 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestBlockstackDapps,
+  requestFetchFollow,
 })(RootRoute))
