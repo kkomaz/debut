@@ -17,7 +17,6 @@ import { withRouter } from 'react-router-dom'
 import {
   UserDapps,
   UserDescription,
-  UserFollowing
 } from 'components/User'
 import {
   NoShares,
@@ -96,11 +95,8 @@ class UsernamePage extends Component {
   }
 
   async loadUserInfo(profile) {
-    const { username, dapps } = this.props
-    const options = { decrypt: false, username }
-    const { sessionUser } = this.context.state
+    const { dapps } = this.props
     let userDappsRadiks
-    let following
 
     try {
       const apps = _.map(profile.apps, (k,v) => {
@@ -108,28 +104,25 @@ class UsernamePage extends Component {
       })
 
       const filteredDapps = returnFilteredUrls(apps)
-      following = await sessionUser.userSession.getFile(`users-following-${username}.json`, options) || '[]'
       userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
 
       if (userDappsRadiks.newDapps.length > 0) {
         this.props.addDappsToList(userDappsRadiks.newDapps)
       }
 
-      if (!userDappsRadiks || !following) {
+      if (!userDappsRadiks) {
         throw new Error('User intro data does not exist')
       }
 
       this.setState({
         userInfo: {
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
-          following: JSON.parse(following),
         },
         loading: false,
       })
     } catch (e) {
       return this.setState({
         userInfo: {
-          following: JSON.parse(following),
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
         loading: false,
@@ -139,10 +132,6 @@ class UsernamePage extends Component {
 
   onCreateEdit = () => {
     this.setState({ displayView: false })
-  }
-
-  onShowDisplay = () => {
-    this.setState({ displayView: true })
   }
 
   onSubmit = (data) => {
@@ -156,10 +145,6 @@ class UsernamePage extends Component {
 
   onCancel = () => {
     this.setState({ displayView: true })
-  }
-
-  addDefaultSrc = (evt) => {
-    evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
   requestUserShares = () => {
@@ -217,7 +202,6 @@ class UsernamePage extends Component {
     const { sessionUser } = this.context.state
 
     const {
-      history,
       shares,
       username,
       user,
@@ -261,15 +245,6 @@ class UsernamePage extends Component {
             <div className="username__dapps mb-one">
               <UserDapps
                 adminMode={adminMode}
-                loading={loading}
-                userInfo={userInfo}
-              />
-            </div>
-
-            <div className="username__following mb-one">
-              <UserFollowing
-                adminMode={adminMode}
-                history={history}
                 loading={loading}
                 userInfo={userInfo}
               />

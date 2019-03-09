@@ -1,7 +1,8 @@
-const forceRedirect = (history) => {
-  setTimeout(() => {
-    history.push('/')
-  }, 5000)
+import toggleNotification from 'utils/notifier/toggleNotification'
+
+const forceRedirect = (history, message) => {
+  history.push('/')
+  toggleNotification('warning', message)
 }
 
 export default forceRedirect

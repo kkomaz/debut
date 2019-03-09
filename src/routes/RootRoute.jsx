@@ -84,11 +84,11 @@ class RootRoute extends Component {
               exact
               path="/"
               render={({ location }) =>
-              <RootPage
-                homePageClicked={this.state.homePageClicked}
-                setHomePageClickedFalse={this.setHomePageClickedFalse}
+                <RootPage
+                  homePageClicked={this.state.homePageClicked}
+                  setHomePageClickedFalse={this.setHomePageClickedFalse}
                 />
-            }
+              }
             />
           <Route
             exact
@@ -105,7 +105,7 @@ class RootRoute extends Component {
             exact
             path="/unsigned/:username"
             render={({ match }) => <UnsignedUser match={match} />}
-            />
+          />
           {
             blockstackDappsLoading ?
             <Loader
