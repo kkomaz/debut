@@ -26,6 +26,7 @@ class UsernameRoute extends Component {
   state = {
     error: false,
     profile: {},
+    loading: true,
   }
 
   static propTypes = {
@@ -53,6 +54,7 @@ class UsernameRoute extends Component {
     if (username !== prevProps.username) {
       this.props.requestSingleUser(username)
       this.props.requestFetchFollow(username)
+      this.setState({ loading: true })
     }
 
     if (!user.loading && prevProps.user.loading) {
@@ -86,7 +88,7 @@ class UsernameRoute extends Component {
           throw new Error(`${username} is currently using an older version of the Blockstack browser.  They have will have to update to newest version.  Located below are social proofs for ${username}.  Send a ping to let them know to stay up to date!`)
         }
       }
-      return this.setState({ profile })
+      return this.setState({ profile, loading: false })
     } catch (e) {
       // If current user is viewing, redirect
       if (sessionUser !== username) {
@@ -104,7 +106,7 @@ class UsernameRoute extends Component {
   }
 
   render() {
-    const { error, profile } = this.state
+    const { error, profile, loading } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
 
     const {
@@ -144,6 +146,7 @@ class UsernameRoute extends Component {
                 follow={follow}
                 profile={profile}
                 shares={shares}
+                loading={loading}
               />
             }
           />

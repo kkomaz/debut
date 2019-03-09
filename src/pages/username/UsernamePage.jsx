@@ -44,7 +44,7 @@ class UsernamePage extends Component {
       userInfo: {
         dapps: [],
       },
-      loading: true,
+      dappLoading: true,
       displayView: true,
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
@@ -67,9 +67,6 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    const { profile } = this.props
-    this.requestUserShares()
-    this.loadUserInfo(profile)
     window.addEventListener('scroll', this.handleScroll)
   }
 
@@ -77,14 +74,17 @@ class UsernamePage extends Component {
     const { username, profile } = this.props
     const { sessionUser } = this.context.state
 
-    // Changing User Profiles
     if (username !== prevProps.username) {
-      this.setState({ adminMode: sessionUser.username === username })
+      this.setState({ dappLoading: true })
+    }
+
+    if (!this.props.loading && prevProps.loading) {
+      this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
       this.requestUserShares()
       this.loadUserInfo(profile)
     }
 
-    if (this.state.loading === false) {
+    if (this.props.loading === false) {
       clearTimeout(this.state.longLoad)
     }
   }
@@ -118,14 +118,14 @@ class UsernamePage extends Component {
         userInfo: {
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
-        loading: false,
+        dappLoading: false,
       })
     } catch (e) {
       return this.setState({
         userInfo: {
           dapps: _.slice(userDappsRadiks.dapps, 0, 21),
         },
-        loading: false,
+        dappLoading: false,
       })
     }
   }
@@ -210,7 +210,6 @@ class UsernamePage extends Component {
     const {
       adminMode,
       bottomReached,
-      loading,
       userInfo,
       displayView,
       showModal,
@@ -228,7 +227,6 @@ class UsernamePage extends Component {
                       <UserDescription
                         adminMode={adminMode}
                         displayView={displayView}
-                        loading={loading}
                         sessionUser={sessionUser}
                         user={user}
                         username={username}
@@ -245,7 +243,7 @@ class UsernamePage extends Component {
             <div className="username__dapps mb-one">
               <UserDapps
                 adminMode={adminMode}
-                loading={loading}
+                loading={this.state.dappLoading}
                 userInfo={userInfo}
               />
             </div>
