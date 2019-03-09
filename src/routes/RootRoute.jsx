@@ -93,7 +93,7 @@ class RootRoute extends Component {
           <Route
             exact
             path="/admin"
-            render={() => <AdminPage userSession={userSession} />}
+            render={() => <AdminPage username={username} />}
             userSession={userSession}
           />
           <Route

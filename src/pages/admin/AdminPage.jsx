@@ -12,12 +12,12 @@ class AdminPage extends Component {
   }
 
   static propTypes = {
-    userSession: PropTypes.object.isRequired,
+    username: PropTypes.object.isRequired,
   }
 
   async componentDidMount() {
-    const { userSession, history } = this.props
-    if (userSession.username !== 'kkomaz.id') {
+    const { username, history } = this.props
+    if (username !== 'kkomaz.id') {
       history.push('/')
     }
 
