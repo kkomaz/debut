@@ -67,16 +67,17 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
+    if (!_.isEmpty(this.props.profile)) {
+      this.setState({ dappsLoading: true }, () => {
+        this.loadUserInfo(this.props.profile)
+      })
+    }
     window.addEventListener('scroll', this.handleScroll)
   }
 
   async componentDidUpdate(prevProps, prevState) {
     const { username, profile } = this.props
     const { sessionUser } = this.context.state
-
-    if (username !== prevProps.username) {
-      this.setState({ dappLoading: true })
-    }
 
     if (!this.props.loading && prevProps.loading) {
       this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
