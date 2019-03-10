@@ -21,6 +21,7 @@ import { appUrl } from 'utils/constants'
 import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { requestSingleUser } from 'actions/user'
 import { requestFetchFollow } from 'actions/follow'
+import { nodeEnv } from 'utils/constants'
 
 class UsernameRoute extends Component {
   state = {
@@ -79,7 +80,7 @@ class UsernameRoute extends Component {
         return v
       })
 
-      if (process.env.NODE_ENV === 'development' && (
+      if (process.env.NODE_ENV === nodeEnv && (
         _.isEmpty(apps) || (apps.length > 0 && !_.includes(apps, appUrl))
       )) {
         if (sessionUser.username === username) {
