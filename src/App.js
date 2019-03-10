@@ -10,6 +10,7 @@ import debutUser from 'model/debutUser'
 import { User } from 'radiks'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import Follow from 'model/follow'
 
 // Component/Styles Imports
 import Login from 'components/Login'
@@ -54,6 +55,15 @@ class App extends Component {
             })
             await currentUser.save()
           }
+
+          const follow = new Follow({
+            username: currentUser._id,
+            followers: [],
+            followersCount: 0,
+            following: [],
+            followingCount: 0,
+          })
+          follow.save()
         }
       } catch (e) {
         console.log(e.message)
