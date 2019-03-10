@@ -13,6 +13,13 @@
     top: 41px;
   }
 
+  .dropdown-item {
+    &.is-active {
+      background-color: $white;
+      color: #4a4a4a;
+    }
+  }
+
   .dropdown-trigger {
     display: none;
   }
