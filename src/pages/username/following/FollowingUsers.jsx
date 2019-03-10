@@ -55,7 +55,7 @@ class FollowingUsers extends Component {
       const result = await User.fetchList({
         username: follow.following,
         sort: '-createdAt',
-        limit: 8,
+        limit: 12,
         offset,
       })
 
