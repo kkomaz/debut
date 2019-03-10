@@ -44,6 +44,17 @@ class AdminPage extends Component {
     }
   }
 
+  updateFollowingOfUser = async (username) => {
+    const follow = new Follow({
+      username: username,
+      followers: [],
+      followersCount: 0,
+      following: [],
+      followingCount: 0,
+    })
+    await follow.save()
+  }
+
   render() {
     return (
       <div className="admin-page">
@@ -60,7 +71,7 @@ class AdminPage extends Component {
                 <React.Fragment>
                   <div style={{ display: 'flex', marginBottom: '5px' }}>
                     <li>{user.username}</li>
-                    <Button className="ml-one" onClick={() => this.updateUserFollowers(user.username)}>Update user followers</Button>
+                    <Button className="ml-one" onClick={() => this.updateFollowingOfUser(user.username)}>Update following</Button>
                   </div>
                 </React.Fragment>
               )
