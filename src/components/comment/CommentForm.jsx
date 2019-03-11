@@ -10,9 +10,8 @@ import {
   Help,
 } from 'components/bulma'
 import {
-  requestCreateShare,
-  requestEditShare
-} from 'actions/share'
+  requestCreateComment,
+} from 'actions/comment'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import './CommentForm.scss';
@@ -34,14 +33,15 @@ class CommentForm extends Component {
   }
 
   static propTypes = {
-    username: PropTypes.string.isRequired,
-    onCancel: PropTypes.func,
-    onComplete: PropTypes.func,
     currentComment: PropTypes.shape({
       id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
-    })
+    }),
+    onCancel: PropTypes.func,
+    onComplete: PropTypes.func,
+    shareId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
   }
 
   onChange = (e) => {
@@ -79,25 +79,26 @@ class CommentForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestEditShare(id, params)
+    // this.props.requestEditShare(id, params)
     this.props.onComplete()
   }
 
   createComment = async () => {
     const { text, imageFile } = this.state
-    const { username } = this.props
+    const { username, shareId } = this.props
 
     const params = {
+      share_id: shareId,
+      creator: username,
       text,
-      username,
-      imageFile
+      imageFile,
     }
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
     }
 
-    this.props.requestCreateShare(params)
+    this.props.requestCreateComment(params)
     this.setState({
       text: '',
       characterLength: 0,
@@ -233,6 +234,5 @@ CommentForm.defaultProps = {
 }
 
 export default connect(null, {
-  requestCreateShare,
-  requestEditShare,
+  requestCreateComment,
 })(CommentForm)

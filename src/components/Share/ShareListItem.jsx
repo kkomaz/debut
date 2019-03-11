@@ -81,7 +81,7 @@ class ShareListItem extends Component {
 
     const shareListeItemContentClass = classNames({
       'share-list-item__card-content': true,
-      'share-list-item__card-content--text-only': !share.imageFile 
+      'share-list-item__card-content--text-only': !share.imageFile
     })
 
     return (
@@ -135,7 +135,10 @@ class ShareListItem extends Component {
           <Card.Content style={{ padding: '0' }}>
             <Content>
               <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem'}}>
-                <CommentForm />
+                <CommentForm
+                  shareId={share._id}
+                  username={sessionUser.username}
+                />
               </div>
               {
                 _.map(comments, (comment, index) => {
