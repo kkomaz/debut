@@ -68,6 +68,17 @@ class ShareListItem extends Component {
       'mb-one': true
     })
 
+    const comments = [
+      {
+        createdAt: 1552024471973,
+        text: 'hello world'
+      },
+      {
+        createdAt: 1552024471973,
+        text: 'thank you next'
+      }
+    ]
+
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content>
@@ -116,13 +127,16 @@ class ShareListItem extends Component {
             </Content>
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>
-            <div className="is-divider"></div>
-
-            <Content style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
-
-              <CommentForm />
-
-              <CommentListItem />
+            <Content>
+              <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem'}}>
+                <CommentForm />
+              </div>
+              {
+                _.map(comments, (comment, index) => {
+                  return <CommentListItem comment={comment} />
+                })
+              }
+              <div className="is-divider"></div>
             </Content>
           </Card.Content>
       </Card>

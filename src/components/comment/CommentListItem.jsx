@@ -50,7 +50,7 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { cardClass, username } = this.props
+    const { cardClass, username, comment } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
@@ -66,13 +66,8 @@ class CommentListItem extends Component {
       'mb-one': true
     })
 
-    const comment = {
-      createdAt: 1552024471973,
-      text: 'hello world'
-    }
-
     return (
-      <div className={shareListItemClass}>
+      <div className={shareListItemClass} style={{ border: '1px solid #E0E3DA'}}>
         <div className="share-list-item__user-details" style={{ position: 'relative' }}>
           <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
           {
@@ -114,7 +109,6 @@ class CommentListItem extends Component {
             <img alt='' src={comment.imageFile} />
           </div>
         }
-        <div className="is-divider"></div>
       </div>
     )
   }
