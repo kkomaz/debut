@@ -141,7 +141,7 @@ class ShareListItem extends Component {
                 />
               </div>
               {
-                _.map(comments, (comment, index) => {
+                _.map(_.get(share, 'comments', []), (comment, index) => {
                   return <CommentListItem comment={comment} />
                 })
               }

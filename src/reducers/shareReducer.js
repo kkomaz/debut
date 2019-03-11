@@ -64,7 +64,7 @@ export default function shareReducer(state = defaultSession, action) {
     case CREATE_COMMENT_SUCCESS:
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
       const shareComments = _.get(share, 'comments', [])
-      const updatedShare = { ...share, commments: [...shareComments, action.payload ]}
+      const updatedShare = { ...share, comments: [...shareComments, action.payload ]}
       const updatedSharesList = updateSingleObjectFromList(updatedShare, state.shares.list)
       return { ...state, shares: { ...state.shares, list: updatedSharesList }}
     case FETCH_USER_SHARES_FAIL:

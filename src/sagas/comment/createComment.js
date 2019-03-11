@@ -1,14 +1,35 @@
 import { put, call } from 'redux-saga/effects'
 import { CREATE_COMMENT_SUCCESS, CREATE_COMMENT_FAIL } from 'actions'
 import Comment from 'model/comment'
+import Share from 'model/share'
 
-const createComment = (action) => {
+const createComment = async (action) => {
+  let comments
   const { params } = action
   const comment = new Comment({
     ...params,
     valid: true,
   })
   comment.save()
+
+  const share = await Share.findById(params.share_id)
+
+  if (!share.attrs.comments) {
+    comments = [{ ...comment.attrs, _id: comment._id }]
+    share.update({
+      comments
+    })
+
+    await share.save()
+  } else if (share.attrs.comments && share.attrs.comments.length < 5) {
+    comments = share.attrs.comments
+    comments.push({ ...comment.attrs, _id: comment._id })
+    share.update({
+      comments
+    })
+
+    await share.save()
+  }
 
   // attrs does not contain id so making a new object this way
   return { ...comment.attrs, _id: comment._id }

@@ -24,7 +24,8 @@ class Share extends Model {
       decrypted: true,
     },
     comments: {
-      type: Array
+      type: Array,
+      decrypted: true
     }
   }
 }
