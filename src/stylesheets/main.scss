@@ -2,12 +2,13 @@
 @import "~react-bulma-components/src/index.sass";
 @import './common.scss';
 
-html {
-  background: #E0E3DA;
-  font-family: 'Overpass', sans-serif;
-}
+// html {
+//   background: #E0E3DA;
+//   font-family: 'Overpass', sans-serif;
+// }
 
-body {
+html, body {
+  font-family: 'Raleway', 'Overpass', 'Open Sans', san-serif;
   background: #E0E3DA;
 }
 
