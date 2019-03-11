@@ -9,6 +9,7 @@ import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
 import { requestDeleteShare } from 'actions/share'
 import { connect} from 'react-redux'
+import { CommentForm, CommentListItem } from 'components/comment'
 import './ShareListItem.scss'
 
 const formatDate = (input) => {
@@ -102,13 +103,22 @@ class ShareListItem extends Component {
               </div>
             }
           </div>
+
           <p className={shareListItemTextClass}>{linkifyText(share.text)}</p>
+
           {
             share.imageFile &&
             <div className="share-list-item__image-container">
               <img alt='' src={share.imageFile} />
             </div>
           }
+
+          <div className="is-divider"></div>
+
+          <CommentForm />
+
+          <CommentListItem />
+
         </Card.Content>
       </Card>
     )

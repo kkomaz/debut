@@ -19,6 +19,10 @@ class Comment extends Model {
     text: {
       type: String,
       decrypted: true
+    },
+    valid: {
+      type: Boolean,
+      decrypted: true
     }
   }
 }
