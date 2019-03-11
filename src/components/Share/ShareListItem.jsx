@@ -79,9 +79,14 @@ class ShareListItem extends Component {
       }
     ]
 
+    const shareListeItemContentClass = classNames({
+      'share-list-item__card-content': true,
+      'share-list-item__card-content--text-only': !share.imageFile 
+    })
+
     return (
       <Card key={share._id} className={shareListItemClass}>
-        <Card.Content>
+        <Card.Content className={shareListeItemContentClass}>
           <Content>
             <div className="share-list-item__user-details" style={{ position: 'relative' }}>
               <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
@@ -126,6 +131,7 @@ class ShareListItem extends Component {
             }
             </Content>
           </Card.Content>
+          <div className="is-divider" style={{ borderTop: '1px solid #E0E3DA', marginTop: '0' }}></div>
           <Card.Content style={{ padding: '0' }}>
             <Content>
               <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem'}}>
@@ -136,7 +142,6 @@ class ShareListItem extends Component {
                   return <CommentListItem comment={comment} />
                 })
               }
-              <div className="is-divider"></div>
             </Content>
           </Card.Content>
       </Card>

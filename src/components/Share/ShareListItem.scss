@@ -7,6 +7,12 @@
     justify-content: center;
   }
 
+  &__card-content {
+    &--text-only {
+      padding-bottom: 0;
+    }
+  }
+
   &__image {
     max-width: 500px;
     max-height: 500px;
