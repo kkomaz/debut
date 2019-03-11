@@ -114,6 +114,7 @@ class CommentListItem extends Component {
             <img alt='' src={comment.imageFile} />
           </div>
         }
+        <div className="is-divider"></div>
       </div>
     )
   }

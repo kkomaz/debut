@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import _ from 'lodash'
-import { Card } from 'components/bulma'
+import { Card, Content } from 'components/bulma'
 import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
 import { Icon } from 'components/icon'
@@ -71,55 +71,60 @@ class ShareListItem extends Component {
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content>
-          <div className="share-list-item__user-details" style={{ position: 'relative' }}>
-            <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
-            {
-              _.isEqual(sessionUser.username, username) &&
-              <div className="share-list-item__edit-delete">
-                <div className="share-list-item__edit-delete-icons ml-one">
-                  <Icon
-                    className="debut-icon debut-icon--pointer mr-half"
-                    icon="IconPencil"
-                    onClick={this.onEditClick}
-                  />
-                  <Icon
-                    className="debut-icon debut-icon--pointer"
-                    icon="IconTrash"
-                    onClick={this.setDeleteConfirmation}
-                  />
-                </div>
-                {
-                  showDeleteConfirmation &&
-                  <div className="share-list-item__delete-confirmation">
-                    <p className="share-list-item__delete-confirmation-text small">
-                      Are you sure you want to delete this moment?
-                    </p>
-                    <div className="share-list-item__delete-yes-no">
-                      <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
-                      <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
-                    </div>
+          <Content>
+            <div className="share-list-item__user-details" style={{ position: 'relative' }}>
+              <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
+              {
+                _.isEqual(sessionUser.username, username) &&
+                <div className="share-list-item__edit-delete">
+                  <div className="share-list-item__edit-delete-icons ml-one">
+                    <Icon
+                      className="debut-icon debut-icon--pointer mr-half"
+                      icon="IconPencil"
+                      onClick={this.onEditClick}
+                    />
+                    <Icon
+                      className="debut-icon debut-icon--pointer"
+                      icon="IconTrash"
+                      onClick={this.setDeleteConfirmation}
+                    />
                   </div>
-                }
+                  {
+                    showDeleteConfirmation &&
+                    <div className="share-list-item__delete-confirmation">
+                      <p className="share-list-item__delete-confirmation-text small">
+                        Are you sure you want to delete this moment?
+                      </p>
+                      <div className="share-list-item__delete-yes-no">
+                        <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
+                        <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <p className={shareListItemTextClass}>{linkifyText(share.text)}</p>
+
+            {
+              share.imageFile &&
+              <div className="share-list-item__image-container">
+                <img alt='' src={share.imageFile} />
               </div>
             }
-          </div>
+            </Content>
+          </Card.Content>
+          <Card.Content style={{ padding: '0' }}>
+            <div className="is-divider"></div>
 
-          <p className={shareListItemTextClass}>{linkifyText(share.text)}</p>
+            <Content style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
 
-          {
-            share.imageFile &&
-            <div className="share-list-item__image-container">
-              <img alt='' src={share.imageFile} />
-            </div>
-          }
+              <CommentForm />
 
-          <div className="is-divider"></div>
-
-          <CommentForm />
-
-          <CommentListItem />
-
-        </Card.Content>
+              <CommentListItem />
+            </Content>
+          </Card.Content>
       </Card>
     )
   }
