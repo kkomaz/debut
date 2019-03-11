@@ -22,6 +22,9 @@ class Share extends Model {
     imageFile: {
       type: String,
       decrypted: true,
+    },
+    comments: {
+      type: Array
     }
   }
 }
