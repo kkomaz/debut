@@ -79,11 +79,6 @@ class UsernamePage extends Component {
     const { username, profile } = this.props
     const { sessionUser } = this.context.state
 
-    if (this.props.location.key !== prevProps.location.key) {
-      console.log(this.props.location, 'current location')
-      console.log(prevProps.location, 'prev location')
-    }
-
     if (!this.props.loading && prevProps.loading) {
       this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
       this.requestUserShares()
