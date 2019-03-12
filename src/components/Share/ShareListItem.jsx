@@ -121,7 +121,8 @@ class ShareListItem extends Component {
             }
             </Content>
             {
-              share.commentCount > 5 && <p className="small share-list-item__view-more-comments mt-one">
+              share.commentCount > 5 &&
+              <p className="small share-list-item__view-more-comments mt-one">
                 View More Comments
               </p>
             }
