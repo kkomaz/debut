@@ -6,7 +6,7 @@ import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
 import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
-import { requestDeleteShare } from 'actions/share'
+import { requestDeleteComment } from 'actions/comment'
 import { connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import './CommentListItem.scss';
@@ -44,8 +44,12 @@ class CommentListItem extends Component {
   }
 
   deleteShare = () => {
-    const { share } = this.props
-    this.props.requestDeleteShare(share)
+    const { share, comment } = this.props
+
+    this.props.requestDeleteComment({
+      share,
+      comment,
+    })
   }
 
   onUserClick = () => {
@@ -122,6 +126,8 @@ CommentListItem.defaultProps = {
   onEditClick: _.noop,
 }
 
-export default withRouter(connect(null, {})(CommentListItem))
+export default withRouter(connect(null, {
+  requestDeleteComment,
+})(CommentListItem))
 
 CommentListItem.contextType = UserContext

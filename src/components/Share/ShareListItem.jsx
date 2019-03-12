@@ -142,8 +142,11 @@ class ShareListItem extends Component {
                 _.map(_.get(share, 'comments', []), (comment, index) => {
                   return (
                     <CommentListItem
-                      key={comment._id}
                       comment={comment}
+                      key={comment._id}
+                      sessionUser={sessionUser}
+                      share={share}
+                      username={username}
                     />
                   )
                 })
