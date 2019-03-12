@@ -11,6 +11,7 @@ import {
 } from 'components/bulma'
 import {
   requestCreateComment,
+  requestEditComment,
 } from 'actions/comment'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
@@ -42,6 +43,7 @@ class CommentForm extends Component {
     onComplete: PropTypes.func,
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
+    requestEditComment: PropTypes.func.isRequired,
   }
 
   onChange = (e) => {
@@ -79,7 +81,7 @@ class CommentForm extends Component {
       return this.setState({ valid: false })
     }
 
-    // this.props.requestEditShare(id, params)
+    this.props.requestEditComment(id, params)
     this.props.onComplete()
   }
 
@@ -239,4 +241,5 @@ CommentForm.defaultProps = {
 
 export default connect(null, {
   requestCreateComment,
+  requestEditComment,
 })(CommentForm)
