@@ -202,25 +202,20 @@ class CommentForm extends Component {
 
           <div className="comment-form__characters">
             <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
-          </div>
-
-          <div className="comment-form__submit-wrapper">
-            <div className="comment-form__options">
-              <Label>
-                <Icon
-                  className="debut-icon debut-icon--pointer mt-half"
-                  icon="IconCamera"
-                  size={20}
-                />
-                <input
-                  type="file"
-                  onChange={this.storeFile}
-                  hidden
-                  accept="image/*"
-                  ref={fileInput => this.fileInput = fileInput}
-                />
-              </Label>
-            </div>
+            <Label>
+              <Icon
+                className="debut-icon debut-icon--pointer ml-one"
+                icon="IconCamera"
+                size={20}
+              />
+              <input
+                type="file"
+                onChange={this.storeFile}
+                hidden
+                accept="image/*"
+                ref={fileInput => this.fileInput = fileInput}
+              />
+            </Label>
           </div>
         </form>
       </React.Fragment>

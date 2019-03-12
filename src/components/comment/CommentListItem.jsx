@@ -8,7 +8,8 @@ import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
 import { requestDeleteShare } from 'actions/share'
 import { connect} from 'react-redux'
-import 'components/Share/ShareListItem.scss'
+import { withRouter } from 'react-router-dom'
+import './CommentListItem.scss';
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -49,31 +50,36 @@ class CommentListItem extends Component {
     this.props.requestDeleteShare(share)
   }
 
+  onUserClick = () => {
+    const { history, comment } = this.props
+
+    history.push(`/${comment.creator}`)
+  }
+
   render() {
     const { cardClass, username, comment } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
-    const shareListItemClass = classNames({
-      [cardClass]: true,
-      'share-list-item': true
-    })
+    const commentListItemClass = classNames({
+      'comment-list-item': true
+    }, cardClass)
 
-    const shareListItemTextClass = classNames({
-      'share-list-item__text': true,
+    const commentListItemTextClass = classNames({
+      'comment-list-item__text': true,
       'mt-quarter': !showDeleteConfirmation,
-      'share-list-item__text--show-delete': showDeleteConfirmation,
-      'mb-one': true
+      'comment-list-item__text--show-delete': showDeleteConfirmation,
+      'small': true
     })
 
     return (
-      <div className={shareListItemClass} style={{ border: '1px solid #E0E3DA'}}>
-        <div className="share-list-item__user-details" style={{ position: 'relative' }}>
-          <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
+      <div className={commentListItemClass}>
+        <div className="comment-list-item__user-details" style={{ position: 'relative' }}>
+          <p><strong onClick={this.onUserClick} className="comment-list-item__username-creator">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
           {
             _.isEqual(sessionUser.username, username) &&
-            <div className="share-list-item__edit-delete">
-              <div className="share-list-item__edit-delete-icons ml-one">
+            <div className="comment-list-item__edit-delete">
+              <div className="comment-list-item__edit-delete-icons ml-one">
                 <Icon
                   className="debut-icon debut-icon--pointer mr-half"
                   icon="IconPencil"
@@ -87,13 +93,13 @@ class CommentListItem extends Component {
               </div>
               {
                 showDeleteConfirmation &&
-                <div className="share-list-item__delete-confirmation">
-                  <p className="share-list-item__delete-confirmation-text small">
+                <div className="comment-list-item__delete-confirmation">
+                  <p className="comment-list-item__delete-confirmation-text small">
                     Are you sure you want to delete this moment?
                   </p>
-                  <div className="share-list-item__delete-yes-no">
-                    <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
-                    <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
+                  <div className="comment-list-item__delete-yes-no">
+                    <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteShare}>DELETE</p>
+                    <p className="cursor small comment-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
                   </div>
                 </div>
               }
@@ -101,11 +107,11 @@ class CommentListItem extends Component {
           }
         </div>
 
-        <p className={shareListItemTextClass}>{linkifyText(comment.text)}</p>
+        <p className={commentListItemTextClass}>{linkifyText(comment.text)}</p>
 
         {
           comment.imageFile &&
-          <div className="share-list-item__image-container">
+          <div className="comment-list-item__image-container">
             <img alt='' src={comment.imageFile} />
           </div>
         }
@@ -118,7 +124,6 @@ CommentListItem.defaultProps = {
   onEditClick: _.noop,
 }
 
+export default withRouter(connect(null, {})(CommentListItem))
+
 CommentListItem.contextType = UserContext
-export default connect(null, {
-  requestDeleteShare,
-})(CommentListItem)

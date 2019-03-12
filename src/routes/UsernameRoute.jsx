@@ -139,7 +139,7 @@ class UsernameRoute extends Component {
           <Route
             exact
             path={match.url}
-            render={() =>
+            render={({ location }) =>
               <UsernamePage
                 user={user}
                 username={username}
@@ -148,6 +148,7 @@ class UsernameRoute extends Component {
                 profile={profile}
                 shares={shares}
                 loading={loading}
+                location={location}
               />
             }
           />

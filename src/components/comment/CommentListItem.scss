@@ -1,0 +1,13 @@
+@import 'src/variables';
+
+.comment-list-item {
+  padding: 1em;
+
+  border: 1px solid $shadow;
+  border-bottom: none;
+
+  &__username-creator {
+    color: $blue;
+    cursor: pointer;
+  }
+}

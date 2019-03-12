@@ -116,12 +116,12 @@ class RootRoute extends Component {
               <Route
                 path="/:username"
                 render={({ match, location }) =>
-                <UsernameRoute
-                  dapps={dapps}
-                  match={match}
-                  username={match.params.username}
-                />
-              }
+                  <UsernameRoute
+                    dapps={dapps}
+                    match={match}
+                    username={match.params.username}
+                  />
+                }
               />
           }
           </Switch>
