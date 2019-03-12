@@ -12,4 +12,9 @@
     color: $blue;
     cursor: pointer;
   }
+
+  &__user-details {
+    display: flex;
+    justify-content: space-between;
+  }
 }

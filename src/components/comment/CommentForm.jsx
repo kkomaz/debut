@@ -14,6 +14,7 @@ import {
 } from 'actions/comment'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
+import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import './CommentForm.scss';
 
 class CommentForm extends Component {
@@ -38,7 +39,6 @@ class CommentForm extends Component {
       text: PropTypes.string,
       imageFile: PropTypes.string,
     }),
-    onCancel: PropTypes.func,
     onComplete: PropTypes.func,
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
@@ -154,7 +154,7 @@ class CommentForm extends Component {
   };
 
   render() {
-    const { characterLength, valid } = this.state
+    const { characterLength, valid, editMode } = this.state
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'comment-form__character-length': true,
@@ -217,6 +217,15 @@ class CommentForm extends Component {
               />
             </Label>
           </div>
+          {
+            editMode &&
+            <div>
+              <SubmitFooter
+                onCancel={this.onCancel}
+                onSubmit={this.onSubmit}
+              />
+            </div>
+          }
         </form>
       </React.Fragment>
     )

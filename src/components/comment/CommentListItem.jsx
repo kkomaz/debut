@@ -39,8 +39,8 @@ class CommentListItem extends Component {
   }
 
   onEditClick = () => {
-    const { share } = this.props
-    this.props.onEditClick(share)
+    const { comment } = this.props
+    this.props.onEditClick(comment)
   }
 
   deleteShare = () => {

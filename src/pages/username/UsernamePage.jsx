@@ -28,6 +28,7 @@ import toggleNotification from 'utils/notifier/toggleNotification'
 import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
 import { Icon } from 'components/icon'
+import { CommentForm } from 'components/comment'
 
 // Action Imports
 import { requestUserShares } from 'actions/share'
@@ -49,7 +50,9 @@ class UsernamePage extends Component {
       bottomReached: false,
       adminMode: props.username === sessionUser.username,
       showModal: false,
+      showCommentModal: false,
       currentShare: {},
+      currentComment: {},
       longLoad: setTimeout(() => {
         toggleNotification('warning', 'User Profile load is taking longer than usual!  Please be patient or refresh the page!')
       }, 8000),
@@ -195,6 +198,22 @@ class UsernamePage extends Component {
     })
   }
 
+  closeCommentModal = () => {
+    this.setState({ showCommentModal: false })
+  }
+
+  openCommentModal = (comment) => {
+    console.log(comment)
+    this.setState({
+      showCommentModal: true,
+      currentComment: {
+        id: comment._id,
+        text: comment.text,
+        imageFile: comment.imageFile
+      }
+    })
+  }
+
   togglePopover = () => {
     return this.setState({ isPopoverOpen: !this.state.isPopoverOpen })
   }
@@ -214,6 +233,7 @@ class UsernamePage extends Component {
       userInfo,
       displayView,
       showModal,
+      showCommentModal,
     } = this.state
 
     return (
@@ -318,6 +338,7 @@ class UsernamePage extends Component {
                           share={share}
                           username={username}
                           onEditClick={this.openModal}
+                          onCommentEditClick={this.openCommentModal}
                         />
                       )
                     })
@@ -340,6 +361,23 @@ class UsernamePage extends Component {
                     currentShare={this.state.currentShare}
                     onCancel={this.closeModal}
                     onComplete={this.closeModal}
+                  />
+                </Section>
+              </Modal.Content>
+            </Modal>
+            <Modal
+              show={showCommentModal}
+              onClose={this.closeCommentModal}
+              closeOnEsc
+            >
+              <Modal.Content>
+                <Section style={{ backgroundColor: 'white' }}>
+                  <CommentForm
+                    currentComment={this.state.currentComment}
+                    onComplete={this.closeCommentModal}
+                    onCancel={this.closeCommentModal}
+                    shareId={this.state.currentComment.share_id}
+                    username={username}
                   />
                 </Section>
               </Modal.Content>

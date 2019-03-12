@@ -32,6 +32,7 @@ class ShareListItem extends Component {
     share: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
+    onCommentEditClick: PropTypes.func,
   }
 
   revertDelete = () => {
@@ -155,19 +156,22 @@ class ShareListItem extends Component {
                       sessionUser={sessionUser}
                       share={share}
                       username={username}
+                      onEditClick={this.props.onCommentEditClick}
                     />
                   )
                 })
               }
               <div className="is-divider" style={{ borderTop: '1px solid #E0E3DA', marginTop: '0' }}></div>
+
               <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem'}}>
-                <CommentForm
-                  shareId={share._id}
-                  username={sessionUser.username}
-                  />
-              </div>
-            </Content>
-          </Card.Content>
+
+              <CommentForm
+                shareId={share._id}
+                username={sessionUser.username}
+              />
+            </div>
+          </Content>
+        </Card.Content>
       </Card>
     )
   }
