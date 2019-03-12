@@ -65,7 +65,6 @@ class ShareListItem extends Component {
       'share-list-item__text': true,
       'mt-quarter': !showDeleteConfirmation,
       'share-list-item__text--show-delete': showDeleteConfirmation,
-      'mb-one': true
     })
 
     const shareListeItemContentClass = classNames({
@@ -76,7 +75,7 @@ class ShareListItem extends Component {
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content className={shareListeItemContentClass}>
-          <Content>
+          <Content style={{ marginBottom: '0' }}>
             <div className="share-list-item__user-details" style={{ position: 'relative' }}>
               <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
               {
@@ -110,7 +109,9 @@ class ShareListItem extends Component {
               }
             </div>
 
-            <p className={shareListItemTextClass}>{linkifyText(share.text)}</p>
+            <p className={shareListItemTextClass}>
+              {linkifyText(share.text)}
+            </p>
 
             {
               share.imageFile &&
@@ -119,6 +120,11 @@ class ShareListItem extends Component {
               </div>
             }
             </Content>
+            {
+              share.commentCount > 5 && <p className="small share-list-item__view-more-comments mt-one">
+                View More Comments
+              </p>
+            }
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>
             <Content>

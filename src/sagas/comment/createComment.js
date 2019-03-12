@@ -17,7 +17,8 @@ const createComment = async (action) => {
   if (!share.attrs.comments) {
     comments = [{ ...comment.attrs, _id: comment._id }]
     share.update({
-      comments
+      comments,
+      commentCount: 1,
     })
 
     await share.save()
@@ -25,7 +26,8 @@ const createComment = async (action) => {
     comments = share.attrs.comments
     comments.push({ ...comment.attrs, _id: comment._id })
     share.update({
-      comments
+      comments,
+      commentCount: share.attrs.commentCount + 1
     })
 
     await share.save()
@@ -34,7 +36,8 @@ const createComment = async (action) => {
     comments.push({ ...comment.attrs, _id: comment._id })
     comments.shift()
     share.update({
-      comments
+      comments,
+      commentCount: share.attrs.commentCount + 1
     })
     await share.save()
   }

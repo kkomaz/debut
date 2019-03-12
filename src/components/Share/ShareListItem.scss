@@ -7,9 +7,13 @@
     justify-content: center;
   }
 
+  &__view-more-comments {
+    color: $primary;
+  }
+
   &__card-content {
     &--text-only {
-      padding-bottom: 0;
+      padding-bottom: 1.0em;
     }
   }
 
