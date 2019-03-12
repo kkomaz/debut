@@ -26,9 +26,7 @@ class CommentListItem extends Component {
   }
 
   static propTypes = {
-    cardClass: PropTypes.string.isRequired,
-    share: PropTypes.object.isRequired,
-    username: PropTypes.string.isRequired,
+    comment: PropTypes.object.isRequired,
     onEditClick: PropTypes.func,
   }
 
@@ -57,13 +55,13 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { cardClass, username, comment } = this.props
+    const { username, comment } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
     const commentListItemClass = classNames({
       'comment-list-item': true
-    }, cardClass)
+    })
 
     const commentListItemTextClass = classNames({
       'comment-list-item__text': true,
