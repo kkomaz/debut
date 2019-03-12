@@ -173,7 +173,7 @@ class CommentForm extends Component {
               name="text"
               onChange={this.onChange}
               placeholder="Write a comment..."
-              rows={2}
+              rows={1}
               value={this.state.text}
               onKeyDown={this.onEnterPress}
               maxLength={150}

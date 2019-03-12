@@ -75,7 +75,7 @@ class CommentListItem extends Component {
     return (
       <div className={commentListItemClass}>
         <div className="comment-list-item__user-details" style={{ position: 'relative' }}>
-          <p><strong onClick={this.onUserClick} className="comment-list-item__username-creator">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
+          <p><strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
           {
             _.isEqual(sessionUser.username, username) &&
             <div className="comment-list-item__edit-delete">

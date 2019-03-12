@@ -29,6 +29,14 @@ const createComment = async (action) => {
     })
 
     await share.save()
+  } else if (share.attrs.comments && share.attrs.comments.length === 5) {
+    comments = share.attrs.comments
+    comments.push({ ...comment.attrs, _id: comment._id })
+    comments.shift()
+    share.update({
+      comments
+    })
+    await share.save()
   }
 
   // attrs does not contain id so making a new object this way

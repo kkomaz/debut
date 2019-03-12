@@ -68,17 +68,6 @@ class ShareListItem extends Component {
       'mb-one': true
     })
 
-    const comments = [
-      {
-        createdAt: 1552024471973,
-        text: 'hello world'
-      },
-      {
-        createdAt: 1552024471973,
-        text: 'thank you next'
-      }
-    ]
-
     const shareListeItemContentClass = classNames({
       'share-list-item__card-content': true,
       'share-list-item__card-content--text-only': !share.imageFile
@@ -131,20 +120,25 @@ class ShareListItem extends Component {
             }
             </Content>
           </Card.Content>
-          <div className="is-divider" style={{ borderTop: '1px solid #E0E3DA', marginTop: '0' }}></div>
           <Card.Content style={{ padding: '0' }}>
             <Content>
+              {
+                _.map(_.get(share, 'comments', []), (comment, index) => {
+                  return (
+                    <CommentListItem
+                      key={comment._id}
+                      comment={comment}
+                    />
+                  )
+                })
+              }
+              <div className="is-divider" style={{ borderTop: '1px solid #E0E3DA', marginTop: '0' }}></div>
               <div style={{ paddingLeft: '1.5rem', paddingRight: '1.5rem'}}>
                 <CommentForm
                   shareId={share._id}
                   username={sessionUser.username}
-                />
+                  />
               </div>
-              {
-                _.map(_.get(share, 'comments', []), (comment, index) => {
-                  return <CommentListItem comment={comment} />
-                })
-              }
             </Content>
           </Card.Content>
       </Card>

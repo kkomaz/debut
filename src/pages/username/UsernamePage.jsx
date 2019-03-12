@@ -234,7 +234,8 @@ class UsernamePage extends Component {
                         onCreateEdit={this.onCreateEdit}
                         onCancel={this.onCancel}
                         onSubmit={this.onSubmit}
-                        />
+                        loading={user.loading}
+                      />
                     </Loadable>
                   </Content>
                 </Card.Content>
