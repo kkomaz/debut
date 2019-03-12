@@ -77,9 +77,23 @@ class CommentListItem extends Component {
     return (
       <div className={commentListItemClass}>
         <div className="comment-list-item__user-details" style={{ position: 'relative' }}>
-          <p><strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
+
+          <p style={{ marginBottom: '0' }}><strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
           {
-            _.isEqual(sessionUser.username, username) &&
+            _.isEqual(sessionUser.username, username) && !_.isEqual(comment.creator, sessionUser.username) &&
+            <div className="comment-list-item__edit-delete">
+              <div className="comment-list-item__edit-delete-icons ml-one">
+                <Icon
+                  className="debut-icon debut-icon--pointer"
+                  icon="IconTrash"
+                  onClick={this.setDeleteConfirmation}
+                />
+              </div>
+            </div>
+          }
+
+          {
+            !_.isEqual(sessionUser.username, username) && _.isEqual(comment.creator, sessionUser.username) &&
             <div className="comment-list-item__edit-delete">
               <div className="comment-list-item__edit-delete-icons ml-one">
                 <Icon
@@ -93,18 +107,37 @@ class CommentListItem extends Component {
                   onClick={this.setDeleteConfirmation}
                 />
               </div>
-              {
-                showDeleteConfirmation &&
-                <div className="comment-list-item__delete-confirmation">
-                  <p className="comment-list-item__delete-confirmation-text small">
-                    Are you sure you want to delete this moment?
-                  </p>
-                  <div className="comment-list-item__delete-yes-no">
-                    <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteShare}>DELETE</p>
-                    <p className="cursor small comment-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
-                  </div>
-                </div>
-              }
+            </div>
+          }
+
+          {
+            _.isEqual(sessionUser.username, username) && _.isEqual(comment.creator, sessionUser.username) &&
+            <div className="comment-list-item__edit-delete">
+              <div className="comment-list-item__edit-delete-icons ml-one">
+                <Icon
+                  className="debut-icon debut-icon--pointer mr-half"
+                  icon="IconPencil"
+                  onClick={this.onEditClick}
+                />
+                <Icon
+                  className="debut-icon debut-icon--pointer"
+                  icon="IconTrash"
+                  onClick={this.setDeleteConfirmation}
+                />
+              </div>
+            </div>
+          }
+
+          {
+            showDeleteConfirmation &&
+            <div className="comment-list-item__delete-confirmation">
+              <p className="comment-list-item__delete-confirmation-text small">
+                Are you sure you want to delete this moment?
+              </p>
+              <div className="comment-list-item__delete-yes-no">
+                <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteShare}>DELETE</p>
+                <p className="cursor small comment-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
+              </div>
             </div>
           }
         </div>

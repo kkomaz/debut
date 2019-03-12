@@ -88,7 +88,7 @@ export default function shareReducer(state = defaultSession, action) {
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
       const shareComments = _.get(share, 'comments', [])
       const updatedComments = updateSingleObjectFromList(action.payload, shareComments)
-      const updatedShare = { ...share, comments: updatedComments, commentCount: share.commentCount - 1 }
+      const updatedShare = { ...share, comments: updatedComments }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
       return { ...state, shares: { ...state.shares, list: updatedShareList }}
     }

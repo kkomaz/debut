@@ -17,4 +17,41 @@
     display: flex;
     justify-content: space-between;
   }
+
+  &__edit-delete-icons {
+    margin-bottom: 5px;
+  }
+
+  &__delete-confirmation {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    right: 0;
+  }
+
+  &__text {
+    &--show-delete {
+      width: 80%;
+    }
+  }
+
+  &__delete-confirmation-text {
+    margin-right: 50px;
+    margin-top: 3px;
+    width: 280px;
+    margin-bottom: 0;
+  }
+
+  &__delete-yes-no {
+    display: flex;
+  }
+
+  &__delete {
+    color: $danger;
+  }
+
+  &__cancel {
+    color: $blue;
+  }
 }

@@ -203,7 +203,6 @@ class UsernamePage extends Component {
   }
 
   openCommentModal = (comment) => {
-    console.log(comment)
     this.setState({
       showCommentModal: true,
       currentComment: {
