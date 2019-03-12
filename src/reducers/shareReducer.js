@@ -8,6 +8,7 @@ import {
   EDIT_SHARE_FAIL,
   DELETE_SHARE_SUCCESS,
   CREATE_COMMENT_SUCCESS,
+  DELETE_COMMENT_SUCCESS,
   FETCH_SHARE_COMMENTS_SUCCESS,
 } from 'actions'
 import _ from 'lodash'
@@ -74,6 +75,14 @@ export default function shareReducer(state = defaultSession, action) {
       const fetchedUpdatedShare = { ...fetchedShare, comments: [...action.payload.comments, ...fetchedShareComments ]}
       const fetchedUpdatedSharesList = updateSingleObjectFromList(fetchedUpdatedShare, state.shares.list)
       return { ...state, shares: { ...state.shares, list: fetchedUpdatedSharesList }}
+    case DELETE_COMMENT_SUCCESS: {
+      const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
+      const shareComments = _.get(share, 'comments', [])
+      const filteredComments = removeObjFromList(shareComments, action.payload)
+      const updatedShare = { ...share, comments: filteredComments, commentCount: share.commentCount - 1 }
+      const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
+      return { ...state, shares: { ...state.shares, list: updatedShareList }}
+    }
     case FETCH_USER_SHARES_FAIL:
     case EDIT_SHARE_FAIL:
     case CREATE_SHARE_FAIL:
