@@ -8,6 +8,7 @@ import { linkifyText } from 'utils/decorator'
 import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
 import { requestDeleteShare } from 'actions/share'
+import { requestShareComments } from 'actions/comment'
 import { connect} from 'react-redux'
 import { CommentForm, CommentListItem } from 'components/comment'
 import './ShareListItem.scss'
@@ -49,6 +50,11 @@ class ShareListItem extends Component {
   deleteShare = () => {
     const { share } = this.props
     this.props.requestDeleteShare(share)
+  }
+
+  fetchShareComments = () => {
+    const { share } = this.props
+    this.props.requestShareComments({ share_id: share._id, offset: share.comments.length })
   }
 
   render() {
@@ -121,8 +127,11 @@ class ShareListItem extends Component {
             }
             </Content>
             {
-              share.commentCount > 5 &&
-              <p className="small share-list-item__view-more-comments mt-one">
+              share.commentCount > 5 && share.commentCount !== share.comments.length &&
+              <p
+                onClick={this.fetchShareComments}
+                className="small share-list-item__view-more-comments mt-one"
+              >
                 View More Comments
               </p>
             }
@@ -160,4 +169,5 @@ ShareListItem.defaultProps = {
 ShareListItem.contextType = UserContext
 export default connect(null, {
   requestDeleteShare,
+  requestShareComments,
 })(ShareListItem)
