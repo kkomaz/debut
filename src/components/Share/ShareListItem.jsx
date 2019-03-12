@@ -141,7 +141,7 @@ class ShareListItem extends Component {
                 </p>
               }
               <p className="small">
-                {share.commentCount} comments
+                {_.get(share, 'commentCount', 0)} comments
               </p>
             </div>
           </Card.Content>
