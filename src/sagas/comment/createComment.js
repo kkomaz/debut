@@ -4,43 +4,60 @@ import Comment from 'model/comment'
 import Share from 'model/share'
 
 const createComment = async (action) => {
-  let comments
   const { params } = action
   const comment = new Comment({
     ...params,
     valid: true,
   })
-  comment.save()
+  await comment.save()
 
   const share = await Share.findById(params.share_id)
 
-  if (!share.attrs.comments) {
-    comments = [{ ...comment.attrs, _id: comment._id }]
+  if (share.attrs.commentCount) {
     share.update({
-      comments,
-      commentCount: 1,
-    })
-
-    await share.save()
-  } else if (share.attrs.comments && share.attrs.comments.length < 5) {
-    comments = share.attrs.comments
-    comments.push({ ...comment.attrs, _id: comment._id })
-    share.update({
-      comments,
       commentCount: share.attrs.commentCount + 1
     })
-
-    await share.save()
-  } else if (share.attrs.comments && share.attrs.comments.length === 5) {
-    comments = share.attrs.comments
-    comments.push({ ...comment.attrs, _id: comment._id })
-    comments.shift()
+  } else {
     share.update({
-      comments,
-      commentCount: share.attrs.commentCount + 1
+      commentCount: 1
     })
-    await share.save()
   }
+
+  await share.save()
+
+  /**
+   * Saving to share logic -- not sure if i'll keep
+  */
+
+  // const share = await Share.findById(params.share_id)
+  //
+  // if (!share.attrs.comments) {
+  //   comments = [{ ...comment.attrs, _id: comment._id }]
+  //   share.update({
+  //     comments,
+  //     commentCount: 1,
+  //   })
+  //
+  //   await share.save()
+  // } else if (share.attrs.comments && share.attrs.comments.length < 5) {
+  //   comments = share.attrs.comments
+  //   comments.push({ ...comment.attrs, _id: comment._id })
+  //   share.update({
+  //     comments,
+  //     commentCount: share.attrs.commentCount + 1
+  //   })
+  //
+  //   await share.save()
+  // } else if (share.attrs.comments && share.attrs.comments.length === 5) {
+  //   comments = share.attrs.comments
+  //   comments.push({ ...comment.attrs, _id: comment._id })
+  //   comments.shift()
+  //   share.update({
+  //     comments,
+  //     commentCount: share.attrs.commentCount + 1
+  //   })
+  //   await share.save()
+  // }
 
   // attrs does not contain id so making a new object this way
   return { ...comment.attrs, _id: comment._id }

@@ -54,7 +54,10 @@ class ShareListItem extends Component {
 
   fetchShareComments = () => {
     const { share } = this.props
-    this.props.requestShareComments({ share_id: share._id, offset: share.comments.length })
+    this.props.requestShareComments({
+      share_id: share._id,
+      offset: _.get(share, 'comments.length', 0)
+    })
   }
 
   render() {
@@ -126,15 +129,20 @@ class ShareListItem extends Component {
               </div>
             }
             </Content>
-            {
-              share.commentCount > 5 && share.commentCount !== share.comments.length &&
-              <p
-                onClick={this.fetchShareComments}
-                className="small share-list-item__view-more-comments mt-one"
-              >
-                View More Comments
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+              {
+                share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
+                <p
+                  onClick={this.fetchShareComments}
+                  className="small share-list-item__view-more-comments"
+                  >
+                  View Comments
+                </p>
+              }
+              <p className="small">
+                {share.commentCount} comments
               </p>
-            }
+            </div>
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>
             <Content>
