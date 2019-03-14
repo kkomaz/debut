@@ -45,12 +45,14 @@ class CommentListItem extends Component {
   }
 
   deleteShare = () => {
-    const { share, comment } = this.props
+    const { share, comment, deleting } = this.props
 
-    this.props.requestDeleteComment({
-      share,
-      comment,
-    })
+    if (!deleting) {
+      this.props.requestDeleteComment({
+        share,
+        comment,
+      })  
+    }
   }
 
   onUserClick = () => {
@@ -162,7 +164,7 @@ CommentListItem.defaultProps = {
 }
 
 const mapStateToProps = (state) => {
-  const deleting = state.share.comments.deleting
+  const deleting = state.share.commentActions.deleting
 
   return {
     deleting

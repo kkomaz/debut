@@ -28,7 +28,12 @@ const defaultSession = {
     full: false,
     loading: true,
   },
-  comments: {
+  shareActions: {
+    submitting: false,
+    deleting: false,
+    editing: false,
+  },
+  commentActions: {
     submitting: false,
     deleting: false,
     editing: false,
@@ -78,7 +83,7 @@ export default function shareReducer(state = defaultSession, action) {
       const updatedShare = { ...share, comments: [...shareComments, action.payload ], commentCount: share.commentCount ? share.commentCount + 1 : 1 }
       const updatedSharesList = updateSingleObjectFromList(updatedShare, state.shares.list)
       toggleNotification('success', 'Comment successfully created')
-      return { ...state, shares: { ...state.shares, list: updatedSharesList }, comments: { submitting: false }}
+      return { ...state, shares: { ...state.shares, list: updatedSharesList }, commentActions: { submitting: false }}
     case FETCH_SHARE_COMMENTS_SUCCESS:
       const fetchedShare = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
       const fetchedShareComments = _.get(fetchedShare, 'comments', [])
@@ -92,7 +97,7 @@ export default function shareReducer(state = defaultSession, action) {
       const updatedShare = { ...share, comments: filteredComments, commentCount: share.commentCount - 1 }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
       toggleNotification('success', 'Comment successfully deleted')
-      return { ...state, shares: { ...state.shares, list: updatedShareList, comments: { deleting: false } }}
+      return { ...state, shares: { ...state.shares, list: updatedShareList, commentActions: { deleting: false } }}
     }
     case EDIT_COMMENT_SUCCESS: {
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
@@ -101,16 +106,16 @@ export default function shareReducer(state = defaultSession, action) {
       const updatedShare = { ...share, comments: updatedComments }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
       toggleNotification('success', 'Comment successfully updated')
-      return { ...state, shares: { ...state.shares, list: updatedShareList }, comments: { editing: false } }
+      return { ...state, shares: { ...state.shares, list: updatedShareList }, commentActions: { editing: false } }
     }
     case REQUEST_EDIT_COMMENT: {
-      return { ...state, comments: { editing: true }}
+      return { ...state, commentActions: { editing: true }}
     }
     case REQUEST_DELETE_COMMENT: {
-      return { ...state, comments: { deleting: true }}
+      return { ...state, commentActions: { deleting: true }}
     }
     case REQUEST_CREATE_COMMENT: {
-      return { ...state, comments: { submitting: true }}
+      return { ...state, commentActions: { submitting: true }}
     }
     case FETCH_USER_SHARES_FAIL:
     case EDIT_SHARE_FAIL:

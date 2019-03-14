@@ -246,8 +246,8 @@ CommentForm.defaultProps = {
 }
 
 const mapStateToProps = (state) => {
-  const submitting = state.share.comments.submitting
-  const editing = state.share.comments.editing
+  const submitting = state.share.commentActions.submitting
+  const editing = state.share.commentActions.editing
 
   return {
     submitting,

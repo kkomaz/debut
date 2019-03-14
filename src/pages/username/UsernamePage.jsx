@@ -396,7 +396,7 @@ class UsernamePage extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const commentEditing = state.share.comments.editing
+  const commentEditing = state.share.commentActions.editing
 
   return {
     commentEditing
