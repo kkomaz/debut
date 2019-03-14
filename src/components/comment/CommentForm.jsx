@@ -45,6 +45,7 @@ class CommentForm extends Component {
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     requestEditComment: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
   }
 
   onChange = (e) => {
@@ -158,12 +159,16 @@ class CommentForm extends Component {
 
   render() {
     const { characterLength, valid, editMode } = this.state
+    const { submitting } = this.props
+
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'comment-form__character-length': true,
       'comment-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
       'comment-form__character-length--danger': leftoverLength < 30
     })
+
+    console.log(this.props.submitting)
 
     return (
       <React.Fragment>
@@ -219,7 +224,7 @@ class CommentForm extends Component {
                 ref={fileInput => this.fileInput = fileInput}
               />
             </Label>
-            <BulmaLoader />
+            { submitting && <BulmaLoader /> }
           </div>
           {
             editMode &&
@@ -241,7 +246,15 @@ CommentForm.defaultProps = {
   onComplete: _.noop,
 }
 
-export default connect(null, {
+const mapStateToProps = (state) => {
+  const submitting = state.share.comments.submitting
+
+  return {
+    submitting
+  }
+}
+
+export default connect(mapStateToProps, {
   requestCreateComment,
   requestEditComment,
 })(CommentForm)

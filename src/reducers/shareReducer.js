@@ -1,5 +1,6 @@
 import {
   REQUEST_USER_SHARES,
+  REQUEST_CREATE_COMMENT,
   FETCH_USER_SHARES_SUCCESS,
   FETCH_USER_SHARES_FAIL,
   CREATE_SHARE_SUCCESS,
@@ -24,6 +25,9 @@ const defaultSession = {
     list: [],
     full: false,
     loading: true,
+  },
+  comments: {
+    submitting: false,
   }
 }
 
@@ -69,7 +73,7 @@ export default function shareReducer(state = defaultSession, action) {
       const shareComments = _.get(share, 'comments', [])
       const updatedShare = { ...share, comments: [...shareComments, action.payload ], commentCount: share.commentCount ? share.commentCount + 1 : 1 }
       const updatedSharesList = updateSingleObjectFromList(updatedShare, state.shares.list)
-      return { ...state, shares: { ...state.shares, list: updatedSharesList }}
+      return { ...state, shares: { ...state.shares, list: updatedSharesList }, comments: { submitting: false }}
     case FETCH_SHARE_COMMENTS_SUCCESS:
       const fetchedShare = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
       const fetchedShareComments = _.get(fetchedShare, 'comments', [])
@@ -91,6 +95,9 @@ export default function shareReducer(state = defaultSession, action) {
       const updatedShare = { ...share, comments: updatedComments }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
       return { ...state, shares: { ...state.shares, list: updatedShareList }}
+    }
+    case REQUEST_CREATE_COMMENT: {
+      return { ...state, comments: { submitting: true }}
     }
     case FETCH_USER_SHARES_FAIL:
     case EDIT_SHARE_FAIL:
