@@ -9,6 +9,7 @@ import { UserContext } from 'components/User/UserProvider'
 import { requestDeleteComment } from 'actions/comment'
 import { connect} from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { BulmaLoader } from 'components/bulma'
 import './CommentListItem.scss';
 
 const formatDate = (input) => {

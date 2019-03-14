@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classNames from 'classnames';
 import {
+  BulmaLoader,
   Field,
   Label,
   Textarea,
@@ -204,9 +205,9 @@ class CommentForm extends Component {
 
           <div className="comment-form__characters">
             <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
-            <Label>
+            <Label className="comment-form__label">
               <Icon
-                className="debut-icon debut-icon--pointer ml-one"
+                className="debut-icon debut-icon--pointer ml-half"
                 icon="IconCamera"
                 size={20}
               />
@@ -218,6 +219,7 @@ class CommentForm extends Component {
                 ref={fileInput => this.fileInput = fileInput}
               />
             </Label>
+            <BulmaLoader />
           </div>
           {
             editMode &&

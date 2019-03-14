@@ -7,6 +7,7 @@ import Dropdown from 'react-bulma-components/lib/components/dropdown'
 import Radio from 'react-bulma-components/lib/components/form/components/radio'
 import Heading from 'react-bulma-components/lib/components/heading'
 import Image from 'react-bulma-components/lib/components/image'
+import BulmaLoader from './BulmaLoader'
 import Media from 'react-bulma-components/lib/components/media'
 import Tabs from 'react-bulma-components/lib/components/tabs'
 import Table from 'react-bulma-components/lib/components/table'
@@ -26,6 +27,7 @@ import {
 } from 'react-bulma-components/lib/components/form'
 
 export {
+  BulmaLoader,
   Button,
   Card,
   Columns,
