@@ -72,7 +72,6 @@ export default function shareReducer(state = defaultSession, action) {
         loading: false
       }}
     case CREATE_SHARE_SUCCESS:
-      debugger
       toggleNotification('success', 'Moment successfully created')
       return { ...state,
         shares: { ...state.shares, list: [action.payload, ...state.shares.list]},
