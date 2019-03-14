@@ -10,6 +10,7 @@ const BulmaLoader = (props) => {
         borderTopColor: 'transparent',
         borderRightColor: 'transparent'
       }}
+      {...props}
     />
   )
 }

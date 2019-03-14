@@ -12,6 +12,8 @@ import {
   DELETE_COMMENT_SUCCESS,
   FETCH_SHARE_COMMENTS_SUCCESS,
   EDIT_COMMENT_SUCCESS,
+  REQUEST_DELETE_COMMENT,
+  REQUEST_EDIT_COMMENT,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -28,6 +30,7 @@ const defaultSession = {
   },
   comments: {
     submitting: false,
+    deleting: false,
   }
 }
 
@@ -86,7 +89,7 @@ export default function shareReducer(state = defaultSession, action) {
       const filteredComments = removeObjFromList(shareComments, action.payload)
       const updatedShare = { ...share, comments: filteredComments, commentCount: share.commentCount - 1 }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
-      return { ...state, shares: { ...state.shares, list: updatedShareList }}
+      return { ...state, shares: { ...state.shares, list: updatedShareList, comments: { deleting: false } }}
     }
     case EDIT_COMMENT_SUCCESS: {
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
@@ -95,6 +98,9 @@ export default function shareReducer(state = defaultSession, action) {
       const updatedShare = { ...share, comments: updatedComments }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
       return { ...state, shares: { ...state.shares, list: updatedShareList }}
+    }
+    case REQUEST_DELETE_COMMENT: {
+      return { ...state, comments: { deleting: true }}
     }
     case REQUEST_CREATE_COMMENT: {
       return { ...state, comments: { submitting: true }}

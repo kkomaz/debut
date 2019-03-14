@@ -60,7 +60,7 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { username, comment } = this.props
+    const { username, comment, deleting } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
@@ -136,6 +136,7 @@ class CommentListItem extends Component {
                 Are you sure you want to delete this moment?
               </p>
               <div className="comment-list-item__delete-yes-no">
+                { deleting && <BulmaLoader className="mr-one" /> }
                 <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteShare}>DELETE</p>
                 <p className="cursor small comment-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
               </div>
@@ -160,7 +161,15 @@ CommentListItem.defaultProps = {
   onEditClick: _.noop,
 }
 
-export default withRouter(connect(null, {
+const mapStateToProps = (state) => {
+  const deleting = state.share.comments.deleting
+
+  return {
+    deleting
+  }
+}
+
+export default withRouter(connect(mapStateToProps, {
   requestDeleteComment,
 })(CommentListItem))
 
