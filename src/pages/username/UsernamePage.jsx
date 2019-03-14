@@ -67,6 +67,7 @@ class UsernamePage extends Component {
   static propTypes = {
     shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
+    commentEditing: PropTypes.bool.isRequired,
   }
 
   async componentDidMount() {
@@ -90,6 +91,12 @@ class UsernamePage extends Component {
 
     if (this.props.loading === false) {
       clearTimeout(this.state.longLoad)
+    }
+
+    console.log(this.props.commentEditing)
+
+    if (!this.props.commentEditing && prevProps.commentEditing) {
+      this.closeCommentModal()
     }
   }
 
@@ -388,8 +395,16 @@ class UsernamePage extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  const commentEditing = state.share.comments.editing
+
+  return {
+    commentEditing
+  }
+}
+
 UsernamePage.contextType = UserContext
-export default withRouter(connect(null, {
+export default withRouter(connect(mapStateToProps, {
   requestUserShares,
   addDappsToList,
 })(UsernamePage))

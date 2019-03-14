@@ -84,7 +84,6 @@ class CommentForm extends Component {
     }
 
     this.props.requestEditComment(id, params)
-    this.props.onComplete()
   }
 
   createComment = async () => {
@@ -159,7 +158,7 @@ class CommentForm extends Component {
 
   render() {
     const { characterLength, valid, editMode } = this.state
-    const { submitting } = this.props
+    const { submitting, editing } = this.props
 
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
@@ -226,10 +225,12 @@ class CommentForm extends Component {
           </div>
           {
             editMode &&
-            <div>
+            <div className="comment-form__submit-footer">
+              { editing && <BulmaLoader className="mr-one" />}
               <SubmitFooter
                 onCancel={this.onCancel}
                 onSubmit={this.onSubmit}
+                submitting={editing}
               />
             </div>
           }
@@ -246,9 +247,11 @@ CommentForm.defaultProps = {
 
 const mapStateToProps = (state) => {
   const submitting = state.share.comments.submitting
+  const editing = state.share.comments.editing
 
   return {
-    submitting
+    submitting,
+    editing,
   }
 }
 

@@ -31,6 +31,7 @@ const defaultSession = {
   comments: {
     submitting: false,
     deleting: false,
+    editing: false,
   }
 }
 
@@ -66,7 +67,7 @@ export default function shareReducer(state = defaultSession, action) {
       toggleNotification('success', 'Moment successfully created')
       return { ...state, shares: { ...state.shares, list: [action.payload, ...state.shares.list]}}
     case EDIT_SHARE_SUCCESS:
-      toggleNotification('success', 'Moment successfully edited')
+      toggleNotification('success', 'Moment successfully updated')
       const sharesList = updateSingleObjectFromList(action.payload, state.shares.list)
       return { ...state, shares: { ...state.shares, list: sharesList }}
     case DELETE_SHARE_SUCCESS:
@@ -76,6 +77,7 @@ export default function shareReducer(state = defaultSession, action) {
       const shareComments = _.get(share, 'comments', [])
       const updatedShare = { ...share, comments: [...shareComments, action.payload ], commentCount: share.commentCount ? share.commentCount + 1 : 1 }
       const updatedSharesList = updateSingleObjectFromList(updatedShare, state.shares.list)
+      toggleNotification('success', 'Comment successfully created')
       return { ...state, shares: { ...state.shares, list: updatedSharesList }, comments: { submitting: false }}
     case FETCH_SHARE_COMMENTS_SUCCESS:
       const fetchedShare = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
@@ -89,6 +91,7 @@ export default function shareReducer(state = defaultSession, action) {
       const filteredComments = removeObjFromList(shareComments, action.payload)
       const updatedShare = { ...share, comments: filteredComments, commentCount: share.commentCount - 1 }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
+      toggleNotification('success', 'Comment successfully deleted')
       return { ...state, shares: { ...state.shares, list: updatedShareList, comments: { deleting: false } }}
     }
     case EDIT_COMMENT_SUCCESS: {
@@ -97,7 +100,11 @@ export default function shareReducer(state = defaultSession, action) {
       const updatedComments = updateSingleObjectFromList(action.payload, shareComments)
       const updatedShare = { ...share, comments: updatedComments }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
-      return { ...state, shares: { ...state.shares, list: updatedShareList }}
+      toggleNotification('success', 'Comment successfully updated')
+      return { ...state, shares: { ...state.shares, list: updatedShareList }, comments: { editing: false } }
+    }
+    case REQUEST_EDIT_COMMENT: {
+      return { ...state, comments: { editing: true }}
     }
     case REQUEST_DELETE_COMMENT: {
       return { ...state, comments: { deleting: true }}

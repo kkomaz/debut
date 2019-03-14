@@ -7,10 +7,11 @@ import './stylesheets/_submit-footer.scss'
 class SubmitFooter extends Component {
   static propTypes = {
     onCancel: PropTypes.func.isRequired,
+    submitting: PropTypes.bool,
   }
 
   render() {
-    const { className } = this.props
+    const { className, submitting } = this.props
 
     const submitFooterClass = classNames({
       'submit-footer': true
@@ -21,18 +22,24 @@ class SubmitFooter extends Component {
         <Button
           onClick={this.props.onCancel}
           className="mr-half"
+          disabled={submitting}
         >
           Cancel
         </Button>
         <Button
           color="primary"
           type="submit"
+          disabled={submitting}
         >
           Submit
         </Button>
       </div>
     )
   }
+}
+
+SubmitFooter.defaultProps = {
+  submitting: false
 }
 
 export default SubmitFooter
