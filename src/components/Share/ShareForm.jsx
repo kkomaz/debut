@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import classNames from 'classnames';
 import {
+  BulmaLoader,
   Field,
   Label,
   Textarea,
@@ -81,7 +82,6 @@ class ShareForm extends Component {
     }
 
     this.props.requestEditShare(id, params)
-    this.props.onComplete()
   }
 
   createShare = async () => {
@@ -154,13 +154,16 @@ class ShareForm extends Component {
   };
 
   render() {
-    const { characterLength, valid } = this.state
+    const { characterLength, valid, editMode } = this.state
+    const { editing, submitting } = this.props
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'share-form__character-length': true,
       'share-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
       'share-form__character-length--danger': leftoverLength < 30
     })
+
+    console.log(this.props.submitting)
 
     return (
       <React.Fragment>
@@ -222,13 +225,29 @@ class ShareForm extends Component {
               </Label>
             </div>
 
-            <div>
-              <SubmitFooter
-                onCancel={this.onCancel}
-                onSubmit={this.onSubmit}
-              />
-            </div>
+            {
+              !editMode &&
+              <div className="share-form__submit-footer">
+                { submitting && <BulmaLoader className="mr-one" />}
+                <SubmitFooter
+                  onCancel={this.onCancel}
+                  onSubmit={this.onSubmit}
+                  submitting={submitting}
+                />
+              </div>
+            }
 
+            {
+              editMode &&
+              <div className="share-form__submit-footer">
+                { editing && <BulmaLoader className="mr-one" />}
+                <SubmitFooter
+                  onCancel={this.onCancel}
+                  onSubmit={this.onSubmit}
+                  submitting={editing}
+                />
+              </div>
+            }
           </div>
         </form>
       </React.Fragment>
@@ -241,7 +260,19 @@ ShareForm.defaultProps = {
   onComplete: _.noop,
 }
 
-export default connect(null, {
+const mapStateToProps = (state) => {
+  const submitting = state.share.shareActions.submitting
+  const editing = state.share.shareActions.editing
+
+  console.log(state.share.shareActions, 'shareActions')
+
+  return {
+    submitting,
+    editing,
+  }
+}
+
+export default connect(mapStateToProps, {
   requestCreateShare,
   requestEditShare,
 })(ShareForm)

@@ -93,10 +93,12 @@ class UsernamePage extends Component {
       clearTimeout(this.state.longLoad)
     }
 
-    console.log(this.props.commentEditing)
-
     if (!this.props.commentEditing && prevProps.commentEditing) {
       this.closeCommentModal()
+    }
+
+    if (!this.props.shareEditing && prevProps.shareEditing) {
+      this.closeModal()
     }
   }
 
@@ -366,7 +368,6 @@ class UsernamePage extends Component {
                     username={username}
                     currentShare={this.state.currentShare}
                     onCancel={this.closeModal}
-                    onComplete={this.closeModal}
                   />
                 </Section>
               </Modal.Content>
@@ -397,9 +398,11 @@ class UsernamePage extends Component {
 
 const mapStateToProps = (state) => {
   const commentEditing = state.share.commentActions.editing
+  const shareEditing = state.share.shareActions.editing
 
   return {
-    commentEditing
+    commentEditing,
+    shareEditing,
   }
 }
 

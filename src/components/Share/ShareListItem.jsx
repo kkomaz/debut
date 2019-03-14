@@ -11,6 +11,7 @@ import { requestDeleteShare } from 'actions/share'
 import { requestShareComments } from 'actions/comment'
 import { connect} from 'react-redux'
 import { CommentForm, CommentListItem } from 'components/comment'
+import { BulmaLoader } from 'components/bulma'
 import './ShareListItem.scss'
 
 const formatDate = (input) => {
@@ -62,7 +63,7 @@ class ShareListItem extends Component {
   }
 
   render() {
-    const { cardClass, share, username } = this.props
+    const { cardClass, share, username, deleting } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
@@ -110,6 +111,7 @@ class ShareListItem extends Component {
                         Are you sure you want to delete this moment?
                       </p>
                       <div className="share-list-item__delete-yes-no">
+                        { deleting && <BulmaLoader className="mr-one" /> }
                         <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
                         <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
                       </div>
@@ -181,8 +183,16 @@ ShareListItem.defaultProps = {
   onEditClick: _.noop,
 }
 
+const mapStateToProps = (state) => {
+  const deleting = state.share.shareActions.deleting
+
+  return {
+    deleting
+  }
+}
+
 ShareListItem.contextType = UserContext
-export default connect(null, {
+export default connect(mapStateToProps, {
   requestDeleteShare,
   requestShareComments,
 })(ShareListItem)
