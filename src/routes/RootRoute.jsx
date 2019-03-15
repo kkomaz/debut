@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route, withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import UserProvider from 'components/User/UserProvider'
@@ -84,9 +84,10 @@ class RootRoute extends Component {
               exact
               path="/"
               render={({ location }) =>
-                <RootPage
-                  homePageClicked={this.state.homePageClicked}
-                  setHomePageClickedFalse={this.setHomePageClickedFalse}
+                <Redirect
+                  to={{
+                    pathname: `/${username}`,
+                  }}
                 />
               }
             />
