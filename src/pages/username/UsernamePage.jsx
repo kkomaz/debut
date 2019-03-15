@@ -281,7 +281,6 @@ class UsernamePage extends Component {
 
           <Columns.Column
             size={7}
-            ref={(rightElement) => this.rightElement = rightElement}
           >
             <Columns>
               <Columns.Column size={12}>
