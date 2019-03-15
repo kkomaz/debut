@@ -62,7 +62,7 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { username, comment, commentActions, share } = this.props
+    const { username, comment, commentActions } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 

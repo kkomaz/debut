@@ -1,70 +1,66 @@
-import React, { Component } from 'react'
-import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import UserProvider from 'components/User/UserProvider'
-import RootPage from 'pages'
-import Navbar from 'components/Navbar'
-import { requestBlockstackDapps } from 'actions/blockstack'
-import UnsignedUser from 'pages/unsigned/UnsignedUser'
-import HelpPage from 'pages/help/HelpPage'
-import AdminPage from 'pages/admin/AdminPage'
-import { Loader } from 'components/Loader'
-import { NoUsername } from 'components/User'
-import { requestFetchFollow} from 'actions/follow'
-import UsernameRoute from './UsernameRoute'
-import { RootContext } from 'components/context/DebutContext'
-import './RootRoute.scss'
+import React, { Component } from "react";
+import { Switch, Route, withRouter, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import UserProvider from "components/User/UserProvider";
+import RootPage from "pages";
+import Navbar from "components/Navbar";
+import { requestBlockstackDapps } from "actions/blockstack";
+import UnsignedUser from "pages/unsigned/UnsignedUser";
+import HelpPage from "pages/help/HelpPage";
+import AdminPage from "pages/admin/AdminPage";
+import { Loader } from "components/Loader";
+import { NoUsername } from "components/User";
+import { requestFetchFollow } from "actions/follow";
+import UsernameRoute from "./UsernameRoute";
+import { RootContext } from "components/context/DebutContext";
+import "./RootRoute.scss";
 
 class RootRoute extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    const userData = props.userSession.loadUserData()
+    const userData = props.userSession.loadUserData();
 
     this.state = {
       homePageClicked: false,
       profileClicked: false,
-      username: userData.username,
-    }
+      username: userData.username
+    };
   }
 
   static propTypes = {
-    userSession: PropTypes.object.isRequired,
-  }
+    userSession: PropTypes.object.isRequired
+  };
 
   componentDidMount() {
-    this.props.requestBlockstackDapps()
-    this.props.requestFetchFollow(this.state.username)
+    this.props.requestBlockstackDapps();
+    this.props.requestFetchFollow(this.state.username);
   }
 
   setHomePageClickedTrue = () => {
-    this.setState({ homePageClicked: true })
-  }
+    this.setState({ homePageClicked: true });
+  };
 
   setHomePageClickedFalse = () => {
-    this.setState({ homePageClicked: false })
-  }
+    this.setState({ homePageClicked: false });
+  };
 
   setProfileClickedTrue = () => {
-    this.setState({ profileClicked: true })
-  }
+    this.setState({ profileClicked: true });
+  };
 
   setProfileClickedFalse = () => {
-    this.setState({ profileClicked: false })
-  }
+    this.setState({ profileClicked: false });
+  };
 
   render() {
-    const {
-      userSession,
-      blockstackDappsLoading,
-      dapps,
-    } = this.props
+    const { userSession, blockstackDappsLoading, dapps } = this.props;
 
-    const { username } = this.state
+    const { username } = this.state;
 
     if (!username) {
-      return <NoUsername userSession={userSession} />
+      return <NoUsername userSession={userSession} />;
     }
 
     return (
@@ -78,69 +74,75 @@ class RootRoute extends Component {
           <Navbar
             setHomePageClickedTrue={this.setHomePageClickedTrue}
             setProfileClickedTrue={this.setProfileClickedTrue}
-            />
+          />
           <Switch>
             <Route
               exact
               path="/"
-              render={({ location }) =>
+              render={({ location }) => (
                 <Redirect
                   to={{
-                    pathname: `/${username}`,
+                    pathname: `/${username}`
                   }}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/explore"
+              render={() =>
+                <RootPage
+                  homePageClicked={this.state.homePageClicked}
+                  setHomePageClickedFalse={this.setHomePageClickedFalse}
                 />
               }
             />
-          <Route
-            exact
-            path="/admin"
-            render={() => <AdminPage username={username} />}
-            userSession={userSession}
-          />
-          <Route
-            exact
-            path="/help"
-            render={() => <HelpPage />}
-          />
-          <Route
-            exact
-            path="/unsigned/:username"
-            render={({ match }) => <UnsignedUser match={match} />}
-          />
-          {
-            blockstackDappsLoading ?
-            <Loader
-              cardWrapped
-              contained
-              text="App is warming up..."
-              /> :
+            <Route
+              exact
+              path="/admin"
+              render={() => <AdminPage username={username} />}
+              userSession={userSession}
+            />
+            <Route exact path="/help" render={() => <HelpPage />} />
+            <Route
+              exact
+              path="/unsigned/:username"
+              render={({ match }) => <UnsignedUser match={match} />}
+            />
+            {blockstackDappsLoading ? (
+              <Loader cardWrapped contained text="App is warming up..." />
+            ) : (
               <Route
                 path="/:username"
-                render={({ match, location }) =>
+                render={({ match, location }) => (
                   <UsernameRoute
                     dapps={dapps}
                     match={match}
                     username={match.params.username}
                   />
-                }
+                )}
               />
-          }
+            )}
           </Switch>
         </RootContext.Provider>
       </UserProvider>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     blockstackDappsLoading: state.blockstack.dapps.loading,
-    dapps: state.blockstack.dapps.list,
-  }
-}
+    dapps: state.blockstack.dapps.list
+  };
+};
 
-
-export default withRouter(connect(mapStateToProps, {
-  requestBlockstackDapps,
-  requestFetchFollow,
-})(RootRoute))
+export default withRouter(
+  connect(
+    mapStateToProps,
+    {
+      requestBlockstackDapps,
+      requestFetchFollow
+    }
+  )(RootRoute)
+);
