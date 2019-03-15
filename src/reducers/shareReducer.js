@@ -40,6 +40,8 @@ const defaultSession = {
     submitting: false,
     deleting: false,
     editing: false,
+    shareId: '',
+    commentId: ''
   }
 }
 
@@ -139,10 +141,10 @@ export default function shareReducer(state = defaultSession, action) {
       return { ...state, commentActions: { ...state.commentActions, editing: true }}
     }
     case REQUEST_DELETE_COMMENT: {
-      return { ...state, commentActions: { ...state.commentActions, deleting: true }}
+      return { ...state, commentActions: { ...state.commentActions, deleting: true, commentId: action.payload.comment._id }}
     }
     case REQUEST_CREATE_COMMENT: {
-      return { ...state, commentActions: { ...state.commentActions, submitting: true }}
+      return { ...state, commentActions: { ...state.commentActions, submitting: true, shareId: action.payload.shareId }}
     }
     case FETCH_USER_SHARES_FAIL:
     case EDIT_SHARE_FAIL:

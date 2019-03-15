@@ -44,14 +44,14 @@ class CommentListItem extends Component {
     this.props.onEditClick(comment)
   }
 
-  deleteShare = () => {
-    const { share, comment, deleting } = this.props
+  deleteComment = () => {
+    const { share, comment, commentActions } = this.props
 
-    if (!deleting) {
+    if (!commentActions.deleting) {
       this.props.requestDeleteComment({
         share,
         comment,
-      })  
+      })
     }
   }
 
@@ -62,7 +62,7 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { username, comment, deleting } = this.props
+    const { username, comment, commentActions, share } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
@@ -138,8 +138,8 @@ class CommentListItem extends Component {
                 Are you sure you want to delete this moment?
               </p>
               <div className="comment-list-item__delete-yes-no">
-                { deleting && <BulmaLoader className="mr-one" /> }
-                <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteShare}>DELETE</p>
+                { commentActions.deleting && commentActions.commentId === comment._id && <BulmaLoader className="mr-one" /> }
+                <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteComment}>DELETE</p>
                 <p className="cursor small comment-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
               </div>
             </div>
@@ -165,9 +165,15 @@ CommentListItem.defaultProps = {
 
 const mapStateToProps = (state) => {
   const deleting = state.share.commentActions.deleting
+  const commentId = state.share.commentActions.commentId
+
+  const commentActions = {
+    deleting,
+    commentId,
+  }
 
   return {
-    deleting
+    commentActions
   }
 }
 

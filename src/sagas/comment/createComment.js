@@ -4,7 +4,7 @@ import Comment from 'model/comment'
 import Share from 'model/share'
 
 const createComment = async (action) => {
-  const { params } = action
+  const { params } = action.payload
   const comment = new Comment({
     ...params,
     valid: true,

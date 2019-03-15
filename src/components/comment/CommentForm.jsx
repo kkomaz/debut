@@ -41,11 +41,15 @@ class CommentForm extends Component {
       text: PropTypes.string,
       imageFile: PropTypes.string,
     }),
+    commentActions: PropTypes.shape({
+      submitting: PropTypes.bool.isRequired,
+      editing: PropTypes.bool.isRequired,
+      shareId: PropTypes.string.isRequired,
+    }).isRequired,
     onComplete: PropTypes.func,
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     requestEditComment: PropTypes.func.isRequired,
-    submitting: PropTypes.bool.isRequired,
   }
 
   onChange = (e) => {
@@ -101,7 +105,7 @@ class CommentForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestCreateComment(params)
+    this.props.requestCreateComment(params, shareId)
     this.setState({
       text: '',
       characterLength: 0,
@@ -158,7 +162,7 @@ class CommentForm extends Component {
 
   render() {
     const { characterLength, valid, editMode } = this.state
-    const { submitting, editing } = this.props
+    const { commentActions, shareId } = this.props
 
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
@@ -221,16 +225,16 @@ class CommentForm extends Component {
                 ref={fileInput => this.fileInput = fileInput}
               />
             </Label>
-            { submitting && <BulmaLoader /> }
+            { commentActions.submitting && shareId === commentActions.shareId && <BulmaLoader /> }
           </div>
           {
             editMode &&
             <div className="comment-form__submit-footer">
-              { editing && <BulmaLoader className="mr-one" />}
+              { commentActions.editing && <BulmaLoader className="mr-one" />}
               <SubmitFooter
                 onCancel={this.onCancel}
                 onSubmit={this.onSubmit}
-                submitting={editing}
+                submitting={commentActions.editing}
               />
             </div>
           }
@@ -248,10 +252,16 @@ CommentForm.defaultProps = {
 const mapStateToProps = (state) => {
   const submitting = state.share.commentActions.submitting
   const editing = state.share.commentActions.editing
+  const shareId = state.share.commentActions.shareId
 
-  return {
+  const commentActions = {
     submitting,
     editing,
+    shareId
+  }
+
+  return {
+    commentActions
   }
 }
 
