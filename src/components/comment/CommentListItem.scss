@@ -1,31 +1,19 @@
 @import 'src/variables';
 
-.share-list-item {
-  &__image-container {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-  }
+.comment-list-item {
+  padding: 1em;
+  padding-left: 1.5em;
 
-  &__view-more-comments {
-    color: $primary;
+  border: 1px solid $shadow;
+  border-bottom: none;
+
+
+  &__username-creator {
+    color: $blue;
     cursor: pointer;
   }
 
-  &__card-content {
-    &--text-only {
-      padding-bottom: 1.0em;
-      padding-right: 1.0em;
-    }
-  }
-
-  &__image {
-    max-width: 500px;
-    max-height: 500px;
-  }
-
   &__user-details {
-    align-items: center;
     display: flex;
     justify-content: space-between;
   }
@@ -44,12 +32,15 @@
 
   &__text {
     &--show-delete {
-      margin-top: 50px;
+      width: 80%;
     }
   }
 
   &__delete-confirmation-text {
+    margin-right: 50px;
+    margin-top: 3px;
     width: 280px;
+    margin-bottom: 0;
   }
 
   &__delete-yes-no {

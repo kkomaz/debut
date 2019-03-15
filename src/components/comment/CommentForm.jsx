@@ -10,40 +10,46 @@ import {
   Textarea,
   Help,
 } from 'components/bulma'
-import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import {
-  requestCreateShare,
-  requestEditShare
-} from 'actions/share'
+  requestCreateComment,
+  requestEditComment,
+} from 'actions/comment'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import './ShareForm.scss'
+import SubmitFooter from 'components/UI/Form/SubmitFooter'
+import './CommentForm.scss';
 
-class ShareForm extends Component {
+class CommentForm extends Component {
   constructor(props) {
     super(props)
 
-    const { currentShare = {} } = props
+    const { currentComment = {} } = props
 
     this.state = {
-      id: currentShare.id || '',
-      text: currentShare.text || '',
-      characterLength: currentShare.text ? currentShare.text.length : 0,
+      id: currentComment.id || '',
+      text: currentComment.text || '',
+      characterLength: currentComment.text ? currentComment.text.length : 0,
       valid: true,
-      imageFile: currentShare.imageFile || '',
-      editMode: !!currentShare.id
+      imageFile: currentComment.imageFile || '',
+      editMode: !!currentComment.id
     }
   }
 
   static propTypes = {
-    username: PropTypes.string.isRequired,
-    onCancel: PropTypes.func,
-    onComplete: PropTypes.func,
-    currentShare: PropTypes.shape({
+    currentComment: PropTypes.shape({
       id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
-    })
+    }),
+    commentActions: PropTypes.shape({
+      submitting: PropTypes.bool.isRequired,
+      editing: PropTypes.bool.isRequired,
+      shareId: PropTypes.string.isRequired,
+    }).isRequired,
+    onComplete: PropTypes.func,
+    shareId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    requestEditComment: PropTypes.func.isRequired,
   }
 
   onChange = (e) => {
@@ -64,10 +70,10 @@ class ShareForm extends Component {
 
     const { editMode } = this.state
 
-    return editMode ? this.editShare() : this.createShare()
+    return editMode ? this.editComment() : this.createComment()
   }
 
-  editShare = async () => {
+  editComment = async () => {
     const { id, text, imageFile } = this.state
     const { username } = this.props
 
@@ -81,24 +87,25 @@ class ShareForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestEditShare(id, params)
+    this.props.requestEditComment(id, params)
   }
 
-  createShare = async () => {
+  createComment = async () => {
     const { text, imageFile } = this.state
-    const { username } = this.props
+    const { username, shareId } = this.props
 
     const params = {
+      share_id: shareId,
+      creator: username,
       text,
-      username,
-      imageFile
+      imageFile,
     }
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
     }
 
-    this.props.requestCreateShare(params)
+    this.props.requestCreateComment(params, shareId)
     this.setState({
       text: '',
       characterLength: 0,
@@ -155,28 +162,27 @@ class ShareForm extends Component {
 
   render() {
     const { characterLength, valid, editMode } = this.state
-    const { editing, submitting } = this.props
+    const { commentActions, shareId } = this.props
+
     const leftoverLength = 150 - characterLength
     const characterClass = classNames({
-      'share-form__character-length': true,
-      'share-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
-      'share-form__character-length--danger': leftoverLength < 30
+      'comment-form__character-length': true,
+      'comment-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
+      'comment-form__character-length--danger': leftoverLength < 30
     })
-
-    console.log(this.props.submitting)
 
     return (
       <React.Fragment>
         <form
-          className="share-form"
+          className="comment-form"
           onSubmit={this.onSubmit}
         >
-          <Field className="share-form__text-field">
+          <Field className="comment-form__text-field">
             <Textarea
               name="text"
               onChange={this.onChange}
-              placeholder="Share a moment here!"
-              rows={2}
+              placeholder="Write a comment..."
+              rows={1}
               value={this.state.text}
               onKeyDown={this.onEnterPress}
               maxLength={150}
@@ -191,10 +197,10 @@ class ShareForm extends Component {
 
           {
             this.state.imageFile &&
-            <div className="share-form__image-uploaded">
+            <div className="comment-form__image-uploaded">
               <img style={{ maxWidth: '500px', maxHeight: '500px' }} alt='' src={this.state.imageFile} />
               <Icon
-                className="share-form__image-remove-button debut-icon debut-icon--pointer"
+                className="comment-form__image-remove-button debut-icon debut-icon--pointer"
                 icon="IconX"
                 color="#E71D36"
                 size={20}
@@ -203,76 +209,63 @@ class ShareForm extends Component {
             </div>
           }
 
-          <div className="share-form__characters">
+          <div className="comment-form__characters">
             <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
+            <Label className="comment-form__label">
+              <Icon
+                className="debut-icon debut-icon--pointer ml-half"
+                icon="IconCamera"
+                size={20}
+              />
+              <input
+                type="file"
+                onChange={this.storeFile}
+                hidden
+                accept="image/*"
+                ref={fileInput => this.fileInput = fileInput}
+              />
+            </Label>
+            { commentActions.submitting && shareId === commentActions.shareId && <BulmaLoader /> }
           </div>
-
-          <div className="share-form__submit-wrapper">
-            <div className="share-form__options">
-              <Label>
-                <Icon
-                  className="debut-icon debut-icon--pointer mt-half"
-                  icon="IconCamera"
-                  size={20}
-                />
-                <input
-                  type="file"
-                  onChange={this.storeFile}
-                  hidden
-                  accept="image/*"
-                  ref={fileInput => this.fileInput = fileInput}
-                />
-              </Label>
+          {
+            editMode &&
+            <div className="comment-form__submit-footer">
+              { commentActions.editing && <BulmaLoader className="mr-one" />}
+              <SubmitFooter
+                onCancel={this.onCancel}
+                onSubmit={this.onSubmit}
+                submitting={commentActions.editing}
+              />
             </div>
-
-            {
-              !editMode &&
-              <div className="share-form__submit-footer">
-                { submitting && <BulmaLoader className="mr-one" />}
-                <SubmitFooter
-                  onCancel={this.onCancel}
-                  onSubmit={this.onSubmit}
-                  submitting={submitting}
-                />
-              </div>
-            }
-
-            {
-              editMode &&
-              <div className="share-form__submit-footer">
-                { editing && <BulmaLoader className="mr-one" />}
-                <SubmitFooter
-                  onCancel={this.onCancel}
-                  onSubmit={this.onSubmit}
-                  submitting={editing}
-                />
-              </div>
-            }
-          </div>
+          }
         </form>
       </React.Fragment>
     )
   }
 }
 
-ShareForm.defaultProps = {
+CommentForm.defaultProps = {
   onCancel: _.noop,
   onComplete: _.noop,
 }
 
 const mapStateToProps = (state) => {
-  const submitting = state.share.shareActions.submitting
-  const editing = state.share.shareActions.editing
+  const submitting = state.share.commentActions.submitting
+  const editing = state.share.commentActions.editing
+  const shareId = state.share.commentActions.shareId
 
-  console.log(state.share.shareActions, 'shareActions')
-
-  return {
+  const commentActions = {
     submitting,
     editing,
+    shareId
+  }
+
+  return {
+    commentActions
   }
 }
 
 export default connect(mapStateToProps, {
-  requestCreateShare,
-  requestEditShare,
-})(ShareForm)
+  requestCreateComment,
+  requestEditComment,
+})(CommentForm)

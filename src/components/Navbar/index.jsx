@@ -59,6 +59,12 @@ class NavbarComp extends Component {
     history.push('/help')
   }
 
+  goToExplore = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/explore')
+  }
+
   onChange = (e) => {
     e.preventDefault()
     if (!this.dropdown.state.open) {
@@ -188,6 +194,9 @@ class NavbarComp extends Component {
                 <React.Fragment>
                   <Navbar.Item onClick={this.goToHelp}>
                     Help
+                  </Navbar.Item>
+                  <Navbar.Item onClick={this.goToExplore}>
+                    Explore
                   </Navbar.Item>
                   <Navbar.Item onClick={this.goToProfile}>
                     My Page

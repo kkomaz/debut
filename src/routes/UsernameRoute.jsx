@@ -117,7 +117,10 @@ class UsernameRoute extends Component {
       user,
       shares,
       username,
+      history,
     } = this.props
+
+    let lastLocation = null
 
     if (error) {
       return (
@@ -136,21 +139,39 @@ class UsernameRoute extends Component {
           sessionUser={sessionUser}
         />
         <Switch>
-          <Route
-            exact
-            path={match.url}
-            render={() =>
-              <UsernamePage
-                user={user}
-                username={username}
-                dapps={dapps}
-                follow={follow}
-                profile={profile}
-                shares={shares}
-                loading={loading}
-              />
-            }
-          />
+          {
+            <Route
+              exact
+              path={match.url}
+              render={() => {
+                history.listen(location => {
+                  lastLocation = location
+                })
+
+                const prevHistoryPush = this.props.history.push
+                this.props.history.push = (pathname, state = {}) => {
+                  if (lastLocation === null ||
+                      pathname !== lastLocation.pathname + lastLocation.search + lastLocation.hash ||
+                      JSON.stringify(state) !== JSON.stringify(lastLocation.state)
+                  ) {
+                    prevHistoryPush(pathname, state)
+                  }
+                }
+                return (
+                  <UsernamePage
+                    user={user}
+                    username={username}
+                    dapps={dapps}
+                    follow={follow}
+                    profile={profile}
+                    shares={shares}
+                    loading={loading}
+                    location={lastLocation}
+                  />
+                )}
+              }
+            />
+          }
           {
             !_.isEmpty(follow) &&
             <Route
