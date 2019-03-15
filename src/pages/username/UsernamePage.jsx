@@ -233,6 +233,7 @@ class UsernamePage extends Component {
       shares,
       username,
       user,
+      sharesLoading,
     } = this.props
 
     const {
@@ -325,7 +326,7 @@ class UsernamePage extends Component {
                 }
 
                 {
-                  !adminMode && _.isEqual(shares.list.length, 0) &&
+                  !adminMode && _.isEqual(shares.list.length, 0) && !sharesLoading &&
                   <NoShares username={username} />
                 }
 
@@ -398,10 +399,12 @@ class UsernamePage extends Component {
 const mapStateToProps = (state) => {
   const commentEditing = state.share.commentActions.editing
   const shareEditing = state.share.shareActions.editing
+  const sharesLoading = state.share.shares.loading
 
   return {
     commentEditing,
     shareEditing,
+    sharesLoading,
   }
 }
 
