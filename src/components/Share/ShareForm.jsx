@@ -163,8 +163,6 @@ class ShareForm extends Component {
       'share-form__character-length--danger': leftoverLength < 30
     })
 
-    console.log(this.props.submitting)
-
     return (
       <React.Fragment>
         <form
@@ -263,8 +261,6 @@ ShareForm.defaultProps = {
 const mapStateToProps = (state) => {
   const submitting = state.share.shareActions.submitting
   const editing = state.share.shareActions.editing
-
-  console.log(state.share.shareActions, 'shareActions')
 
   return {
     submitting,
