@@ -28,6 +28,7 @@ class UsernameRoute extends Component {
     error: false,
     profile: {},
     loading: true,
+    userProofs: []
   }
 
   static propTypes = {
@@ -67,6 +68,7 @@ class UsernameRoute extends Component {
     const { username, history, user } = this.props
     const { sessionUser } = this.context.state
     let profile
+    let userProofs
 
     if (!user.data) {
       return history.push({
@@ -79,6 +81,8 @@ class UsernameRoute extends Component {
       const apps = _.map(profile.apps, (k, v) => {
         return v
       })
+      const allowableProofs = ['facebook', 'twitter', 'github', 'linkedIn']
+      userProofs = _.filter(profile.account, (account) => _.includes(allowableProofs, account.service))
 
       if (process.env.NODE_ENV === nodeEnv && (
         _.isEmpty(apps) || (apps.length > 0 && !_.includes(apps, appUrl))
@@ -89,13 +93,11 @@ class UsernameRoute extends Component {
           throw new Error(`${username} is currently using an older version of the Blockstack browser.  They have will have to update to newest version.  Located below are social proofs for ${username}.  Send a ping to let them know to stay up to date!`)
         }
       }
-      return this.setState({ profile, loading: false })
+      return this.setState({ profile, loading: false, userProofs })
     } catch (e) {
       // If current user is viewing, redirect
       if (sessionUser !== username) {
         this.setState({ error: true })
-        const allowableProofs = ['facebook', 'twitter', 'github', 'linkedIn']
-        const userProofs = _.filter(profile.account, (account) => _.includes(allowableProofs, account.service))
         const iconProofs = <IconProofs message={e.message} userProofs={userProofs} username={username} />
         return forceRedirect(history, iconProofs)
       }
@@ -107,7 +109,7 @@ class UsernameRoute extends Component {
   }
 
   render() {
-    const { error, profile, loading } = this.state
+    const { error, profile, loading, userProofs } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
 
     const {
@@ -137,6 +139,7 @@ class UsernameRoute extends Component {
           user={user}
           defaultImgUrl={defaultImgUrl}
           sessionUser={sessionUser}
+          userProofs={userProofs}
         />
         <Switch>
           {

@@ -3,7 +3,7 @@ import _ from 'lodash'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import { ICONS } from './utils/constants'
-import './Icon.scss'
+import './Icon.scss';
 
 /* eslint-disable */
 const Icon = (props) => {
@@ -13,7 +13,8 @@ const Icon = (props) => {
     className,
     style,
     ariaLabel,
-    linkStyles
+    linkStyles,
+    color
   } = props;
 
   const iconClass = () => classNames({
@@ -27,6 +28,11 @@ const Icon = (props) => {
       fill: props.color,
     },
   } : style;
+
+  const updatedLinkStyles = {
+    ...linkStyles,
+    ...styles,
+  }
 
   const viewBox = _.get(icons, 'icon.viewBox', null) || _.get(ICONS, props.icon, {}).viewBox;
   const iconImage = _.get(icons, 'icon.markup', null) || _.get(ICONS, props.icon, {}).markup;
@@ -50,7 +56,7 @@ const Icon = (props) => {
         onClick={props.onClick}
         tabIndex={0}
         onKeyPress={onKeyPress}
-        style={linkStyles}
+        style={updatedLinkStyles}
         onMouseEnter={props.onMouseEnter}
       >
         <svg
