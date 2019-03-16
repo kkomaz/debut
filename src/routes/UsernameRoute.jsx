@@ -140,6 +140,7 @@ class UsernameRoute extends Component {
           defaultImgUrl={defaultImgUrl}
           sessionUser={sessionUser}
           userProofs={userProofs}
+          loading={loading}
         />
         <Switch>
           {

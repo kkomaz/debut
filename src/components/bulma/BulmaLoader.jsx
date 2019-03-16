@@ -8,7 +8,8 @@ const BulmaLoader = (props) => {
       style={{
         border: `1px solid ${props.color}`,
         borderTopColor: 'transparent',
-        borderRightColor: 'transparent'
+        borderRightColor: 'transparent',
+        ...props.style
       }}
       {...props}
     />

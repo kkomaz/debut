@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import {
+  BulmaLoader,
   Container,
   Columns,
   Heading,
@@ -15,7 +16,11 @@ import './UserHero.scss'
 
 class UserHero extends Component {
   renderIcons = () => {
-    const { userProofs } = this.props
+    const { userProofs, loading } = this.props
+
+    if (loading) {
+      return <BulmaLoader color="white" style={{ marginTop: '5px' }} />
+    }
 
     return _.map(userProofs, (proof) => {
       if (proof.service === 'github') {
@@ -48,7 +53,12 @@ class UserHero extends Component {
     })
   }
   render() {
-    const { username, user, defaultImgUrl, sessionUser } = this.props
+    const {
+      username,
+      user,
+      defaultImgUrl,
+      sessionUser,
+    } = this.props
 
     return (
       <Container className="user-hero">
