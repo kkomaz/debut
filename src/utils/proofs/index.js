@@ -7,7 +7,7 @@ export const keys = {
   facebook: {
     icon: 'IconFacebook',
     url: 'https://facebook.com',
-    color: '#3b5998'
+    color: '#dfe3ee'
   },
   github: {
     icon: 'IconGithub',
