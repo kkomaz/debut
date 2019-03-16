@@ -10,13 +10,48 @@ import FollowButton from 'components/Follow/FollowButton'
 import { UserTabs } from 'components/Tab'
 import { HeroAvatarLoader } from 'components/Loader'
 import { AvatarForm } from 'components/User'
+import IconProof from 'components/SocialProofs/IconProof'
+import './UserHero.scss'
 
 class UserHero extends Component {
+  renderIcons = () => {
+    const { userProofs } = this.props
+
+    return _.map(userProofs, (proof) => {
+      if (proof.service === 'github') {
+        return (
+          <IconProof
+            clasName="icon-proof mr-two"
+            color="white"
+            key={proof.service}
+            proof={proof}
+            size={27}
+            linkStyles={{
+              marginRight: '10px',
+              height: '30px'
+            }}
+          />
+        )
+      }
+      return (
+        <IconProof
+          clasName="icon-proof mr-two"
+          key={proof.service}
+          proof={proof}
+          size={27}
+          linkStyles={{
+            marginRight: '10px',
+            height: '30px'
+          }}
+        />
+      )
+    })
+  }
   render() {
     const { username, user, defaultImgUrl, sessionUser } = this.props
 
     return (
-      <Container>
+      <Container className="user-hero">
         <Columns>
           <Columns.Column size={12} style={{ paddingBottom: '0' }}>
             <Media className="username__hero">
@@ -35,10 +70,18 @@ class UserHero extends Component {
                 position="center"
                 style={{ alignSelf: 'center' }}
               >
-                <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
-                <Heading subtitle size={6} style={{ color: 'white' }}>
-                  {username}
-                </Heading>
+                <div className="user-hero__identity">
+                  <div className="user-hero__identity-names mr-one">
+                    <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
+                    <Heading subtitle size={6} style={{ color: 'white' }}>
+                      {username}
+                    </Heading>
+                  </div>
+                  <div className="user-hero__identity-proofs">
+                    {this.renderIcons()}
+                  </div>
+                </div>
+
                 <FollowButton
                   defaultImgUrl={defaultImgUrl}
                   sessionUser={sessionUser}
