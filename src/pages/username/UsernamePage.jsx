@@ -31,7 +31,7 @@ import { Icon } from 'components/icon'
 import { CommentForm } from 'components/comment'
 
 // Action Imports
-import { requestUserShares } from 'actions/share'
+import { requestUserShares, resetSharesLoading } from 'actions/share'
 import { addDappsToList } from 'actions/blockstack'
 import './UsernamePage.scss';
 
@@ -83,6 +83,10 @@ class UsernamePage extends Component {
     const { username, profile } = this.props
     const { sessionUser } = this.context.state
 
+    if (this.props.username !== prevProps.username) {
+      this.props.resetSharesLoading()
+    }
+
     if (!this.props.loading && prevProps.loading) {
       this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
       this.requestUserShares()
@@ -103,8 +107,13 @@ class UsernamePage extends Component {
   }
 
   componentWillUnmount() {
+    const { sharesLoading } = this.props
     window.removeEventListener('scroll', this.handleScroll)
     clearTimeout(this.state.longLoad)
+
+    if (!sharesLoading) {
+      this.props.resetSharesLoading()
+    }
   }
 
   async loadUserInfo(profile) {
@@ -412,4 +421,5 @@ UsernamePage.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
   requestUserShares,
   addDappsToList,
+  resetSharesLoading,
 })(UsernamePage))

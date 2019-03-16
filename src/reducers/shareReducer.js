@@ -1,4 +1,5 @@
 import {
+  RESET_SHARES_LOADING,
   REQUEST_USER_SHARES,
   REQUEST_CREATE_SHARE,
   REQUEST_DELETE_SHARE,
@@ -64,6 +65,7 @@ function updateSingleObjectFromList(payload, list) {
 
 export default function shareReducer(state = defaultSession, action) {
   switch(action.type) {
+    case RESET_SHARES_LOADING:
     case REQUEST_USER_SHARES:
       return { ...state, shares: { ...state.shares, loading: true }}
     case FETCH_USER_SHARES_SUCCESS:
