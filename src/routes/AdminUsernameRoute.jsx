@@ -1,13 +1,20 @@
+// Library Imports
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import _ from 'lodash';
 import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
+
+// Component Imports
 import AdminHomePage from 'pages/admin/AdminHomePage'
 import {
   Menu,
   Columns,
   Container
 } from 'components/bulma'
+import BarLoader from 'components/Loader/BarLoader'
+
+// Stylesheets
 import './AdminMenu.scss'
 
 class AdminUsernameRoute extends Component {
@@ -41,8 +48,10 @@ class AdminUsernameRoute extends Component {
               <Route
                 exact
                 path={match.url}
-                render={() => <AdminHomePage userFollow={userFollow} />}
-                />
+                render={() => (
+                  _.isEmpty(userFollow) ? <BarLoader /> : <AdminHomePage userFollow={userFollow} />
+                )}
+              />
             </Switch>
           </Columns.Column>
           <Columns.Column size={3}>

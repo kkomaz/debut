@@ -7,7 +7,7 @@ import { linkifyText } from 'utils/decorator'
 import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
 import { requestDeleteComment } from 'actions/comment'
-import { connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { BulmaLoader } from 'components/bulma'
 import './CommentListItem.scss';

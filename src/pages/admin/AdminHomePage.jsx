@@ -1,11 +1,18 @@
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Card } from 'components/bulma'
 import { withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+
+// Model Imports
+import _ from 'lodash'
+import { Card } from 'components/bulma'
 import { User } from 'radiks'
 import Follow from 'model/follow'
-import _ from 'lodash'
 import Share from 'model/share'
+
+// Action Imports
+import { requestFetchShareFeeds } from 'actions/share'
 
 class AdminHomePage extends Component {
   static propTypes = {
@@ -13,6 +20,7 @@ class AdminHomePage extends Component {
   }
 
   componentDidMount() {
+    this.props.requestFetchShareFeeds(this.props.userFollow)
     Share.addStreamListener((share) => {
       this.addShareToActivites(share)
     })
@@ -37,4 +45,6 @@ class AdminHomePage extends Component {
   }
 }
 
-export default withRouter(AdminHomePage)
+export default withRouter(connect(null, {
+  requestFetchShareFeeds,
+})(AdminHomePage))
