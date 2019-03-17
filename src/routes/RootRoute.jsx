@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, withRouter, Redirect } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import UserProvider from "components/User/UserProvider";
@@ -14,7 +14,6 @@ import { NoUsername } from "components/User";
 import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
-import Share from 'model/share'
 import "./RootRoute.scss";
 
 class RootRoute extends Component {
@@ -34,9 +33,6 @@ class RootRoute extends Component {
   componentDidMount() {
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.props.username);
-    Share.addStreamListener((share) => {
-      this.addShareToActivites(share)
-    })
   }
 
   setHomePageClickedTrue = () => {
@@ -54,11 +50,6 @@ class RootRoute extends Component {
   setProfileClickedFalse = () => {
     this.setState({ profileClicked: false });
   };
-
-  addShareToActivites(share) {
-    console.log(share)
-    console.log(this.props)
-  }
 
   render() {
     const {

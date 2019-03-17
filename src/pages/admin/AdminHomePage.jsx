@@ -5,13 +5,28 @@ import { withRouter } from 'react-router-dom'
 import { User } from 'radiks'
 import Follow from 'model/follow'
 import _ from 'lodash'
+import Share from 'model/share'
 
 class AdminHomePage extends Component {
   static propTypes = {
-    username: PropTypes.object.isRequired,
+    userFollow: PropTypes.object.isRequired,
+  }
+
+  componentDidMount() {
+    Share.addStreamListener((share) => {
+      this.addShareToActivites(share)
+    })
+  }
+
+  addShareToActivites(share) {
+    console.log(share)
+    console.log(this.props)
   }
 
   render() {
+    const { userFollow } = this.props
+
+    console.log(userFollow)
     return (
       <Card className="admin-home-page">
         <Card.Content>

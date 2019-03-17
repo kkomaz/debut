@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Switch, Route } from 'react-router-dom'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import AdminHomePage from 'pages/admin/AdminHomePage'
 import {
@@ -13,13 +13,15 @@ import './AdminMenu.scss'
 class AdminUsernameRoute extends Component {
   static propTypes = {
     match: PropTypes.object.isRequired,
-    username: PropTypes.string.isRequired
+    username: PropTypes.string.isRequired,
+    userFollow: PropTypes.object.isRequired,
   }
 
   render() {
     const {
       match,
-      username
+      username,
+      userFollow,
     } = this.props
 
     return (
@@ -39,7 +41,7 @@ class AdminUsernameRoute extends Component {
               <Route
                 exact
                 path={match.url}
-                render={() => <AdminHomePage />}
+                render={() => <AdminHomePage userFollow={userFollow} />}
                 />
             </Switch>
           </Columns.Column>
@@ -58,13 +60,12 @@ class AdminUsernameRoute extends Component {
   }
 }
 
-// const mapStateToProps = (state, ownProps) => {
-//   const userFollow = state.follow[ownProps.username] || {}
-//
-//   return {
-//     userFollow,
-//   };
-// };
+const mapStateToProps = (state, ownProps) => {
+  const userFollow = state.follow[ownProps.username] || {}
 
-// export default connect(mapStateToProps)(AdminUsernameRoute)
-export default AdminUsernameRoute
+  return {
+    userFollow,
+  };
+};
+
+export default connect(mapStateToProps)(AdminUsernameRoute)
