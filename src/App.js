@@ -17,10 +17,19 @@ import Login from 'components/Login'
 import 'stylesheets/main.scss'
 
 class App extends Component {
-  state = {
-    userSession: new UserSession({ appConfig }),
-    loggedIn: false,
-    loggingIn: false,
+  constructor(props) {
+    super(props)
+
+    const userSession = new UserSession({ appConfig })
+    const userData = userSession.loadUserData();
+
+    this.state = {
+      userSession,
+      loggedIn: false,
+      loggingIn: false,
+      userData: userData,
+      username: userData.username
+    }
   }
 
   componentDidMount = async () => {
@@ -77,7 +86,7 @@ class App extends Component {
   }
 
   render() {
-    const { userSession } = this.state
+    const { userSession, userData, username } = this.state
 
     return (
       <div className="App">
@@ -86,6 +95,8 @@ class App extends Component {
           this.state.loggedIn ?
           <RootRoute
             userSession={userSession}
+            userData={userData}
+            username={username}
           /> :
           <Login
             userSession={userSession}

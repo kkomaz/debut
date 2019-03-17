@@ -8,24 +8,22 @@ import Navbar from "components/Navbar";
 import { requestBlockstackDapps } from "actions/blockstack";
 import UnsignedUser from "pages/unsigned/UnsignedUser";
 import HelpPage from "pages/help/HelpPage";
-import AdminPage from "pages/admin/AdminPage";
+import AdminUsernameRoute from "./AdminUsernameRoute";
 import { Loader } from "components/Loader";
 import { NoUsername } from "components/User";
 import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
+import Share from 'model/share'
 import "./RootRoute.scss";
 
 class RootRoute extends Component {
   constructor(props) {
     super(props);
 
-    const userData = props.userSession.loadUserData();
-
     this.state = {
       homePageClicked: false,
       profileClicked: false,
-      username: userData.username
     };
   }
 
@@ -35,7 +33,10 @@ class RootRoute extends Component {
 
   componentDidMount() {
     this.props.requestBlockstackDapps();
-    this.props.requestFetchFollow(this.state.username);
+    this.props.requestFetchFollow(this.props.username);
+    Share.addStreamListener((share) => {
+      this.addShareToActivites(share)
+    })
   }
 
   setHomePageClickedTrue = () => {
@@ -54,10 +55,19 @@ class RootRoute extends Component {
     this.setState({ profileClicked: false });
   };
 
-  render() {
-    const { userSession, blockstackDappsLoading, dapps } = this.props;
+  addShareToActivites(share) {
+    console.log(share)
+    console.log(this.props)
+  }
 
-    const { username } = this.state;
+  render() {
+    const {
+      userSession,
+      blockstackDappsLoading,
+      dapps,
+      username,
+      userFollow,
+    } = this.props;
 
     if (!username) {
       return <NoUsername userSession={userSession} />;
@@ -79,14 +89,16 @@ class RootRoute extends Component {
             <Route
               exact
               path="/"
-              render={({ location }) => (
-                <Redirect
-                  to={{
-                    pathname: `/${username}`
-                  }}
+              render={({ match }) =>
+                <AdminUsernameRoute
+                  match={match}
+                  username={username}
+                  userSession={userSession}
+                  userFollow={userFollow}
                 />
-              )}
+              }
             />
+
             <Route
               exact
               path="/explore"
@@ -97,18 +109,15 @@ class RootRoute extends Component {
                 />
               }
             />
-            <Route
-              exact
-              path="/admin"
-              render={() => <AdminPage username={username} />}
-              userSession={userSession}
-            />
+
             <Route exact path="/help" render={() => <HelpPage />} />
+
             <Route
               exact
               path="/unsigned/:username"
               render={({ match }) => <UnsignedUser match={match} />}
             />
+
             {blockstackDappsLoading ? (
               <Loader cardWrapped contained text="App is warming up..." />
             ) : (
@@ -130,10 +139,13 @@ class RootRoute extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+  const userFollow = state.follow[ownProps.username] || {}
+
   return {
     blockstackDappsLoading: state.blockstack.dapps.loading,
-    dapps: state.blockstack.dapps.list
+    dapps: state.blockstack.dapps.list,
+    userFollow,
   };
 };
 
