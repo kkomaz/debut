@@ -5,6 +5,7 @@ import {
   Heading,
 } from 'components/bulma'
 import { IconListUsers } from 'components/icon'
+import './RandomUsers.scss'
 
 class RandomUsers extends Component {
   state = {
@@ -20,9 +21,21 @@ class RandomUsers extends Component {
     const { users } = this.state
 
     return (
-      <Card>
+      <Card className="random-users">
         <Card.Content>
-          <Heading size={4}>Signed up users on debut</Heading>
+          <div className="random-users__content mb-one">
+            <div className="random-users__title-container">
+              <Heading className="random-users__header" size={6}>Signed up users on debut</Heading>
+              <Heading size={6}>· </Heading>
+            </div>
+            <div className="random-users__refresh-container ml-half">
+              <p className="small">Refresh</p>
+              <p className="ml-quarter">· </p>
+            </div>
+            <div className="random-users__view-all-container">
+              <p className="small">View All</p>
+            </div>
+          </div>
           <IconListUsers users={users} />
         </Card.Content>
       </Card>

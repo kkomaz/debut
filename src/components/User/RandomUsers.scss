@@ -1,0 +1,33 @@
+.random-users {
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .title {
+      margin-bottom: 0;
+    }
+  }
+
+  &__header {
+    margin-right: 5px;
+  }
+
+  &__refresh-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__view-all-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
