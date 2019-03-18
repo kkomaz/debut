@@ -36,7 +36,7 @@ class AdminActivityFeed extends Component {
 
   addShareToActivites(share) {
     console.log(share)
-    console.log(this.props)
+    console.log(this.props.feedShares.list)
   }
 
   render() {
@@ -50,10 +50,14 @@ class AdminActivityFeed extends Component {
           transitionLeaveTimeout={300}
         >
         {
-          _.map(feedShares.list, (feedShare) => {
+          _.map(feedShares.list, (feedShare, index) => {
+            const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
+
             return (
               <ShareListItem
-                className="admin-activity-feed__share mb-one"
+                key={feedShare._id}
+                cardClass={cardClass}
+                className="admin-activity-feed__share"
                 share={feedShare}
                 username={feedShare.username}
               />
