@@ -123,6 +123,7 @@ class AdminUsernameRoute extends Component {
                 render={() =>
                   <AdminFollowersUsers
                     follow={userFollow}
+                    loading={loading}
                   />
                 }
               />

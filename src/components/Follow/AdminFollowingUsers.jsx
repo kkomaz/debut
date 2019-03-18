@@ -111,9 +111,13 @@ class AdminFollowingUsers extends Component {
   render() {
     const { users, bottomReached, full } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className, size, follow } = this.props
+    const { className, size, follow, loading } = this.props
 
-    if (_.isEmpty(follow.following)) {
+    if (loading) {
+      return <BarLoader />
+    }
+
+    if (_.isEmpty(follow.following) && !loading) {
       return <AdminNoFollowing />
     }
 

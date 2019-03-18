@@ -12,6 +12,7 @@ import {
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import AdminNoFollowers from 'components/Follow/AdminNoFollowers'
+import { BarLoader } from 'components/Loader'
 
 // Model Imports
 import { User } from 'radiks'
@@ -32,6 +33,7 @@ class AdminFollowersUsers extends Component {
 
   static propTypes = {
     follow: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
   }
 
   componentDidMount = async () => {
@@ -130,9 +132,13 @@ class AdminFollowersUsers extends Component {
   render() {
     const { users } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className, follow } = this.props
+    const { className, follow, loading } = this.props
 
-    if (_.isEmpty(follow.followers)) {
+    if (loading) {
+      return <BarLoader />
+    }
+
+    if (_.isEmpty(follow.followers) && !loading) {
       return <AdminNoFollowers />
     }
 
