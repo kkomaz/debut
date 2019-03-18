@@ -37,20 +37,22 @@
   }
 }
 
-.icon-list-users-transition-enter {
-  opacity: 0.01;
-}
-
-.icon-list-users-transition-enter.icon-list-users-transition-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-
-.icon-list-users-transition-leave {
+.cross-fade-leave {
   opacity: 1;
 }
+.cross-fade-leave.cross-fade-leave-active {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
 
-.icon-list-users-transition-leave.icon-list-users-transition-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+.cross-fade-enter {
+  opacity: 0;
+}
+.cross-fade-enter.cross-fade-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.cross-fade-height {
+  transition: height 0.5s ease-in-out;
 }
