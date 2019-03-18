@@ -12,7 +12,7 @@ import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 
-class FollowingUsers extends Component {
+class AdminFollowingUsers extends Component {
   constructor(props) {
     super(props)
 
@@ -109,39 +109,37 @@ class FollowingUsers extends Component {
     const { className, size } = this.props
 
     return (
-      <Container>
-        <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
-          {
-            _.map(users, (user) => {
-              return (
-                <Columns.Column
-                  key={user.username}
-                  tablet={{
-                    size,
-                  }}
-                >
-                  <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                    <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
-                    <Card.Content className="page__content">
-                      <p className="page__username-text">{user.username}</p>
-                    </Card.Content>
-                  </Card>
-                </Columns.Column>
-              )
-            })
-          }
-          {
-            bottomReached && !full && <BarLoader style={{ height: '200px' }} />
-          }
-        </Columns>
-      </Container>
+      <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
+        {
+          _.map(users, (user) => {
+            return (
+              <Columns.Column
+                key={user.username}
+                tablet={{
+                  size,
+                }}
+              >
+                <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                  <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
+                  <Card.Content className="page__content">
+                    <p className="page__username-text">{user.username}</p>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+            )
+          })
+        }
+        {
+          bottomReached && !full && <BarLoader style={{ height: '200px' }} />
+        }
+      </Columns>
     )
   }
 }
 
-FollowingUsers.defaultProps = {
+AdminFollowingUsers.defaultProps = {
   size: 3
 }
 
-export default withRouter(connect()(FollowingUsers))
-FollowingUsers.contextType = UserContext
+export default withRouter(connect()(AdminFollowingUsers))
+AdminFollowingUsers.contextType = UserContext

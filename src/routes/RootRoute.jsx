@@ -91,12 +91,13 @@ class RootRoute extends Component {
 
             <Route
               path="/admin"
-              render={({ match }) =>
+              render={({ match, location }) =>
                 <AdminUsernameRoute
                   match={match}
                   username={username}
                   userSession={userSession}
                   userFollow={userFollow}
+                  location={location}
                 />
               }
             />

@@ -13,13 +13,31 @@ import {
   Container
 } from 'components/bulma'
 import BarLoader from 'components/Loader/BarLoader'
+import FollowersUsers from 'pages/username/followers/FollowersUsers'
+import AdminFollowingUsers from 'components/Follow/AdminFollowingUsers'
 
 // Stylesheets
 import './AdminMenu.scss'
 
 class AdminUsernameRoute extends Component {
-  state = {
-    active: 'activityFeed'
+  constructor(props) {
+    super(props)
+    let activeMenu
+
+    const pathArray = props.location.pathname.split('/')
+    const path = _.last(pathArray)
+
+    const paths = ['following', 'followers']
+
+    if (!_.includes(paths, path)) {
+      activeMenu = 'activityFeed'
+    } else {
+      activeMenu = path
+    }
+
+    this.state = {
+      active: activeMenu
+    }
   }
 
   static propTypes = {
@@ -56,6 +74,8 @@ class AdminUsernameRoute extends Component {
 
     const { active } = this.state
 
+    console.log(userFollow)
+
     return (
       <Container>
         <Columns>
@@ -78,8 +98,18 @@ class AdminUsernameRoute extends Component {
                 )}
               />
               <Route
-                path={`/${match.url}/following`}
-                render={() => <div>Hello World</div>}
+                exact
+                path={`/admin/following`}
+                render={() => (
+                  <AdminFollowingUsers
+                    follow={userFollow}
+                    size={4}
+                  />
+                )}
+              />
+              <Route
+                path={`/admin/followers`}
+                render={() => <FollowersUsers follow={userFollow} />}
               />
             </Switch>
           </Columns.Column>
