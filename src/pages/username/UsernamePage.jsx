@@ -362,7 +362,7 @@ class UsernamePage extends Component {
                   }
                 </CSSTransitionGroup>
                 {
-                  bottomReached && !shares.full && <BarLoader style={{ height: '200px' }} />
+                  bottomReached && shares.length >= 5 && !shares.full && <BarLoader style={{ height: '200px' }} />
                 }
               </Columns.Column>
             </Columns>
