@@ -20,9 +20,12 @@ class RootRoute extends Component {
   constructor(props) {
     super(props);
 
+    const userData = props.userSession.loadUserData();
+
     this.state = {
       homePageClicked: false,
       profileClicked: false,
+      username: userData.username
     };
   }
 
@@ -32,7 +35,7 @@ class RootRoute extends Component {
 
   componentDidMount() {
     this.props.requestBlockstackDapps();
-    this.props.requestFetchFollow(this.props.username);
+    this.props.requestFetchFollow(this.state.username);
   }
 
   setHomePageClickedTrue = () => {
@@ -56,9 +59,12 @@ class RootRoute extends Component {
       userSession,
       blockstackDappsLoading,
       dapps,
-      username,
       userFollow,
     } = this.props;
+
+    const {
+      username
+    } = this.state
 
     if (!username) {
       return <NoUsername userSession={userSession} />;
@@ -75,6 +81,7 @@ class RootRoute extends Component {
           <Navbar
             setHomePageClickedTrue={this.setHomePageClickedTrue}
             setProfileClickedTrue={this.setProfileClickedTrue}
+            username={username}
           />
           <Switch>
             <Route
@@ -125,7 +132,6 @@ class RootRoute extends Component {
               <Loader cardWrapped contained text="App is warming up..." />
             ) : (
               <Route
-                exact
                 path="/user/:username"
                 render={({ match, location }) => (
                   <UsernameRoute

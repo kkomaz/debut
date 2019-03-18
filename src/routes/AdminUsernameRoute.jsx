@@ -13,7 +13,7 @@ import {
   Container
 } from 'components/bulma'
 import BarLoader from 'components/Loader/BarLoader'
-import FollowersUsers from 'pages/username/followers/FollowersUsers'
+import AdminFollowersUsers from 'components/Follow/AdminFollowersUsers'
 import AdminFollowingUsers from 'components/Follow/AdminFollowingUsers'
 
 // Stylesheets
@@ -74,8 +74,6 @@ class AdminUsernameRoute extends Component {
 
     const { active } = this.state
 
-    console.log(userFollow)
-
     return (
       <Container>
         <Columns>
@@ -109,7 +107,11 @@ class AdminUsernameRoute extends Component {
               />
               <Route
                 path={`/admin/followers`}
-                render={() => <FollowersUsers follow={userFollow} />}
+                render={() =>
+                  <AdminFollowersUsers
+                    follow={userFollow}
+                  />
+                }
               />
             </Switch>
           </Columns.Column>

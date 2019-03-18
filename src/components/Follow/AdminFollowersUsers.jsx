@@ -5,13 +5,12 @@ import {
   Columns,
   Card,
 } from 'components/bulma'
-import { BarLoader } from 'components/Loader'
 import PropTypes from 'prop-types'
 import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 
-class AdminFollowingUsers extends Component {
+class AdminFollowersUsers extends Component {
   constructor(props) {
     super(props)
 
@@ -27,7 +26,6 @@ class AdminFollowingUsers extends Component {
 
   static propTypes = {
     follow: PropTypes.object.isRequired,
-    size: PropTypes.number,
   }
 
   componentDidMount = async () => {
@@ -41,41 +39,31 @@ class AdminFollowingUsers extends Component {
         this.fetchUsers()
       })
     }
+
+    if (this.props.follow.username === prevProps.follow.username) {
+      const { sessionUser } = this.context.state
+
+      if (this.props.follow.followersCount > prevProps.follow.followersCount) {
+        const user = await User.findOne({ username: sessionUser.username })
+        const users = [...this.state.users, user.attrs]
+        this.setState({
+          users,
+          offset: users.length
+        })
+      }
+
+      if (this.props.follow.followersCount < prevProps.follow.followersCount) {
+        const users = _.filter(this.state.users, (user) => user._id !== sessionUser.username)
+        this.setState({
+          users,
+          offset: users.length
+        })
+      }
+    }
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
-  }
-
-  fetchUsers = async () => {
-    const { follow } = this.props
-    const { offset } = this.state
-
-    if (_.get(follow, 'following.length', 0) > 0) {
-      const result = await User.fetchList({
-        username: follow.following,
-        sort: '-createdAt',
-        limit: 12,
-        offset,
-      })
-
-      if (_.isEmpty(result)) {
-        return this.setState({ full: true })
-      }
-
-      const additionalUsers = _.map(result, 'attrs')
-      const finalUsers = [...this.state.users, ...additionalUsers]
-
-      return this.setState({
-        users: finalUsers,
-        offset: finalUsers.length
-      })
-    }
-  }
-
-  onBoxClick = (user) => {
-    const { history } = this.props
-    history.push(`/user/${user.username}`)
   }
 
   handleScroll = () => {
@@ -102,22 +90,53 @@ class AdminFollowingUsers extends Component {
     }
   }
 
+  fetchUsers = async () => {
+    const { follow } = this.props
+    const { offset } = this.state
+
+    if (_.get(follow, 'followers.length', 0) > 0) {
+      const result = await User.fetchList({
+        username: follow.followers,
+        sort: '-createdAt',
+        limit: 12,
+        offset,
+      })
+
+      if (_.isEmpty(result)) {
+        return this.setState({ full: true })
+      }
+
+      const additionalUsers = _.map(result, 'attrs')
+      const finalUsers = [...this.state.users, ...additionalUsers]
+
+      return this.setState({
+        users: finalUsers,
+        offset: finalUsers.length
+      })
+    }
+  }
+
+  onBoxClick = (user) => {
+    const { history } = this.props
+    history.push(`/user/${user.username}`)
+  }
+
   render() {
-    const { users, bottomReached, full } = this.state
+    const { users } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className, size } = this.props
+    const { className } = this.props
 
     return (
-      <Columns className={className} breakpoint="tablet">
+      <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
         {
           _.map(users, (user) => {
             return (
               <Columns.Column
                 key={user.username}
                 tablet={{
-                  size,
+                  size: 3,
                 }}
-                >
+              >
                 <Card className="page__card" onClick={() => this.onBoxClick(user)}>
                   <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
                   <Card.Content className="page__content">
@@ -128,17 +147,14 @@ class AdminFollowingUsers extends Component {
             )
           })
         }
-        {
-          bottomReached && !full && <BarLoader style={{ height: '200px' }} />
-        }
       </Columns>
     )
   }
 }
 
-AdminFollowingUsers.defaultProps = {
+AdminFollowersUsers.defaultProps = {
   size: 3
 }
 
-export default withRouter(connect()(AdminFollowingUsers))
-AdminFollowingUsers.contextType = UserContext
+export default withRouter(connect()(AdminFollowersUsers))
+AdminFollowersUsers.contextType = UserContext

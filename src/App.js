@@ -21,14 +21,11 @@ class App extends Component {
     super(props)
 
     const userSession = new UserSession({ appConfig })
-    const userData = userSession.loadUserData();
 
     this.state = {
       userSession,
       loggedIn: false,
       loggingIn: false,
-      userData: userData,
-      username: userData.username
     }
   }
 
@@ -86,7 +83,7 @@ class App extends Component {
   }
 
   render() {
-    const { userSession, userData, username } = this.state
+    const { userSession } = this.state
 
     return (
       <div className="App">
@@ -95,8 +92,6 @@ class App extends Component {
           this.state.loggedIn ?
           <RootRoute
             userSession={userSession}
-            userData={userData}
-            username={username}
           /> :
           <Login
             userSession={userSession}

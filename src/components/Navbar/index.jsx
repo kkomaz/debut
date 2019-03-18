@@ -65,6 +65,12 @@ class NavbarComp extends Component {
     history.push('/explore')
   }
 
+  goToHome = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/')
+  }
+
   onChange = (e) => {
     e.preventDefault()
     if (!this.dropdown.state.open) {
@@ -142,6 +148,7 @@ class NavbarComp extends Component {
     const { open, searchResults } = this.state
     const { sessionUser } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
+    const { username } = this.props
 
     return (
       <Navbar
@@ -192,14 +199,20 @@ class NavbarComp extends Component {
               {
                 isSignedIn &&
                 <React.Fragment>
-                  <Navbar.Item onClick={this.goToHelp}>
-                    Help
+                  <Navbar.Item onClick={this.goToProfile}>
+                    {username}
                   </Navbar.Item>
+
+                  <Navbar.Item onClick={this.goToHome}>
+                    Home
+                  </Navbar.Item>
+
                   <Navbar.Item onClick={this.goToExplore}>
                     Explore
                   </Navbar.Item>
-                  <Navbar.Item onClick={this.goToProfile}>
-                    My Page
+
+                  <Navbar.Item onClick={this.goToHelp}>
+                    Help
                   </Navbar.Item>
 
                   <Navbar.Item onClick={this.signOut}>
