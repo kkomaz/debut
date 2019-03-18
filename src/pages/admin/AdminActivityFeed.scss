@@ -1,0 +1,17 @@
+.admin-activity-feed-transition-enter {
+  opacity: 0.01;
+}
+
+.admin-activity-feed-transition-enter.admin-activity-feed-transition-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.admin-activity-feed-transition-leave {
+  opacity: 1;
+}
+
+.admin-activity-feed-transition-leave.admin-activity-feed-transition-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}

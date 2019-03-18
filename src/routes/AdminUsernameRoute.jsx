@@ -6,7 +6,7 @@ import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 // Component Imports
-import AdminHomePage from 'pages/admin/AdminHomePage'
+import AdminActivityFeed from 'pages/admin/AdminActivityFeed'
 import {
   Menu,
   Columns,
@@ -49,7 +49,7 @@ class AdminUsernameRoute extends Component {
                 exact
                 path={match.url}
                 render={() => (
-                  _.isEmpty(userFollow) ? <BarLoader /> : <AdminHomePage userFollow={userFollow} />
+                  _.isEmpty(userFollow) ? <BarLoader /> : <AdminActivityFeed userFollow={userFollow} />
                 )}
               />
             </Switch>

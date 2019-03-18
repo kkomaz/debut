@@ -29,7 +29,7 @@ class ShareListItem extends Component {
   }
 
   static propTypes = {
-    cardClass: PropTypes.string.isRequired,
+    className: PropTypes.string,
     share: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
@@ -83,14 +83,13 @@ class ShareListItem extends Component {
   }
 
   render() {
-    const { cardClass, share, username, deleting } = this.props
+    const { className, share, username, deleting } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
     const shareListItemClass = classNames({
-      [cardClass]: true,
       'share-list-item': true
-    })
+    }, className)
 
     const shareListItemTextClass = classNames({
       'share-list-item__text': true,
