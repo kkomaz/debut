@@ -60,8 +60,8 @@ class AdminUsernameRoute extends Component {
             <Menu className="admin-menu">
               <Menu.List title={username} className="admin-menu__title">
                 <Menu.List.Item active={active === 'activityFeed'} onClick={this.onActivityFeedClick}>Activity Feed</Menu.List.Item>
-                <Menu.List.Item active={active === 'followers'} onClick={this.onFollowersClick}>Following</Menu.List.Item>
-                <Menu.List.Item active={active === 'following'} onClick={this.onFollowingClick}>Followers</Menu.List.Item>
+                <Menu.List.Item active={active === 'following'} onClick={this.onFollowingClick}>Following</Menu.List.Item>
+                <Menu.List.Item active={active === 'followers'} onClick={this.onFollowersClick}>Followers</Menu.List.Item>
               </Menu.List>
             </Menu>
           </Columns.Column>
