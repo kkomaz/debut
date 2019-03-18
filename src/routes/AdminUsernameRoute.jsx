@@ -15,6 +15,7 @@ import {
 import BarLoader from 'components/Loader/BarLoader'
 import AdminFollowersUsers from 'components/Follow/AdminFollowersUsers'
 import AdminFollowingUsers from 'components/Follow/AdminFollowingUsers'
+import { RandomUsers } from 'components/User'
 
 // Stylesheets
 import './AdminMenu.scss'
@@ -116,13 +117,7 @@ class AdminUsernameRoute extends Component {
             </Switch>
           </Columns.Column>
           <Columns.Column size={3}>
-            <Menu className="admin-menu">
-              <Menu.List title={username}>
-                <Menu.List.Item>Activity Feed</Menu.List.Item>
-                <Menu.List.Item>Following</Menu.List.Item>
-                <Menu.List.Item>Followers</Menu.List.Item>
-              </Menu.List>
-            </Menu>
+            <RandomUsers />
           </Columns.Column>
         </Columns>
       </Container>
