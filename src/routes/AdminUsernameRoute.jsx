@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash';
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 // Component Imports
@@ -34,14 +34,17 @@ class AdminUsernameRoute extends Component {
 
   onActivityFeedClick = () => {
     this.onMenuItemClick('activityFeed')
+    this.props.history.push('/admin')
   }
 
   onFollowersClick = () => {
     this.onMenuItemClick('followers')
+    this.props.history.push('/admin/followers')
   }
 
   onFollowingClick = () => {
     this.onMenuItemClick('following')
+    this.props.history.push('/admin/following')
   }
 
   render() {
@@ -74,6 +77,10 @@ class AdminUsernameRoute extends Component {
                   _.isEmpty(userFollow) ? <BarLoader /> : <AdminActivityFeed userFollow={userFollow} />
                 )}
               />
+              <Route
+                path={`/${match.url}/following`}
+                render={() => <div>Hello World</div>}
+              />
             </Switch>
           </Columns.Column>
           <Columns.Column size={3}>
@@ -99,4 +106,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(AdminUsernameRoute)
+export default withRouter(connect(mapStateToProps)(AdminUsernameRoute))

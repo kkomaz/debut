@@ -58,7 +58,7 @@ class CommentListItem extends Component {
   onUserClick = () => {
     const { history, comment } = this.props
 
-    history.push(`/${comment.creator}`)
+    history.push(`/user/${comment.creator}`)
   }
 
   render() {

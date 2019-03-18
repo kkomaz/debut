@@ -35,10 +35,10 @@ class UserTabs extends Component {
 
     this.setState({ activeTab: value }, () => {
       if (value === 'profile') {
-        return this.props.history.push(`/${username}`)
+        return this.props.history.push(`/user/${username}`)
       }
 
-      return this.props.history.push(`/${username}/${value}`)
+      return this.props.history.push(`/user/${username}/${value}`)
     })
   }
 

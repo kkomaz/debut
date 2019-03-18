@@ -50,7 +50,7 @@ class NavbarComp extends Component {
     const { sessionUser } = this.context.state
     this.toggleNavbar()
     this.props.setProfileClickedTrue()
-    history.push(`/${sessionUser.username}`)
+    history.push(`/user/${sessionUser.username}`)
   }
 
   goToHelp = () => {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route, withRouter } from "react-router-dom";
+import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import UserProvider from "components/User/UserProvider";
@@ -81,6 +81,17 @@ class RootRoute extends Component {
               exact
               path="/"
               render={({ match }) =>
+                <Redirect
+                  to={{
+                    pathname: '/admin'
+                  }}
+                />
+              }
+            />
+
+            <Route
+              path="/admin"
+              render={({ match }) =>
                 <AdminUsernameRoute
                   match={match}
                   username={username}
@@ -113,7 +124,8 @@ class RootRoute extends Component {
               <Loader cardWrapped contained text="App is warming up..." />
             ) : (
               <Route
-                path="/:username"
+                exact
+                path="/user/:username"
                 render={({ match, location }) => (
                   <UsernameRoute
                     dapps={dapps}

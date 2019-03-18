@@ -11,7 +11,7 @@ class UserList extends Component {
   onClick = (username) => {
     const { history } = this.props
 
-    history.push(`/${username}`)
+    history.push(`/user/${username}`)
   }
 
   render() {

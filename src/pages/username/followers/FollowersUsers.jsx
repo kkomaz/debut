@@ -119,7 +119,7 @@ class FollowersUsers extends Component {
 
   onBoxClick = (user) => {
     const { history } = this.props
-    history.push(`/${user.username}`)
+    history.push(`/user/${user.username}`)
   }
 
   render() {
