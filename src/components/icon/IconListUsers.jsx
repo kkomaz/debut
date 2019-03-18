@@ -64,5 +64,5 @@ class IconListUsers extends Component {
     )
   }
 }
-IconListUsers.contextType = UserContext
 export default withRouter(IconListUsers)
+IconListUsers.contextType = UserContext

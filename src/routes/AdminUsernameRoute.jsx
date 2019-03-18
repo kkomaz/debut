@@ -71,9 +71,13 @@ class AdminUsernameRoute extends Component {
       match,
       username,
       userFollow,
+      loading,
     } = this.props
 
     const { active } = this.state
+
+    const followingText = !loading && !_.isEmpty(userFollow) ? `Following (${userFollow.followingCount})` : 'Following'
+    const followersText = !loading && !_.isEmpty(userFollow) ? `Following (${userFollow.followersCount})` : 'Followers'
 
     return (
       <Container>
@@ -82,8 +86,16 @@ class AdminUsernameRoute extends Component {
             <Menu className="admin-menu">
               <Menu.List title={username} className="admin-menu__title">
                 <Menu.List.Item active={active === 'activityFeed'} onClick={this.onActivityFeedClick}>Activity Feed</Menu.List.Item>
-                <Menu.List.Item active={active === 'following'} onClick={this.onFollowingClick}>Following</Menu.List.Item>
-                <Menu.List.Item active={active === 'followers'} onClick={this.onFollowersClick}>Followers</Menu.List.Item>
+                <Menu.List.Item
+                  active={active === 'following'}
+                  onClick={this.onFollowingClick}>
+                    {followingText}
+                  </Menu.List.Item>
+                <Menu.List.Item
+                  active={active === 'followers'}
+                  onClick={this.onFollowersClick}>
+                    {followersText}
+                </Menu.List.Item>
               </Menu.List>
             </Menu>
           </Columns.Column>
@@ -127,9 +139,11 @@ class AdminUsernameRoute extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const userFollow = state.follow[ownProps.username] || {}
+  const loading = state.follow.loading
 
   return {
     userFollow,
+    loading,
   };
 };
 
