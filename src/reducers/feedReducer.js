@@ -1,6 +1,7 @@
 import {
   REQUEST_FETCH_SHARE_FEEDS,
-  FETCH_SHARE_FEEDS_SUCCESS
+  FETCH_SHARE_FEEDS_SUCCESS,
+  REQUEST_ADD_SHARE_FEEDS,
 } from 'actions'
 import {
   filterListFromList,
@@ -16,6 +17,12 @@ const defaultState = {
 
 export default function feedReducer(state = defaultState, action) {
   switch (action.type) {
+    case REQUEST_ADD_SHARE_FEEDS: {
+      return { ...state, shares: {
+        ...state.shares,
+        list: [action.payload, ...state.shares.list]
+      }}
+    }
     case REQUEST_FETCH_SHARE_FEEDS: {
       return { ...state, shares: {
         ...state.shares,

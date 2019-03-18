@@ -1,12 +1,12 @@
 // Library Imports
 import React, { Component } from 'react'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 
 // Model Imports
-import _ from 'lodash'
 import { Card } from 'components/bulma'
 import { User } from 'radiks'
 import Follow from 'model/follow'
@@ -16,7 +16,7 @@ import Share from 'model/share'
 import { ShareListItem } from 'components/Share'
 
 // Action Imports
-import { requestFetchShareFeeds } from 'actions/feed'
+import { requestFetchShareFeeds, requestAddShareFeeds } from 'actions/feed'
 
 // Stylesheets
 import './AdminActivityFeed.scss'
@@ -35,13 +35,15 @@ class AdminActivityFeed extends Component {
   }
 
   addShareToActivites(share) {
-    console.log(share)
-    console.log(this.props.feedShares.list)
+    const { userFollow, feedShares } = this.props
+    if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id)) {
+      this.props.requestAddShareFeeds(share.attrs)
+    }
   }
 
   render() {
     const { feedShares } = this.props
-    console.log(feedShares)
+
     return (
       <div className="admin-activity-feed">
         <CSSTransitionGroup
@@ -80,4 +82,5 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestFetchShareFeeds,
+  requestAddShareFeeds,
 })(AdminActivityFeed))
