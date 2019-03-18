@@ -87,7 +87,7 @@ class AdminUsernameRoute extends Component {
               </Menu.List>
             </Menu>
           </Columns.Column>
-          <Columns.Column size={7}>
+          <Columns.Column size={6}>
             <Switch>
               <Route
                 exact
@@ -116,7 +116,7 @@ class AdminUsernameRoute extends Component {
               />
             </Switch>
           </Columns.Column>
-          <Columns.Column size={3}>
+          <Columns.Column size={4}>
             <RandomUsers />
           </Columns.Column>
         </Columns>

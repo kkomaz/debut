@@ -1,0 +1,38 @@
+@import 'src/variables';
+
+.icon-list-users {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  &__single {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-bottom: 10px;
+
+    img {
+      height: 50px;
+      width: 50px;
+      border-radius: 100%;
+      border: 3px solid $shadow;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &__username {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__single-link {
+    flex: 0 1 auto;
+  }
+}
