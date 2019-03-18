@@ -1,17 +1,23 @@
+// Library Imports
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
+
+// Component Imports
 import {
   Columns,
-  Container,
   Card,
 } from 'components/bulma'
-import PropTypes from 'prop-types'
-import { User } from 'radiks'
-import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
+import AdminNoFollowers from 'components/Follow/AdminNoFollowers'
+import { BarLoader } from 'components/Loader'
 
-class FollowersUsers extends Component {
+// Model Imports
+import { User } from 'radiks'
+
+class AdminFollowersUsers extends Component {
   constructor(props) {
     super(props)
 
@@ -27,6 +33,7 @@ class FollowersUsers extends Component {
 
   static propTypes = {
     follow: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
   }
 
   componentDidMount = async () => {
@@ -125,35 +132,45 @@ class FollowersUsers extends Component {
   render() {
     const { users } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className } = this.props
+    const { className, follow, loading } = this.props
+
+    if (loading) {
+      return <BarLoader />
+    }
+
+    if (_.isEmpty(follow.followers) && !loading) {
+      return <AdminNoFollowers />
+    }
 
     return (
-      <Container>
-        <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
-          {
-            _.map(users, (user) => {
-              return (
-                <Columns.Column
-                  key={user.username}
-                  tablet={{
-                    size: 3,
-                  }}
-                >
-                  <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                    <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
-                    <Card.Content className="page__content">
-                      <p className="page__username-text">{user.username}</p>
-                    </Card.Content>
-                  </Card>
-                </Columns.Column>
-              )
-            })
-          }
-        </Columns>
-      </Container>
+      <Columns className={className} breakpoint="tablet">
+        {
+          _.map(users, (user) => {
+            return (
+              <Columns.Column
+                key={user.username}
+                tablet={{
+                  size: 3,
+                }}
+              >
+                <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                  <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
+                  <Card.Content className="page__content">
+                    <p className="page__username-text">{user.username}</p>
+                  </Card.Content>
+                </Card>
+              </Columns.Column>
+            )
+          })
+        }
+      </Columns>
     )
   }
 }
 
-export default withRouter(connect()(FollowersUsers))
-FollowersUsers.contextType = UserContext
+AdminFollowersUsers.defaultProps = {
+  size: 3
+}
+
+export default withRouter(connect()(AdminFollowersUsers))
+AdminFollowersUsers.contextType = UserContext

@@ -17,10 +17,16 @@ import Login from 'components/Login'
 import 'stylesheets/main.scss'
 
 class App extends Component {
-  state = {
-    userSession: new UserSession({ appConfig }),
-    loggedIn: false,
-    loggingIn: false,
+  constructor(props) {
+    super(props)
+
+    const userSession = new UserSession({ appConfig })
+
+    this.state = {
+      userSession,
+      loggedIn: false,
+      loggingIn: false,
+    }
   }
 
   componentDidMount = async () => {

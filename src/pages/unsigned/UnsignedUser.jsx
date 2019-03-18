@@ -76,7 +76,7 @@ class UnsignedUsers extends Component {
     }
 
     if (radiksCheck) {
-      return history.push(`/${username}`)
+      return history.push(`/user/${username}`)
     }
 
     // set proofs

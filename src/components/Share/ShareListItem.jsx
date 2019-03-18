@@ -90,7 +90,7 @@ class ShareListItem extends Component {
     const shareListItemClass = classNames({
       [cardClass]: true,
       'share-list-item': true
-    })
+    }, cardClass)
 
     const shareListItemTextClass = classNames({
       'share-list-item__text': true,

@@ -64,7 +64,7 @@ class Page extends Component {
     const { history } = this.props
 
     return history.push({
-      pathname: `/${user.username}`,
+      pathname: `/user/${user.username}`,
       state: {
         identityAddress: user.blockstackId
       }

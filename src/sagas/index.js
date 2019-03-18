@@ -4,6 +4,7 @@ import blockstackSaga from 'sagas/blockstack'
 import commentSaga from 'sagas/comment'
 import shareSaga from 'sagas/share'
 import followSaga from 'sagas/follow'
+import feedSaga from 'sagas/feed'
 
 export default function* rootSaga() {
   yield [
@@ -12,5 +13,6 @@ export default function* rootSaga() {
     fork(followSaga),
     fork(shareSaga),
     fork(userSaga),
+    fork(feedSaga),
   ]
 }
