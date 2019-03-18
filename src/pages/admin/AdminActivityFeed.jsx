@@ -72,8 +72,10 @@ class AdminActivityFeed extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const feedShares = state.feed.shares
+const mapStateToProps = (state, ownProps) => {
+  const {userFollow } = ownProps
+  const list = _.filter(state.share.shares.list, (share) => _.includes(userFollow.following, share.username))
+  const feedShares = { ...state.share.shares, list }
 
   return {
     feedShares

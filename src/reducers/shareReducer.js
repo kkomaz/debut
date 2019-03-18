@@ -18,6 +18,8 @@ import {
   EDIT_COMMENT_SUCCESS,
   REQUEST_DELETE_COMMENT,
   REQUEST_EDIT_COMMENT,
+  FETCH_SHARE_FEEDS_SUCCESS,
+  REQUEST_ADD_SHARE_FEEDS,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -75,6 +77,20 @@ export default function shareReducer(state = defaultSession, action) {
         full: newShares.length === 0,
         loading: false
       }}
+    case FETCH_SHARE_FEEDS_SUCCESS: {
+      const newShares = action.payload
+      return { ...state, shares: {
+        list: filterListFromList(state.shares.list, newShares),
+        full: newShares.length === 0,
+        loading: false
+      }}
+    }
+    case REQUEST_ADD_SHARE_FEEDS: {
+      return { ...state, shares: {
+        ...state.shares,
+        list: [action.payload, ...state.shares.list]
+      }}
+    }
     case CREATE_SHARE_SUCCESS:
       toggleNotification('success', 'Moment successfully created')
       return { ...state,
