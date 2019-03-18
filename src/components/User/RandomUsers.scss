@@ -1,3 +1,5 @@
+@import 'src/variables';
+
 .random-users {
   &__content {
     display: flex;
@@ -29,5 +31,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__refresh,
+  &__view-all {
+    cursor: pointer;
+
+    &:hover {
+      color: $blue;
+    }
   }
 }
