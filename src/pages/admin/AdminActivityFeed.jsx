@@ -44,7 +44,7 @@ class AdminActivityFeed extends Component {
   render() {
     const { feedShares } = this.props
 
-    if (!feedShares.loading && feedShares.list.length !== 0) {
+    if (!feedShares.loading && feedShares.list.length === 0) {
       return <AdminNoShares />
     }
 
