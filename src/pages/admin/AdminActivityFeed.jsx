@@ -13,7 +13,7 @@ import Follow from 'model/follow'
 import Share from 'model/share'
 
 // Component Import
-import { ShareListItem } from 'components/Share'
+import { ShareListItem, AdminNoShares } from 'components/Share'
 
 // Action Imports
 import { requestFetchShareFeeds, requestAddShareFeeds } from 'actions/feed'
@@ -43,6 +43,10 @@ class AdminActivityFeed extends Component {
 
   render() {
     const { feedShares } = this.props
+
+    if (!feedShares.loading && feedShares.list.length !== 0) {
+      return <AdminNoShares />
+    }
 
     return (
       <div className="admin-activity-feed">

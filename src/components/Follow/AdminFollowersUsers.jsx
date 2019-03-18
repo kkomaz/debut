@@ -1,14 +1,20 @@
+// Library Imports
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
+
+// Component Imports
 import {
   Columns,
   Card,
 } from 'components/bulma'
-import PropTypes from 'prop-types'
-import { User } from 'radiks'
-import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
+import AdminNoFollowers from 'components/Follow/AdminNoFollowers'
+
+// Model Imports
+import { User } from 'radiks'
 
 class AdminFollowersUsers extends Component {
   constructor(props) {
@@ -124,7 +130,11 @@ class AdminFollowersUsers extends Component {
   render() {
     const { users } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className } = this.props
+    const { className, follow } = this.props
+
+    if (_.isEmpty(follow.followers)) {
+      return <AdminNoFollowers />
+    }
 
     return (
       <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
