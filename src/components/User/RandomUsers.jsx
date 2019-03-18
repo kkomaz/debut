@@ -1,6 +1,8 @@
 // Library Imports
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import axios from 'axios'
+import { withRouter } from 'react-router-dom'
 
 // Component Imports
 import {
@@ -17,12 +19,22 @@ class RandomUsers extends Component {
     users: [],
   }
 
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+  }
+
   componentDidMount = () => {
     this.fetchRandomUsers()
   }
 
   onRefreshClick = () => {
     this.setState({ users: [] }, this.fetchRandomUsers)
+  }
+
+  onExploreClick = () => {
+    const { history } = this.props
+
+    return history.push('/explore')
   }
 
   fetchRandomUsers = async () => {
@@ -48,7 +60,7 @@ class RandomUsers extends Component {
               <p className="ml-quarter">· </p>
             </div>
             <div className="random-users__view-all-container">
-              <p className="small random-users__view-all">View All</p>
+              <p className="small random-users__view-all" onClick={this.onExploreClick}>View All</p>
             </div>
           </div>
           <IconListUsers users={users} />
@@ -58,4 +70,4 @@ class RandomUsers extends Component {
   }
 }
 
-export default RandomUsers
+export default withRouter(RandomUsers)

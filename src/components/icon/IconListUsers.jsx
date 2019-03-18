@@ -16,10 +16,6 @@ class IconListUsers extends Component {
     history: PropTypes.object.isRequired
   }
 
-  componentWillUnmount() {
-    console.log('unmounting')
-  }
-
   addDefaultSrc = (evt) => {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
