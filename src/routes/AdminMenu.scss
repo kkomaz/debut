@@ -6,5 +6,8 @@
   .menu-label {
     padding-left: 10px;
     padding-top: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }

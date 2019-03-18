@@ -77,7 +77,7 @@ class AdminUsernameRoute extends Component {
     const { active } = this.state
 
     const followingText = !loading && !_.isEmpty(userFollow) ? `Following (${userFollow.followingCount})` : 'Following'
-    const followersText = !loading && !_.isEmpty(userFollow) ? `Following (${userFollow.followersCount})` : 'Followers'
+    const followersText = !loading && !_.isEmpty(userFollow) ? `Followers (${userFollow.followersCount})` : 'Followers'
 
     return (
       <Container>

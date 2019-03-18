@@ -137,7 +137,7 @@ class AdminFollowersUsers extends Component {
     }
 
     return (
-      <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
+      <Columns className={className} breakpoint="tablet">
         {
           _.map(users, (user) => {
             return (
