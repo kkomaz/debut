@@ -20,16 +20,17 @@
       background-repeat: no-repeat;
       background-size: cover;
     }
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   &__username {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    cursor: pointer;
+
+    &:hover {
+      color: $blue;
+    }
   }
 
   &__single-link {

@@ -123,7 +123,7 @@ class Page extends Component {
                <Columns>
                  <Columns.Column size={7}>
                    <Heading>Welcome to debut!</Heading>
-                   <Heading size={5}>Here are the list of user currently signed up!</Heading>
+                   <Heading size={5}>Here are the list of users currently signed up!</Heading>
                    <Heading size={6}>Feel free to adjust your view, explore profiles, and introduce yourself by updating your profile via "My Page"!</Heading>
                  </Columns.Column>
                  <Columns.Column size={5}>
