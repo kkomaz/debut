@@ -90,7 +90,7 @@ class NavbarComp extends Component {
       searchedUser: selected,
       selected,
     }, () => {
-      history.push(`/${selected}`)
+      history.push(`/user/${selected}`)
     })
   }
 
@@ -98,7 +98,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     if (this.dropdown.state.open && e.keyCode === 13) {
       if (this.state.hovered) {
-        history.push(`/${this.state.hovered}`)
+        history.push(`/user/${this.state.hovered}`)
         this.dropdown.toggle()
       }
     }
