@@ -41,20 +41,11 @@
 
   &__delete-confirmation {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    position: absolute;
-    right: 0;
+    margin-right: 50px;
   }
 
-  &__text {
-    &--show-delete {
-      margin-top: 50px;
-    }
-  }
-
-  &__delete-confirmation-text {
-    width: 280px;
+  &__username-date {
+    margin-bottom: 1em;
   }
 
   &__delete-yes-no {

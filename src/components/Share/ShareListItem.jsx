@@ -13,7 +13,9 @@ import { requestShareComments } from 'actions/comment'
 import { connect} from 'react-redux'
 import { CommentForm, CommentListItem } from 'components/comment'
 import { BulmaLoader } from 'components/bulma'
+import Popover, { ArrowContainer } from 'react-tiny-popover'
 import './ShareListItem.scss'
+import { ShareAdminMenu } from 'components/Share'
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -26,7 +28,8 @@ const formatDate = (input) => {
 }
 class ShareListItem extends Component {
   state = {
-    showDeleteConfirmation: false
+    showDeleteConfirmation: false,
+    isPopoverOpen: false,
   }
 
   static propTypes = {
@@ -89,6 +92,56 @@ class ShareListItem extends Component {
     return history.push(`/user/${username}`)
   }
 
+  renderEditablePopover = () => {
+    const { sessionUser } = this.context.state
+    const { share, username } = this.props
+
+    if (!_.isEqual(sessionUser.username, username)) {
+      return null
+    }
+
+    return (
+      <Popover
+          isOpen={this.state.isPopoverOpen}
+          position="right"
+          padding={30}
+          onClickOutside={() => this.setState({ isPopoverOpen: false })}
+          content={({ position, targetRect, popoverRect }) => (
+              <ArrowContainer
+                position={position}
+                targetRect={targetRect}
+                popoverRect={popoverRect}
+                arrowColor="white"
+                arrowSize={10}
+              >
+                {
+                  _.isEqual(sessionUser.username, username) &&
+                  <ShareAdminMenu
+                    onEditClick={this.onEditClick}
+                    onDeleteClick={this.setDeleteConfirmation}
+                    username={username}
+                    share={share}
+                  />
+                }
+              </ArrowContainer>
+          )}
+      >
+        <Icon
+          className="debut-icon debut-icon--pointer"
+          icon="IconDots"
+          onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+          size={16}
+          linkStyles={{
+            position: 'absolute',
+            top: '0',
+            right: '5px',
+            height: '30px'
+          }}
+        />
+      </Popover>
+    )
+  }
+
   render() {
     const { cardClass, share, username, deleting } = this.props
     const { sessionUser } = this.context.state
@@ -100,7 +153,6 @@ class ShareListItem extends Component {
 
     const shareListItemTextClass = classNames({
       'share-list-item__text': true,
-      'mt-quarter': !showDeleteConfirmation,
       'share-list-item__text--show-delete': showDeleteConfirmation,
     })
 
@@ -114,35 +166,23 @@ class ShareListItem extends Component {
         <Card.Content className={shareListeItemContentClass}>
           <Content style={{ marginBottom: '0' }}>
             <div className="share-list-item__user-details" style={{ position: 'relative' }}>
-              <p onClick={this.goToUserProfile}><strong className="share-list-item__username">{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
+              <div>
+                <p className="share-list-item__username-date" onClick={this.goToUserProfile}>
+                  <strong className="share-list-item__username">{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span>
+                </p>
+                {this.renderEditablePopover()}
+              </div>
               {
-                _.isEqual(sessionUser.username, username) &&
-                <div className="share-list-item__edit-delete">
-                  <div className="share-list-item__edit-delete-icons ml-one">
-                    <Icon
-                      className="debut-icon debut-icon--pointer mr-half"
-                      icon="IconPencil"
-                      onClick={this.onEditClick}
-                    />
-                    <Icon
-                      className="debut-icon debut-icon--pointer"
-                      icon="IconTrash"
-                      onClick={this.setDeleteConfirmation}
-                    />
+                _.isEqual(sessionUser.username, username) && showDeleteConfirmation &&
+                <div className="share-list-item__delete-confirmation">
+                  <p className="share-list-item__delete-confirmation-text small">
+                    Are you sure you want to delete this moment?
+                  </p>
+                  <div className="share-list-item__delete-yes-no ml-one">
+                    <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
+                    <p className="cursor small share-list-item__cancel ml-half mr-one" onClick={this.revertDelete}>CANCEL</p>
+                    { deleting && <BulmaLoader /> }
                   </div>
-                  {
-                    showDeleteConfirmation &&
-                    <div className="share-list-item__delete-confirmation">
-                      <p className="share-list-item__delete-confirmation-text small">
-                        Are you sure you want to delete this moment?
-                      </p>
-                      <div className="share-list-item__delete-yes-no">
-                        { deleting && <BulmaLoader className="mr-one" /> }
-                        <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
-                        <p className="cursor small share-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
-                      </div>
-                    </div>
-                  }
                 </div>
               }
             </div>

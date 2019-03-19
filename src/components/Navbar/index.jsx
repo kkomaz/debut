@@ -247,10 +247,6 @@ class NavbarComp extends Component {
                     Help
                   </Navbar.Item>
 
-                  <Navbar.Item onClick={this.goToShares}>
-                    Shares
-                  </Navbar.Item>
-
                   <div className="is-divider-vertical is-last"></div>
 
                   <Navbar.Item onClick={this.signOut}>

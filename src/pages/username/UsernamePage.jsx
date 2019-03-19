@@ -366,6 +366,7 @@ class UsernamePage extends Component {
                 }
               </Columns.Column>
             </Columns>
+
             <Modal
               show={showModal}
               onClose={this.closeModal}
@@ -381,6 +382,7 @@ class UsernamePage extends Component {
                 </Section>
               </Modal.Content>
             </Modal>
+
             <Modal
               show={showCommentModal}
               onClose={this.closeCommentModal}
