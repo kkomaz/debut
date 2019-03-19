@@ -143,7 +143,7 @@ class ShareListItem extends Component {
   }
 
   render() {
-    const { cardClass, share, username, deleting } = this.props
+    const { cardClass, share, username, deleting, currentComment } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
@@ -229,6 +229,7 @@ class ShareListItem extends Component {
               <CommentForm
                 shareId={share._id}
                 username={sessionUser.username}
+                currentComment={currentComment}
               />
             </div>
           </Content>

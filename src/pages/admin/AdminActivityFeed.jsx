@@ -5,12 +5,16 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
-
+import {
+  Modal,
+  Section,
+} from 'components/bulma'
 // Model Imports
 import Share from 'model/share'
 
 // Component Import
 import { ShareListItem, AdminNoShares } from 'components/Share'
+import { CommentForm } from 'components/comment'
 
 // Action Imports
 import { requestAddShareFeeds, requestFetchShareFeeds } from 'actions/share'
@@ -19,6 +23,11 @@ import { requestAddShareFeeds, requestFetchShareFeeds } from 'actions/share'
 import './AdminActivityFeed.scss'
 
 class AdminActivityFeed extends Component {
+  state = {
+    showCommentModal: false,
+    currentComment: {},
+  }
+
   static propTypes = {
     userFollow: PropTypes.object.isRequired,
     feedShares: PropTypes.object.isRequired,
@@ -38,8 +47,17 @@ class AdminActivityFeed extends Component {
     }
   }
 
+  openCommentModal = (comment) => {
+    return this.setState({ showCommentModal: true, currentComment: comment })
+  }
+
+  closeCommentModal = () => {
+    return this.setState({ showCommentModal: false })
+  }
+
   render() {
     const { feedShares } = this.props
+    const { showCommentModal } = this.state
 
     if (!feedShares.loading && feedShares.list.length === 0) {
       return <AdminNoShares />
@@ -63,11 +81,32 @@ class AdminActivityFeed extends Component {
                 className="admin-activity-feed__share"
                 share={feedShare}
                 username={feedShare.username}
+                onCommentEditClick={this.openCommentModal}
               />
             )
           })
         }
         </CSSTransitionGroup>
+        {
+          showCommentModal &&
+          <Modal
+            show={showCommentModal}
+            onClose={this.closeModal}
+            closeOnEsc
+            >
+            <Modal.Content>
+              <Section style={{ backgroundColor: 'white' }}>
+                <CommentForm
+                  currentComment={this.state.currentComment}
+                  onComplete={this.closeCommentModal}
+                  onCancel={this.closeCommentModal}
+                  shareId={this.state.currentComment.share_id}
+                  username={this.state.currentComment.creator}
+                />
+              </Section>
+            </Modal.Content>
+          </Modal>
+        }
       </div>
     )
   }

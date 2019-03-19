@@ -26,12 +26,12 @@ class CommentForm extends Component {
     const { currentComment = {} } = props
 
     this.state = {
-      id: currentComment.id || '',
+      id: currentComment._id || '',
       text: currentComment.text || '',
       characterLength: currentComment.text ? currentComment.text.length : 0,
       valid: true,
       imageFile: currentComment.imageFile || '',
-      editMode: !!currentComment.id
+      editMode: !_.isEmpty(currentComment._id)
     }
   }
 
@@ -47,6 +47,7 @@ class CommentForm extends Component {
       shareId: PropTypes.string.isRequired,
     }).isRequired,
     onComplete: PropTypes.func,
+    onCancel: PropTypes.func,
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     requestEditComment: PropTypes.func.isRequired,
@@ -88,6 +89,7 @@ class CommentForm extends Component {
     }
 
     this.props.requestEditComment(id, params)
+    this.props.onComplete()
   }
 
   createComment = async () => {
@@ -111,6 +113,7 @@ class CommentForm extends Component {
       characterLength: 0,
       imageFile: ''
     })
+    this.props.onComplete()
   }
 
   onCancel = (e) => {
@@ -170,6 +173,8 @@ class CommentForm extends Component {
       'comment-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
       'comment-form__character-length--danger': leftoverLength < 30
     })
+
+    console.log(this.state)
 
     return (
       <React.Fragment>
