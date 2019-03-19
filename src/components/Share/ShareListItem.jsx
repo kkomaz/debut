@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { withRouter } from 'react-router-dom'
 import _ from 'lodash'
 import { Card, Content } from 'components/bulma'
 import moment from 'moment'
@@ -82,6 +83,12 @@ class ShareListItem extends Component {
     return result
   }
 
+  goToUserProfile = () => {
+    const { history, username } = this.props
+
+    return history.push(`/user/${username}`)
+  }
+
   render() {
     const { cardClass, share, username, deleting } = this.props
     const { sessionUser } = this.context.state
@@ -108,7 +115,7 @@ class ShareListItem extends Component {
         <Card.Content className={shareListeItemContentClass}>
           <Content style={{ marginBottom: '0' }}>
             <div className="share-list-item__user-details" style={{ position: 'relative' }}>
-              <p><strong>{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
+              <p onClick={this.goToUserProfile}><strong className="share-list-item__username">{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span></p>
               {
                 _.isEqual(sessionUser.username, username) &&
                 <div className="share-list-item__edit-delete">
@@ -204,7 +211,7 @@ const mapStateToProps = (state) => {
 }
 
 ShareListItem.contextType = UserContext
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   requestDeleteShare,
   requestShareComments,
-})(ShareListItem)
+})(ShareListItem))

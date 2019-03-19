@@ -7,6 +7,11 @@
     justify-content: center;
   }
 
+  &__username {
+    color: $blue;
+    cursor: pointer;
+  }
+
   &__view-more-comments {
     color: $primary;
     cursor: pointer;
