@@ -7,9 +7,6 @@ import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 
 // Model Imports
-import { Card } from 'components/bulma'
-import { User } from 'radiks'
-import Follow from 'model/follow'
 import Share from 'model/share'
 
 // Component Import

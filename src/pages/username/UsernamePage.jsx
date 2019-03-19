@@ -255,7 +255,7 @@ class UsernamePage extends Component {
     } = this.state
 
     return (
-      <Container>
+      <Container style={{ marginTop: '10px' }}>
         <Columns className="mt-half">
           <Columns.Column size={5}>
             <div className="username__description mb-one">

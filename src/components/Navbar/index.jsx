@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import { Input, Dropdown } from 'components/bulma'
 import { IconLoader } from 'components/Loader'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 import axios from 'axios'
 import './Navbar.scss';
