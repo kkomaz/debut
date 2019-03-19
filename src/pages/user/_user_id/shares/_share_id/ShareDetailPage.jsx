@@ -8,6 +8,7 @@ import {
   Container,
   Modal,
   Section,
+  Heading,
 } from 'components/bulma'
 
 // Model Imports
@@ -109,6 +110,7 @@ class ShareDetail extends Component {
             >
             <Modal.Content>
               <Section style={{ backgroundColor: 'white' }}>
+                <Heading size={4}>User Comments</Heading>
                 <CommentForm
                   currentComment={this.state.currentComment}
                   onComplete={this.closeCommentModal}
@@ -129,6 +131,7 @@ class ShareDetail extends Component {
           >
             <Modal.Content>
               <Section style={{ backgroundColor: 'white' }}>
+                <Heading size={4}>Shared Moment</Heading>
                 <ShareForm
                   username={username}
                   currentShare={this.state.currentShare}

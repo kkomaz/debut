@@ -11,6 +11,7 @@ import {
   Content,
   Modal,
   Section,
+  Heading,
 } from 'components/bulma'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
@@ -375,6 +376,7 @@ class UsernamePage extends Component {
             >
               <Modal.Content>
                 <Section style={{ backgroundColor: 'white' }}>
+                  <Heading size={4}>Shared Moment</Heading>
                   <ShareForm
                     username={username}
                     currentShare={this.state.currentShare}
@@ -391,6 +393,7 @@ class UsernamePage extends Component {
             >
               <Modal.Content>
                 <Section style={{ backgroundColor: 'white' }}>
+                  <Heading size={4}>User Comments</Heading>
                   <CommentForm
                     currentComment={this.state.currentComment}
                     onComplete={this.closeCommentModal}

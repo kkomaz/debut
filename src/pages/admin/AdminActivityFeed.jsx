@@ -8,6 +8,7 @@ import { CSSTransitionGroup } from 'react-transition-group'
 import {
   Modal,
   Section,
+  Heading,
 } from 'components/bulma'
 // Model Imports
 import Share from 'model/share'
@@ -95,6 +96,7 @@ class AdminActivityFeed extends Component {
             closeOnEsc
             >
             <Modal.Content>
+              <Heading size={4}>User Comments</Heading>
               <Section style={{ backgroundColor: 'white' }}>
                 <CommentForm
                   currentComment={this.state.currentComment}
