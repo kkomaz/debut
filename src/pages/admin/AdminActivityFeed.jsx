@@ -96,8 +96,8 @@ class AdminActivityFeed extends Component {
             closeOnEsc
             >
             <Modal.Content>
-              <Heading size={4}>User Comments</Heading>
               <Section style={{ backgroundColor: 'white' }}>
+                <Heading size={4}>User Comments</Heading>
                 <CommentForm
                   currentComment={this.state.currentComment}
                   onComplete={this.closeCommentModal}
