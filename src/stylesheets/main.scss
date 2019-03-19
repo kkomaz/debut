@@ -2,14 +2,14 @@
 @import "~react-bulma-components/src/index.sass";
 @import '~bulma-divider';
 @import './common.scss';
-
+@import '../variables.sass';
 // html {
 //   background: #E0E3DA;
 //   font-family: 'Overpass', sans-serif;
 // }
 
 html, body {
-  font-family: 'Raleway', 'Overpass', 'Open Sans', san-serif;
+  font-family: "Poppins", sans-serif;
   background: #E0E3DA;
 }
 
@@ -42,4 +42,16 @@ p {
 
 .content li + li {
   margin-top: 0;
+}
+
+.button {
+  &.is-light {
+    background-image: -webkit-linear-gradient(45deg, $citrus 0%, #fabe61 100%);
+    color: $white;
+  }
+
+  &.is-primary {
+    background-image: -webkit-linear-gradient(45deg, $primary 0%, #5a5791 100%);
+    color: $white;
+  }
 }
