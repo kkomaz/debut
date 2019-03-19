@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
+import './FollowingUsers.scss'
 
 class FollowingUsers extends Component {
   constructor(props) {
@@ -109,8 +110,8 @@ class FollowingUsers extends Component {
     const { className, size } = this.props
 
     return (
-      <Container>
-        <Columns className={className} breakpoint="tablet" style={{ padding: '0 150px' }}>
+      <Container className="following-users">
+        <Columns className={className} breakpoint="tablet">
           {
             _.map(users, (user) => {
               return (
