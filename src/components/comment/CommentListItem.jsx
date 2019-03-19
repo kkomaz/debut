@@ -190,21 +190,21 @@ class CommentListItem extends Component {
           }
 
           {this.renderEditablePopover()}
-
-          {
-            showDeleteConfirmation &&
-            <div className="comment-list-item__delete-confirmation">
-              <p className="comment-list-item__delete-confirmation-text small">
-                Are you sure you want to delete this moment?
-              </p>
-              <div className="comment-list-item__delete-yes-no ml-one">
-                <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteComment}>DELETE</p>
-                <p className="cursor small comment-list-item__cancel ml-half mr-one" onClick={this.revertDelete}>CANCEL</p>
-                { commentActions.deleting && commentActions.commentId === comment._id && <BulmaLoader /> }
-              </div>
-            </div>
-          }
         </div>
+
+        {
+          showDeleteConfirmation &&
+          <div className="comment-list-item__delete-confirmation">
+            <p className="comment-list-item__delete-confirmation-text small">
+              Are you sure you want to delete this moment?
+            </p>
+            <div className="comment-list-item__delete-yes-no ml-one">
+              <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteComment}>DELETE</p>
+              <p className="cursor small comment-list-item__cancel ml-half mr-one" onClick={this.revertDelete}>CANCEL</p>
+              { commentActions.deleting && commentActions.commentId === comment._id && <BulmaLoader /> }
+            </div>
+          </div>
+        }
 
         <p className={commentListItemTextClass}>{linkifyText(comment.text)}</p>
 

@@ -172,20 +172,21 @@ class ShareListItem extends Component {
                 </p>
                 {this.renderEditablePopover()}
               </div>
-              {
-                _.isEqual(sessionUser.username, username) && showDeleteConfirmation &&
-                <div className="share-list-item__delete-confirmation">
-                  <p className="share-list-item__delete-confirmation-text small">
-                    Are you sure you want to delete this moment?
-                  </p>
-                  <div className="share-list-item__delete-yes-no ml-one">
-                    <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
-                    <p className="cursor small share-list-item__cancel ml-half mr-one" onClick={this.revertDelete}>CANCEL</p>
-                    { deleting && <BulmaLoader /> }
-                  </div>
-                </div>
-              }
             </div>
+
+            {
+              _.isEqual(sessionUser.username, username) && showDeleteConfirmation &&
+              <div className="share-list-item__delete-confirmation">
+                <p className="share-list-item__delete-confirmation-text small">
+                  Are you sure you want to delete this moment?
+                </p>
+                <div className="share-list-item__delete-yes-no ml-one">
+                  <p className="cursor small mr-half share-list-item__delete" onClick={this.deleteShare}>DELETE</p>
+                  <p className="cursor small share-list-item__cancel ml-half mr-one" onClick={this.revertDelete}>CANCEL</p>
+                  { deleting && <BulmaLoader /> }
+                </div>
+              </div>
+            }
 
             <p className={shareListItemTextClass}>
               {linkifyText(share.text)}

@@ -1,14 +1,3 @@
-.admin-activity-feed {
-  .comment-list-item {
-    &__delete-confirmation-text {
-      margin-bottom: inherit !important;
-    }
-
-    &__delete-confirmation {
-      margin-right: 10px;
-    }
-  }
-}
 .admin-activity-feed-transition-enter {
   opacity: 0.01;
 }
