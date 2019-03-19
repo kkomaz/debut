@@ -217,17 +217,25 @@ class NavbarComp extends Component {
                     {username}
                   </Navbar.Item>
 
+                  <div className="is-divider-vertical"></div>
+
                   <Navbar.Item onClick={this.goToHome}>
                     Home
                   </Navbar.Item>
+
+                  <div className="is-divider-vertical"></div>
 
                   <Navbar.Item onClick={this.goToExplore}>
                     Explore
                   </Navbar.Item>
 
+                  <div className="is-divider-vertical"></div>
+
                   <Navbar.Item onClick={this.goToHelp}>
                     Help
                   </Navbar.Item>
+
+                  <div className="is-divider-vertical is-last"></div>
 
                   <Navbar.Item onClick={this.signOut}>
                     Sign Out

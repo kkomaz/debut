@@ -7,6 +7,16 @@
   padding-left: 278px;
   height: 65px;
 
+  .is-divider-vertical {
+    padding: 0;
+
+    &.is-last {
+      &::before {
+        border-left: 0.03rem solid #dbdbdb;
+      }
+    }
+  }
+
   .navbar-item {
     display: flex;
     align-items: center;
