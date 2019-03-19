@@ -1,0 +1,14 @@
+@import 'src/variables';
+
+.comment-admin-menu {
+  &__delete-container,
+  &__edit-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__text-option {
+    color: $pitch-dark;
+    flex: 0 1 100px;
+  }
+}

@@ -10,6 +10,8 @@ import { requestDeleteComment } from 'actions/comment'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { BulmaLoader } from 'components/bulma'
+import Popover, { ArrowContainer } from 'react-tiny-popover'
+import { CommentAdminMenu } from 'components/comment'
 import './CommentListItem.scss';
 
 const formatDate = (input) => {
@@ -61,6 +63,96 @@ class CommentListItem extends Component {
     history.push(`/user/${comment.creator}`)
   }
 
+  renderEditablePopover = () => {
+    const { sessionUser } = this.context.state
+    const { comment, username, share } = this.props
+
+    if (!_.isEqual(sessionUser.username, username) && _.isEqual(comment.creator, sessionUser.username)) {
+      return (
+        <Popover
+          isOpen={this.state.isPopoverOpen}
+          position="right"
+          padding={30}
+          onClickOutside={() => this.setState({ isPopoverOpen: false })}
+          content={({ position, targetRect, popoverRect }) => (
+            <ArrowContainer
+              position={position}
+              targetRect={targetRect}
+              popoverRect={popoverRect}
+              arrowColor="white"
+              arrowSize={10}
+              >
+                <CommentAdminMenu
+                  onEditClick={this.onEditClick}
+                  onDeleteClick={this.setDeleteConfirmation}
+                  username={username}
+                  share={share}
+                />
+            </ArrowContainer>
+          )}
+          >
+          <Icon
+            className="debut-icon debut-icon--pointer"
+            icon="IconDots"
+            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+            size={16}
+            linkStyles={{
+              position: 'absolute',
+              top: '0',
+              right: '5px',
+              height: '30px'
+            }}
+            />
+        </Popover>
+      )
+    }
+
+    if ((_.isEqual(sessionUser.username, username) && _.isEqual(comment.creator, sessionUser.username))) {
+      return (
+        <Popover
+          isOpen={this.state.isPopoverOpen}
+          position="right"
+          padding={30}
+          onClickOutside={() => this.setState({ isPopoverOpen: false })}
+          content={({ position, targetRect, popoverRect }) => (
+            <ArrowContainer
+              position={position}
+              targetRect={targetRect}
+              popoverRect={popoverRect}
+              arrowColor="white"
+              arrowSize={10}
+              >
+              {
+                _.isEqual(sessionUser.username, username) &&
+                <CommentAdminMenu
+                  onEditClick={this.onEditClick}
+                  onDeleteClick={this.setDeleteConfirmation}
+                  username={username}
+                  share={share}
+                />
+              }
+            </ArrowContainer>
+          )}
+          >
+          <Icon
+            className="debut-icon debut-icon--pointer"
+            icon="IconDots"
+            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+            size={16}
+            linkStyles={{
+              position: 'absolute',
+              top: '0',
+              right: '5px',
+              height: '30px'
+            }}
+            />
+        </Popover>
+      )
+    }
+
+    return null
+  }
+
   render() {
     const { username, comment, commentActions } = this.props
     const { sessionUser } = this.context.state
@@ -81,7 +173,9 @@ class CommentListItem extends Component {
       <div className={commentListItemClass}>
         <div className="comment-list-item__user-details" style={{ position: 'relative' }}>
 
-          <p style={{ marginBottom: '0' }}><strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span></p>
+          <p className="comment-list-item__username-date">
+            <strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span>
+          </p>
           {
             _.isEqual(sessionUser.username, username) && !_.isEqual(comment.creator, sessionUser.username) &&
             <div className="comment-list-item__edit-delete">
@@ -95,41 +189,7 @@ class CommentListItem extends Component {
             </div>
           }
 
-          {
-            !_.isEqual(sessionUser.username, username) && _.isEqual(comment.creator, sessionUser.username) &&
-            <div className="comment-list-item__edit-delete">
-              <div className="comment-list-item__edit-delete-icons ml-one">
-                <Icon
-                  className="debut-icon debut-icon--pointer mr-half"
-                  icon="IconPencil"
-                  onClick={this.onEditClick}
-                />
-                <Icon
-                  className="debut-icon debut-icon--pointer"
-                  icon="IconTrash"
-                  onClick={this.setDeleteConfirmation}
-                />
-              </div>
-            </div>
-          }
-
-          {
-            _.isEqual(sessionUser.username, username) && _.isEqual(comment.creator, sessionUser.username) &&
-            <div className="comment-list-item__edit-delete">
-              <div className="comment-list-item__edit-delete-icons ml-one">
-                <Icon
-                  className="debut-icon debut-icon--pointer mr-half"
-                  icon="IconPencil"
-                  onClick={this.onEditClick}
-                />
-                <Icon
-                  className="debut-icon debut-icon--pointer"
-                  icon="IconTrash"
-                  onClick={this.setDeleteConfirmation}
-                />
-              </div>
-            </div>
-          }
+          {this.renderEditablePopover()}
 
           {
             showDeleteConfirmation &&
@@ -137,10 +197,10 @@ class CommentListItem extends Component {
               <p className="comment-list-item__delete-confirmation-text small">
                 Are you sure you want to delete this moment?
               </p>
-              <div className="comment-list-item__delete-yes-no">
-                { commentActions.deleting && commentActions.commentId === comment._id && <BulmaLoader className="mr-one" /> }
+              <div className="comment-list-item__delete-yes-no ml-one">
                 <p className="cursor small mr-half comment-list-item__delete" onClick={this.deleteComment}>DELETE</p>
-                <p className="cursor small comment-list-item__cancel" onClick={this.revertDelete}>CANCEL</p>
+                <p className="cursor small comment-list-item__cancel ml-half mr-one" onClick={this.revertDelete}>CANCEL</p>
+                { commentActions.deleting && commentActions.commentId === comment._id && <BulmaLoader /> }
               </div>
             </div>
           }

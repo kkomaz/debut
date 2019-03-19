@@ -14,6 +14,7 @@
   }
 
   &__user-details {
+    align-items: center;
     display: flex;
     justify-content: space-between;
   }
@@ -24,23 +25,11 @@
 
   &__delete-confirmation {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    position: absolute;
-    right: 0;
-  }
-
-  &__text {
-    &--show-delete {
-      width: 80%;
-    }
-  }
-
-  &__delete-confirmation-text {
     margin-right: 50px;
-    margin-top: 3px;
-    width: 280px;
-    margin-bottom: 0;
+  }
+
+  &__username-date {
+    margin-bottom: 1em;
   }
 
   &__delete-yes-no {

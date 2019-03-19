@@ -4,9 +4,9 @@ import {
   Menu,
 } from 'components/bulma'
 import { withRouter } from 'react-router-dom'
-import './ShareAdminMenu.scss'
+import './CommentAdminMenu.scss'
 
-class ShareAdminMenu extends Component {
+class CommentAdminMenu extends Component {
   state = {
     active: 'edit'
   }
@@ -15,6 +15,8 @@ class ShareAdminMenu extends Component {
     username: PropTypes.string.isRequired,
     share: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
+    onEditClick: PropTypes.func.isRequired,
+    onDeleteClick: PropTypes.func.isRequired,
   }
 
   onEditClick = () => {
@@ -25,12 +27,6 @@ class ShareAdminMenu extends Component {
   onDeleteClick = () => {
     this.setState({ active: 'delete' })
     this.props.onDeleteClick()
-  }
-
-  onDetailClick = () => {
-    const { username, share, history } = this.props
-    this.setState({ active: 'detail' })
-    return history.push(`/user/${username}/shares/${share._id}`)
   }
 
   render() {
@@ -57,15 +53,10 @@ class ShareAdminMenu extends Component {
             onClick={this.onDeleteClick}>
               Delete
             </Menu.List.Item>
-          <Menu.List.Item
-            active={active === 'detail'}
-            onClick={this.onDetailClick}>
-              Go to Share
-          </Menu.List.Item>
         </Menu.List>
       </Menu>
     )
   }
 }
 
-export default withRouter(ShareAdminMenu)
+export default withRouter(CommentAdminMenu)
