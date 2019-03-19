@@ -152,8 +152,6 @@ class NavbarComp extends Component {
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
     const { username, user, loading } = this.props
 
-    console.log(user)
-
     return (
       <Navbar
         className="debut-nav-bar"
@@ -205,7 +203,7 @@ class NavbarComp extends Component {
                 <React.Fragment>
                   <Navbar.Item onClick={this.goToProfile}>
                     {
-                      _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-quarter" /> :
+                      _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-half" /> :
                       <Link className="debut-nav-bar__user-identity mr-one" to={`/user/${user.username}`}>
                         <img
                           onError={this.addDefaultSrc}

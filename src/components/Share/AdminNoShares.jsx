@@ -59,7 +59,8 @@ class AdminNoShares extends Component {
                   }}
                 />
               </Popover>
-              <p>You are not following anyone that has shared a moment.  You can browse user profiles to the right!</p>
+              <p>You are not following anyone that has shared a moment.  You can view user profiles to the <strong>right</strong> or click the <strong>Explore</strong> to see a list of users!</p>
+              <p>If you would like to update your profile click on your <strong>username</strong> above.</p>
             </div>
           </Content>
         </Card.Content>

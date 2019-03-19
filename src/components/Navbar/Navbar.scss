@@ -3,9 +3,12 @@
 .debut-nav-bar {
   border-bottom: 1px solid hsla(0,0%,100%,.1);
   padding-left: 278px;
-  height: 70px;
+  height: 65px;
 
   .navbar-item {
+    display: flex;
+    align-items: center;
+
     img {
       max-height: 45px;
     }

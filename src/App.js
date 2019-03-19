@@ -69,7 +69,7 @@ class App extends Component {
             following: [],
             followingCount: 0,
           })
-          follow.save()
+          await follow.save()
         }
       } catch (e) {
         console.log(e.message)
@@ -103,4 +103,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

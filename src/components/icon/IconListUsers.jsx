@@ -41,7 +41,7 @@ class IconListUsers extends Component {
             {
               _.map(users, (user, index) => {
                 return (
-                  <li className="icon-list-users__single" key={`${user.username}-${index}`}>
+                  <li className="icon-list-users__single" onClick={() => this.onClick(user)} key={`${user.username}-${index}`}>
                     <Link className="icon-list-users__single-link" to={`/user/${user.username}`}>
                       <img
                         onError={this.addDefaultSrc}
@@ -51,7 +51,7 @@ class IconListUsers extends Component {
                         width="42"
                       />
                     </Link>
-                    <p className="icon-list-users__username ml-one mb-half">
+                    <p className="icon-list-users__username ml-one mb-half" onClick={() => this.onClick(user)}>
                       {user.username}
                     </p>
                   </li>

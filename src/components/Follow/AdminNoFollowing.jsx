@@ -59,7 +59,7 @@ class AdminNoFollowing extends Component {
                   }}
                 />
               </Popover>
-              <p>You are not following anyone at this moment.  Click the <strong>Explore</strong> in the navigation bar or browse user profiles on the right!</p>
+              <p>Welcome to debut!  You are not following anyone at this moment.  Click the <strong>Explore</strong> in the navigation bar or browse user profiles on the right!</p>
             </div>
           </Content>
         </Card.Content>
