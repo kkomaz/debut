@@ -68,7 +68,7 @@ class FollowersUsers extends Component {
   }
 
   handleScroll = () => {
-    const { bottomReached } = this.state
+    const { bottomReached, users } = this.state
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
     // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
@@ -82,7 +82,7 @@ class FollowersUsers extends Component {
     */
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true }, () => {
-        if (!this.state.full) {
+        if (!this.state.full && users.length >= 12) {
           this.fetchUsers()
         }
       });
