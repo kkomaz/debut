@@ -224,9 +224,10 @@ class UsernamePage extends Component {
     this.setState({
       showCommentModal: true,
       currentComment: {
-        id: comment._id,
+        _id: comment._id,
         text: comment.text,
-        imageFile: comment.imageFile
+        imageFile: comment.imageFile,
+        share_id: comment.share_id
       }
     })
   }

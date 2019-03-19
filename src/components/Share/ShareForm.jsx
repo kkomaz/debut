@@ -26,7 +26,7 @@ class ShareForm extends Component {
     const { currentShare = {} } = props
 
     this.state = {
-      id: currentShare._id || '',
+      _id: currentShare._id || '',
       text: currentShare.text || '',
       characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
@@ -40,7 +40,7 @@ class ShareForm extends Component {
     onCancel: PropTypes.func,
     onComplete: PropTypes.func,
     currentShare: PropTypes.shape({
-      id: PropTypes.string,
+      _id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
     })
@@ -68,7 +68,7 @@ class ShareForm extends Component {
   }
 
   editShare = async () => {
-    const { id, text, imageFile } = this.state
+    const { _id, text, imageFile } = this.state
     const { username } = this.props
 
     const params = {
@@ -81,7 +81,7 @@ class ShareForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestEditShare(id, params)
+    this.props.requestEditShare(_id, params)
     this.props.onComplete()
   }
 

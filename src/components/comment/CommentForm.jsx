@@ -26,7 +26,7 @@ class CommentForm extends Component {
     const { currentComment = {} } = props
 
     this.state = {
-      id: currentComment._id || '',
+      _id: currentComment._id || '',
       text: currentComment.text || '',
       characterLength: currentComment.text ? currentComment.text.length : 0,
       valid: true,
@@ -37,7 +37,7 @@ class CommentForm extends Component {
 
   static propTypes = {
     currentComment: PropTypes.shape({
-      id: PropTypes.string,
+      _id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
     }),
@@ -75,7 +75,7 @@ class CommentForm extends Component {
   }
 
   editComment = async () => {
-    const { id, text, imageFile } = this.state
+    const { _id, text, imageFile } = this.state
     const { username } = this.props
 
     const params = {
@@ -88,7 +88,7 @@ class CommentForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestEditComment(id, params)
+    this.props.requestEditComment(_id, params)
     this.props.onComplete()
   }
 
@@ -120,7 +120,7 @@ class CommentForm extends Component {
     e.preventDefault()
     this.fileInput.value = ''
     this.setState({
-      id: '',
+      _id: '',
       text: '',
       characterLength: 0,
       valid: true,
