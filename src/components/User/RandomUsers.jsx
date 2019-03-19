@@ -49,7 +49,7 @@ class RandomUsers extends Component {
 
     return (
       <Card className="random-users" style={{ height: '280px' }}>
-        <Card.Content>
+        <Card.Content className="random-users__card-content">
           <div className="random-users__content mb-one">
             <div className="random-users__title-container">
               <Heading className="random-users__header" size={6}>Signed up users on debut</Heading>
