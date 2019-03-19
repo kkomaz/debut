@@ -3,6 +3,9 @@
 @import '~bulma-divider';
 @import './common.scss';
 @import '../variables.sass';
+
+@import './modules/button';
+
 // html {
 //   background: #E0E3DA;
 //   font-family: 'Overpass', sans-serif;
@@ -42,16 +45,4 @@ p {
 
 .content li + li {
   margin-top: 0;
-}
-
-.button {
-  &.is-light {
-    background-image: -webkit-linear-gradient(45deg, $citrus 0%, #fabe61 100%);
-    color: $white;
-  }
-
-  &.is-primary {
-    background-image: -webkit-linear-gradient(45deg, $primary 0%, #5a5791 100%);
-    color: $white;
-  }
 }
