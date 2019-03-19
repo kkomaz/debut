@@ -10,6 +10,8 @@ import PropTypes from 'prop-types'
 import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
+import { BarLoader } from 'components/Loader'
+import NoFollowers from 'components/Follow/NoFollowers'
 import './FollowersUsers.scss'
 
 class FollowersUsers extends Component {
@@ -21,6 +23,7 @@ class FollowersUsers extends Component {
       users: [],
       bottomReached: false,
       full: false,
+      loading: true
     }
 
     this.handleScroll = _.debounce(this.handleScroll, 300)
@@ -105,7 +108,7 @@ class FollowersUsers extends Component {
       })
 
       if (_.isEmpty(result)) {
-        return this.setState({ full: true })
+        return this.setState({ full: true, loading: false })
       }
 
       const additionalUsers = _.map(result, 'attrs')
@@ -113,9 +116,14 @@ class FollowersUsers extends Component {
 
       return this.setState({
         users: finalUsers,
-        offset: finalUsers.length
+        offset: finalUsers.length,
+        loading: false,
       })
     }
+
+    return this.setState({
+      loading: false
+    })
   }
 
   onBoxClick = (user) => {
@@ -124,11 +132,28 @@ class FollowersUsers extends Component {
   }
 
   render() {
-    const { users } = this.state
+    const { users, loading } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className } = this.props
+    const { className, follow } = this.props
 
-    console.log(users)
+    console.log(loading)
+
+    if (loading) {
+      return (
+        <div className="following-users following-users--loading">
+          <BarLoader />
+        </div>
+      )
+    }
+
+    if (!loading && _.isEmpty(users)) {
+      return (
+        <Container style={{ padding: '0 75px'}}>
+          <NoFollowers username={follow.username} />
+        </Container>
+      )
+    }
+
 
     return (
       <Container className="followers-users">
