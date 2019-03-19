@@ -209,7 +209,7 @@ class UsernamePage extends Component {
     this.setState({
       showModal: true,
       currentShare: {
-        id: share._id,
+        _id: share._id,
         text: share.text,
         imageFile: share.imageFile,
       }

@@ -26,12 +26,12 @@ class ShareForm extends Component {
     const { currentShare = {} } = props
 
     this.state = {
-      id: currentShare.id || '',
+      id: currentShare._id || '',
       text: currentShare.text || '',
       characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
       imageFile: currentShare.imageFile || '',
-      editMode: !!currentShare.id
+      editMode: !_.isEmpty(currentShare._id)
     }
   }
 
@@ -82,6 +82,7 @@ class ShareForm extends Component {
     }
 
     this.props.requestEditShare(id, params)
+    this.props.onComplete()
   }
 
   createShare = async () => {

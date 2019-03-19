@@ -174,8 +174,6 @@ class CommentForm extends Component {
       'comment-form__character-length--danger': leftoverLength < 30
     })
 
-    console.log(this.state)
-
     return (
       <React.Fragment>
         <form

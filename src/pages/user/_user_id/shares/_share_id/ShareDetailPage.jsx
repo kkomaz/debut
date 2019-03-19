@@ -5,18 +5,30 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import {
   Columns,
-  Container
+  Container,
+  Modal,
+  Section,
 } from 'components/bulma'
+
+// Model Imports
 import Share from 'model/share'
-import { ShareListItem, InvalidShare } from 'components/Share'
+
+// Action Imports
 import { requestAddShareFeeds } from 'actions/share'
+
+// Component Imports
+import { ShareListItem, InvalidShare } from 'components/Share'
 import { RandomUsers } from 'components/User'
+import { CommentForm } from 'components/comment'
+import { ShareForm } from 'components/Share'
 
 class ShareDetail extends Component {
   state = {
     error: false,
     share: {},
     loading: true,
+    showCommentModal: false,
+    showShareModal: false,
   }
 
   static propTypes = {
@@ -40,11 +52,25 @@ class ShareDetail extends Component {
     }
   }
 
+  openEditModal = (share) => {
+    return this.setState({ showShareModal: true, currentShare: share })
+  }
+
+  closeShareModal = () => {
+    return this.setState({ showShareModal: false })
+  }
+
+  openCommentModal = (comment) => {
+    return this.setState({ showCommentModal: true, currentComment: comment })
+  }
+
+  closeCommentModal = () => {
+    return this.setState({ showCommentModal: false })
+  }
+
   render() {
     const { username, share } = this.props
-    const { error } = this.state
-
-    console.log('hitting here?')
+    const { error, showCommentModal, showShareModal } = this.state
 
     if (error) {
       return (
@@ -62,12 +88,57 @@ class ShareDetail extends Component {
       <Container>
         <Columns>
           <Columns.Column size={6} offset={1}>
-            <ShareListItem share={share} username={username} />
+            <ShareListItem
+              share={share}
+              username={username}
+              onEditClick={this.openEditModal}
+              onCommentEditClick={this.openCommentModal}
+              disableGoPath
+            />
           </Columns.Column>
           <Columns.Column size={4}>
             <RandomUsers />
           </Columns.Column>
         </Columns>
+        {
+          showCommentModal &&
+          <Modal
+            show={showCommentModal}
+            onClose={this.closeCommentModal}
+            closeOnEsc
+            >
+            <Modal.Content>
+              <Section style={{ backgroundColor: 'white' }}>
+                <CommentForm
+                  currentComment={this.state.currentComment}
+                  onComplete={this.closeCommentModal}
+                  onCancel={this.closeCommentModal}
+                  shareId={this.state.currentComment.share_id}
+                  username={this.state.currentComment.creator}
+                />
+              </Section>
+            </Modal.Content>
+          </Modal>
+        }
+        {
+          showShareModal &&
+          <Modal
+            show={showShareModal}
+            onClose={this.closeModal}
+            closeOnEsc
+          >
+            <Modal.Content>
+              <Section style={{ backgroundColor: 'white' }}>
+                <ShareForm
+                  username={username}
+                  currentShare={this.state.currentShare}
+                  onCancel={this.closeShareModal}
+                  onComplete={this.closeShareModal}
+                />
+              </Section>
+            </Modal.Content>
+          </Modal>
+        }
       </Container>
     )
   }

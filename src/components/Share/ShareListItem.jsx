@@ -34,6 +34,7 @@ class ShareListItem extends Component {
 
   static propTypes = {
     cardClass: PropTypes.string.isRequired,
+    disableGoPath: PropTypes.bool,
     share: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
@@ -94,7 +95,7 @@ class ShareListItem extends Component {
 
   renderEditablePopover = () => {
     const { sessionUser } = this.context.state
-    const { share, username } = this.props
+    const { share, username, disableGoPath } = this.props
 
     if (!_.isEqual(sessionUser.username, username)) {
       return null
@@ -117,6 +118,7 @@ class ShareListItem extends Component {
                 {
                   _.isEqual(sessionUser.username, username) &&
                   <ShareAdminMenu
+                    disableGoPath={disableGoPath}
                     onEditClick={this.onEditClick}
                     onDeleteClick={this.setDeleteConfirmation}
                     username={username}
@@ -241,6 +243,7 @@ class ShareListItem extends Component {
 
 ShareListItem.defaultProps = {
   onEditClick: _.noop,
+  disableGoPath: false
 }
 
 const mapStateToProps = (state) => {

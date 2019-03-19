@@ -12,6 +12,7 @@ class ShareAdminMenu extends Component {
   }
 
   static propTypes = {
+    disableGoPath: PropTypes.bool.isRequired,
     username: PropTypes.string.isRequired,
     share: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
@@ -35,6 +36,7 @@ class ShareAdminMenu extends Component {
 
   render() {
     const { active } = this.state
+    const { disableGoPath } = this.props
 
     return (
       <Menu
@@ -57,11 +59,14 @@ class ShareAdminMenu extends Component {
             onClick={this.onDeleteClick}>
               Delete
             </Menu.List.Item>
-          <Menu.List.Item
-            active={active === 'detail'}
-            onClick={this.onDetailClick}>
+          {
+            !disableGoPath &&
+            <Menu.List.Item
+              active={active === 'detail'}
+              onClick={this.onDetailClick}>
               Go to Share
-          </Menu.List.Item>
+            </Menu.List.Item>
+          }
         </Menu.List>
       </Menu>
     )
