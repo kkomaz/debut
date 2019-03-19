@@ -134,14 +134,6 @@ class UsernameRoute extends Component {
 
     return (
       <div className="username-route">
-        <UserHero
-          username={username}
-          user={user}
-          defaultImgUrl={defaultImgUrl}
-          sessionUser={sessionUser}
-          userProofs={userProofs}
-          loading={loading}
-        />
         <Switch>
           {
             <Route
@@ -162,32 +154,72 @@ class UsernameRoute extends Component {
                   }
                 }
                 return (
-                  <UsernamePage
-                    user={user}
-                    username={username}
-                    dapps={dapps}
-                    follow={follow}
-                    profile={profile}
-                    shares={shares}
-                    loading={loading}
-                    location={lastLocation}
-                  />
+                  <React.Fragment>
+                    <UserHero
+                      username={username}
+                      user={user}
+                      defaultImgUrl={defaultImgUrl}
+                      sessionUser={sessionUser}
+                      userProofs={userProofs}
+                      loading={loading}
+                    />
+                    <UsernamePage
+                      user={user}
+                      username={username}
+                      dapps={dapps}
+                      follow={follow}
+                      profile={profile}
+                      shares={shares}
+                      loading={loading}
+                      location={lastLocation}
+                      />
+                  </React.Fragment>
                 )}
               }
             />
           }
+
+          <Route
+            path={`${match.url}/posts/:post_id`}
+            render={() => <div>Hello</div>}
+          />
+
           {
             !_.isEmpty(follow) &&
             <Route
               path={`${match.url}/following`}
-              render={() => <FollowingUsers follow={follow} />}
+              render={() => (
+                <React.Fragment>
+                  <UserHero
+                    username={username}
+                    user={user}
+                    defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
+                    userProofs={userProofs}
+                    loading={loading}
+                  />
+                  <FollowingUsers follow={follow} />
+                </React.Fragment>
+              )}
             />
           }
           {
             !_.isEmpty(follow) &&
             <Route
               path={`${match.url}/followers`}
-              render={() => <FollowersUsers follow={follow} />}
+              render={() => (
+                <React.Fragment>
+                  <UserHero
+                    username={username}
+                    user={user}
+                    defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
+                    userProofs={userProofs}
+                    loading={loading}
+                  />
+                  <FollowersUsers follow={follow} />
+                </React.Fragment>
+              )}
             />
           }
         </Switch>
