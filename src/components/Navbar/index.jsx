@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import { Input, Dropdown } from 'components/bulma'
-import { withRouter } from 'react-router-dom'
+import { IconLoader } from 'components/Loader'
+import { withRouter, Link } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 import axios from 'axios'
 import './Navbar.scss';
@@ -146,9 +148,11 @@ class NavbarComp extends Component {
 
   render() {
     const { open, searchResults } = this.state
-    const { sessionUser } = this.context.state
+    const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { username } = this.props
+    const { username, user, loading } = this.props
+
+    console.log(user)
 
     return (
       <Navbar
@@ -200,6 +204,18 @@ class NavbarComp extends Component {
                 isSignedIn &&
                 <React.Fragment>
                   <Navbar.Item onClick={this.goToProfile}>
+                    {
+                      _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-quarter" /> :
+                      <Link className="debut-nav-bar__user-identity mr-one" to={`/user/${user.username}`}>
+                        <img
+                          onError={this.addDefaultSrc}
+                          src={_.get(user, 'profileImgUrl', defaultImgUrl)}
+                          alt="user"
+                          height="45"
+                          width="45"
+                          />
+                      </Link>
+                    }
                     {username}
                   </Navbar.Item>
 
@@ -227,5 +243,16 @@ class NavbarComp extends Component {
   }
 }
 
-export default withRouter(NavbarComp)
+const mapStateToProps = (state, ownProps) => {
+  const user = _.find(state.user.users, (user) => user._id === ownProps.username) || {}
+  const loading = state.user.loading
+
+  return {
+    user,
+    loading,
+  };
+};
+
+
+export default withRouter(connect(mapStateToProps)(NavbarComp))
 NavbarComp.contextType = UserContext

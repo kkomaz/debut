@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import _ from 'lodash'
 import { Switch, Route, withRouter, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -14,6 +15,8 @@ import { NoUsername } from "components/User";
 import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
+import { requestSingleUser } from 'actions/user'
+
 import "./RootRoute.scss";
 
 class RootRoute extends Component {
@@ -34,6 +37,8 @@ class RootRoute extends Component {
   };
 
   componentDidMount() {
+    const { username } = this.state
+    this.props.requestSingleUser(username)
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.state.username);
   }
@@ -59,7 +64,6 @@ class RootRoute extends Component {
       userSession,
       blockstackDappsLoading,
       dapps,
-      userFollow,
     } = this.props;
 
     const {
@@ -103,7 +107,6 @@ class RootRoute extends Component {
                   match={match}
                   username={username}
                   userSession={userSession}
-                  userFollow={userFollow}
                   location={location}
                 />
               }
@@ -150,12 +153,9 @@ class RootRoute extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const userFollow = state.follow[ownProps.username] || {}
-
   return {
     blockstackDappsLoading: state.blockstack.dapps.loading,
     dapps: state.blockstack.dapps.list,
-    userFollow,
   };
 };
 
@@ -164,7 +164,8 @@ export default withRouter(
     mapStateToProps,
     {
       requestBlockstackDapps,
-      requestFetchFollow
+      requestFetchFollow,
+      requestSingleUser,
     }
   )(RootRoute)
 );

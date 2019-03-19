@@ -49,7 +49,7 @@ class IconListUsers extends Component {
                         alt="user"
                         height="42"
                         width="42"
-                        />
+                      />
                     </Link>
                     <p className="icon-list-users__username ml-one mb-half">
                       {user.username}
