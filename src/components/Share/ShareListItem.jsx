@@ -95,7 +95,6 @@ class ShareListItem extends Component {
     const { showDeleteConfirmation } = this.state
 
     const shareListItemClass = classNames({
-      [cardClass]: true,
       'share-list-item': true
     }, cardClass)
 

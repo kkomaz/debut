@@ -13,7 +13,7 @@ import Share from 'model/share'
 import { ShareListItem, AdminNoShares } from 'components/Share'
 
 // Action Imports
-import { requestFetchShareFeeds, requestAddShareFeeds } from 'actions/feed'
+import { requestAddShareFeeds, requestFetchShareFeeds } from 'actions/share'
 
 // Stylesheets
 import './AdminActivityFeed.scss'

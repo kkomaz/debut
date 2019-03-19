@@ -15,6 +15,7 @@ import { UserHero } from 'components/User'
 import FollowingUsers from 'pages/username/following/FollowingUsers'
 import FollowersUsers from 'pages/username/followers/FollowersUsers'
 import IconProofs from 'components/SocialProofs/IconProofs'
+import ShareDetailPage from 'pages/user/_user_id/shares/_share_id/ShareDetailPage'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -180,8 +181,14 @@ class UsernameRoute extends Component {
           }
 
           <Route
-            path={`${match.url}/posts/:post_id`}
-            render={() => <div>Hello</div>}
+            exact
+            path={`${match.url}/shares/:share_id`}
+            render={({ match }) =>
+              <ShareDetailPage
+                match={match}
+                username={username}
+              />
+            }
           />
 
           {

@@ -73,6 +73,18 @@ class NavbarComp extends Component {
     history.push('/')
   }
 
+  goToShares = () => {
+    const { history } = this.props
+    const { sessionUser } = this.context.state
+
+    this.toggleNavbar()
+    history.push({
+      pathname: `/user/${sessionUser.username}/shares/123`,
+      state: { modal: true }
+    })
+  }
+
+
   onChange = (e) => {
     e.preventDefault()
     if (!this.dropdown.state.open) {
@@ -233,6 +245,10 @@ class NavbarComp extends Component {
 
                   <Navbar.Item onClick={this.goToHelp}>
                     Help
+                  </Navbar.Item>
+
+                  <Navbar.Item onClick={this.goToShares}>
+                    Shares
                   </Navbar.Item>
 
                   <div className="is-divider-vertical is-last"></div>

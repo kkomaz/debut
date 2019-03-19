@@ -88,7 +88,8 @@ export default function shareReducer(state = defaultSession, action) {
     case REQUEST_ADD_SHARE_FEEDS: {
       return { ...state, shares: {
         ...state.shares,
-        list: [action.payload, ...state.shares.list]
+        list: [action.payload, ...state.shares.list],
+        loading: false
       }}
     }
     case CREATE_SHARE_SUCCESS:
