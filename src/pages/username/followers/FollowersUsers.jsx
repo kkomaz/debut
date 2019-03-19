@@ -128,6 +128,8 @@ class FollowersUsers extends Component {
     const { defaultImgUrl } = this.context.state
     const { className } = this.props
 
+    console.log(users)
+
     return (
       <Container className="followers-users">
         <Columns className={className} breakpoint="tablet">
