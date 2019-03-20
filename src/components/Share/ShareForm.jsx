@@ -180,7 +180,11 @@ class ShareForm extends Component {
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
-              style={{ borderRadius: 0, borderColor: '#E0E3DA'}}
+              style={{
+                fontFamily: 'Poppins, sans-serif',
+                borderRadius: 0,
+                borderColor: '#E0E3DA'
+              }}
             />
           </Field>
 

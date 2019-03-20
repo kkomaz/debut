@@ -190,7 +190,12 @@ class CommentForm extends Component {
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
-              style={{ borderRadius: 0, borderColor: '#E0E3DA'}}
+              style={{
+                borderRadius: 0,
+                borderColor: '#E0E3DA',
+                fontSize: '13px',
+                fontFamily: 'Poppins, sans-serif'
+              }}
             />
           </Field>
 

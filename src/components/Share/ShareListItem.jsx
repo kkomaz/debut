@@ -30,6 +30,7 @@ class ShareListItem extends Component {
   state = {
     showDeleteConfirmation: false,
     isPopoverOpen: false,
+    commentView: true,
   }
 
   static propTypes = {
@@ -61,14 +62,19 @@ class ShareListItem extends Component {
 
   fetchShareComments = () => {
     const { share } = this.props
+    this.setState({ commentView: true })
     this.props.requestShareComments({
       share_id: share._id,
       offset: _.get(share, 'comments.length', 0)
     })
   }
 
+  /**
+   * This could use some refactoring <3
+  */
   renderShareCommentInfo = () => {
     const { share } = this.props
+    const { commentView } = this.state
 
     const result = (
       share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
@@ -76,12 +82,34 @@ class ShareListItem extends Component {
         onClick={this.fetchShareComments}
         className="small share-list-item__view-more-comments"
         >
-        View Comments
+        View comments
       </p>
     )
 
     if (result === 0) {
       return null
+    }
+
+    if (_.isEqual(result, false)) {
+      if (commentView) {
+        return (
+          <p
+            onClick={this.hideCommentView}
+            className="small share-list-item__hide-comments"
+            >
+            Hide comments
+          </p>
+        )
+      } else {
+        return (
+          <p
+            onClick={this.showCommentView}
+            className="small share-list-item__view-more-comments"
+            >
+            View comments
+          </p>
+        )
+      }
     }
 
     return result
@@ -144,10 +172,18 @@ class ShareListItem extends Component {
     )
   }
 
+  showCommentView = () => {
+    return this.setState({ commentView: true })
+  }
+
+  hideCommentView = () => {
+    return this.setState({ commentView: false })
+  }
+
   render() {
     const { cardClass, share, username, deleting, currentComment } = this.props
     const { sessionUser } = this.context.state
-    const { showDeleteConfirmation } = this.state
+    const { showDeleteConfirmation, commentView } = this.state
 
     const shareListItemClass = classNames({
       'share-list-item': true
@@ -211,7 +247,7 @@ class ShareListItem extends Component {
           <Card.Content style={{ padding: '0' }}>
             <Content>
               {
-                _.map(_.get(share, 'comments', []), (comment, index) => {
+                commentView && _.map(_.get(share, 'comments', []), (comment, index) => {
                   return (
                     <CommentListItem
                       comment={comment}
