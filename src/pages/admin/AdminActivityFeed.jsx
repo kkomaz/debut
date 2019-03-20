@@ -24,9 +24,17 @@ import { requestAddShareFeeds, requestFetchShareFeeds } from 'actions/share'
 import './AdminActivityFeed.scss'
 
 class AdminActivityFeed extends Component {
-  state = {
-    showCommentModal: false,
-    currentComment: {},
+  constructor(props) {
+    super(props)
+
+
+    this.state = {
+      bottomReached: false,
+      showCommentModal: false,
+      currentComment: {},
+    }
+
+    this.handleScroll = _.debounce(this.handleScroll, 300)
   }
 
   static propTypes = {
@@ -39,6 +47,11 @@ class AdminActivityFeed extends Component {
     Share.addStreamListener((share) => {
       this.addShareToActivites(share)
     })
+    window.addEventListener('scroll', this.handleScroll)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 
   addShareToActivites(share) {
@@ -56,6 +69,31 @@ class AdminActivityFeed extends Component {
     return this.setState({ showCommentModal: false })
   }
 
+  handleScroll = () => {
+    const { bottomReached } = this.state
+    const html = document.documentElement; // get the html element
+    // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
+    // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
+    const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
+    const body = document.body; // get the document body
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
+    const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
+
+    /**
+     * if windowBottom is larger then you know you reached the bottom
+    */
+    if (windowBottom >= docHeight) {
+      this.setState({ bottomReached: true })
+      // this.setState({ bottomReached: true }, () => {
+      //   if (!this.state.full) {
+      //     this.fetchUsers()
+      //   }
+      // });
+    } else if ((windowBottom < docHeight) && bottomReached) {
+      this.setState({ bottomReached: false });
+    }
+  }
+
   render() {
     const { feedShares } = this.props
     const { showCommentModal } = this.state
@@ -63,6 +101,8 @@ class AdminActivityFeed extends Component {
     if (!feedShares.loading && feedShares.list.length === 0) {
       return <AdminNoShares />
     }
+
+    console.log(this.state.bottomReached)
 
     return (
       <div className="admin-activity-feed">
