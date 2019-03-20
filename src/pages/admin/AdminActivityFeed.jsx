@@ -16,6 +16,7 @@ import Share from 'model/share'
 // Component Import
 import { ShareListItem, AdminNoShares } from 'components/Share'
 import { CommentForm } from 'components/comment'
+import { BarLoader } from 'components/Loader'
 
 // Action Imports
 import { requestAddShareFeeds, requestFetchShareFeeds } from 'actions/share'
@@ -39,11 +40,15 @@ class AdminActivityFeed extends Component {
 
   static propTypes = {
     userFollow: PropTypes.object.isRequired,
-    feedShares: PropTypes.object.isRequired,
+    feedShares: PropTypes.shape({
+      list: PropTypes.array.isRequired,
+      full: PropTypes.bool.isRequired,
+      loading: PropTypes.bool.isRequired,
+    }).isRequired
   }
 
   componentDidMount = async () => {
-    this.props.requestFetchShareFeeds(this.props.userFollow)
+    this.requestFetchShareFeeds()
     Share.addStreamListener((share) => {
       this.addShareToActivites(share)
     })
@@ -69,8 +74,18 @@ class AdminActivityFeed extends Component {
     return this.setState({ showCommentModal: false })
   }
 
+  requestFetchShareFeeds = () => {
+    const { userFollow, feedShares } = this.props
+    const feedSharesLength = feedShares.list.length
+    this.props.requestFetchShareFeeds({
+      follow: userFollow,
+      offset: feedSharesLength
+    })
+  }
+
   handleScroll = () => {
     const { bottomReached } = this.state
+    const { feedShares } = this.props
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
     // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
@@ -84,11 +99,11 @@ class AdminActivityFeed extends Component {
     */
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true })
-      // this.setState({ bottomReached: true }, () => {
-      //   if (!this.state.full) {
-      //     this.fetchUsers()
-      //   }
-      // });
+      this.setState({ bottomReached: true }, () => {
+        if (!feedShares.full) {
+          this.requestFetchShareFeeds()
+        }
+      });
     } else if ((windowBottom < docHeight) && bottomReached) {
       this.setState({ bottomReached: false });
     }
@@ -96,13 +111,11 @@ class AdminActivityFeed extends Component {
 
   render() {
     const { feedShares } = this.props
-    const { showCommentModal } = this.state
+    const { showCommentModal, bottomReached } = this.state
 
     if (!feedShares.loading && feedShares.list.length === 0) {
       return <AdminNoShares />
     }
-
-    console.log(this.state.bottomReached)
 
     return (
       <div className="admin-activity-feed">
@@ -126,6 +139,9 @@ class AdminActivityFeed extends Component {
               />
             )
           })
+        }
+        {
+          bottomReached && feedShares.list.length >= 5 && !feedShares.full && <BarLoader style={{ height: '200px' }} />
         }
         </CSSTransitionGroup>
         {
@@ -160,7 +176,7 @@ const mapStateToProps = (state, ownProps) => {
   const feedShares = { ...state.share.shares, list }
 
   return {
-    feedShares
+    feedShares,
   }
 }
 
