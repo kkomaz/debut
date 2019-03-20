@@ -33,6 +33,7 @@ class AdminActivityFeed extends Component {
       bottomReached: false,
       showCommentModal: false,
       currentComment: {},
+      showMoreOptions: false,
     }
 
     this.handleScroll = _.debounce(this.handleScroll, 300)
@@ -48,20 +49,30 @@ class AdminActivityFeed extends Component {
   }
 
   componentDidMount = async () => {
-    this.requestFetchShareFeeds()
-    Share.addStreamListener((share) => {
-      this.addShareToActivites(share)
-    })
+    const { userFollow, feedShares } = this.props
+
+    if (feedShares.list.length === 0) {
+      this.requestFetchShareFeeds({
+        follow: userFollow,
+        offset: 0
+      })
+    }
+
+    Share.addStreamListener(this.addShareToActivites)
     window.addEventListener('scroll', this.handleScroll)
   }
 
   componentWillUnmount() {
+    Share.removeStreamListener(this.addShareToActivites)
     window.removeEventListener('scroll', this.handleScroll)
   }
 
-  addShareToActivites(share) {
+  addShareToActivites = (share) => {
     const { userFollow, feedShares } = this.props
     if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id)) {
+      if (!this.state.showMoreOptions) {
+        this.setState({ showMoreOptions: true })
+      }
       this.props.requestAddShareFeeds(share.attrs)
     }
   }
@@ -111,7 +122,7 @@ class AdminActivityFeed extends Component {
 
   render() {
     const { feedShares } = this.props
-    const { showCommentModal, bottomReached } = this.state
+    const { showCommentModal, bottomReached, showMoreOptions } = this.state
 
     if (!feedShares.loading && feedShares.list.length === 0) {
       return <AdminNoShares />
@@ -119,6 +130,7 @@ class AdminActivityFeed extends Component {
 
     return (
       <div className="admin-activity-feed">
+        { showMoreOptions && <p>Show more shared moments</p>}
         <CSSTransitionGroup
           transitionName="admin-activity-feed-transition"
           transitionEnterTimeout={500}
@@ -171,7 +183,7 @@ class AdminActivityFeed extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const {userFollow } = ownProps
+  const { userFollow } = ownProps
   const list = _.filter(state.share.shares.list, (share) => _.includes(userFollow.following, share.username))
   const feedShares = { ...state.share.shares, list }
 
