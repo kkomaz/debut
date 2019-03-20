@@ -14,7 +14,7 @@ class InvalidShares extends Component {
   onClick = () => {
     const { history, username } = this.props
 
-    return history.push(`/user/${username}`)
+    return history.push(`/${username}`)
   }
 
   render() {

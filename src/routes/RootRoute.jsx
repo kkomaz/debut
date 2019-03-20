@@ -134,7 +134,7 @@ class RootRoute extends Component {
               <Loader cardWrapped contained text="App is warming up..." />
             ) : (
               <Route
-                path="/user/:username"
+                path="/:username"
                 render={({ match, location }) => (
                   <UsernameRoute
                     dapps={dapps}

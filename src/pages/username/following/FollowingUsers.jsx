@@ -84,7 +84,7 @@ class FollowingUsers extends Component {
 
   onBoxClick = (user) => {
     const { history } = this.props
-    history.push(`/user/${user.username}`)
+    history.push(`/${user.username}`)
   }
 
   handleScroll = () => {

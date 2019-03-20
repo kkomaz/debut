@@ -22,7 +22,7 @@ class IconListUsers extends Component {
 
   onClick = (user) => {
     const { history } = this.props
-    return history.push(`/user/${user.username}`)
+    return history.push(`/${user.username}`)
   }
 
   render() {
@@ -42,7 +42,7 @@ class IconListUsers extends Component {
               _.map(users, (user, index) => {
                 return (
                   <li className="icon-list-users__single" key={`${user.username}-${index}`}>
-                    <Link className="icon-list-users__single-link" to={`/user/${user.username}`}>
+                    <Link className="icon-list-users__single-link" to={`/${user.username}`}>
                       <img
                         onError={this.addDefaultSrc}
                         src={_.get(user, 'profileImgUrl', defaultImgUrl)}

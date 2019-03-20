@@ -90,7 +90,7 @@ class ShareListItem extends Component {
   goToUserProfile = () => {
     const { history, username } = this.props
 
-    return history.push(`/user/${username}`)
+    return history.push(`/${username}`)
   }
 
   renderEditablePopover = () => {

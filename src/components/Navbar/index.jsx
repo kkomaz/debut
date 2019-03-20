@@ -50,9 +50,9 @@ class NavbarComp extends Component {
   goToProfile = () => {
     const { history } = this.props
     const { sessionUser } = this.context.state
-    this.toggleNavbar()
     this.props.setProfileClickedTrue()
-    history.push(`/user/${sessionUser.username}`)
+    this.toggleNavbar()
+    history.push(`/${sessionUser.username}`)
   }
 
   goToHelp = () => {
@@ -73,18 +73,6 @@ class NavbarComp extends Component {
     history.push('/')
   }
 
-  goToShares = () => {
-    const { history } = this.props
-    const { sessionUser } = this.context.state
-
-    this.toggleNavbar()
-    history.push({
-      pathname: `/user/${sessionUser.username}/shares/123`,
-      state: { modal: true }
-    })
-  }
-
-
   onChange = (e) => {
     e.preventDefault()
     if (!this.dropdown.state.open) {
@@ -102,7 +90,7 @@ class NavbarComp extends Component {
       searchedUser: selected,
       selected,
     }, () => {
-      history.push(`/user/${selected}`)
+      history.push(`/${selected}`)
     })
   }
 
@@ -110,7 +98,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     if (this.dropdown.state.open && e.keyCode === 13) {
       if (this.state.hovered) {
-        history.push(`/user/${this.state.hovered}`)
+        history.push(`/${this.state.hovered}`)
         this.dropdown.toggle()
       }
     }

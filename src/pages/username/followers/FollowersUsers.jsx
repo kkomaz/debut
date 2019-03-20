@@ -128,15 +128,13 @@ class FollowersUsers extends Component {
 
   onBoxClick = (user) => {
     const { history } = this.props
-    history.push(`/user/${user.username}`)
+    history.push(`/${user.username}`)
   }
 
   render() {
     const { users, loading } = this.state
     const { defaultImgUrl } = this.context.state
     const { className, follow } = this.props
-
-    console.log(loading)
 
     if (loading) {
       return (
