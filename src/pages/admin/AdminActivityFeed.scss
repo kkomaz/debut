@@ -1,3 +1,24 @@
+@import 'src/variables';
+
+.admin-activity-feed {
+  &__show-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    color: $blue;
+
+    p {
+      cursor: pointer;
+    }
+  }
+
+  &__share {
+    &--hidden {
+      display: none;
+    }
+  }
+}
 .admin-activity-feed-transition-enter {
   opacity: 0.01;
 }
@@ -14,4 +35,25 @@
 .admin-activity-feed-transition-leave.admin-activity-feed-transition-leave-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
+}
+
+//
+.admin-activity-feed-show-more-leave {
+  opacity: 1;
+}
+.admin-activity-feed-show-more-leave.admin-activity-feed-show-more-leave-active {
+  opacity: 0;
+  transition: opacity 1s ease-in;
+}
+
+.admin-activity-feed-show-more-enter {
+  opacity: 0;
+}
+.admin-activity-feed-show-more-enter.admin-activity-feed-show-more-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.admin-activity-feed-show-more-height {
+  transition: height 0.5s ease-in-out;
 }

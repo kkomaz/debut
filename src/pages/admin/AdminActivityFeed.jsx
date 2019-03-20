@@ -5,11 +5,14 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
+import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import {
   Modal,
   Section,
   Heading,
 } from 'components/bulma'
+import classNames from 'classnames';
+
 // Model Imports
 import Share from 'model/share'
 
@@ -19,7 +22,11 @@ import { CommentForm } from 'components/comment'
 import { BarLoader } from 'components/Loader'
 
 // Action Imports
-import { requestAddShareFeeds, requestFetchShareFeeds } from 'actions/share'
+import {
+  requestAddShareFeeds,
+  requestFetchShareFeeds,
+  requestDisplayHiddenShares,
+} from 'actions/share'
 
 // Stylesheets
 import './AdminActivityFeed.scss'
@@ -120,6 +127,11 @@ class AdminActivityFeed extends Component {
     }
   }
 
+  showMoreShares = () => {
+    this.props.requestDisplayHiddenShares()
+    return this.setState({ showMoreOptions: false })
+  }
+
   render() {
     const { feedShares } = this.props
     const { showCommentModal, bottomReached, showMoreOptions } = this.state
@@ -130,7 +142,20 @@ class AdminActivityFeed extends Component {
 
     return (
       <div className="admin-activity-feed">
-        { showMoreOptions && <p>Show more shared moments</p>}
+
+        {
+          showMoreOptions &&
+          <ReactCSSTransitionReplace
+            transitionName="admin-activity-feed-show-more"
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={100}
+          >
+            <div className="admin-activity-feed__show-more">
+              <p onClick={this.showMoreShares}>Show more shared moments</p>
+            </div>
+          </ReactCSSTransitionReplace>
+        }
+
         <CSSTransitionGroup
           transitionName="admin-activity-feed-transition"
           transitionEnterTimeout={500}
@@ -138,13 +163,16 @@ class AdminActivityFeed extends Component {
         >
         {
           _.map(feedShares.list, (feedShare, index) => {
-            const cardClass = _.isEqual(index, 0) ? '' : 'mt-one'
+            const cardClass = classNames({
+              'mt-one': !_.isEqual(index, 0),
+              'admin-activity-feed__share': true,
+              'admin-activity-feed__share--hidden': feedShare.hidden,
+            })
 
             return (
               <ShareListItem
                 key={feedShare._id}
                 cardClass={cardClass}
-                className="admin-activity-feed__share"
                 share={feedShare}
                 username={feedShare.username}
                 onCommentEditClick={this.openCommentModal}
@@ -195,4 +223,5 @@ const mapStateToProps = (state, ownProps) => {
 export default withRouter(connect(mapStateToProps, {
   requestFetchShareFeeds,
   requestAddShareFeeds,
+  requestDisplayHiddenShares,
 })(AdminActivityFeed))
