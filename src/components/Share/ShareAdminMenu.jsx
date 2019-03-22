@@ -36,7 +36,7 @@ class ShareAdminMenu extends Component {
 
   render() {
     const { active } = this.state
-    const { disableGoPath } = this.props
+    const { disableGoPath, disableAdminPath } = this.props
 
     return (
       <Menu
@@ -49,16 +49,22 @@ class ShareAdminMenu extends Component {
         }}
       >
         <Menu.List>
-          <Menu.List.Item
-            active={active === 'edit'}
-            onClick={this.onEditClick}>
+          {
+            !disableAdminPath &&
+            <Menu.List.Item
+              active={active === 'edit'}
+              onClick={this.onEditClick}>
               Edit
-          </Menu.List.Item>
-          <Menu.List.Item
-            active={active === 'delete'}
-            onClick={this.onDeleteClick}>
+            </Menu.List.Item>
+          }
+          {
+            !disableAdminPath &&
+            <Menu.List.Item
+              active={active === 'delete'}
+              onClick={this.onDeleteClick}>
               Delete
             </Menu.List.Item>
+          }
           {
             !disableGoPath &&
             <Menu.List.Item
@@ -71,6 +77,11 @@ class ShareAdminMenu extends Component {
       </Menu>
     )
   }
+}
+
+ShareAdminMenu.defaultProps = {
+  disableGoPath: false,
+  disableAdminPath: false,
 }
 
 export default withRouter(ShareAdminMenu)

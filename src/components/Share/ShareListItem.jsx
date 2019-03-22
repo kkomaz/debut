@@ -126,7 +126,49 @@ class ShareListItem extends Component {
     const { share, username, disableGoPath } = this.props
 
     if (!_.isEqual(sessionUser.username, username)) {
-      return null
+      if (disableGoPath) {
+        return null
+      }
+
+      return (
+        <Popover
+            isOpen={this.state.isPopoverOpen}
+            position="right"
+            padding={30}
+            onClickOutside={() => this.setState({ isPopoverOpen: false })}
+            content={({ position, targetRect, popoverRect }) => (
+                <ArrowContainer
+                  position={position}
+                  targetRect={targetRect}
+                  popoverRect={popoverRect}
+                  arrowColor="white"
+                  arrowSize={10}
+                >
+                  <ShareAdminMenu
+                    disableGoPath={disableGoPath}
+                    disableAdminPath
+                    onEditClick={this.onEditClick}
+                    onDeleteClick={this.setDeleteConfirmation}
+                    username={username}
+                    share={share}
+                  />
+                </ArrowContainer>
+            )}
+        >
+          <Icon
+            className="debut-icon debut-icon--pointer"
+            icon="IconDots"
+            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+            size={16}
+            linkStyles={{
+              position: 'absolute',
+              top: '0',
+              right: '5px',
+              height: '30px'
+            }}
+          />
+        </Popover>
+      )
     }
 
     return (
