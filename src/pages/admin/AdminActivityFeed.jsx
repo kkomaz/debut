@@ -58,7 +58,7 @@ class AdminActivityFeed extends Component {
   componentDidMount = async () => {
     const { userFollow, feedShares } = this.props
 
-    if (feedShares.list.length === 0) {
+    if (feedShares.list.length < 5) {
       this.requestFetchShareFeeds({
         follow: userFollow,
         offset: 0
