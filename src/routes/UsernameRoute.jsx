@@ -43,10 +43,6 @@ class UsernameRoute extends Component {
 
   async componentDidMount() {
     const { username } = this.props
-    // (no data or slim data then make request for full data)
-    // if (!user.data || (user.data && !user.data.basicInformation)) {
-    //   this.props.requestSingleUser(username)
-    // }
     this.props.requestSingleUser(username)
     this.props.requestFetchFollow(username)
   }
