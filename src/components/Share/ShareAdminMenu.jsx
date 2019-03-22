@@ -31,7 +31,7 @@ class ShareAdminMenu extends Component {
   onDetailClick = () => {
     const { username, share, history } = this.props
     this.setState({ active: 'detail' })
-    return history.push(`/${username}/shares/${share._id}`)
+    return history.push(`/${username}/moments/${share._id}`)
   }
 
   render() {
@@ -64,7 +64,7 @@ class ShareAdminMenu extends Component {
             <Menu.List.Item
               active={active === 'detail'}
               onClick={this.onDetailClick}>
-              Go to Share
+              Go to Moment
             </Menu.List.Item>
           }
         </Menu.List>

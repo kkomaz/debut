@@ -76,7 +76,7 @@ class ShareMenuAdmin extends Component {
             active={active === 'detail'}
             onClick={this.onFollowersClick}>
             <div className="share-admin-menu__go-to-container">
-              <p className="share-admin-menu__text-option">Go to Share</p>
+              <p className="share-admin-menu__text-option">Go to Moment</p>
               <Icon
                 className="debut-icon debut-icon--pointer ml-one"
                 icon="IconGo"

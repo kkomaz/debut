@@ -182,7 +182,7 @@ class UsernameRoute extends Component {
 
           <Route
             exact
-            path={`${match.url}/shares/:share_id`}
+            path={`${match.url}/moments/:share_id`}
             render={({ match }) =>
               <ShareDetailPage
                 match={match}
