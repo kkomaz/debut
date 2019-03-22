@@ -30,7 +30,7 @@ class ShareListItem extends Component {
   state = {
     showDeleteConfirmation: false,
     isPopoverOpen: false,
-    commentView: true,
+    commentView: false,
   }
 
   static propTypes = {
