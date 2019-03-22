@@ -47,7 +47,7 @@ class ShareDetail extends Component {
         throw new Error('That moment does not exist!')
       }
 
-      this.props.requestAddShareFeeds(share.attrs)
+      this.props.requestAddShareFeeds(share.attrs, false)
     } catch (e) {
       this.setState({ error: true })
     }
