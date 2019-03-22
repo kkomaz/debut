@@ -6,7 +6,6 @@ import {
   Content,
   Heading,
 } from 'components/bulma'
-import { Link } from 'react-router-dom'
 import { Icon } from 'components/icon'
 import help from 'assets/help.jpg'
 
@@ -31,10 +30,10 @@ class HelpPage extends Component {
                       Any issues, bugs, or feature request for debut?
                     </Heading>
                     <p>
-                      Thank you for checking out and using debut!  My name is <Link to="/kkomaz.id">Alex Lee</Link> and I am currently a full time software engineer who works on debut on the side. (nights and weekends)
+                      Thank you for checking out and using debut!
                     </p>
                     <p>
-                      If there are any bugs, issues, or feature requests, you can message me on the blockstack slack channel or add a github issue.
+                      If there are any bugs, issues, or feature requests, you can message us on the blockstack slack channel or add a github issue.
                     </p>
                     <Icon
                       className="debut-icon debut-icon--pointer"
@@ -43,7 +42,7 @@ class HelpPage extends Component {
                       size={32}
                     />
                     <p className="mt-two">
-                      If you are developer new to blockstack or experienced but wanting to learn more, I also create youtube tutorials.  Check it out below!
+                      If you are developer new to blockstack or experienced but wanting to learn more, check out these youtube tutorials.
                     </p>
                     <iframe
                       title="tech-rally-playlist"
