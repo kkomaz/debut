@@ -1,8 +1,30 @@
 @import 'src/variables';
 
 .debut-nav-bar {
+  background-image: -webkit-linear-gradient(45deg, $primary 0%, #5a5791 100%);
+  color: $white;
   border-bottom: 1px solid hsla(0,0%,100%,.1);
   padding-left: 278px;
+  height: 65px;
+
+  .is-divider-vertical {
+    padding: 0;
+
+    &.is-last {
+      &::before {
+        border-left: 0.03rem solid #dbdbdb;
+      }
+    }
+  }
+
+  .navbar-item {
+    display: flex;
+    align-items: center;
+
+    img {
+      max-height: 45px;
+    }
+  }
 
   input {
     width: 400px;
@@ -26,6 +48,18 @@
 
   .dropdown-menu {
     width: 400px;
+  }
+
+  &__user-identity {
+    img {
+      height: 45px;
+      width: 45px;
+      border-radius: 100%;
+      border: 3px solid $pink;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
   }
 }
 

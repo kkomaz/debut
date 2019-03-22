@@ -1,0 +1,15 @@
+@import 'src/variables';
+
+.share-admin-menu {
+  &__go-to-container,
+  &__delete-container,
+  &__edit-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__text-option {
+    color: $pitch-dark;
+    flex: 0 1 100px;
+  }
+}

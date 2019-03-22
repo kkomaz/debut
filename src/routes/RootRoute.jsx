@@ -8,12 +8,14 @@ import Navbar from "components/Navbar";
 import { requestBlockstackDapps } from "actions/blockstack";
 import UnsignedUser from "pages/unsigned/UnsignedUser";
 import HelpPage from "pages/help/HelpPage";
-import AdminPage from "pages/admin/AdminPage";
+import AdminUsernameRoute from "./AdminUsernameRoute";
 import { Loader } from "components/Loader";
 import { NoUsername } from "components/User";
 import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
+import { requestSingleUser } from 'actions/user'
+
 import "./RootRoute.scss";
 
 class RootRoute extends Component {
@@ -34,6 +36,8 @@ class RootRoute extends Component {
   };
 
   componentDidMount() {
+    const { username } = this.state
+    this.props.requestSingleUser(username)
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.state.username);
   }
@@ -55,9 +59,15 @@ class RootRoute extends Component {
   };
 
   render() {
-    const { userSession, blockstackDappsLoading, dapps } = this.props;
+    const {
+      userSession,
+      blockstackDappsLoading,
+      dapps,
+    } = this.props;
 
-    const { username } = this.state;
+    const {
+      username
+    } = this.state
 
     if (!username) {
       return <NoUsername userSession={userSession} />;
@@ -74,19 +84,33 @@ class RootRoute extends Component {
           <Navbar
             setHomePageClickedTrue={this.setHomePageClickedTrue}
             setProfileClickedTrue={this.setProfileClickedTrue}
+            username={username}
           />
           <Switch>
             <Route
               exact
               path="/"
-              render={({ location }) => (
+              render={({ match }) =>
                 <Redirect
                   to={{
-                    pathname: `/${username}`
+                    pathname: '/admin'
                   }}
                 />
-              )}
+              }
             />
+
+            <Route
+              path="/admin"
+              render={({ match, location }) =>
+                <AdminUsernameRoute
+                  match={match}
+                  username={username}
+                  userSession={userSession}
+                  location={location}
+                />
+              }
+            />
+
             <Route
               exact
               path="/explore"
@@ -97,18 +121,15 @@ class RootRoute extends Component {
                 />
               }
             />
-            <Route
-              exact
-              path="/admin"
-              render={() => <AdminPage username={username} />}
-              userSession={userSession}
-            />
+
             <Route exact path="/help" render={() => <HelpPage />} />
+
             <Route
               exact
               path="/unsigned/:username"
               render={({ match }) => <UnsignedUser match={match} />}
             />
+
             {blockstackDappsLoading ? (
               <Loader cardWrapped contained text="App is warming up..." />
             ) : (
@@ -130,10 +151,10 @@ class RootRoute extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   return {
     blockstackDappsLoading: state.blockstack.dapps.loading,
-    dapps: state.blockstack.dapps.list
+    dapps: state.blockstack.dapps.list,
   };
 };
 
@@ -142,7 +163,8 @@ export default withRouter(
     mapStateToProps,
     {
       requestBlockstackDapps,
-      requestFetchFollow
+      requestFetchFollow,
+      requestSingleUser,
     }
   )(RootRoute)
 );

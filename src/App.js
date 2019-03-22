@@ -17,10 +17,16 @@ import Login from 'components/Login'
 import 'stylesheets/main.scss'
 
 class App extends Component {
-  state = {
-    userSession: new UserSession({ appConfig }),
-    loggedIn: false,
-    loggingIn: false,
+  constructor(props) {
+    super(props)
+
+    const userSession = new UserSession({ appConfig })
+
+    this.state = {
+      userSession,
+      loggedIn: false,
+      loggingIn: false,
+    }
   }
 
   componentDidMount = async () => {
@@ -63,7 +69,7 @@ class App extends Component {
             following: [],
             followingCount: 0,
           })
-          follow.save()
+          await follow.save()
         }
       } catch (e) {
         console.log(e.message)
@@ -97,4 +103,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

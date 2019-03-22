@@ -2,6 +2,9 @@
 @import "~react-bulma-components/src/index.sass";
 @import '~bulma-divider';
 @import './common.scss';
+@import '../variables.sass';
+
+@import './modules/button';
 
 // html {
 //   background: #E0E3DA;
@@ -9,7 +12,7 @@
 // }
 
 html, body {
-  font-family: 'Raleway', 'Overpass', 'Open Sans', san-serif;
+  font-family: "Poppins", sans-serif;
   background: #E0E3DA;
 }
 
@@ -37,9 +40,13 @@ p {
 
 // bulma component styles
 .container {
-  margin-top: 10px;
+  margin-top: 40px;
 }
 
 .content li + li {
   margin-top: 0;
+}
+
+.section {
+  padding-top: 1.5em;
 }

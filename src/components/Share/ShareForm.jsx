@@ -26,12 +26,12 @@ class ShareForm extends Component {
     const { currentShare = {} } = props
 
     this.state = {
-      id: currentShare.id || '',
+      _id: currentShare._id || '',
       text: currentShare.text || '',
       characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
       imageFile: currentShare.imageFile || '',
-      editMode: !!currentShare.id
+      editMode: !_.isEmpty(currentShare._id)
     }
   }
 
@@ -40,7 +40,7 @@ class ShareForm extends Component {
     onCancel: PropTypes.func,
     onComplete: PropTypes.func,
     currentShare: PropTypes.shape({
-      id: PropTypes.string,
+      _id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
     })
@@ -68,7 +68,7 @@ class ShareForm extends Component {
   }
 
   editShare = async () => {
-    const { id, text, imageFile } = this.state
+    const { _id, text, imageFile } = this.state
     const { username } = this.props
 
     const params = {
@@ -81,7 +81,8 @@ class ShareForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestEditShare(id, params)
+    this.props.requestEditShare(_id, params)
+    this.props.onComplete()
   }
 
   createShare = async () => {
@@ -179,7 +180,11 @@ class ShareForm extends Component {
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
-              style={{ borderRadius: 0, borderColor: '#E0E3DA'}}
+              style={{
+                fontFamily: 'Poppins, sans-serif',
+                borderRadius: 0,
+                borderColor: '#E0E3DA'
+              }}
             />
           </Field>
 

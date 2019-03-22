@@ -7,6 +7,12 @@
     justify-content: center;
   }
 
+  &__username {
+    color: $blue;
+    cursor: pointer;
+  }
+
+  &__hide-comments,
   &__view-more-comments {
     color: $primary;
     cursor: pointer;
@@ -36,20 +42,11 @@
 
   &__delete-confirmation {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    position: absolute;
-    right: 0;
+    justify-content: flex-end;
   }
 
-  &__text {
-    &--show-delete {
-      margin-top: 50px;
-    }
-  }
-
-  &__delete-confirmation-text {
-    width: 280px;
+  &__username-date {
+    margin-bottom: 1em;
   }
 
   &__delete-yes-no {

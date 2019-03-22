@@ -143,7 +143,7 @@ class UserDescription extends Component {
             user.data.basicInformation ?
             <Button
               onClick={this.props.onCreateEdit}
-              color="primary"
+              color="light"
               className="mr-half"
               disabled={!displayView}
             >

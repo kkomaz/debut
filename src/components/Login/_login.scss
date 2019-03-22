@@ -20,18 +20,8 @@
     align-items: center;
   }
 
-  &__column-left {
-    background: #E0E3DA;
-    background: $primary;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 50px;
-  }
-
   &__column-right {
-    background: $primary;
-    background: #E0E3DA;
+    background: $white;
     display: flex;
     align-items: center;
     justify-content: center;

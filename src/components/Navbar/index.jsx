@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import { Input, Dropdown } from 'components/bulma'
+import { IconLoader } from 'components/Loader'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 import axios from 'axios'
@@ -48,8 +50,8 @@ class NavbarComp extends Component {
   goToProfile = () => {
     const { history } = this.props
     const { sessionUser } = this.context.state
-    this.toggleNavbar()
     this.props.setProfileClickedTrue()
+    this.toggleNavbar()
     history.push(`/${sessionUser.username}`)
   }
 
@@ -63,6 +65,12 @@ class NavbarComp extends Component {
     const { history } = this.props
     this.toggleNavbar()
     history.push('/explore')
+  }
+
+  goToHome = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/')
   }
 
   onChange = (e) => {
@@ -140,8 +148,9 @@ class NavbarComp extends Component {
 
   render() {
     const { open, searchResults } = this.state
-    const { sessionUser } = this.context.state
+    const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
+    const { username, user, loading } = this.props
 
     return (
       <Navbar
@@ -192,15 +201,41 @@ class NavbarComp extends Component {
               {
                 isSignedIn &&
                 <React.Fragment>
-                  <Navbar.Item onClick={this.goToHelp}>
-                    Help
+                  <Navbar.Item onClick={this.goToProfile}>
+                    {
+                      _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-half" /> :
+                      <div className="debut-nav-bar__user-identity mr-one" onClick={this.goToProfile}>
+                        <img
+                          onError={this.addDefaultSrc}
+                          src={_.get(user, 'profileImgUrl', defaultImgUrl)}
+                          alt="user"
+                          height="45"
+                          width="45"
+                          />
+                      </div>
+                    }
+                    {username}
                   </Navbar.Item>
+
+                  <div className="is-divider-vertical"></div>
+
+                  <Navbar.Item onClick={this.goToHome}>
+                    Home
+                  </Navbar.Item>
+
+                  <div className="is-divider-vertical"></div>
+
                   <Navbar.Item onClick={this.goToExplore}>
                     Explore
                   </Navbar.Item>
-                  <Navbar.Item onClick={this.goToProfile}>
-                    My Page
+
+                  <div className="is-divider-vertical"></div>
+
+                  <Navbar.Item onClick={this.goToHelp}>
+                    Help
                   </Navbar.Item>
+
+                  <div className="is-divider-vertical is-last"></div>
 
                   <Navbar.Item onClick={this.signOut}>
                     Sign Out
@@ -214,5 +249,16 @@ class NavbarComp extends Component {
   }
 }
 
-export default withRouter(NavbarComp)
+const mapStateToProps = (state, ownProps) => {
+  const user = _.find(state.user.users, (user) => user._id === ownProps.username) || {}
+  const loading = state.user.loading
+
+  return {
+    user,
+    loading,
+  };
+};
+
+
+export default withRouter(connect(mapStateToProps)(NavbarComp))
 NavbarComp.contextType = UserContext

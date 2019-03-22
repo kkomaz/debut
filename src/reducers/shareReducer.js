@@ -1,4 +1,5 @@
 import {
+  REQUEST_DISPLAY_HIDDEN_SHARES,
   RESET_SHARES_LOADING,
   REQUEST_USER_SHARES,
   REQUEST_CREATE_SHARE,
@@ -18,6 +19,8 @@ import {
   EDIT_COMMENT_SUCCESS,
   REQUEST_DELETE_COMMENT,
   REQUEST_EDIT_COMMENT,
+  FETCH_SHARE_FEEDS_SUCCESS,
+  REQUEST_ADD_SHARE_FEEDS,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -75,6 +78,35 @@ export default function shareReducer(state = defaultSession, action) {
         full: newShares.length === 0,
         loading: false
       }}
+    case FETCH_SHARE_FEEDS_SUCCESS: {
+      const newShares = action.payload
+      return { ...state, shares: {
+        list: filterListFromList(state.shares.list, newShares),
+        full: newShares.length === 0,
+        loading: false
+      }}
+    }
+    case REQUEST_DISPLAY_HIDDEN_SHARES : {
+      const list = _.map(state.shares.list, (share) => {
+        if (share.hidden) {
+          return { ...share, hidden: false }
+        }
+        return share
+      })
+      return { ...state, shares: {
+        ...state.shares,
+        list,
+        loading: false
+      }}
+    }
+    case REQUEST_ADD_SHARE_FEEDS: {
+      const share = { ...action.payload, hidden: true }
+      return { ...state, shares: {
+        ...state.shares,
+        list: [share, ...state.shares.list],
+        loading: false
+      }}
+    }
     case CREATE_SHARE_SUCCESS:
       toggleNotification('success', 'Moment successfully created')
       return { ...state,

@@ -13,6 +13,7 @@ import Tabs from 'react-bulma-components/lib/components/tabs'
 import Table from 'react-bulma-components/lib/components/table'
 import Container from 'react-bulma-components/lib/components/container'
 import Hero from 'react-bulma-components/lib/components/hero'
+import Menu from 'react-bulma-components/lib/components/menu';
 import Modal from 'react-bulma-components/lib/components/modal';
 import Section from 'react-bulma-components/lib/components/section';
 import Pagination from 'react-bulma-components/lib/components/pagination';
@@ -45,6 +46,7 @@ export {
   Radio,
   Image,
   Media,
+  Menu,
   Modal,
   Section,
   Tabs,

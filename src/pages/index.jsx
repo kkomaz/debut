@@ -115,7 +115,7 @@ class Page extends Component {
 
     return (
       <div className="page">
-        <Hero color="primary" className="mb-two">
+        <Hero color="primary" className="page__hero mb-two">
          <Hero.Body>
            <Container>
              {
@@ -151,7 +151,7 @@ class Page extends Component {
            </Container>
          </Hero.Body>
        </Hero>
-          <Container>
+          <Container className="page__user-container">
             {
               userState.paginatedObj.loading ?
               <Loader
