@@ -1,0 +1,76 @@
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import {
+  Menu,
+} from 'components/bulma'
+import { withRouter } from 'react-router-dom'
+import './ShareAdminMenu.scss'
+
+class ShareAdminMenu extends Component {
+  state = {
+    active: 'edit'
+  }
+
+  static propTypes = {
+    disableGoPath: PropTypes.bool.isRequired,
+    username: PropTypes.string.isRequired,
+    share: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+  }
+
+  onEditClick = () => {
+    this.setState({ active: 'edit' })
+    this.props.onEditClick()
+  }
+
+  onDeleteClick = () => {
+    this.setState({ active: 'delete' })
+    this.props.onDeleteClick()
+  }
+
+  onDetailClick = () => {
+    const { username, share, history } = this.props
+    this.setState({ active: 'detail' })
+    return history.push(`/${username}/shares/${share._id}`)
+  }
+
+  render() {
+    const { active } = this.state
+    const { disableGoPath } = this.props
+
+    return (
+      <Menu
+        className="share-admin-menu"
+        style={{
+          backgroundColor: 'white',
+          padding: '20px',
+          color: 'white',
+          width: '200px',
+        }}
+      >
+        <Menu.List>
+          <Menu.List.Item
+            active={active === 'edit'}
+            onClick={this.onEditClick}>
+              Edit
+          </Menu.List.Item>
+          <Menu.List.Item
+            active={active === 'delete'}
+            onClick={this.onDeleteClick}>
+              Delete
+            </Menu.List.Item>
+          {
+            !disableGoPath &&
+            <Menu.List.Item
+              active={active === 'detail'}
+              onClick={this.onDetailClick}>
+              Go to Share
+            </Menu.List.Item>
+          }
+        </Menu.List>
+      </Menu>
+    )
+  }
+}
+
+export default withRouter(ShareAdminMenu)

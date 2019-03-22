@@ -1,4 +1,5 @@
 import {
+  REQUEST_DISPLAY_HIDDEN_SHARES,
   RESET_SHARES_LOADING,
   REQUEST_USER_SHARES,
   REQUEST_CREATE_SHARE,
@@ -85,10 +86,25 @@ export default function shareReducer(state = defaultSession, action) {
         loading: false
       }}
     }
-    case REQUEST_ADD_SHARE_FEEDS: {
+    case REQUEST_DISPLAY_HIDDEN_SHARES : {
+      const list = _.map(state.shares.list, (share) => {
+        if (share.hidden) {
+          return { ...share, hidden: false }
+        }
+        return share
+      })
       return { ...state, shares: {
         ...state.shares,
-        list: [action.payload, ...state.shares.list]
+        list,
+        loading: false
+      }}
+    }
+    case REQUEST_ADD_SHARE_FEEDS: {
+      const share = { ...action.payload, hidden: true }
+      return { ...state, shares: {
+        ...state.shares,
+        list: [share, ...state.shares.list],
+        loading: false
       }}
     }
     case CREATE_SHARE_SUCCESS:

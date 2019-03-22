@@ -56,4 +56,11 @@
     justify-content: center;
     align-items: center;
   }
+
+  &__user-container {
+    @media screen and (min-width: 1472px) {
+      max-width: 900px;
+      width: 900px;
+    }
+  }
 }

@@ -26,18 +26,18 @@ class CommentForm extends Component {
     const { currentComment = {} } = props
 
     this.state = {
-      id: currentComment.id || '',
+      _id: currentComment._id || '',
       text: currentComment.text || '',
       characterLength: currentComment.text ? currentComment.text.length : 0,
       valid: true,
       imageFile: currentComment.imageFile || '',
-      editMode: !!currentComment.id
+      editMode: !_.isEmpty(currentComment._id)
     }
   }
 
   static propTypes = {
     currentComment: PropTypes.shape({
-      id: PropTypes.string,
+      _id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
     }),
@@ -47,6 +47,7 @@ class CommentForm extends Component {
       shareId: PropTypes.string.isRequired,
     }).isRequired,
     onComplete: PropTypes.func,
+    onCancel: PropTypes.func,
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     requestEditComment: PropTypes.func.isRequired,
@@ -74,7 +75,7 @@ class CommentForm extends Component {
   }
 
   editComment = async () => {
-    const { id, text, imageFile } = this.state
+    const { _id, text, imageFile } = this.state
     const { username } = this.props
 
     const params = {
@@ -87,7 +88,8 @@ class CommentForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestEditComment(id, params)
+    this.props.requestEditComment(_id, params)
+    this.props.onComplete()
   }
 
   createComment = async () => {
@@ -111,13 +113,14 @@ class CommentForm extends Component {
       characterLength: 0,
       imageFile: ''
     })
+    this.props.onComplete()
   }
 
   onCancel = (e) => {
     e.preventDefault()
     this.fileInput.value = ''
     this.setState({
-      id: '',
+      _id: '',
       text: '',
       characterLength: 0,
       valid: true,
@@ -187,7 +190,12 @@ class CommentForm extends Component {
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
-              style={{ borderRadius: 0, borderColor: '#E0E3DA'}}
+              style={{
+                borderRadius: 0,
+                borderColor: '#E0E3DA',
+                fontSize: '13px',
+                fontFamily: 'Poppins, sans-serif'
+              }}
             />
           </Field>
 

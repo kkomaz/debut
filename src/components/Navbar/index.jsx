@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Navbar from 'react-bulma-components/lib/components/navbar'
 import { Input, Dropdown } from 'components/bulma'
 import { IconLoader } from 'components/Loader'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 import axios from 'axios'
 import './Navbar.scss';
@@ -50,9 +50,9 @@ class NavbarComp extends Component {
   goToProfile = () => {
     const { history } = this.props
     const { sessionUser } = this.context.state
-    this.toggleNavbar()
     this.props.setProfileClickedTrue()
-    history.push(`/user/${sessionUser.username}`)
+    this.toggleNavbar()
+    history.push(`/${sessionUser.username}`)
   }
 
   goToHelp = () => {
@@ -90,7 +90,7 @@ class NavbarComp extends Component {
       searchedUser: selected,
       selected,
     }, () => {
-      history.push(`/user/${selected}`)
+      history.push(`/${selected}`)
     })
   }
 
@@ -98,7 +98,7 @@ class NavbarComp extends Component {
     const { history } = this.props
     if (this.dropdown.state.open && e.keyCode === 13) {
       if (this.state.hovered) {
-        history.push(`/user/${this.state.hovered}`)
+        history.push(`/${this.state.hovered}`)
         this.dropdown.toggle()
       }
     }
@@ -204,7 +204,7 @@ class NavbarComp extends Component {
                   <Navbar.Item onClick={this.goToProfile}>
                     {
                       _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-half" /> :
-                      <Link className="debut-nav-bar__user-identity mr-one" to={`/user/${user.username}`}>
+                      <div className="debut-nav-bar__user-identity mr-one" onClick={this.goToProfile}>
                         <img
                           onError={this.addDefaultSrc}
                           src={_.get(user, 'profileImgUrl', defaultImgUrl)}
@@ -212,22 +212,30 @@ class NavbarComp extends Component {
                           height="45"
                           width="45"
                           />
-                      </Link>
+                      </div>
                     }
                     {username}
                   </Navbar.Item>
+
+                  <div className="is-divider-vertical"></div>
 
                   <Navbar.Item onClick={this.goToHome}>
                     Home
                   </Navbar.Item>
 
+                  <div className="is-divider-vertical"></div>
+
                   <Navbar.Item onClick={this.goToExplore}>
                     Explore
                   </Navbar.Item>
 
+                  <div className="is-divider-vertical"></div>
+
                   <Navbar.Item onClick={this.goToHelp}>
                     Help
                   </Navbar.Item>
+
+                  <div className="is-divider-vertical is-last"></div>
 
                   <Navbar.Item onClick={this.signOut}>
                     Sign Out

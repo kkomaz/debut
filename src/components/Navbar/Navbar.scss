@@ -7,6 +7,16 @@
   padding-left: 278px;
   height: 65px;
 
+  .is-divider-vertical {
+    padding: 0;
+
+    &.is-last {
+      &::before {
+        border-left: 0.03rem solid #dbdbdb;
+      }
+    }
+  }
+
   .navbar-item {
     display: flex;
     align-items: center;
@@ -45,7 +55,7 @@
       height: 45px;
       width: 45px;
       border-radius: 100%;
-      border: 3px solid $shadow;
+      border: 3px solid $pink;
       background-position: 50% 50%;
       background-repeat: no-repeat;
       background-size: cover;

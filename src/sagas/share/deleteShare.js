@@ -1,4 +1,5 @@
 import { put, call } from 'redux-saga/effects'
+import axios from 'axios'
 import { DELETE_SHARE_SUCCESS, DELETE_SHARE_FAIL } from 'actions'
 import Share from 'model/share'
 
@@ -11,6 +12,9 @@ const deleteShare = async (action) => {
     imageFile: '',
     valid: false
   })
+
+  axios.put(`/comment/?share_id=${share._id}`)
+
   return deletedShare.save()
 }
 

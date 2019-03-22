@@ -4,13 +4,13 @@ import { FETCH_SHARE_FEEDS_SUCCESS, FETCH_SHARE_FEEDS_FAIL } from 'actions'
 import Share from 'model/share'
 
 const fetchShareFeeds = async (action) => {
-  const { payload } = action
+  const { follow, offset } = action.payload
 
   const shares = await Share.fetchList({
-    username: payload.following,
+    username: follow.following,
     sort: '-createdAt',
     limit: 5,
-    offset: action.payload.offset,
+    offset,
     valid: true,
   })
 

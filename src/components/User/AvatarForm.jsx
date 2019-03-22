@@ -144,6 +144,7 @@ class AvatarForm extends Component {
           closeOnEsc
         >
           <Modal.Content>
+            <Heading size={4}>Avatar Form</Heading>
             <Section className="avatar-form__section">
               <Heading
                 className="avatar-form__section-title"

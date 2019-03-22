@@ -64,7 +64,7 @@ class Page extends Component {
     const { history } = this.props
 
     return history.push({
-      pathname: `/user/${user.username}`,
+      pathname: `/${user.username}`,
       state: {
         identityAddress: user.blockstackId
       }
@@ -151,7 +151,7 @@ class Page extends Component {
            </Container>
          </Hero.Body>
        </Hero>
-          <Container>
+          <Container className="page__user-container">
             {
               userState.paginatedObj.loading ?
               <Loader

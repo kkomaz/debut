@@ -11,6 +11,7 @@ import {
   Content,
   Modal,
   Section,
+  Heading,
 } from 'components/bulma'
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
@@ -209,7 +210,7 @@ class UsernamePage extends Component {
     this.setState({
       showModal: true,
       currentShare: {
-        id: share._id,
+        _id: share._id,
         text: share.text,
         imageFile: share.imageFile,
       }
@@ -224,9 +225,10 @@ class UsernamePage extends Component {
     this.setState({
       showCommentModal: true,
       currentComment: {
-        id: comment._id,
+        _id: comment._id,
         text: comment.text,
-        imageFile: comment.imageFile
+        imageFile: comment.imageFile,
+        share_id: comment.share_id
       }
     })
   }
@@ -255,7 +257,7 @@ class UsernamePage extends Component {
     } = this.state
 
     return (
-      <Container>
+      <Container style={{ marginTop: '10px' }}>
         <Columns className="mt-half">
           <Columns.Column size={5}>
             <div className="username__description mb-one">
@@ -366,6 +368,7 @@ class UsernamePage extends Component {
                 }
               </Columns.Column>
             </Columns>
+
             <Modal
               show={showModal}
               onClose={this.closeModal}
@@ -373,6 +376,7 @@ class UsernamePage extends Component {
             >
               <Modal.Content>
                 <Section style={{ backgroundColor: 'white' }}>
+                  <Heading size={4}>Shared Moment</Heading>
                   <ShareForm
                     username={username}
                     currentShare={this.state.currentShare}
@@ -381,6 +385,7 @@ class UsernamePage extends Component {
                 </Section>
               </Modal.Content>
             </Modal>
+
             <Modal
               show={showCommentModal}
               onClose={this.closeCommentModal}
@@ -388,6 +393,7 @@ class UsernamePage extends Component {
             >
               <Modal.Content>
                 <Section style={{ backgroundColor: 'white' }}>
+                  <Heading size={4}>User Comments</Heading>
                   <CommentForm
                     currentComment={this.state.currentComment}
                     onComplete={this.closeCommentModal}

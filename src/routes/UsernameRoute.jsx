@@ -15,6 +15,7 @@ import { UserHero } from 'components/User'
 import FollowingUsers from 'pages/username/following/FollowingUsers'
 import FollowersUsers from 'pages/username/followers/FollowersUsers'
 import IconProofs from 'components/SocialProofs/IconProofs'
+import ShareDetailPage from 'pages/user/_user_id/shares/_share_id/ShareDetailPage'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -134,14 +135,6 @@ class UsernameRoute extends Component {
 
     return (
       <div className="username-route">
-        <UserHero
-          username={username}
-          user={user}
-          defaultImgUrl={defaultImgUrl}
-          sessionUser={sessionUser}
-          userProofs={userProofs}
-          loading={loading}
-        />
         <Switch>
           {
             <Route
@@ -162,32 +155,78 @@ class UsernameRoute extends Component {
                   }
                 }
                 return (
-                  <UsernamePage
-                    user={user}
-                    username={username}
-                    dapps={dapps}
-                    follow={follow}
-                    profile={profile}
-                    shares={shares}
-                    loading={loading}
-                    location={lastLocation}
-                  />
+                  <React.Fragment>
+                    <UserHero
+                      username={username}
+                      user={user}
+                      defaultImgUrl={defaultImgUrl}
+                      sessionUser={sessionUser}
+                      userProofs={userProofs}
+                      loading={loading}
+                    />
+                    <UsernamePage
+                      user={user}
+                      username={username}
+                      dapps={dapps}
+                      follow={follow}
+                      profile={profile}
+                      shares={shares}
+                      loading={loading}
+                      location={lastLocation}
+                      />
+                  </React.Fragment>
                 )}
               }
             />
           }
+
+          <Route
+            exact
+            path={`${match.url}/shares/:share_id`}
+            render={({ match }) =>
+              <ShareDetailPage
+                match={match}
+                username={username}
+              />
+            }
+          />
+
           {
             !_.isEmpty(follow) &&
             <Route
               path={`${match.url}/following`}
-              render={() => <FollowingUsers follow={follow} />}
+              render={() => (
+                <React.Fragment>
+                  <UserHero
+                    username={username}
+                    user={user}
+                    defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
+                    userProofs={userProofs}
+                    loading={loading}
+                  />
+                  <FollowingUsers follow={follow} />
+                </React.Fragment>
+              )}
             />
           }
           {
             !_.isEmpty(follow) &&
             <Route
               path={`${match.url}/followers`}
-              render={() => <FollowersUsers follow={follow} />}
+              render={() => (
+                <React.Fragment>
+                  <UserHero
+                    username={username}
+                    user={user}
+                    defaultImgUrl={defaultImgUrl}
+                    sessionUser={sessionUser}
+                    userProofs={userProofs}
+                    loading={loading}
+                  />
+                  <FollowersUsers follow={follow} />
+                </React.Fragment>
+              )}
             />
           }
         </Switch>

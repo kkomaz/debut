@@ -126,7 +126,7 @@ class AdminFollowersUsers extends Component {
 
   onBoxClick = (user) => {
     const { history } = this.props
-    history.push(`/user/${user.username}`)
+    history.push(`/${user.username}`)
   }
 
   render() {
@@ -134,12 +134,18 @@ class AdminFollowersUsers extends Component {
     const { defaultImgUrl } = this.context.state
     const { className, follow, loading } = this.props
 
+    let styles = {}
+
     if (loading) {
       return <BarLoader />
     }
 
     if (_.isEmpty(follow.followers) && !loading) {
       return <AdminNoFollowers />
+    }
+
+    if (users.length < 3) {
+      styles = { minWidth: '190px', minHeight: '190px' }
     }
 
     return (
@@ -153,7 +159,7 @@ class AdminFollowersUsers extends Component {
                   size: 3,
                 }}
               >
-                <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                <Card className="page__card" style={styles} onClick={() => this.onBoxClick(user)}>
                   <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
                   <Card.Content className="page__content">
                     <p className="page__username-text">{user.username}</p>
