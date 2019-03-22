@@ -15,7 +15,7 @@ import {
 import Share from 'model/share'
 
 // Action Imports
-import { requestAddShareFeeds } from 'actions/share'
+import { handleDetailShare, removeDetailShare } from 'actions/share'
 
 // Component Imports
 import { ShareListItem, InvalidShare } from 'components/Share'
@@ -47,10 +47,15 @@ class ShareDetail extends Component {
         throw new Error('That moment does not exist!')
       }
 
-      this.props.requestAddShareFeeds(share.attrs, false)
+      this.props.handleDetailShare(share.attrs, false)
     } catch (e) {
       this.setState({ error: true })
     }
+  }
+
+  componentWillUnmount() {
+    const { share } = this.props
+    this.props.removeDetailShare(share)
   }
 
   openEditModal = (share) => {
@@ -159,5 +164,6 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 export default connect(mapStateToProps, {
-  requestAddShareFeeds
+  handleDetailShare,
+  removeDetailShare,
 })(ShareDetail)

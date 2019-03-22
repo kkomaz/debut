@@ -1,4 +1,6 @@
 import {
+  HANDLE_DETAIL_SHARE,
+  REMOVE_DETAIL_SHARE,
   REQUEST_DISPLAY_HIDDEN_SHARES,
   RESET_SHARES_LOADING,
   REQUEST_USER_SHARES,
@@ -39,6 +41,7 @@ const defaultSession = {
     submitting: false,
     deleting: false,
     editing: false,
+    added: false,
   },
   commentActions: {
     submitting: false,
@@ -106,6 +109,43 @@ export default function shareReducer(state = defaultSession, action) {
         list: [share, ...state.shares.list],
         loading: false
       }}
+    }
+    case HANDLE_DETAIL_SHARE: {
+      const share = _.find(state.shares.list, (share) => share._id === action.payload._id)
+
+      if (!share) {
+        return { ...state,
+          shares: {
+            ...state.shares,
+            list: [action.payload, ...state.shares.list],
+            loading: false
+          },
+          shareActions: {
+            ...state.shareActions,
+            added: true,
+          }
+        }
+      }
+
+      return state
+    }
+    case REMOVE_DETAIL_SHARE: {
+      if (state.shareActions.added) {
+        const filteredList = _.filter(state.shares.list, (share) => share._id !== action.payload._id)
+        return { ...state,
+          shares: {
+            ...state.shares,
+            list: filteredList,
+            loading: false,
+          },
+          shareActions: {
+            ...state.shareActions,
+            added: false
+          }
+        }
+      }
+
+      return state
     }
     case CREATE_SHARE_SUCCESS:
       toggleNotification('success', 'Moment successfully created')
