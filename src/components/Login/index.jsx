@@ -54,10 +54,14 @@ class Login extends Component {
                     className="mt-half login__button-sign-in"
                     color="link"
                     onClick={this.signIn}
+                    disabled
                     >
                     Sign in with Blockstack
                   </Button>
                 </Content>
+                <Heading size={6}>
+                  debut is currently in maintenance mode.  Please check in at another time!
+                </Heading>
                 <Heading size={6}>
                   <a href="https://landing.debutapp.social" rel="noopener noreferrer" target="_blank">About debut</a>
                 </Heading>
