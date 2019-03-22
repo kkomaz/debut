@@ -59,9 +59,6 @@ class Login extends Component {
                   </Button>
                 </Content>
                 <Heading size={6}>
-                  debut is currently in maintenance mode.  Please check in at another time!
-                </Heading>
-                <Heading size={6}>
                   <a href="https://landing.debutapp.social" rel="noopener noreferrer" target="_blank">About debut</a>
                 </Heading>
 
