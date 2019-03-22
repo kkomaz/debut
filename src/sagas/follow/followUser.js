@@ -7,7 +7,8 @@ const followUser = async (action) => {
   const { payload } = action
   const sessionFollow = await Follow.findOne({ username: payload.sessionUsername })
   const viewedFollow = await Follow.findOne({ username: payload.username })
-  const following = [...payload.following, payload.username]
+
+  const following = [...sessionFollow.attrs.following, payload.username]
 
   sessionFollow.update({
     following,
@@ -16,7 +17,7 @@ const followUser = async (action) => {
   const updatedFollowing = await sessionFollow.save()
 
   result[`${payload.sessionUsername}`] = updatedFollowing.attrs
-  const followers = [...payload.followers, payload.sessionUsername]
+  const followers = [...viewedFollow.attrs.followers, payload.sessionUsername]
   viewedFollow.update({
     followers,
     followersCount: followers.length

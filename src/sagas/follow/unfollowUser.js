@@ -9,8 +9,8 @@ const unfollowUser = async (action) => {
   const sessionFollow = await Follow.findOne({ username: payload.sessionUsername })
   const viewedFollow = await Follow.findOne({ username: payload.username })
 
-  const following = _.filter(payload.following, (followingUser) => followingUser !== payload.username)
-  const followers = _.filter(payload.followers, (followersUser) => followersUser !== payload.sessionUsername)
+  const following = _.filter(sessionFollow.attrs.following, (followingUser) => followingUser !== payload.username)
+  const followers = _.filter(viewedFollow.attrs.followers, (followersUser) => followersUser !== payload.sessionUsername)
 
   sessionFollow.update({
     following,
