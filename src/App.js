@@ -32,15 +32,19 @@ class App extends Component {
   componentDidMount = async () => {
     const { userSession } = this.state
 
+    // If already signed in
     if (userSession.isUserSignedIn()) {
-      this.setState({ loggedIn: true }, () => {
-        const user = userSession.loadUserData()
-        if (user.username !== 'kkomaz.id') {
-          userSession.signUserOut()
+      this.setState({ loggedIn: true }, async () => {
+        const userData = userSession.loadUserData()
+        const radiksUser = await User.findOne({ username: userData.username })
+
+        if (radiksUser && !radiksUser.attrs.radiksSignature) {
+          await User.createWithCurrentUser()
         }
       })
     }
 
+    // If pending sign-in
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
       const userData = await userSession.handlePendingSignIn()
       this.setState({ loggingIn: true })
@@ -56,6 +60,10 @@ class App extends Component {
 
       try {
         const radiksUser = await User.findOne({ username: userData.username })
+
+        if (radiksUser && !radiksUser.attrs.radiksSignature) {
+          await User.createWithCurrentUser()
+        }
 
         if (!radiksUser) {
           const currentUser = await User.createWithCurrentUser()
