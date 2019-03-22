@@ -33,7 +33,12 @@ class App extends Component {
     const { userSession } = this.state
 
     if (userSession.isUserSignedIn()) {
-      this.setState({ loggedIn: true })
+      this.setState({ loggedIn: true }, () => {
+        const user = userSession.loadUserData()
+        if (user.username !== 'kkomaz.id') {
+          userSession.signUserOut()
+        }
+      })
     }
 
     if (!userSession.isUserSignedIn() && userSession.isSignInPending()) {
