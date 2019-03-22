@@ -1,7 +1,6 @@
 {
   "name": "debut",
   "version": "0.1.0",
-  "homepage": "https://debutapp.social.com",
   "private": true,
   "dependencies": {
     "ajv": "^6.6.2",
