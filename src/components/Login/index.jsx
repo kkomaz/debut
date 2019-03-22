@@ -47,8 +47,8 @@ class Login extends Component {
           {
             loadingUser ? <div>Loading...</div> :
             <div className="login-blockstack">
+              <Heading size={2} style={{ marginTop: '30px'}}>debut</Heading>
               <img className="mb-one" src={debutInfo} alt="Logo" height={600} width={600} />
-              <Heading size={3} style={{ marginTop: '30px'}}>debut</Heading>
                 <Content className="login__sign-in-content">
                   <Button
                     className="mt-half login__button-sign-in"
@@ -58,9 +58,13 @@ class Login extends Component {
                     Sign in with Blockstack
                   </Button>
                 </Content>
-              <Heading size={6}>
-                Curious about our technical roadmap? Click <a href="https://trello.com/b/he3qvtA0/debut" rel="noopener noreferrer" target="_blank">here.</a>
-              </Heading>
+                <Heading size={6}>
+                  <a href="https://landing.debutapp.social" rel="noopener noreferrer" target="_blank">About debut</a>
+                </Heading>
+
+                <Heading size={6}>
+                  Curious about our technical roadmap? Click <a href="https://trello.com/b/he3qvtA0/debut" rel="noopener noreferrer" target="_blank">here.</a>
+                </Heading>
             </div>
           }
         </Columns.Column>
