@@ -2,4 +2,9 @@
   &__about-myself {
     display: flex;
   }
+
+  &__button-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }

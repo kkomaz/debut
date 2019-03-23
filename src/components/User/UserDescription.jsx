@@ -138,27 +138,6 @@ class UserDescription extends Component {
               />
             </Popover>
         </div>
-        <div className="user-description__button-actions mb-one">
-          {
-            user.data.basicInformation ?
-            <Button
-              onClick={this.props.onCreateEdit}
-              color="light"
-              className="mr-half"
-              disabled={!displayView}
-            >
-              Edit
-            </Button> :
-            <Button
-              onClick={this.props.onCreateEdit}
-              color="primary"
-              className="mr-half"
-              disabled={!displayView}
-            >
-              Create
-            </Button>
-          }
-        </div>
         {
           displayView ? <UserIntroDisplay description={user.data.basicInformation.description} /> :
           <UserIntroForm
@@ -169,6 +148,29 @@ class UserDescription extends Component {
             username={username}
           />
         }
+        <div className="user-description__button-actions mt-one">
+          {
+            displayView && (
+              user.data.basicInformation ?
+              <Button
+                onClick={this.props.onCreateEdit}
+                color="primary"
+                className="mr-half"
+                disabled={!displayView}
+              >
+                Edit
+              </Button> :
+              <Button
+                onClick={this.props.onCreateEdit}
+                color="primary"
+                className="mr-half"
+                disabled={!displayView}
+              >
+                Create
+              </Button>
+            )
+          }
+        </div>
       </div>
     )
   }
