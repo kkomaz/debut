@@ -1,6 +1,6 @@
 .button {
   &.is-light {
-    background-image: -webkit-linear-gradient(45deg, $citrus 0%, #fabe61 100%);
+    background-image: -webkit-linear-gradient(45deg, $pitch-dark 0%, $darkness 100%);
     color: $white;
 
     &:active,
