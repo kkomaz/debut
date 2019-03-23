@@ -114,7 +114,6 @@ class AdminUsernameRoute extends Component {
                 render={() => (
                   <AdminFollowingUsers
                     follow={userFollow}
-                    size={4}
                   />
                 )}
               />

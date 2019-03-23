@@ -113,12 +113,18 @@ class AdminFollowingUsers extends Component {
     const { defaultImgUrl } = this.context.state
     const { className, size, follow, loading } = this.props
 
+    let styles = {}
+
     if (loading) {
       return <BarLoader />
     }
 
     if (_.isEmpty(follow.following) && !loading) {
       return <AdminNoFollowing />
+    }
+
+    if (users.length < 3) {
+      styles = { minWidth: '190px', minHeight: '190px' }
     }
 
     return (
@@ -132,7 +138,7 @@ class AdminFollowingUsers extends Component {
                   size,
                 }}
                 >
-                <Card className="page__card" onClick={() => this.onBoxClick(user)}>
+                <Card className="page__card" style={styles} onClick={() => this.onBoxClick(user)}>
                   <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
                   <Card.Content className="page__content">
                     <p className="page__username-text">{user.username}</p>
