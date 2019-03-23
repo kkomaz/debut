@@ -132,7 +132,7 @@ class AdminFollowersUsers extends Component {
   render() {
     const { users } = this.state
     const { defaultImgUrl } = this.context.state
-    const { className, follow, loading } = this.props
+    const { className, follow, loading, size } = this.props
 
     let styles = {}
 
@@ -156,7 +156,7 @@ class AdminFollowersUsers extends Component {
               <Columns.Column
                 key={user.username}
                 tablet={{
-                  size: 3,
+                  size,
                 }}
               >
                 <Card className="page__card" style={styles} onClick={() => this.onBoxClick(user)}>

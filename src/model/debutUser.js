@@ -26,6 +26,8 @@ class DebutUser extends User {
 
       const userIntro = await userSession.getFile(`user-intro-${username}.json`, options)
 
+      console.log(userIntro, 'userIntro')
+
       if (!userIntro) {
         return { ...this.data, basicInformation: {
           description: '',
