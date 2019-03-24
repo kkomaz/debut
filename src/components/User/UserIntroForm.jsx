@@ -9,6 +9,10 @@ import {
   Textarea,
   Help,
 } from 'react-bulma-components/lib/components/form'
+import {
+  Input,
+} from 'components/bulma'
+import axios from 'axios'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
 
 class UserIntroForm extends Component {
@@ -20,7 +24,10 @@ class UserIntroForm extends Component {
     this.state = {
       description,
       valid: true,
+      city: props.city || '',
     }
+
+    this.fetchCityList = _.debounce(this.fetchCityList, 1000)
   }
 
   static propTypes = {
@@ -38,6 +45,22 @@ class UserIntroForm extends Component {
 
     this.setState({
       [e.target.name]: e.target.value
+    })
+  }
+
+  onCityChange = (e) => {
+    const { valid } = this.props
+
+    if (!valid) {
+      this.setState({ valid: true })
+    }
+
+    const target = e.target.value
+
+    this.setState({
+      [e.target.name]: e.target.value
+    }, () => {
+      this.fetchCityList(target)
     })
   }
 
@@ -72,6 +95,17 @@ class UserIntroForm extends Component {
     }
   }
 
+  fetchCityList = async (value) => {
+    const result = await axios.get('http://autocomplete.geocoder.api.here.com/6.2/suggest.json', {
+      params: {
+        app_id: 'HcfQzK5jZbS7VenQDIPz',
+        app_code: '3T1_Gjk5H-BCkrK3QtraUg',
+        query: value
+      }
+    })
+    console.log(result)
+  }
+
   render() {
     const { valid } = this.state
 
@@ -79,6 +113,12 @@ class UserIntroForm extends Component {
       <form className="user-intro-form" onSubmit={this.onSubmit}>
         <Field>
           <Label>Introduction</Label>
+          <Input
+            name="city"
+            onChange={this.onCityChange}
+            placeholder="Add input here!"
+            value={this.state.city}
+          />
           <Textarea
             name="description"
             onChange={this.onChange}

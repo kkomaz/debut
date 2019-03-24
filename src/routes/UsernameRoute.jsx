@@ -81,8 +81,6 @@ class UsernameRoute extends Component {
       const allowableProofs = ['facebook', 'twitter', 'github', 'linkedIn']
       userProofs = _.filter(profile.account, (account) => _.includes(allowableProofs, account.service))
 
-      console.log(apps)
-
       if (process.env.NODE_ENV === nodeEnv && (
         _.isEmpty(apps) || (apps.length > 0 && !_.includes(apps, appUrl))
       )) {
