@@ -6,11 +6,6 @@
 
 @import './modules/button';
 
-// html {
-//   background: #E0E3DA;
-//   font-family: 'Overpass', sans-serif;
-// }
-
 html, body {
   font-family: "Poppins", sans-serif;
   background: #E0E3DA;
@@ -49,4 +44,41 @@ p {
 
 .section {
   padding-top: 1.5em;
+}
+
+.dark-mode {
+  html, body {
+    font-family: "Poppins", sans-serif;
+    background: #10171e;
+  }
+
+  .card {
+    background-color: #161F2A;
+    color: $white;
+  }
+
+  .textarea {
+    background-color: #11171D;
+    border-color: $blue !important;
+  }
+
+  textarea::-webkit-input-placeholder {
+    color: $white !important;
+  }
+
+  textarea:-moz-placeholder { /* Firefox 18- */
+    color: $white !important;
+  }
+
+  textarea::-moz-placeholder {  /* Firefox 19+ */
+    color: $white !important;
+  }
+
+  textarea:-ms-input-placeholder {
+    color: $white !important;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    color: $white !important;
+  }
 }
