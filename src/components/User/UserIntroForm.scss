@@ -1,0 +1,28 @@
+@import 'src/variables';
+
+.user-intro-form {
+  &__location-wrapper {
+    position: relative;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 33px;
+    left: 0;
+  }
+
+  .dropdown-item {
+    &.is-active {
+      background-color: $white;
+      color: #4a4a4a;
+    }
+  }
+
+  .dropdown-trigger {
+    display: none;
+  }
+
+  .dropdown-menu {
+    width: 331px;
+  }
+}
