@@ -5,7 +5,6 @@ import _ from 'lodash'
 import PropTypes from 'prop-types'
 import {
   Field,
-  Label,
   Textarea,
   Help,
 } from 'react-bulma-components/lib/components/form'
@@ -25,7 +24,8 @@ class UserIntroForm extends Component {
       description,
       valid: true,
       city: props.city || '',
-      websiteUrl: props.websiteUrl || ''
+      websiteUrl: props.websiteUrl || '',
+      name: props.name || '',
     }
 
     this.fetchCityList = _.debounce(this.fetchCityList, 1000)
@@ -114,13 +114,15 @@ class UserIntroForm extends Component {
       <form className="user-intro-form" onSubmit={this.onSubmit}>
         <Field>
           <Input
-            name="Name"
+            className="mb-half"
+            name="name"
             onChange={this.onChange}
             placeholder="Name"
-            value={this.state.websiteUrl}
+            value={this.state.name}
           />
 
           <Textarea
+            className="mb-half"
             name="description"
             onChange={this.onChange}
             placeholder="About Yourself"
@@ -133,13 +135,14 @@ class UserIntroForm extends Component {
             !valid && <Help color="danger">Field can not be empty!</Help>
           }
           <Input
-            name="City"
+            className="mb-half"
+            name="city"
             onChange={this.onCityChange}
             placeholder="Location"
             value={this.state.city}
           />
           <Input
-            name="Website"
+            name="websiteUrl"
             onChange={this.onChange}
             placeholder="Website"
             value={this.state.websiteUrl}
