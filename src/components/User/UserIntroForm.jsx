@@ -25,6 +25,7 @@ class UserIntroForm extends Component {
       description,
       valid: true,
       city: props.city || '',
+      websiteUrl: props.websiteUrl || ''
     }
 
     this.fetchCityList = _.debounce(this.fetchCityList, 1000)
@@ -112,18 +113,18 @@ class UserIntroForm extends Component {
     return (
       <form className="user-intro-form" onSubmit={this.onSubmit}>
         <Field>
-          <Label>Introduction</Label>
           <Input
-            name="city"
-            onChange={this.onCityChange}
-            placeholder="Add input here!"
-            value={this.state.city}
+            name="Name"
+            onChange={this.onChange}
+            placeholder="Name"
+            value={this.state.websiteUrl}
           />
+
           <Textarea
             name="description"
             onChange={this.onChange}
-            placeholder="Add description here!"
-            rows={20}
+            placeholder="About Yourself"
+            rows={10}
             onKeyDown={this.onEnterPress}
             value={this.state.description}
             color={valid ? null : 'danger'}
@@ -131,6 +132,18 @@ class UserIntroForm extends Component {
           {
             !valid && <Help color="danger">Field can not be empty!</Help>
           }
+          <Input
+            name="City"
+            onChange={this.onCityChange}
+            placeholder="Location"
+            value={this.state.city}
+          />
+          <Input
+            name="Website"
+            onChange={this.onChange}
+            placeholder="Website"
+            value={this.state.websiteUrl}
+          />
         </Field>
         <SubmitFooter
           onCancel={this.onCancel}
