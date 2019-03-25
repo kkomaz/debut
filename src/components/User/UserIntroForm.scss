@@ -25,4 +25,16 @@
   .dropdown-menu {
     width: 331px;
   }
+
+  &__character-length {
+    color: $forest;
+
+    &--warning {
+      color: $light_purple;
+    }
+
+    &--danger {
+      color: $danger;
+    }
+  }
 }

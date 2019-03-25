@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Button,
-  Heading,
 } from 'react-bulma-components'
 import { UserIntroDisplay } from 'components/User'
 import UserIntroForm from 'components/User/UserIntroForm'
@@ -89,7 +88,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={user.data.description}
+              user={user.data}
               />
           }
         </div>
@@ -112,19 +111,19 @@ class UserDescription extends Component {
                       arrowColor={'#383A3F'}
                       arrowSize={10}
                     >
-                        <div
-                            style={{
-                              backgroundColor: '#383A3F',
-                              padding: '20px',
-                              color: 'white',
-                              width: '300px',
-                            }}
-                            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                        >
-                          <p className="small">
-                            Write a small bio about yourself.  Let everyone know who you are!
-                          </p>
-                        </div>
+                      <div
+                          style={{
+                            backgroundColor: '#383A3F',
+                            padding: '20px',
+                            color: 'white',
+                            width: '300px',
+                          }}
+                          onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                      >
+                        <p className="small">
+                          Write a small bio about yourself.  Let everyone know who you are!
+                        </p>
+                      </div>
                     </ArrowContainer>
                 )}
             >

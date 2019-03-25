@@ -14,6 +14,7 @@ import {
 } from 'components/bulma'
 import axios from 'axios'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
+import classNames from 'classnames';
 import './UserIntroForm.scss'
 
 class UserIntroForm extends Component {
@@ -31,6 +32,8 @@ class UserIntroForm extends Component {
       searchResults: [],
       hovered: '',
       open: false,
+      characterLength: user.description ? user.description.length : 0,
+      standardCharacterLength: 160,
     }
 
     this.fetchCityList = _.debounce(this.fetchCityList, 1000)
@@ -101,6 +104,8 @@ class UserIntroForm extends Component {
       description,
       area,
       websiteUrl,
+      characterLength,
+      standardCharacterLength,
     } = this.state
 
     const {
@@ -109,7 +114,7 @@ class UserIntroForm extends Component {
 
     e.preventDefault()
 
-    if (_.isEmpty(description)) {
+    if (_.isEmpty(description) || characterLength > standardCharacterLength) {
       return this.setState({ valid: false })
     }
 
@@ -204,8 +209,27 @@ class UserIntroForm extends Component {
     }
   }
 
+  onDescriptionChange = (e) => {
+    const { valid } = this.props
+
+    if (!valid) {
+      this.setState({ valid: true })
+    }
+
+    this.setState({
+      [e.target.name]: e.target.value,
+      characterLength: e.target.value.length
+    })
+  }
+
   render() {
-    const { valid, searchResults } = this.state
+    const { valid, searchResults, characterLength, standardCharacterLength } = this.state
+    const leftoverLength = 160 - characterLength
+    const characterClass = classNames({
+      'user-intro-form__character-length': true,
+      'user-intro-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
+      'user-intro-form__character-length--danger': leftoverLength < 30
+    })
 
     return (
       <React.Fragment>
@@ -222,15 +246,22 @@ class UserIntroForm extends Component {
             <Textarea
               className="mb-half"
               name="description"
-              onChange={this.onChange}
+              onChange={this.onDescriptionChange}
               placeholder="About Yourself"
               rows={10}
               onKeyDown={this.onEnterPress}
               value={this.state.description}
               color={valid ? null : 'danger'}
             />
+
+            <div className="user-intro-form__characters">
+              <p className={characterClass}>{160 - this.state.characterLength} characters left</p>
+            </div>
             {
-              !valid && <Help color="danger">Field can not be empty!</Help>
+              !valid &&  characterLength > standardCharacterLength && <Help color="danger">Bio is longer than 160 characters.</Help>
+            }
+            {
+              !valid && characterLength === 0 && <Help color="danger">Field can not be empty!</Help>
             }
             <div className="user-intro-form__location-wrapper">
               <Input
