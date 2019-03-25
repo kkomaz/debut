@@ -13,13 +13,16 @@ const UserIntroDisplay = (props) => {
 
   return (
     <div className="user-intro-display">
-      {
-        user.name &&
-        <div className="user-intro-display__identity mb-one">
-          <Heading className="user-intro-display__name" size={4}>{user.name}</Heading>
-          <p>{linkifyText(`@${user.username}`)}</p>
-        </div>
-      }
+      <div className="user-intro-display__identity mb-one">
+        {user.name ? <Heading className="user-intro-display__name" size={4}>{user.name}</Heading> :
+        <Heading
+          className="user-intro-display__name"
+          size={4}>
+            {user.username}
+        </Heading>
+        }
+        {<p className="mt-half">{linkifyText(`@${user.username}`)}</p>}
+      </div>
       {
         user.description &&
         <p className="user-intro-display__description">
