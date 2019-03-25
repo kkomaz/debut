@@ -1,6 +1,8 @@
 .user-description {
   &__about-myself {
-    display: flex;
+    position: absolute;
+    right: 10px;
+    top: 0;
   }
 
   &__button-actions {

@@ -4,7 +4,7 @@ import {
   Button,
   Heading,
 } from 'react-bulma-components'
-import UserIntroDisplay from 'components/User/IntroDisplay'
+import { UserIntroDisplay } from 'components/User'
 import UserIntroForm from 'components/User/UserIntroForm'
 import { List } from 'react-content-loader'
 import Popover, { ArrowContainer } from 'react-tiny-popover'
@@ -48,7 +48,6 @@ class UserDescription extends Component {
       return (
         <div className="user-description">
           <div className="user-description__about-myself">
-            <Heading className="mr-one" size={4}>About Myself</Heading>
               <Popover
                   isOpen={this.state.isPopoverOpen}
                   position="right"
@@ -100,7 +99,6 @@ class UserDescription extends Component {
     return (
       <div className="user-description__info-details">
         <div className="user-description__about-myself">
-          <Heading className="mr-one" size={4}>About Myself</Heading>
             <Popover
                 isOpen={this.state.isPopoverOpen}
                 position="right"
@@ -139,7 +137,10 @@ class UserDescription extends Component {
             </Popover>
         </div>
         {
-          displayView ? <UserIntroDisplay description={user.data.description} /> :
+          displayView ?
+          <UserIntroDisplay
+            user={user.data}
+          /> :
           <UserIntroForm
             user={user.data}
             description={user.data.description}
@@ -151,22 +152,14 @@ class UserDescription extends Component {
         <div className="user-description__button-actions mt-one">
           {
             displayView && (
-              user.data ?
+              user.data &&
               <Button
                 onClick={this.props.onCreateEdit}
                 color="primary"
                 className="mr-half"
                 disabled={!displayView}
               >
-                Edit
-              </Button> :
-              <Button
-                onClick={this.props.onCreateEdit}
-                color="primary"
-                className="mr-half"
-                disabled={!displayView}
-              >
-                Create
+                Edit Profile
               </Button>
             )
           }

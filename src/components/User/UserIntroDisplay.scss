@@ -1,0 +1,12 @@
+.user-intro-display {
+  &__website,
+  &__joined,
+  &__area {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__name {
+    margin-bottom: 0 !important;
+  }
+}

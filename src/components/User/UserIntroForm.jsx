@@ -27,7 +27,7 @@ class UserIntroForm extends Component {
       valid: true,
       area: user.area || '',
       websiteUrl: user.websiteUrl || '',
-      name: props.name || '',
+      name: user.name || '',
       searchResults: [],
       hovered: '',
       open: false,
@@ -99,7 +99,7 @@ class UserIntroForm extends Component {
     const {
       name,
       description,
-      location,
+      area,
       websiteUrl,
     } = this.state
 
@@ -116,7 +116,7 @@ class UserIntroForm extends Component {
     const blockstackData = {
       name,
       description,
-      location,
+      area,
       websiteUrl,
     }
 
