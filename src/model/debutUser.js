@@ -1,6 +1,6 @@
 import { User } from 'radiks'
-import BasicInformation from './basicInformation'
 import { UserSession } from 'blockstack'
+import _ from 'lodash'
 import { appConfig } from 'utils/constants'
 
 class DebutUser extends User {
@@ -12,34 +12,28 @@ class DebutUser extends User {
   static schema = {
     ...DebutUser.schema,
     profileImgUrl: { type: String, decrypted: true },
+    name: { type: String, decrypted: true },
+    description: { type: String, decrypted: true },
+    area: { type: String, decrypted: true },
+    websiteUrl: { type: String, decrypted: true }
   }
 
   async addBasicInfo() {
-    const basicInformation = await BasicInformation.findOne({ username: this.data._id }) || null
-
-    if (basicInformation) {
-      return {...this.data, basicInformation: basicInformation.attrs }
-    } else {
+    if (_.isEmpty(this.data.description)) {
       const username = this.data._id
       const options = { decrypt: false, username }
       const userSession = new UserSession({ appConfig })
 
       const userIntro = await userSession.getFile(`user-intro-${username}.json`, options)
 
-      console.log(userIntro, 'userIntro')
-
       if (!userIntro) {
-        return { ...this.data, basicInformation: {
-          description: '',
-          username,
-        }}
+        return { ...this, data: { ...this.data, description: '' }}
       }
 
-      return { ...this.data, basicInformation: {
-        description: JSON.parse(userIntro).description,
-        username,
-      }}
+      return { ...this, data: { ...this.data, description: JSON.parse(userIntro).description }}
     }
+
+    return this
   }
 }
 

@@ -20,13 +20,13 @@ class UserIntroForm extends Component {
   constructor(props) {
     super(props)
 
-    const { description } = props
+    const { user } = props
 
     this.state = {
-      description,
+      description: user.description || '',
       valid: true,
-      area: props.area || '',
-      websiteUrl: props.websiteUrl || '',
+      area: user.area || '',
+      websiteUrl: user.websiteUrl || '',
       name: props.name || '',
       searchResults: [],
       hovered: '',
@@ -37,7 +37,12 @@ class UserIntroForm extends Component {
   }
 
   static propTypes = {
-    description: PropTypes.string,
+    username: PropTypes.shape({
+      name: PropTypes.string,
+      description: PropTypes.string,
+      area: PropTypes.string,
+      websiteUrl: PropTypes.string,
+    }).isRequired,
     onCancel: PropTypes.func,
     onSubmit: PropTypes.func,
   }
@@ -91,8 +96,17 @@ class UserIntroForm extends Component {
   }
 
   onSubmit = async (e) => {
-    const { description } = this.state
-    const { username, basicInformation } = this.props
+    const {
+      name,
+      description,
+      location,
+      websiteUrl,
+    } = this.state
+
+    const {
+      username,
+    } = this.props
+
     e.preventDefault()
 
     if (_.isEmpty(description)) {
@@ -100,11 +114,13 @@ class UserIntroForm extends Component {
     }
 
     const blockstackData = {
+      name,
       description,
-      username,
+      location,
+      websiteUrl,
     }
 
-    this.props.requestSetBasicInformation(username, blockstackData, basicInformation._id)
+    this.props.requestSetBasicInformation(username, blockstackData)
     this.props.onSubmit({ description })
   }
 

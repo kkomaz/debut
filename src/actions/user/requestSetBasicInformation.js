@@ -6,7 +6,6 @@ const requestSetBasicInformation = (username, params, id) => {
     payload: {
       username,
       params,
-      id
     }
   }
 }

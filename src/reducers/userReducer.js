@@ -84,10 +84,8 @@ export default function userReducer(state = defaultSession, action) {
         loading: false,
       }
     case SET_BASIC_INFO_SUCCESS:
-      const searchedUser = state.users.find((user) => user._id === action.payload.username)
-      const updatedUser = { ...searchedUser, basicInformation: action.payload.basicInformation }
-      toggleNotification('success', `${updatedUser.username}'s bio successfully updated!`)
-      return { ...state, users: updateOrAddObjFromList(state.users, updatedUser)}
+      toggleNotification('success', `${action.payload.username}'s bio successfully updated!`)
+      return { ...state, users: updateOrAddObjFromList(state.users, action.payload.user)}
     case REQUEST_SET_USER_AVATAR:
       return { ...state, avatarLoading: true }
     case SET_USER_AVATAR_FAIL:

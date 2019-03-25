@@ -1,6 +1,5 @@
 import { put, call } from 'redux-saga/effects'
 import { SET_USER_AVATAR_SUCCESS, SET_USER_AVATAR_FAIL } from 'actions'
-import DebutUser from 'model/debutUser'
 import { User } from 'radiks'
 
 const setUserAvatar = async (action) => {
@@ -12,9 +11,7 @@ const setUserAvatar = async (action) => {
   })
 
   await user.save()
-  const debutUser = await DebutUser.findOne({ username: payload.username })
-  const updatedUser = await debutUser.addBasicInfo()
-  return updatedUser
+  return user.attrs
 }
 
 function* setUserAvatarSaga(action) {

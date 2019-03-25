@@ -40,7 +40,7 @@ class UserDescription extends Component {
     const { user } = this.props
 
     // Hot Fix - need to find a cleaner way to handle this
-    if (!user.data.basicInformation) {
+    if (!user.data) {
       return <List />
     }
 
@@ -90,7 +90,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={user.data.basicInformation.description}
+              description={user.data.description}
               />
           }
         </div>
@@ -139,10 +139,10 @@ class UserDescription extends Component {
             </Popover>
         </div>
         {
-          displayView ? <UserIntroDisplay description={user.data.basicInformation.description} /> :
+          displayView ? <UserIntroDisplay description={user.data.description} /> :
           <UserIntroForm
-            basicInformation={user.data.basicInformation}
-            description={user.data.basicInformation.description}
+            user={user.data}
+            description={user.data.description}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
             username={username}
@@ -151,7 +151,7 @@ class UserDescription extends Component {
         <div className="user-description__button-actions mt-one">
           {
             displayView && (
-              user.data.basicInformation ?
+              user.data ?
               <Button
                 onClick={this.props.onCreateEdit}
                 color="primary"
