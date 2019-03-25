@@ -45,7 +45,7 @@ const UserIntroDisplay = (props) => {
             icon="IconDisplay"
             size={20}
           />
-          <a href={user.websiteUrl} rel="noopener noreferrer" target="_blank">{user.websiteUrl}</a>
+          <p>{linkifyText(user.websiteUrl)}</p>
         </div>
       }
 
