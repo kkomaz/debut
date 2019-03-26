@@ -30,6 +30,11 @@
     width: 400px;
   }
 
+  .dropdown {
+    position: absolute;
+    bottom: 17px;
+  }
+
   .dropdown-item {
     &.is-active {
       background-color: $white;
