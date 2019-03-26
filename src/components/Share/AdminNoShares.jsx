@@ -59,8 +59,10 @@ class AdminNoShares extends Component {
                   }}
                 />
               </Popover>
-              <p>Welcome to debut!  You are not following anyone that has shared a moment.  You can view user profiles to the <strong>right</strong> or click the <strong>Explore</strong> to see a list of users!</p>
+              <p>Welcome to debut!  This is your activity feed page!  In this page, you will be able to see real time updates of your shared moments and other's if you follow them</p>
+              <p>You can view user profiles to the <strong>right</strong> or click the <strong>Explore</strong> to see a list of users!</p>
               <p>If you would like to update your profile click on your <strong>username</strong> above.</p>
+              <p>You can create your first shared moment with the debut community.  Anyone who follows you will have real time updates on anything you post!</p>
             </div>
           </Content>
         </Card.Content>

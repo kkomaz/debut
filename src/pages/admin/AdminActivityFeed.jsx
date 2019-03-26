@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import {
+  Card,
   Modal,
   Section,
   Heading,
@@ -17,7 +18,7 @@ import classNames from 'classnames';
 import Share from 'model/share'
 
 // Component Import
-import { ShareListItem, AdminNoShares } from 'components/Share'
+import { ShareListItem, AdminNoShares, ShareForm } from 'components/Share'
 import { CommentForm } from 'components/comment'
 import { BarLoader } from 'components/Loader'
 import { BulmaLoader } from 'components/bulma'
@@ -37,11 +38,12 @@ class AdminActivityFeed extends Component {
   constructor(props) {
     super(props)
 
-
     this.state = {
       bottomReached: false,
+      showShareModal: false,
       showCommentModal: false,
       currentComment: {},
+      currentShare: {},
       showMoreOptions: false,
     }
 
@@ -135,21 +137,34 @@ class AdminActivityFeed extends Component {
     return this.setState({ showMoreOptions: false })
   }
 
+  closeShareModal = () => {
+    this.setState({ showShareModal: false })
+  }
+
+  openShareModal = (share) => {
+    this.setState({
+      showShareModal: true,
+      currentShare: {
+        _id: share._id,
+        text: share.text,
+        imageFile: share.imageFile,
+      }
+    })
+  }
+
   render() {
-    const { feedShares } = this.props
-    const { showCommentModal, bottomReached, showMoreOptions } = this.state
+    const { feedShares, userFollow } = this.props
+    const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
 
     if (feedShares.loading) {
       return <BulmaLoader />
     }
 
-    if (!feedShares.loading && feedShares.list.length === 0) {
-      return <AdminNoShares />
-    }
-
     return (
       <div className="admin-activity-feed">
-
+        {
+          !feedShares.loading && feedShares.list.length === 0 && <AdminNoShares className="mb-one" />
+        }
         {
           showMoreOptions &&
           <ReactCSSTransitionReplace
@@ -162,6 +177,12 @@ class AdminActivityFeed extends Component {
             </div>
           </ReactCSSTransitionReplace>
         }
+
+        <Card className="mb-one">
+          <Card.Content>
+            <ShareForm username={userFollow.username} />
+          </Card.Content>
+        </Card>
 
         <CSSTransitionGroup
           transitionName="admin-activity-feed-transition"
@@ -183,6 +204,7 @@ class AdminActivityFeed extends Component {
                 share={feedShare}
                 username={feedShare.username}
                 onCommentEditClick={this.openCommentModal}
+                onEditClick={this.openShareModal}
               />
             )
           })
@@ -191,6 +213,24 @@ class AdminActivityFeed extends Component {
           bottomReached && feedShares.list.length >= 5 && !feedShares.full && <BarLoader style={{ height: '200px' }} />
         }
         </CSSTransitionGroup>
+        <Modal
+          show={showShareModal}
+          onClose={this.closeShareModal}
+          closeOnEsc
+        >
+          <Modal.Content>
+            <Section style={{ backgroundColor: 'white' }}>
+              <Heading size={4}>Shared Moment</Heading>
+              <ShareForm
+                username={userFollow.username}
+                currentShare={this.state.currentShare}
+                onCancel={this.closeShareModal}
+                onComplete={this.closeShareModal}
+              />
+            </Section>
+          </Modal.Content>
+        </Modal>
+
         {
           showCommentModal &&
           <Modal
