@@ -27,6 +27,7 @@ import {
   requestAddShareFeeds,
   requestFetchShareFeeds,
   requestDisplayHiddenShares,
+  resetSharesFeed,
 } from 'actions/share'
 
 // Stylesheets
@@ -58,6 +59,8 @@ class AdminActivityFeed extends Component {
 
   componentDidMount = async () => {
     const { userFollow } = this.props
+
+    this.props.resetSharesFeed()
 
     this.requestFetchShareFeeds({
       follow: userFollow,
@@ -118,7 +121,7 @@ class AdminActivityFeed extends Component {
         if (!feedShares.full) {
           this.requestFetchShareFeeds({
             follow: userFollow,
-            offset: feedShares.length,
+            offset: feedShares.list.length,
           })
         }
       });
@@ -228,4 +231,5 @@ export default withRouter(connect(mapStateToProps, {
   requestFetchShareFeeds,
   requestAddShareFeeds,
   requestDisplayHiddenShares,
+  resetSharesFeed,
 })(AdminActivityFeed))
