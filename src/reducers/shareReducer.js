@@ -1,4 +1,5 @@
 import {
+  REQUEST_FETCH_SHARE_FEEDS,
   HANDLE_DETAIL_SHARE,
   REMOVE_DETAIL_SHARE,
   REQUEST_DISPLAY_HIDDEN_SHARES,
@@ -71,6 +72,11 @@ function updateSingleObjectFromList(payload, list) {
 
 export default function shareReducer(state = defaultSession, action) {
   switch(action.type) {
+    case REQUEST_FETCH_SHARE_FEEDS:
+      return { ...state, shares: { ...state.shares,
+        list: [],
+        loading: true,
+      }}
     case RESET_SHARES_LOADING:
     case REQUEST_USER_SHARES:
       return { ...state, shares: { ...state.shares, loading: true }}

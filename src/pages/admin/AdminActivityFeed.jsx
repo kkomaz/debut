@@ -20,6 +20,7 @@ import Share from 'model/share'
 import { ShareListItem, AdminNoShares } from 'components/Share'
 import { CommentForm } from 'components/comment'
 import { BarLoader } from 'components/Loader'
+import { BulmaLoader } from 'components/bulma'
 
 // Action Imports
 import {
@@ -56,14 +57,12 @@ class AdminActivityFeed extends Component {
   }
 
   componentDidMount = async () => {
-    const { userFollow, feedShares } = this.props
+    const { userFollow } = this.props
 
-    if (feedShares.list.length < 5) {
-      this.requestFetchShareFeeds({
-        follow: userFollow,
-        offset: 0
-      })
-    }
+    this.requestFetchShareFeeds({
+      follow: userFollow,
+      offset: 0
+    })
 
     Share.addStreamListener(this.addShareToActivites)
     window.addEventListener('scroll', this.handleScroll)
@@ -92,18 +91,16 @@ class AdminActivityFeed extends Component {
     return this.setState({ showCommentModal: false })
   }
 
-  requestFetchShareFeeds = () => {
-    const { userFollow, feedShares } = this.props
-    const feedSharesLength = feedShares.list.length
+  requestFetchShareFeeds = ({ follow, offset }) => {
     this.props.requestFetchShareFeeds({
-      follow: userFollow,
-      offset: feedSharesLength
+      follow,
+      offset
     })
   }
 
   handleScroll = () => {
     const { bottomReached } = this.state
-    const { feedShares } = this.props
+    const { feedShares, userFollow } = this.props
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
     // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
@@ -119,7 +116,10 @@ class AdminActivityFeed extends Component {
       this.setState({ bottomReached: true })
       this.setState({ bottomReached: true }, () => {
         if (!feedShares.full) {
-          this.requestFetchShareFeeds()
+          this.requestFetchShareFeeds({
+            follow: userFollow,
+            offset: feedShares.length,
+          })
         }
       });
     } else if ((windowBottom < docHeight) && bottomReached) {
@@ -135,6 +135,10 @@ class AdminActivityFeed extends Component {
   render() {
     const { feedShares } = this.props
     const { showCommentModal, bottomReached, showMoreOptions } = this.state
+
+    if (feedShares.loading) {
+      return <BulmaLoader />
+    }
 
     if (!feedShares.loading && feedShares.list.length === 0) {
       return <AdminNoShares />
