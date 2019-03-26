@@ -3,34 +3,23 @@ import {
   SET_BASIC_INFO_SUCCESS,
   SET_BASIC_INFO_FAIL,
 } from 'actions'
-import BasicInformation from 'model/basicInformation'
+import { User } from 'radiks'
 
 const setBasicInformation = async (action) => {
-  const { id, params } = action.payload
+  const { params, username } = action.payload
 
-  // Edit, id included in attrs
-  if (id) {
-    const basicInformation = await BasicInformation.findById(id)
-    basicInformation.update(params)
-    basicInformation.save()
-    return basicInformation.attrs
-  }
+  const user = await User.findOne({ username })
+  user.update(params)
+  await user.save()
 
-
-  // Save, id - id NOT included in attrs
-  const basicInformation = new BasicInformation(params)
-  basicInformation.save()
-  return {
-    ...basicInformation.attrs,
-    _id: basicInformation._id,
-  }
+  return user.attrs
 }
 
 function* setBasicInformationSaga(action) {
   try {
-    const basicInformation = yield call(setBasicInformation, action)
+    const user = yield call(setBasicInformation, action)
     yield put({ type: SET_BASIC_INFO_SUCCESS, payload: {
-      basicInformation,
+      user,
       username: action.payload.username,
     }})
   } catch (error) {

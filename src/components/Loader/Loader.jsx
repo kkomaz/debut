@@ -37,7 +37,7 @@ const loader = ({ text, cardWrapped, contained, styles }) => {
 
   if (cardWrapped) {
     return (
-      <Card className="loader-card loader-card--contained">
+      <Card className="loader-card">
         <Card.Content>
             <Content>
               <Diamond />

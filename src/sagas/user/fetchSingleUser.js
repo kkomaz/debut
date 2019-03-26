@@ -5,7 +5,7 @@ import DebutUser from 'model/debutUser'
 const fetchSingleUser = async (action) => {
   const user = await DebutUser.findOne({ username: action.payload.username })
   const debutUser = await user.addBasicInfo()
-  return debutUser
+  return debutUser.data
 }
 
 function* fetchSingleUserSaga(action) {

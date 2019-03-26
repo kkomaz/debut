@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Button,
-  Heading,
 } from 'react-bulma-components'
-import UserIntroDisplay from 'components/User/IntroDisplay'
+import { UserIntroDisplay } from 'components/User'
 import UserIntroForm from 'components/User/UserIntroForm'
 import { List } from 'react-content-loader'
 import Popover, { ArrowContainer } from 'react-tiny-popover'
@@ -40,7 +39,7 @@ class UserDescription extends Component {
     const { user } = this.props
 
     // Hot Fix - need to find a cleaner way to handle this
-    if (!user.data.basicInformation) {
+    if (!user.data) {
       return <List />
     }
 
@@ -48,7 +47,6 @@ class UserDescription extends Component {
       return (
         <div className="user-description">
           <div className="user-description__about-myself">
-            <Heading className="mr-one" size={4}>About Myself</Heading>
               <Popover
                   isOpen={this.state.isPopoverOpen}
                   position="right"
@@ -90,7 +88,7 @@ class UserDescription extends Component {
             loading ? <List /> :
             <UserIntroDisplay
               adminMode={adminMode}
-              description={user.data.basicInformation.description}
+              user={user.data}
               />
           }
         </div>
@@ -100,7 +98,6 @@ class UserDescription extends Component {
     return (
       <div className="user-description__info-details">
         <div className="user-description__about-myself">
-          <Heading className="mr-one" size={4}>About Myself</Heading>
             <Popover
                 isOpen={this.state.isPopoverOpen}
                 position="right"
@@ -114,19 +111,19 @@ class UserDescription extends Component {
                       arrowColor={'#383A3F'}
                       arrowSize={10}
                     >
-                        <div
-                            style={{
-                              backgroundColor: '#383A3F',
-                              padding: '20px',
-                              color: 'white',
-                              width: '300px',
-                            }}
-                            onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                        >
-                          <p className="small">
-                            Write a small bio about yourself.  Let everyone know who you are!
-                          </p>
-                        </div>
+                      <div
+                          style={{
+                            backgroundColor: '#383A3F',
+                            padding: '20px',
+                            color: 'white',
+                            width: '300px',
+                          }}
+                          onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                      >
+                        <p className="small">
+                          Write a small bio about yourself.  Let everyone know who you are!
+                        </p>
+                      </div>
                     </ArrowContainer>
                 )}
             >
@@ -139,10 +136,13 @@ class UserDescription extends Component {
             </Popover>
         </div>
         {
-          displayView ? <UserIntroDisplay description={user.data.basicInformation.description} /> :
+          displayView ?
+          <UserIntroDisplay
+            user={user.data}
+          /> :
           <UserIntroForm
-            basicInformation={user.data.basicInformation}
-            description={user.data.basicInformation.description}
+            user={user.data}
+            description={user.data.description}
             onCancel={this.props.onCancel}
             onSubmit={this.props.onSubmit}
             username={username}
@@ -151,22 +151,14 @@ class UserDescription extends Component {
         <div className="user-description__button-actions mt-one">
           {
             displayView && (
-              user.data.basicInformation ?
+              user.data &&
               <Button
                 onClick={this.props.onCreateEdit}
                 color="primary"
                 className="mr-half"
                 disabled={!displayView}
               >
-                Edit
-              </Button> :
-              <Button
-                onClick={this.props.onCreateEdit}
-                color="primary"
-                className="mr-half"
-                disabled={!displayView}
-              >
-                Create
+                Edit Profile
               </Button>
             )
           }

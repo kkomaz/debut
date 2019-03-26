@@ -30,11 +30,6 @@
     width: 400px;
   }
 
-  .dropdown {
-    position: absolute;
-    top: 41px;
-  }
-
   .dropdown-item {
     &.is-active {
       background-color: $white;
@@ -55,7 +50,7 @@
       height: 45px;
       width: 45px;
       border-radius: 100%;
-      border: 3px solid $pitch-dark;
+      border: 3px solid $blue;
       background-position: 50% 50%;
       background-repeat: no-repeat;
       background-size: cover;

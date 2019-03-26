@@ -156,7 +156,6 @@ class Page extends Component {
               userState.paginatedObj.loading ?
               <Loader
                 cardWrapped
-                contained
                 text="App is warming up..."
               /> :
               userState.paginatedObj.full ? (
