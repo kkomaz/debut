@@ -78,36 +78,46 @@ class ShareListItem extends Component {
 
     const result = (
       share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
-      <p
+      <Icon
+        className="debut-icon debut-icon--pointer mb-half share-list-item__view-more-comments"
+        icon="IconBubble"
+        size={15}
         onClick={this.fetchShareComments}
-        className="small share-list-item__view-more-comments"
-        >
-        View comments
-      </p>
+        linkClassName="mr-one"
+      />
     )
 
-    if (result === 0) {
-      return null
+    // 0 Comments
+    if (result === 0 || result === undefined) {
+      return (
+        <Icon
+          className="debut-icon mb-half mr-one share-list-item__view-more-comments"
+          icon="IconBubble"
+          size={15}
+        />
+      )
     }
 
     if (_.isEqual(result, false)) {
       if (commentView) {
         return (
-          <p
+          <Icon
+            className="debut-icon debut-icon--pointer mb-half share-list-item__view-more-comments"
+            icon="IconBubble"
+            size={15}
             onClick={this.hideCommentView}
-            className="small share-list-item__hide-comments"
-            >
-            Hide comments
-          </p>
+            linkClassName="mr-one"
+          />
         )
       } else {
         return (
-          <p
+          <Icon
+            className="debut-icon debut-icon--pointer mb-half share-list-item__view-more-comments"
+            icon="IconBubble"
+            size={15}
             onClick={this.showCommentView}
-            className="small share-list-item__view-more-comments"
-            >
-            View comments
-          </p>
+            linkClassName="mr-one"
+          />
         )
       }
     }
@@ -280,10 +290,19 @@ class ShareListItem extends Component {
             }
             </Content>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              {this.renderShareCommentInfo()}
               <p className="small">
                 {_.get(share, 'commentCount', 0)} comments
               </p>
+              <div>
+                {this.renderShareCommentInfo()}
+                <Icon
+                  className="debut-icon debut-icon--pointer mb-half share-list-item__view-more-comments"
+                  icon="IconHeart"
+                  size={15}
+                  onClick={this.showCommentView}
+                  linkClassName="mr-half"
+                />
+              </div>
             </div>
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>

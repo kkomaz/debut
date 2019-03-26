@@ -8,6 +8,7 @@ import './Icon.scss';
 /* eslint-disable */
 const Icon = (props) => {
   const {
+    linkClassName,
     icons,
     id,
     className,
@@ -51,6 +52,7 @@ const Icon = (props) => {
   if (props.onClick && !props.disabled) {
     return (
       <a
+        className={linkClassName}
         role="button"
         aria-label={ariaLabel}
         onClick={props.onClick}

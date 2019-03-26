@@ -7,12 +7,14 @@ import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import {
+  Button,
   Card,
   Modal,
   Section,
   Heading,
 } from 'components/bulma'
 import classNames from 'classnames';
+import axios from 'axios'
 
 // Model Imports
 import Share from 'model/share'
@@ -152,6 +154,26 @@ class AdminActivityFeed extends Component {
     })
   }
 
+  doIt = async () => {
+    const result = await axios.get('/shares', {
+      params: {
+        limit: 5,
+        username: 'kkomaz.id',
+        offset: 0,
+      }
+    })
+    console.log(result)
+  }
+
+  doItWithRadiks = async () => {
+    const result = await Share.fetchList({
+      limit: 5,
+      username: 'kkomaz.id'
+    })
+
+    console.log(result)
+  }
+
   render() {
     const { feedShares, userFollow } = this.props
     const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
@@ -162,6 +184,8 @@ class AdminActivityFeed extends Component {
 
     return (
       <div className="admin-activity-feed">
+        <Button onClick={this.doIt}>Submit</Button>
+        <Button onClick={this.doIt}>Submit with Radiks</Button>
         {
           !feedShares.loading && feedShares.list.length === 0 && <AdminNoShares className="mb-one" />
         }
