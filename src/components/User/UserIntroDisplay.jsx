@@ -21,7 +21,7 @@ const UserIntroDisplay = (props) => {
             {user.username}
         </Heading>
         }
-        {<p className="mt-half">{linkifyText(`@${user.username}`)}</p>}
+        {<p className="mt-half user-intro-display__username">{linkifyText(`@${user.username}`)}</p>}
       </div>
       {
         user.description &&

@@ -8,8 +8,11 @@
   }
 
   &__username {
-    color: $blue;
     cursor: pointer;
+
+    &:hover {
+      color: $blue;
+    }
   }
 
   &__hide-comments,
