@@ -7,7 +7,7 @@ const fetchShareFeeds = async (action) => {
   const { follow, offset } = action.payload
 
   const shares = await Share.fetchList({
-    username: follow.following,
+    username: [...follow.following, follow.username],
     sort: '-createdAt',
     limit: 5,
     offset,
