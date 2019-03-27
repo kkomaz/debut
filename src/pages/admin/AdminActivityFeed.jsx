@@ -99,9 +99,12 @@ class AdminActivityFeed extends Component {
   }
 
   requestFetchShareFeeds = ({ follow, offset }) => {
+    const { feedShares } = this.props
+    const share = _.last(feedShares.list)
+
     this.props.requestFetchShareFeeds({
       follow,
-      offset
+      lt: _.get(share, 'createdAt', null),
     })
   }
 
@@ -157,9 +160,10 @@ class AdminActivityFeed extends Component {
   doIt = async () => {
     const result = await axios.get('/shares', {
       params: {
-        limit: 20,
+        limit: 5,
         username: ['kkomaz.id', 'techrally3.id.blockstack'],
         offset: 0,
+        lt: 1553301151830,
       }
     })
     console.log(result)
