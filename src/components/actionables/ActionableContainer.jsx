@@ -46,15 +46,6 @@ class ActionableContainer extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (!_.isEmpty(this.props.voter) && prevState.voter.added) {
-      this.setState({
-        voter: this.props.voter,
-        count: _.get(this.props.detailObj, 'votes.length', 0)
-      })
-    }
-  }
-
   render() {
     const { detailObj } = this.props
     const { voter, count } = this.state

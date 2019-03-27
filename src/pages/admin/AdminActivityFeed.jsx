@@ -64,9 +64,8 @@ class AdminActivityFeed extends Component {
 
     this.props.resetSharesFeed()
 
-    this.requestFetchShareFeeds({
+    this.props.requestFetchShareFeeds({
       follow: userFollow,
-      offset: 0
     })
 
     Share.addStreamListener(this.addShareToActivites)
