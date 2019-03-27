@@ -1,5 +1,9 @@
 @import 'src/variables';
 
+.share-list-item :focus:not(.focus-visible) {
+  outline: none;
+}
+
 .share-list-item {
   &__image-container {
     align-items: center;
