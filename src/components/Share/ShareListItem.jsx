@@ -230,8 +230,14 @@ class ShareListItem extends Component {
   addOrRemoveVote = () => {
     const { share } = this.props
     const { sessionUser } = this.context.state
-    this.props.requestAddVote(sessionUser.username, share._id)
-    // this.props.requestRemoveVote('cc5e97c7d5e8-435e-9d86-b4a18c9c57b2')
+
+    const voter = _.find(share.votes, (vote) => vote.username === sessionUser.username)
+
+    if (voter) {
+      this.props.requestRemoveVote(share, voter)
+    } else {
+      this.props.requestAddVote(sessionUser.username, share._id)
+    }
   }
 
   render() {
@@ -311,7 +317,7 @@ class ShareListItem extends Component {
                     size={15}
                     onClick={this.addOrRemoveVote}
                   />
-                  <span className="small">12</span>
+                  <span className="small">{_.get(share, 'votes.length', 0)}</span>
                 </div>
               </div>
             </div>
