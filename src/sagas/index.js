@@ -5,6 +5,7 @@ import commentSaga from 'sagas/comment'
 import shareSaga from 'sagas/share'
 import followSaga from 'sagas/follow'
 import feedSaga from 'sagas/feed'
+import voteSaga from 'sagas/vote'
 
 export default function* rootSaga() {
   yield [
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     fork(shareSaga),
     fork(userSaga),
     fork(feedSaga),
+    fork(voteSaga)
   ]
 }

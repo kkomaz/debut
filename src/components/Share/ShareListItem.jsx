@@ -10,6 +10,7 @@ import { Icon } from 'components/icon'
 import { UserContext } from 'components/User/UserProvider'
 import { requestDeleteShare } from 'actions/share'
 import { requestShareComments } from 'actions/comment'
+import { requestAddVote } from 'actions/vote'
 import { connect} from 'react-redux'
 import { CommentForm, CommentListItem } from 'components/comment'
 import { BulmaLoader } from 'components/bulma'
@@ -40,6 +41,7 @@ class ShareListItem extends Component {
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
     onCommentEditClick: PropTypes.func,
+    requestAddVote: PropTypes.func.isRequired,
   }
 
   revertDelete = () => {
@@ -222,6 +224,12 @@ class ShareListItem extends Component {
     return this.setState({ commentView: false })
   }
 
+  addOrRemoveVote = () => {
+    const { share } = this.props
+    const { sessionUser } = this.context.state
+    this.props.requestAddVote(sessionUser.username, share._id)
+  }
+
   render() {
     const { cardClass, share, username, deleting, currentComment } = this.props
     const { sessionUser } = this.context.state
@@ -297,7 +305,7 @@ class ShareListItem extends Component {
                     className="debut-icon debut-icon--pointer share-list-item__view-more-comments mr-half"
                     icon="IconHeart"
                     size={15}
-                    onClick={this.showCommentView}
+                    onClick={this.addOrRemoveVote}
                   />
                   <span className="small">12</span>
                 </div>
@@ -354,4 +362,5 @@ ShareListItem.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
   requestDeleteShare,
   requestShareComments,
+  requestAddVote,
 })(ShareListItem))
