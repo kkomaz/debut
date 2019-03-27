@@ -15,6 +15,7 @@ import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
 import { requestSingleUser } from 'actions/user'
+// import Vote from 'model/vote'
 
 import "./RootRoute.scss";
 
@@ -40,7 +41,15 @@ class RootRoute extends Component {
     this.props.requestSingleUser(username)
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.state.username);
+    // console.log('mounting')
+    // Vote.addStreamListener(this.addVotesToParent)
   }
+
+  // addVotesToParent = (result) => {
+  //   const vote = result.attrs
+  //
+  //   console.log(vote)
+  // }
 
   setHomePageClickedTrue = () => {
     this.setState({ homePageClicked: true });
