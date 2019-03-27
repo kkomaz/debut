@@ -157,8 +157,8 @@ class AdminActivityFeed extends Component {
   doIt = async () => {
     const result = await axios.get('/shares', {
       params: {
-        limit: 5,
-        username: 'kkomaz.id',
+        limit: 20,
+        username: ['kkomaz.id', 'techrally3.id.blockstack'],
         offset: 0,
       }
     })
@@ -168,7 +168,7 @@ class AdminActivityFeed extends Component {
   doItWithRadiks = async () => {
     const result = await Share.fetchList({
       limit: 5,
-      username: 'kkomaz.id'
+      username: ['kkomaz.id', 'techrally3.id.blockstack']
     })
 
     console.log(result)

@@ -230,8 +230,8 @@ class ShareListItem extends Component {
   addOrRemoveVote = () => {
     const { share } = this.props
     const { sessionUser } = this.context.state
-    // this.props.requestAddVote(sessionUser.username, share._id)
-    this.props.requestRemoveVote('cc5e97c7d5e8-435e-9d86-b4a18c9c57b2')
+    this.props.requestAddVote(sessionUser.username, share._id)
+    // this.props.requestRemoveVote('cc5e97c7d5e8-435e-9d86-b4a18c9c57b2')
   }
 
   render() {
