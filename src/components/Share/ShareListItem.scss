@@ -63,4 +63,13 @@
   &__cancel {
     color: $blue;
   }
+
+  &__icons {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__icons-bubble {
+    margin-right: 30px;
+  }
 }
