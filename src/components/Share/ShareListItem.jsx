@@ -259,6 +259,8 @@ class ShareListItem extends Component {
       'share-list-item__card-content--text-only': !share.imageFile
     })
 
+    const voter = _.find(share.votes, (vote) => vote.username === sessionUser.username)
+
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content className={shareListeItemContentClass}>
@@ -307,17 +309,25 @@ class ShareListItem extends Component {
                     className="debut-icon share-list-item__view-more-comments mr-half"
                     icon="IconBubble"
                     size={15}
+                    color="8b8687"
+                    linkStyle={{
+                      height: '20px'
+                    }}
                   />
                   <span className="small">{_.get(share, 'commentCount', 0)}</span>
                 </div>
                 <div className="share-list-item__icons-hearts">
                   <Icon
-                    className="debut-icon debut-icon--pointer share-list-item__view-more-comments mr-half"
+                    className="debut-icon debut-icon--pointer share-list-item__toggle-votes"
                     icon="IconHeart"
                     size={15}
                     onClick={this.addOrRemoveVote}
+                    color={!_.isEmpty(voter) ? '#ff3860' : '#8b8687'}
+                    linkStyle={{
+                      height: '20px'
+                    }}
                   />
-                  <span className="small">{_.get(share, 'votes.length', 0)}</span>
+                <span style={{ width: '10px', marginTop: '3px' }} className="small ml-half">{_.get(share, 'votes.length', 0)}</span>
                 </div>
               </div>
             </div>
