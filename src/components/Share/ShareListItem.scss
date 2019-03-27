@@ -19,12 +19,6 @@
     }
   }
 
-  &__hide-comments,
-  &__view-more-comments {
-    color: $primary;
-    cursor: pointer;
-  }
-
   &__card-content {
     &--text-only {
       padding-bottom: 1.0em;
@@ -66,18 +60,5 @@
 
   &__cancel {
     color: $blue;
-  }
-
-  &__icons {
-    display: flex;
-    justify-content: center;
-  }
-
-  &__icons-bubble {
-    margin-right: 30px;
-  }
-
-  &__icons-hearts {
-    display: flex;
   }
 }

@@ -21,6 +21,9 @@ import Popover, { ArrowContainer } from 'react-tiny-popover'
 import './ShareListItem.scss'
 import { ShareAdminMenu } from 'components/Share'
 
+// Component Imports
+import { ActionableContainer } from 'components/actionables'
+
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
   const postedDateArray = postedDate.split(' ')
@@ -303,33 +306,11 @@ class ShareListItem extends Component {
               <p className="small">
                 {this.renderShareCommentInfo()}
               </p>
-              <div className="share-list-item__icons">
-                <div className="share-list-item__icons-bubble">
-                  <Icon
-                    className="debut-icon share-list-item__view-more-comments mr-half"
-                    icon="IconBubble"
-                    size={15}
-                    color="8b8687"
-                    linkStyle={{
-                      height: '20px'
-                    }}
-                  />
-                  <span className="small">{_.get(share, 'commentCount', 0)}</span>
-                </div>
-                <div className="share-list-item__icons-hearts">
-                  <Icon
-                    className="debut-icon debut-icon--pointer share-list-item__toggle-votes"
-                    icon="IconHeart"
-                    size={15}
-                    onClick={this.addOrRemoveVote}
-                    color={!_.isEmpty(voter) ? '#ff3860' : '#8b8687'}
-                    linkStyle={{
-                      height: '20px'
-                    }}
-                  />
-                <span style={{ width: '10px', marginTop: '3px' }} className="small ml-half">{_.get(share, 'votes.length', 0)}</span>
-                </div>
-              </div>
+              <ActionableContainer
+                detailObj={share}
+                voter={voter}
+                toggleVote={this.addOrRemoveVote}
+              />
             </div>
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>

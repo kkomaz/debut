@@ -1,0 +1,23 @@
+@import 'src/variables';
+
+
+.actionable-container {
+  &__icons {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__icons-bubble {
+    margin-right: 30px;
+  }
+
+  &__icons-hearts {
+    display: flex;
+  }
+
+  &__hide-comments,
+  &__view-more-comments {
+    color: $primary;
+    cursor: pointer;
+  }
+}
