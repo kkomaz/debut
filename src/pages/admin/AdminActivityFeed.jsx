@@ -159,7 +159,11 @@ class AdminActivityFeed extends Component {
     const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
 
     if (feedShares.loading) {
-      return <BulmaLoader />
+      return (
+        <div className="admin-activity-feed admin-activity-feed--loading">
+          <BulmaLoader />
+        </div>
+      )
     }
 
     return (
