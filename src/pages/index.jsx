@@ -16,6 +16,9 @@ import Switch from 'react-bulma-switch/lib';
 import { Loader } from 'components/Loader'
 import { requestPaginatedUsers, revertPaginatedUsersFull } from 'actions/user'
 import { NoUsers } from 'components/User'
+import {
+  isFirefox,
+} from 'utils/browser/compatability'
 import './Page.scss'
 
 class Page extends Component {
@@ -177,7 +180,17 @@ class Page extends Component {
                           }}
                         >
                           <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                            <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
+                            <Card.Image
+                              alt={isFirefox ? ' ': ''}
+                              className="page__card-image"
+                              size="5by4"
+                              style={{
+                                backgroundImage: `url(${_.get(user, 'profileImgUrl', defaultImgUrl)})`,
+                                backgroundSize: 'cover',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: '50% 50%',
+                              }}
+                            />
                             <Card.Content className="page__content">
                               <p className="page__username-text">{user.username}</p>
                             </Card.Content>

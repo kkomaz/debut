@@ -14,6 +14,13 @@
     width: 280px;
   }
 
+  &__card-image {
+    img {
+      color: rgba(0, 0, 0, 0) !important;
+      text-indent:-9999px
+    }
+  }
+
   &__content {
     height: 100px;
     display: flex;
