@@ -8,7 +8,7 @@
 
 html, body {
   font-family: "Poppins", sans-serif;
-  background: #e7ecef;
+  background: #fafbfc;
 }
 
 p {
@@ -82,12 +82,19 @@ hr {
   padding-top: 1.5em;
 }
 
+.tabs {
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  ul {
+    border-bottom: none;
+  }
+}
+
 // Bulma
 
 // Bulma components
-.content p:not(:last-child), .content dl:not(:last-child), .content ol:not(:last-child), .content ul:not(:last-child), .content blockquote:not(:last-child), .content pre:not(:last-child), .content table:not(:last-child) {
-  margin-bottom: 0;
-}
+// .content p:not(:last-child), .content dl:not(:last-child), .content ol:not(:last-child), .content ul:not(:last-child), .content blockquote:not(:last-child), .content pre:not(:last-child), .content table:not(:last-child) {
+//   margin-bottom: 0;
+// }
 
 .dark-mode {
   html, body {

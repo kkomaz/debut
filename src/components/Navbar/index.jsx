@@ -200,7 +200,7 @@ class NavbarComp extends Component {
                   <Navbar.Item onClick={this.goToProfile}>
                     {
                       _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-half" /> :
-                      <div className="debut-nav-bar__user-identity mr-one mt-half" onClick={this.goToProfile}>
+                      <div className="debut-nav-bar__user-identity mt-half" onClick={this.goToProfile}>
                         <img
                           onError={this.addDefaultSrc}
                           src={_.get(user, 'profileImgUrl', defaultImgUrl)}
