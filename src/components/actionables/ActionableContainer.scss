@@ -12,6 +12,18 @@
     margin-right: 30px;
   }
 
+  &__view-more-comments {
+    &:hover {
+      fill: $blue !important;
+    }
+  }
+
+  &__toggle-votes {
+    &:hover {
+      fill: $pink !important;
+    }
+  }
+
   &__icons-hearts {
     align-items: center;
     display: flex;
