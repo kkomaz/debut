@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Icon } from 'components/icon'
@@ -9,6 +10,7 @@ import {
 } from 'actions/vote'
 import classNames from 'classnames';
 import './ActionableContainer.scss'
+
 class ActionableContainer extends Component {
   constructor(props) {
     super(props)
@@ -22,6 +24,13 @@ class ActionableContainer extends Component {
     }
 
     this.addOrRemoveVote = _.debounce(this.addOrRemoveVote, 300)
+  }
+
+  static propTypes = {
+    detailObj: PropTypes.object.isRequired,
+    voter: PropTypes.object.isRequired,
+    toggleVote: PropTypes.func.isRequired,
+    toggleComment: PropTypes.func.isRequired,
   }
 
   addOrRemoveVote = () => {
@@ -61,10 +70,11 @@ class ActionableContainer extends Component {
       <div className="actionable-container__icons">
         <div className="actionable-container__icons-bubble">
           <Icon
-            className="debut-icon actionable-container__view-more-comments mr-half"
+            className="debut-icon debut-icon--pointer actionable-container__view-more-comments mr-half"
             icon="IconBubble"
             size={15}
             color="8b8687"
+            onClick={this.props.toggleComment}
           />
           <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
         </div>
@@ -79,12 +89,7 @@ class ActionableContainer extends Component {
               height: 'inherit'
             }}
           />
-        <span
-          style={{ width: '10px', marginTop: '3px' }}
-          className="small ml-half"
-        >
-          {count}
-        </span>
+          <span className="small ml-half" style={{ width: '10px', marginTop: '2px'}}>{count}</span>
         </div>
       </div>
     )

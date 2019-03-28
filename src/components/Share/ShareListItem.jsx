@@ -76,48 +76,48 @@ class ShareListItem extends Component {
   /**
    * This could use some refactoring <3
   */
-  renderShareCommentInfo = () => {
-    const { share } = this.props
-    const { commentView } = this.state
-
-    const result = (
-      share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
-      <p
-        onClick={this.fetchShareComments}
-        className="small share-list-item__view-more-comments"
-        >
-        View Comments
-      </p>
-    )
-
-    if (result === 0) {
-      return null
-    }
-
-    if (_.isEqual(result, false)) {
-      if (commentView) {
-        return (
-          <p
-            onClick={this.hideCommentView}
-            className="small share-list-item__hide-comments"
-            >
-            Hide comments
-          </p>
-        )
-      } else {
-        return (
-          <p
-            onClick={this.showCommentView}
-            className="small share-list-item__view-more-comments"
-            >
-            View comments
-          </p>
-        )
-      }
-    }
-
-    return result
-  }
+  // renderShareCommentInfo = () => {
+  //   const { share } = this.props
+  //   const { commentView } = this.state
+  //
+  //   const result = (
+  //     share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
+  //     <p
+  //       onClick={this.fetchShareComments}
+  //       className="small share-list-item__view-more-comments"
+  //       >
+  //       View Comments
+  //     </p>
+  //   )
+  //
+  //   if (result === 0) {
+  //     return null
+  //   }
+  //
+  //   if (_.isEqual(result, false)) {
+  //     if (commentView) {
+  //       return (
+  //         <p
+  //           onClick={this.hideCommentView}
+  //           className="small share-list-item__hide-comments"
+  //           >
+  //           Hide comments
+  //         </p>
+  //       )
+  //     } else {
+  //       return (
+  //         <p
+  //           onClick={this.showCommentView}
+  //           className="small share-list-item__view-more-comments"
+  //           >
+  //           View comments
+  //         </p>
+  //       )
+  //     }
+  //   }
+  //
+  //   return result
+  // }
 
   goToUserProfile = () => {
     const { history, username } = this.props
@@ -226,6 +226,10 @@ class ShareListItem extends Component {
     return this.setState({ commentView: false })
   }
 
+  toggleCommentView = () => {
+    return this.setState({ commentView: !this.state.commentView })
+  }
+
   render() {
     const { cardClass, share, username, deleting, currentComment } = this.props
     const { sessionUser } = this.context.state
@@ -285,14 +289,12 @@ class ShareListItem extends Component {
               </div>
             }
             </Content>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              <p className="small">
-                {this.renderShareCommentInfo()}
-              </p>
+            <div className="share-list-item__actionable-container">
               <ActionableContainer
                 detailObj={share}
                 voter={voter}
                 toggleVote={this.addOrRemoveVote}
+                toggleComment={this.toggleCommentView}
               />
             </div>
           </Card.Content>

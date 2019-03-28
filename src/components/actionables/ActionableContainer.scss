@@ -13,6 +13,7 @@
   }
 
   &__icons-hearts {
+    align-items: center;
     display: flex;
     &--single {
       padding-right: 5px; // Need to make this dynamic
