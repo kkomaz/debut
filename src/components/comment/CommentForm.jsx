@@ -169,7 +169,7 @@ class CommentForm extends Component {
 
     const characterClass = classNames({
       'comment-form__character-length': true,
-      'small': true
+      'super-small': true
     })
 
     return (
@@ -221,7 +221,7 @@ class CommentForm extends Component {
               <Icon
                 className="debut-icon debut-icon--pointer ml-half mr-half"
                 icon="IconCamera"
-                size={20}
+                size={15}
                 />
               <input
                 type="file"

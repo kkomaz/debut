@@ -201,8 +201,7 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { username, comment, commentActions, index } = this.props
-    const { sessionUser } = this.context.state
+    const { comment, commentActions, index } = this.props
     const { showDeleteConfirmation } = this.state
 
     const commentListItemClass = classNames({

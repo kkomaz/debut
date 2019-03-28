@@ -226,7 +226,7 @@ class AdminActivityFeed extends Component {
         >
           <Modal.Content>
             <Section style={{ backgroundColor: 'white' }}>
-              <Heading size={4}>Shared Moment</Heading>
+              <Heading size={6}>Shared Moment</Heading>
               <ShareForm
                 username={userFollow.username}
                 currentShare={this.state.currentShare}
@@ -246,7 +246,7 @@ class AdminActivityFeed extends Component {
             >
             <Modal.Content>
               <Section style={{ backgroundColor: 'white' }}>
-                <Heading size={4}>User Comments</Heading>
+                <Heading size={6}>User Comments</Heading>
                 <CommentForm
                   currentComment={this.state.currentComment}
                   onComplete={this.closeCommentModal}

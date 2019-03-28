@@ -159,7 +159,7 @@ class ShareForm extends Component {
     const { editing, submitting } = this.props
     const characterClass = classNames({
       'share-form__character-length': true,
-      'small': true
+      'super-small': true
     })
 
     return (
@@ -212,7 +212,7 @@ class ShareForm extends Component {
                 <Icon
                   className="debut-icon debut-icon--pointer"
                   icon="IconCamera"
-                  size={20}
+                  size={15}
                 />
                 <input
                   type="file"

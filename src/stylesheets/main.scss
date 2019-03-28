@@ -28,8 +28,31 @@ textarea {
   font-family: "Poppins", sans-serif;
 }
 
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+li,
+p,
+pre,
+blockquote,
+figure,
+hr {
+  margin: 0;
+  padding: 0;
+}
+
 .small {
   font-size: 12px;
+}
+
+.super-small {
+  font-size: 10px;
 }
 
 .italic {
@@ -57,6 +80,13 @@ textarea {
 
 .section {
   padding-top: 1.5em;
+}
+
+// Bulma
+
+// Bulma components
+.content p:not(:last-child), .content dl:not(:last-child), .content ol:not(:last-child), .content ul:not(:last-child), .content blockquote:not(:last-child), .content pre:not(:last-child), .content table:not(:last-child) {
+  margin-bottom: 0;
 }
 
 .dark-mode {
