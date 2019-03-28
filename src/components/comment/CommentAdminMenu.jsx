@@ -7,8 +7,12 @@ import { withRouter } from 'react-router-dom'
 import './CommentAdminMenu.scss'
 
 class CommentAdminMenu extends Component {
-  state = {
-    active: 'edit'
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      active: props.editClick ? 'edit' : 'delete'
+    }
   }
 
   static propTypes = {
@@ -32,6 +36,33 @@ class CommentAdminMenu extends Component {
   render() {
     const { active } = this.state
 
+    if (this.props.onEditClick) {
+      return (
+        <Menu
+          className="share-admin-menu"
+          style={{
+            backgroundColor: 'white',
+            padding: '20px',
+            color: 'white',
+            width: '200px',
+          }}
+        >
+          <Menu.List>
+            <Menu.List.Item
+              active={active === 'edit'}
+              onClick={this.onEditClick}>
+                Edit
+            </Menu.List.Item>
+            <Menu.List.Item
+              active={active === 'delete'}
+              onClick={this.onDeleteClick}>
+                Delete
+              </Menu.List.Item>
+          </Menu.List>
+        </Menu>
+      )
+    }
+
     return (
       <Menu
         className="share-admin-menu"
@@ -43,11 +74,6 @@ class CommentAdminMenu extends Component {
         }}
       >
         <Menu.List>
-          <Menu.List.Item
-            active={active === 'edit'}
-            onClick={this.onEditClick}>
-              Edit
-          </Menu.List.Item>
           <Menu.List.Item
             active={active === 'delete'}
             onClick={this.onDeleteClick}>

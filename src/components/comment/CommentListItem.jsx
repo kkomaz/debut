@@ -146,7 +146,53 @@ class CommentListItem extends Component {
               right: '5px',
               height: '30px'
             }}
-            />
+          />
+        </Popover>
+      )
+    }
+
+    if (_.isEqual(sessionUser.username, username) && !_.isEqual(comment.creator, sessionUser.username)) {
+      return (
+        <Popover
+          isOpen={this.state.isPopoverOpen}
+          position="right"
+          padding={30}
+          onClickOutside={() => this.setState({ isPopoverOpen: false })}
+          content={({ position, targetRect, popoverRect }) => (
+            <ArrowContainer
+              position={position}
+              targetRect={targetRect}
+              popoverRect={popoverRect}
+              arrowColor="white"
+              arrowSize={10}
+              >
+              {
+                _.isEqual(sessionUser.username, username) &&
+                <CommentAdminMenu
+                  onDeleteClick={this.setDeleteConfirmation}
+                  username={username}
+                  share={share}
+                />
+              }
+            </ArrowContainer>
+          )}
+        >
+          <div className="comment-list-item__edit-delete">
+            <div className="comment-list-item__edit-delete-icons ml-one">
+              <Icon
+                className="debut-icon debut-icon--pointer"
+                icon="IconDots"
+                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                size={16}
+                linkStyles={{
+                  position: 'absolute',
+                  top: '0',
+                  right: '5px',
+                  height: '30px'
+                }}
+              />
+            </div>
+          </div>
         </Popover>
       )
     }
@@ -179,19 +225,6 @@ class CommentListItem extends Component {
           <p className="comment-list-item__username-date">
             <strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span>
           </p>
-          {
-            _.isEqual(sessionUser.username, username) && !_.isEqual(comment.creator, sessionUser.username) &&
-            <div className="comment-list-item__edit-delete">
-              <div className="comment-list-item__edit-delete-icons ml-one">
-                <Icon
-                  className="debut-icon debut-icon--pointer"
-                  icon="IconTrash"
-                  onClick={this.setDeleteConfirmation}
-                />
-              </div>
-            </div>
-          }
-
           {this.renderEditablePopover()}
         </div>
 
