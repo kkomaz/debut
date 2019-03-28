@@ -253,6 +253,9 @@ class UserIntroForm extends Component {
               onKeyDown={this.onEnterPress}
               value={this.state.description}
               color={valid ? null : 'danger'}
+              style={{
+                fontSize: '14px'
+              }}
             />
 
             <div className="user-intro-form__characters">
@@ -271,6 +274,9 @@ class UserIntroForm extends Component {
                 onChange={this.onCityChange}
                 placeholder="Location"
                 value={this.state.area}
+                style={{
+                  fontSize: '14px'
+                }}
               />
               <Dropdown
                 ref={(dropdown) => this.dropdown = dropdown }
@@ -298,6 +304,9 @@ class UserIntroForm extends Component {
               onChange={this.onChange}
               placeholder="Website"
               value={this.state.websiteUrl}
+              style={{
+                fontSize: '14px'
+              }}
             />
           </Field>
           <SubmitFooter
