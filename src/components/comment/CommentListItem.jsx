@@ -31,6 +31,7 @@ class CommentListItem extends Component {
   static propTypes = {
     comment: PropTypes.object.isRequired,
     onEditClick: PropTypes.func,
+    index: PropTypes.number.isRequired,
   }
 
   revertDelete = () => {
@@ -154,12 +155,14 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { username, comment, commentActions } = this.props
+    const { username, comment, commentActions, index } = this.props
     const { sessionUser } = this.context.state
     const { showDeleteConfirmation } = this.state
 
     const commentListItemClass = classNames({
-      'comment-list-item': true
+      'comment-list-item': true,
+      'comment-list-item--even': index % 2 === 0,
+      'comment-list-item--odd': index % 2 === 1,
     })
 
     const commentListItemTextClass = classNames({

@@ -44,4 +44,10 @@
     align-items: center;
     justify-content: flex-end;
   }
+
+  &__loader {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+  }
 }

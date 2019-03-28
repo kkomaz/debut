@@ -9,6 +9,10 @@
   border-right: none;
   border-bottom: none;
 
+  &--odd {
+    background: $dusty;
+  }
+
 
   &__username-creator {
     cursor: pointer;

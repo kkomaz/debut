@@ -218,19 +218,22 @@ class CommentForm extends Component {
             <p className={characterClass}>({150 - this.state.characterLength})</p>
             <Label className="comment-form__label">
               <Icon
-                className="debut-icon debut-icon--pointer ml-half"
+                className="debut-icon debut-icon--pointer ml-half mr-half"
                 icon="IconCamera"
                 size={20}
-              />
+                />
               <input
                 type="file"
                 onChange={this.storeFile}
                 hidden
                 accept="image/*"
                 ref={fileInput => this.fileInput = fileInput}
-              />
+                />
             </Label>
-            { commentActions.submitting && shareId === commentActions.shareId && <BulmaLoader /> }
+            { commentActions.submitting &&
+              shareId === commentActions.shareId &&
+              <BulmaLoader className="comment-form__loader"/>
+            }
           </div>
           {
             editMode &&

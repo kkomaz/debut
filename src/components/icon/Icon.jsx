@@ -113,9 +113,7 @@ Icon.defaultProps = {
   icons: {},
   style: {},
   disabled: false,
-  linkStyles: {
-    height: '30px'
-  }
+  linkStyles: {}
 };
 
 export default Icon;

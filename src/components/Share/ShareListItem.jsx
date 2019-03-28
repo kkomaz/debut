@@ -308,6 +308,7 @@ class ShareListItem extends Component {
                       share={share}
                       username={username}
                       onEditClick={this.props.onCommentEditClick}
+                      index={index}
                     />
                   )
                 })

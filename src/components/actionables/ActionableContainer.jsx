@@ -58,9 +58,6 @@ class ActionableContainer extends Component {
             icon="IconBubble"
             size={15}
             color="8b8687"
-            linkStyle={{
-              height: '20px'
-            }}
           />
           <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
         </div>
@@ -72,7 +69,7 @@ class ActionableContainer extends Component {
             onClick={this.addOrRemoveVote}
             color={!_.isEmpty(voter) ? '#ff3860' : '#8b8687'}
             linkStyle={{
-              height: '20px'
+              height: 'inherit'
             }}
           />
         <span

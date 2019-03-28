@@ -150,7 +150,7 @@ class NavbarComp extends Component {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { username, user, loading } = this.props
+    const { user, loading } = this.props
 
     return (
       <Navbar
@@ -234,7 +234,7 @@ class NavbarComp extends Component {
                     Help
                   </Navbar.Item>
 
-                  <div className="is-divider-vertical is-last"></div>
+                  <div className="is-divider-vertical"></div>
 
                   <Navbar.Item onClick={this.signOut}>
                     Sign Out

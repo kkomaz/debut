@@ -60,4 +60,9 @@
   &__cancel {
     color: $blue;
   }
+
+  &__hide-comments,
+  &__view-more-comments {
+    cursor: pointer;
+  }
 }
