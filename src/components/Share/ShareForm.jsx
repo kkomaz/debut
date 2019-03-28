@@ -180,7 +180,8 @@ class ShareForm extends Component {
               style={{
                 fontFamily: 'Poppins, sans-serif',
                 borderRadius: 0,
-                borderColor: '#E0E3DA'
+                borderColor: '#E0E3DA',
+                fontSize: '14px'
               }}
             />
           </Field>

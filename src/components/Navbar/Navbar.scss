@@ -1,7 +1,7 @@
 @import 'src/variables';
 
 .debut-nav-bar {
-  background-image: -webkit-linear-gradient(45deg, $primary 0%, #5a5791 100%);
+  background: $primary;
   color: $white;
   border-bottom: 1px solid hsla(0,0%,100%,.1);
   padding-left: 196px;

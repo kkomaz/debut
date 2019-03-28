@@ -7,14 +7,9 @@
     }
   }
 
-  &__hero {
-    background-image: -webkit-linear-gradient(30deg, $primary 0%, #5a5791 100%);
-  }
-
   &__card {
     cursor: pointer;
     background: $pitch-dark;
-    background-image: -webkit-linear-gradient(45deg, $pitch-dark 0%, $darkness 100%);
     color: $white;
     width: 280px;
   }

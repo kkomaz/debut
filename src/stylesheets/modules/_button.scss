@@ -14,7 +14,7 @@
   }
 
   &.is-primary {
-    background-image: -webkit-linear-gradient(45deg, $primary 0%, #5a5791 100%);
+    background: $primary;
     color: $white;
 
     &:hover {

@@ -190,7 +190,7 @@ class CommentForm extends Component {
               style={{
                 borderRadius: 0,
                 borderColor: '#E0E3DA',
-                fontSize: '13px',
+                fontSize: '12px',
                 fontFamily: 'Poppins, sans-serif'
               }}
             />
