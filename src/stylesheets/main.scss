@@ -12,11 +12,16 @@ html, body {
 }
 
 p {
-  white-space: pre-wrap
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+a {
+  font-size: 14px;
 }
 
 .small {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .italic {

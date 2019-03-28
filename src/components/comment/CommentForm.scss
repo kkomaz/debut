@@ -8,27 +8,17 @@
 
   &__characters {
     display: flex;
-    align-items: center;
-    padding: 10px 0;
+    justify-content: space-between;
+    margin: 7px 0;
+    padding: 0 5px;
   }
 
   &__label {
     margin-bottom: 0 !important;
-    margin-right: 10px;
   }
 
   &__character-length {
-    margin-bottom: 0 !important;
-
-    color: $forest;
-
-    &--warning {
-      color: $light_purple;
-    }
-
-    &--danger {
-      color: $danger;
-    }
+    color: $light_purple;
   }
 
   &__text-field {

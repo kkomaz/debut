@@ -164,14 +164,11 @@ class CommentForm extends Component {
   };
 
   render() {
-    const { characterLength, valid, editMode } = this.state
+    const { valid, editMode } = this.state
     const { commentActions, shareId } = this.props
 
-    const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'comment-form__character-length': true,
-      'comment-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
-      'comment-form__character-length--danger': leftoverLength < 30
     })
 
     return (
@@ -218,7 +215,7 @@ class CommentForm extends Component {
           }
 
           <div className="comment-form__characters">
-            <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
+            <p className={characterClass}>({150 - this.state.characterLength})</p>
             <Label className="comment-form__label">
               <Icon
                 className="debut-icon debut-icon--pointer ml-half"
