@@ -173,7 +173,9 @@ class UsernamePage extends Component {
   requestUserShares = () => {
     const { username, shares } = this.props
     const lastShare = _.last(shares.list)
-    this.props.requestUserShares({ username, lt: lastShare.createdAt })
+    if (lastShare) {
+      this.props.requestUserShares({ username, lt: lastShare.createdAt })
+    }
   }
 
   handleScroll = () => {

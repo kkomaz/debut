@@ -169,6 +169,7 @@ class CommentForm extends Component {
 
     const characterClass = classNames({
       'comment-form__character-length': true,
+      'small': true
     })
 
     return (

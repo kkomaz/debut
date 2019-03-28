@@ -159,6 +159,7 @@ class ShareForm extends Component {
     const { editing, submitting } = this.props
     const characterClass = classNames({
       'share-form__character-length': true,
+      'small': true
     })
 
     return (
