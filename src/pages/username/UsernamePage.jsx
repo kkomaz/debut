@@ -90,7 +90,7 @@ class UsernamePage extends Component {
 
     if (!this.props.loading && prevProps.loading) {
       this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
-      this.requestUserShares()
+      this.props.requestUserShares({ username })
       this.loadUserInfo(profile)
     }
 
@@ -172,8 +172,8 @@ class UsernamePage extends Component {
 
   requestUserShares = () => {
     const { username, shares } = this.props
-    const sharesLength = shares.list.length
-    this.props.requestUserShares({ username, offset: sharesLength })
+    const lastShare = _.last(shares.list)
+    this.props.requestUserShares({ username, lt: lastShare.createdAt })
   }
 
   handleScroll = () => {

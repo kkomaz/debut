@@ -7,8 +7,8 @@ import {
   requestAddVote,
   requestRemoveVote,
 } from 'actions/vote'
+import classNames from 'classnames';
 import './ActionableContainer.scss'
-
 class ActionableContainer extends Component {
   constructor(props) {
     super(props)
@@ -50,6 +50,13 @@ class ActionableContainer extends Component {
     const { detailObj } = this.props
     const { voter, count } = this.state
 
+    const iconHeartsClassName = classNames({
+      'actionable-container__icons-hearts': true,
+      'actionable-container__icons-hearts--single': count < 10,
+      'actionable-container__icons-hearts--double': count >= 10,
+      'actionable-container__icons-hearts--triple': count >= 100,
+    })
+
     return (
       <div className="actionable-container__icons">
         <div className="actionable-container__icons-bubble">
@@ -61,7 +68,7 @@ class ActionableContainer extends Component {
           />
           <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
         </div>
-        <div className="actionable-container__icons-hearts">
+        <div className={iconHeartsClassName}>
           <Icon
             className="debut-icon debut-icon--pointer actionable-container__toggle-votes"
             icon="IconHeart"

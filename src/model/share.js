@@ -1,4 +1,6 @@
 import { Model } from 'radiks'
+import Comment from 'model/comment'
+import _ from 'lodash'
 
 class Share extends Model {
   static className = "Share"
@@ -31,6 +33,14 @@ class Share extends Model {
       type: Number,
       decrypted: true
     }
+  }
+
+  async afterFetch() {
+    const comments = await Comment.fetchList({
+      share_id: this._id,
+    })
+
+    this.comments = _.map(comments, 'attrs')
   }
 }
 
