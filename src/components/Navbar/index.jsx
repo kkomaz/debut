@@ -160,10 +160,6 @@ class NavbarComp extends Component {
         active={open}
       >
         <Navbar.Brand>
-          <Navbar.Item onClick={this.goToHome}>
-            debut
-          </Navbar.Item>
-
           <Navbar.Item>
             <Input
               onChange={this.onChange}
