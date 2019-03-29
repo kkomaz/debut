@@ -11,7 +11,7 @@ import help from 'assets/help.jpg'
 
 class HelpPage extends Component {
   onClick = () => {
-    window.open('https://github.com/kkomaz/debut/issues')
+    window.open('https://github.com/kkomaz/debut-landing/issues')
   }
 
   render() {
