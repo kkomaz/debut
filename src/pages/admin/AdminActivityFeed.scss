@@ -1,6 +1,11 @@
 @import 'src/variables';
 
 .admin-activity-feed {
+  &--loading {
+    display: flex;
+    justify-content: center;
+  }
+  
   &__show-more {
     display: flex;
     justify-content: center;

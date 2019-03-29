@@ -155,13 +155,11 @@ class ShareForm extends Component {
   };
 
   render() {
-    const { characterLength, valid, editMode } = this.state
+    const { valid, editMode } = this.state
     const { editing, submitting } = this.props
-    const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'share-form__character-length': true,
-      'share-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
-      'share-form__character-length--danger': leftoverLength < 30
+      'super-small': true
     })
 
     return (
@@ -183,7 +181,8 @@ class ShareForm extends Component {
               style={{
                 fontFamily: 'Poppins, sans-serif',
                 borderRadius: 0,
-                borderColor: '#E0E3DA'
+                borderColor: '#E0E3DA',
+                fontSize: '14px'
               }}
             />
           </Field>
@@ -207,16 +206,13 @@ class ShareForm extends Component {
           }
 
           <div className="share-form__characters">
-            <p className={characterClass}>{150 - this.state.characterLength} characters left</p>
-          </div>
-
-          <div className="share-form__submit-wrapper">
+            <p className={characterClass}>({150 - this.state.characterLength})</p>
             <div className="share-form__options">
               <Label>
                 <Icon
-                  className="debut-icon debut-icon--pointer mt-half"
+                  className="debut-icon debut-icon--pointer"
                   icon="IconCamera"
-                  size={20}
+                  size={15}
                 />
                 <input
                   type="file"
@@ -227,7 +223,9 @@ class ShareForm extends Component {
                 />
               </Label>
             </div>
+          </div>
 
+          <div className="share-form__submit-wrapper">
             {
               !editMode &&
               <div className="share-form__submit-footer">

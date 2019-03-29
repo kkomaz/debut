@@ -1,3 +1,9 @@
+@import 'src/variables';
+
 .Toastify__toast {
   padding: 10px !important;
+
+  &--success {
+    background: $primary !important;
+  }
 }

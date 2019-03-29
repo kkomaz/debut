@@ -90,7 +90,7 @@ class UsernamePage extends Component {
 
     if (!this.props.loading && prevProps.loading) {
       this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
-      this.requestUserShares()
+      this.props.requestUserShares({ username })
       this.loadUserInfo(profile)
     }
 
@@ -172,8 +172,10 @@ class UsernamePage extends Component {
 
   requestUserShares = () => {
     const { username, shares } = this.props
-    const sharesLength = shares.list.length
-    this.props.requestUserShares({ username, offset: sharesLength })
+    const lastShare = _.last(shares.list)
+    if (lastShare) {
+      this.props.requestUserShares({ username, lt: lastShare.createdAt })
+    }
   }
 
   handleScroll = () => {
@@ -376,7 +378,7 @@ class UsernamePage extends Component {
             >
               <Modal.Content>
                 <Section style={{ backgroundColor: 'white' }}>
-                  <Heading size={4}>Shared Moment</Heading>
+                  <Heading size={6}>Shared Moment</Heading>
                   <ShareForm
                     username={username}
                     currentShare={this.state.currentShare}
@@ -393,7 +395,7 @@ class UsernamePage extends Component {
             >
               <Modal.Content>
                 <Section style={{ backgroundColor: 'white' }}>
-                  <Heading size={4}>User Comments</Heading>
+                  <Heading size={6}>User Comments</Heading>
                   <CommentForm
                     currentComment={this.state.currentComment}
                     onComplete={this.closeCommentModal}

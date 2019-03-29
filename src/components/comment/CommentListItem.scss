@@ -1,14 +1,11 @@
 @import 'src/variables';
 
 .comment-list-item {
-  padding: 1em;
-  padding-left: 1.5em;
-
+  padding: 1em 1.5em;
   border: 1px solid $shadow;
   border-left: none;
   border-right: none;
   border-bottom: none;
-
 
   &__username-creator {
     cursor: pointer;
@@ -34,7 +31,7 @@
   }
 
   &__username-date {
-    margin-bottom: 1em;
+    margin-bottom: 0 !important;
   }
 
   &__delete-yes-no {

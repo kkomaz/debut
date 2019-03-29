@@ -1,20 +1,20 @@
 @import 'src/variables';
 
 .debut-nav-bar {
-  background-image: -webkit-linear-gradient(45deg, $primary 0%, #5a5791 100%);
+  background: $primary;
   color: $white;
   border-bottom: 1px solid hsla(0,0%,100%,.1);
-  padding-left: 196px;
+  padding-left: 269px;
   height: 65px;
 
   .is-divider-vertical {
     padding: 0;
 
-    &.is-last {
-      &::before {
-        border-left: 0.03rem solid #dbdbdb;
-      }
-    }
+    // &.is-last {
+    //   &::before {
+    //     border-left: 0.03rem solid #dbdbdb;
+    //   }
+    // }
   }
 
   .navbar-item {
@@ -55,7 +55,8 @@
       height: 45px;
       width: 45px;
       border-radius: 100%;
-      border: 3px solid $blue;
+      border: 3px solid $white;
+      box-shadow: 0px 1px 0px 0px $shadow;
       background-position: 50% 50%;
       background-repeat: no-repeat;
       background-size: cover;
@@ -65,6 +66,6 @@
 
 @media only screen and (max-width: 1500px) {
   .debut-nav-bar {
-    padding-left: 0
+    padding-left: 125px;
   }
 }

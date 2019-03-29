@@ -24,6 +24,8 @@ import {
   REQUEST_EDIT_COMMENT,
   FETCH_SHARE_FEEDS_SUCCESS,
   REQUEST_ADD_SHARE_FEEDS,
+  REMOVE_VOTE_SUCCESS,
+  ADD_VOTE_SUCCESS,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -232,6 +234,26 @@ export default function shareReducer(state = defaultSession, action) {
     case CREATE_SHARE_FAIL:
       toggleNotification('error', action.payload)
       return state
+    // Vote Related
+    case REMOVE_VOTE_SUCCESS: {
+      const share = _.find(state.shares.list, (share) => share._id === action.payload.share._id)
+      const shareVotes = _.get(share, 'votes', [])
+      const filteredVotes = removeObjFromList(shareVotes, action.payload.vote)
+      const updatedShare = { ...share, votes: filteredVotes }
+      const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
+      return { ...state,
+        shares: { ...state.shares, list: updatedShareList },
+      }
+    }
+    case ADD_VOTE_SUCCESS: {
+      const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
+      const shareVotes = _.get(share, 'votes', [])
+      const updatedShare = { ...share, votes: [...shareVotes, action.payload.vote ] }
+      const updatedSharesList = updateSingleObjectFromList(updatedShare, state.shares.list)
+      return { ...state,
+        shares: { ...state.shares, list: updatedSharesList }
+      }
+    }
     default:
       return state
   }

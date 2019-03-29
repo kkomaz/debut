@@ -2,21 +2,21 @@ export const keys = {
   twitter: {
     icon: 'IconTwitter',
     url: 'https://twitter.com',
-    color: '#55acee'
+    color: 'white'
   },
   facebook: {
     icon: 'IconFacebook',
     url: 'https://facebook.com',
-    color: '#dfe3ee'
+    color: 'white'
   },
   github: {
     icon: 'IconGithub',
     url: 'https://github.com',
-    color: '#171515'
+    color: 'white'
   },
   linkedIn: {
     icon: 'IconLinkedIn',
     url: 'https://www.linkedin.com/in',
-    color: '#0077B5'
+    color: 'white'
   }
 }

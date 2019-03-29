@@ -38,16 +38,18 @@ class ShareDetail extends Component {
   }
 
   componentDidMount = async () => {
-    const { match, username } = this.props
+    const { match } = this.props
 
     try {
-      const share = await Share.findOne({ _id: match.params.share_id, username })
+      const share = await Share.findById(match.params.share_id)
 
       if (!share) {
         throw new Error('That moment does not exist!')
       }
 
-      this.props.handleDetailShare(share.attrs, false)
+      const adjustedShare = { ...share, attrs: { ...share.attrs, comments: share.comments } }
+
+      this.props.handleDetailShare(adjustedShare.attrs, false)
     } catch (e) {
       this.setState({ error: true })
     }
@@ -77,6 +79,8 @@ class ShareDetail extends Component {
   render() {
     const { username, share } = this.props
     const { error, showCommentModal, showShareModal } = this.state
+
+    console.log(share)
 
     if (error) {
       return (
@@ -115,7 +119,7 @@ class ShareDetail extends Component {
             >
             <Modal.Content>
               <Section style={{ backgroundColor: 'white' }}>
-                <Heading size={4}>User Comments</Heading>
+                <Heading size={6}>User Comments</Heading>
                 <CommentForm
                   currentComment={this.state.currentComment}
                   onComplete={this.closeCommentModal}
@@ -136,7 +140,7 @@ class ShareDetail extends Component {
           >
             <Modal.Content>
               <Section style={{ backgroundColor: 'white' }}>
-                <Heading size={4}>Shared Moment</Heading>
+                <Heading size={6}>Shared Moment</Heading>
                 <ShareForm
                   username={username}
                   currentShare={this.state.currentShare}

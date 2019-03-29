@@ -1,5 +1,9 @@
 @import 'src/variables';
 
+.share-list-item :focus:not(.focus-visible) {
+  outline: none;
+}
+
 .share-list-item {
   &__image-container {
     align-items: center;
@@ -12,19 +16,6 @@
 
     &:hover {
       color: $blue;
-    }
-  }
-
-  &__hide-comments,
-  &__view-more-comments {
-    color: $primary;
-    cursor: pointer;
-  }
-
-  &__card-content {
-    &--text-only {
-      padding-bottom: 1.0em;
-      padding-right: 1.0em;
     }
   }
 
@@ -62,5 +53,17 @@
 
   &__cancel {
     color: $blue;
+  }
+
+  &__actionable-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  &__hide-comments,
+  &__view-more-comments {
+    cursor: pointer;
   }
 }

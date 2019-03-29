@@ -8,15 +8,51 @@
 
 html, body {
   font-family: "Poppins", sans-serif;
-  background: #e7ecef;
+  background: #fafbfc;
 }
 
 p {
-  white-space: pre-wrap
+  white-space: pre-wrap;
+  font-size: 14px;
+}
+
+a {
+  font-size: 14px;
+}
+
+input {
+  font-family: "Poppins", sans-serif;
+}
+
+textarea {
+  font-family: "Poppins", sans-serif;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+li,
+p,
+pre,
+blockquote,
+figure,
+hr {
+  margin: 0;
+  padding: 0;
 }
 
 .small {
-  font-size: 13px;
+  font-size: 12px;
+}
+
+.super-small {
+  font-size: 10px;
 }
 
 .italic {
@@ -45,6 +81,20 @@ p {
 .section {
   padding-top: 1.5em;
 }
+
+.tabs {
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+  ul {
+    border-bottom: none;
+  }
+}
+
+// Bulma
+
+// Bulma components
+// .content p:not(:last-child), .content dl:not(:last-child), .content ol:not(:last-child), .content ul:not(:last-child), .content blockquote:not(:last-child), .content pre:not(:last-child), .content table:not(:last-child) {
+//   margin-bottom: 0;
+// }
 
 .dark-mode {
   html, body {

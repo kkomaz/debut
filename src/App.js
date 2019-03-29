@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { UserSession } from 'blockstack'
 import _ from 'lodash'
+import 'focus-visible/dist/focus-visible.js'
 
 // Utility Imports
 import { appConfig } from 'utils/constants'

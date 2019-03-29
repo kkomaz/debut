@@ -64,9 +64,8 @@ class AdminActivityFeed extends Component {
 
     this.props.resetSharesFeed()
 
-    this.requestFetchShareFeeds({
+    this.props.requestFetchShareFeeds({
       follow: userFollow,
-      offset: 0
     })
 
     Share.addStreamListener(this.addShareToActivites)
@@ -97,9 +96,12 @@ class AdminActivityFeed extends Component {
   }
 
   requestFetchShareFeeds = ({ follow, offset }) => {
+    const { feedShares } = this.props
+    const share = _.last(feedShares.list)
+
     this.props.requestFetchShareFeeds({
       follow,
-      offset
+      lt: _.get(share, 'createdAt', null),
     })
   }
 
@@ -157,7 +159,11 @@ class AdminActivityFeed extends Component {
     const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
 
     if (feedShares.loading) {
-      return <BulmaLoader />
+      return (
+        <div className="admin-activity-feed admin-activity-feed--loading">
+          <BulmaLoader />
+        </div>
+      )
     }
 
     return (
@@ -220,7 +226,7 @@ class AdminActivityFeed extends Component {
         >
           <Modal.Content>
             <Section style={{ backgroundColor: 'white' }}>
-              <Heading size={4}>Shared Moment</Heading>
+              <Heading size={6}>Shared Moment</Heading>
               <ShareForm
                 username={userFollow.username}
                 currentShare={this.state.currentShare}
@@ -240,7 +246,7 @@ class AdminActivityFeed extends Component {
             >
             <Modal.Content>
               <Section style={{ backgroundColor: 'white' }}>
-                <Heading size={4}>User Comments</Heading>
+                <Heading size={6}>User Comments</Heading>
                 <CommentForm
                   currentComment={this.state.currentComment}
                   onComplete={this.closeCommentModal}

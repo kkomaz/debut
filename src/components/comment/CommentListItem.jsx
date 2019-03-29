@@ -31,6 +31,7 @@ class CommentListItem extends Component {
   static propTypes = {
     comment: PropTypes.object.isRequired,
     onEditClick: PropTypes.func,
+    index: PropTypes.number.isRequired,
   }
 
   revertDelete = () => {
@@ -79,7 +80,7 @@ class CommentListItem extends Component {
               position={position}
               targetRect={targetRect}
               popoverRect={popoverRect}
-              arrowColor="white"
+              arrowColor={'#383A3F'}
               arrowSize={10}
               >
                 <CommentAdminMenu
@@ -119,7 +120,7 @@ class CommentListItem extends Component {
               position={position}
               targetRect={targetRect}
               popoverRect={popoverRect}
-              arrowColor="white"
+              arrowColor={'#383A3F'}
               arrowSize={10}
               >
               {
@@ -145,7 +146,53 @@ class CommentListItem extends Component {
               right: '5px',
               height: '30px'
             }}
-            />
+          />
+        </Popover>
+      )
+    }
+
+    if (_.isEqual(sessionUser.username, username) && !_.isEqual(comment.creator, sessionUser.username)) {
+      return (
+        <Popover
+          isOpen={this.state.isPopoverOpen}
+          position="right"
+          padding={30}
+          onClickOutside={() => this.setState({ isPopoverOpen: false })}
+          content={({ position, targetRect, popoverRect }) => (
+            <ArrowContainer
+              position={position}
+              targetRect={targetRect}
+              popoverRect={popoverRect}
+              arrowColor={'#383A3F'}
+              arrowSize={10}
+              >
+              {
+                _.isEqual(sessionUser.username, username) &&
+                <CommentAdminMenu
+                  onDeleteClick={this.setDeleteConfirmation}
+                  username={username}
+                  share={share}
+                />
+              }
+            </ArrowContainer>
+          )}
+        >
+          <div className="comment-list-item__edit-delete">
+            <div className="comment-list-item__edit-delete-icons ml-one">
+              <Icon
+                className="debut-icon debut-icon--pointer"
+                icon="IconDots"
+                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
+                size={16}
+                linkStyles={{
+                  position: 'absolute',
+                  top: '0',
+                  right: '5px',
+                  height: '30px'
+                }}
+              />
+            </div>
+          </div>
         </Popover>
       )
     }
@@ -154,12 +201,13 @@ class CommentListItem extends Component {
   }
 
   render() {
-    const { username, comment, commentActions } = this.props
-    const { sessionUser } = this.context.state
+    const { comment, commentActions, index } = this.props
     const { showDeleteConfirmation } = this.state
 
     const commentListItemClass = classNames({
-      'comment-list-item': true
+      'comment-list-item': true,
+      'comment-list-item--even': index % 2 === 0,
+      'comment-list-item--odd': index % 2 === 1,
     })
 
     const commentListItemTextClass = classNames({
@@ -176,19 +224,6 @@ class CommentListItem extends Component {
           <p className="comment-list-item__username-date">
             <strong onClick={this.onUserClick} className="comment-list-item__username-creator small">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span>
           </p>
-          {
-            _.isEqual(sessionUser.username, username) && !_.isEqual(comment.creator, sessionUser.username) &&
-            <div className="comment-list-item__edit-delete">
-              <div className="comment-list-item__edit-delete-icons ml-one">
-                <Icon
-                  className="debut-icon debut-icon--pointer"
-                  icon="IconTrash"
-                  onClick={this.setDeleteConfirmation}
-                />
-              </div>
-            </div>
-          }
-
           {this.renderEditablePopover()}
         </div>
 

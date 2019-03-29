@@ -121,13 +121,18 @@ class AvatarForm extends Component {
       <div className="avatar-form">
         <Image
           className={avatarFormImageClass}
-          alt="100x100"
           renderAs="p"
-          src={this.props.user.data.profileImgUrl || defaultImgUrl}
-          style={{ margin: 0 }}
           onMouseEnter={this.setAvatarHoveredTrue}
           onMouseLeave={this.setAvatarHoveredFalse}
           onClick={this.openModal}
+          style={{
+            backgroundImage: `url(${this.props.user.data.profileImgUrl || defaultImgUrl})`,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: '50% 50%',
+            margin: 0,
+            borderRadius: '100%'
+          }}
         />
 
         <Icon
@@ -159,10 +164,15 @@ class AvatarForm extends Component {
                 <div className="avatar-form__image-items">
                   <Image
                     className="avatar-form__image"
-                    alt="100x100"
                     renderAs="p"
-                    src={this.state.imageFile}
-                    style={{ margin: 0 }}
+                    style={{
+                      backgroundImage: `url(${this.state.imageFile})`,
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: '50% 50%',
+                      margin: 0,
+                      borderRadius: '100%'
+                    }}
                     />
 
                   <input

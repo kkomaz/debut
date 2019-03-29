@@ -17,6 +17,9 @@ import Popover, { ArrowContainer } from 'react-tiny-popover'
 import './ShareListItem.scss'
 import { ShareAdminMenu } from 'components/Share'
 
+// Component Imports
+import { ActionableContainer } from 'components/actionables'
+
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
   const postedDateArray = postedDate.split(' ')
@@ -40,6 +43,7 @@ class ShareListItem extends Component {
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
     onCommentEditClick: PropTypes.func,
+    requestAddVote: PropTypes.func.isRequired,
   }
 
   revertDelete = () => {
@@ -72,48 +76,48 @@ class ShareListItem extends Component {
   /**
    * This could use some refactoring <3
   */
-  renderShareCommentInfo = () => {
-    const { share } = this.props
-    const { commentView } = this.state
-
-    const result = (
-      share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
-      <p
-        onClick={this.fetchShareComments}
-        className="small share-list-item__view-more-comments"
-        >
-        View comments
-      </p>
-    )
-
-    if (result === 0) {
-      return null
-    }
-
-    if (_.isEqual(result, false)) {
-      if (commentView) {
-        return (
-          <p
-            onClick={this.hideCommentView}
-            className="small share-list-item__hide-comments"
-            >
-            Hide comments
-          </p>
-        )
-      } else {
-        return (
-          <p
-            onClick={this.showCommentView}
-            className="small share-list-item__view-more-comments"
-            >
-            View comments
-          </p>
-        )
-      }
-    }
-
-    return result
-  }
+  // renderShareCommentInfo = () => {
+  //   const { share } = this.props
+  //   const { commentView } = this.state
+  //
+  //   const result = (
+  //     share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
+  //     <p
+  //       onClick={this.fetchShareComments}
+  //       className="small share-list-item__view-more-comments"
+  //       >
+  //       View Comments
+  //     </p>
+  //   )
+  //
+  //   if (result === 0) {
+  //     return null
+  //   }
+  //
+  //   if (_.isEqual(result, false)) {
+  //     if (commentView) {
+  //       return (
+  //         <p
+  //           onClick={this.hideCommentView}
+  //           className="small share-list-item__hide-comments"
+  //           >
+  //           Hide comments
+  //         </p>
+  //       )
+  //     } else {
+  //       return (
+  //         <p
+  //           onClick={this.showCommentView}
+  //           className="small share-list-item__view-more-comments"
+  //           >
+  //           View comments
+  //         </p>
+  //       )
+  //     }
+  //   }
+  //
+  //   return result
+  // }
 
   goToUserProfile = () => {
     const { history, username } = this.props
@@ -137,22 +141,22 @@ class ShareListItem extends Component {
             padding={30}
             onClickOutside={() => this.setState({ isPopoverOpen: false })}
             content={({ position, targetRect, popoverRect }) => (
-                <ArrowContainer
-                  position={position}
-                  targetRect={targetRect}
-                  popoverRect={popoverRect}
-                  arrowColor="white"
-                  arrowSize={10}
-                >
-                  <ShareAdminMenu
-                    disableGoPath={disableGoPath}
-                    disableAdminPath
-                    onEditClick={this.onEditClick}
-                    onDeleteClick={this.setDeleteConfirmation}
-                    username={username}
-                    share={share}
-                  />
-                </ArrowContainer>
+              <ArrowContainer
+                position={position}
+                targetRect={targetRect}
+                popoverRect={popoverRect}
+                arrowColor={'#383A3F'}
+                arrowSize={10}
+              >
+                <ShareAdminMenu
+                  disableGoPath={disableGoPath}
+                  disableAdminPath
+                  onEditClick={this.onEditClick}
+                  onDeleteClick={this.setDeleteConfirmation}
+                  username={username}
+                  share={share}
+                />
+              </ArrowContainer>
             )}
         >
           <Icon
@@ -182,7 +186,7 @@ class ShareListItem extends Component {
                 position={position}
                 targetRect={targetRect}
                 popoverRect={popoverRect}
-                arrowColor="white"
+                arrowColor={'#383A3F'}
                 arrowSize={10}
               >
                 {
@@ -222,6 +226,10 @@ class ShareListItem extends Component {
     return this.setState({ commentView: false })
   }
 
+  toggleCommentView = () => {
+    return this.setState({ commentView: !this.state.commentView })
+  }
+
   render() {
     const { cardClass, share, username, deleting, currentComment } = this.props
     const { sessionUser } = this.context.state
@@ -240,6 +248,8 @@ class ShareListItem extends Component {
       'share-list-item__card-content': true,
       'share-list-item__card-content--text-only': !share.imageFile
     })
+
+    const voter = _.find(share.votes, (vote) => vote.username === sessionUser.username)
 
     return (
       <Card key={share._id} className={shareListItemClass}>
@@ -279,11 +289,12 @@ class ShareListItem extends Component {
               </div>
             }
             </Content>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-              {this.renderShareCommentInfo()}
-              <p className="small">
-                {_.get(share, 'commentCount', 0)} comments
-              </p>
+            <div className="share-list-item__actionable-container">
+              <ActionableContainer
+                detailObj={share}
+                voter={voter}
+                toggleComment={this.toggleCommentView}
+              />
             </div>
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>
@@ -298,6 +309,7 @@ class ShareListItem extends Component {
                       share={share}
                       username={username}
                       onEditClick={this.props.onCommentEditClick}
+                      index={index}
                     />
                   )
                 })

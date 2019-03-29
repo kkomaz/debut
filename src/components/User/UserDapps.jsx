@@ -33,7 +33,7 @@ class UserDapps extends Component {
             <Content>
               <Loadable loading={loading}>
                 <div className="user-dapps__info-section">
-                  <Heading className="mr-one" size={4}>My Blockstack Dapps</Heading>
+                  <Heading className="mr-one" size={5}>My Blockstack Dapps</Heading>
                     <Popover
                         isOpen={this.state.isPopoverOpen}
                         position="right"
@@ -95,7 +95,7 @@ class UserDapps extends Component {
             <Loadable loading={loading}>
               <React.Fragment>
                 <div className="user-dapps__info-section">
-                  <Heading className="mr-one" size={4}>My Blockstack Dapps</Heading>
+                  <Heading className="mr-one" size={5}>My Blockstack Dapps</Heading>
                     <Popover
                         isOpen={this.state.isPopoverOpen}
                         position="right"

@@ -1,27 +1,26 @@
-import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
 import { FETCH_SHARE_FEEDS_SUCCESS, FETCH_SHARE_FEEDS_FAIL } from 'actions'
-import Share from 'model/share'
+import axios from 'axios'
 
 const fetchShareFeeds = async (action) => {
-  const { follow, offset } = action.payload
+  const { follow, lt } = action.payload
 
-  const shares = await Share.fetchList({
-    username: [...follow.following, follow.username],
-    sort: '-createdAt',
-    limit: 5,
-    offset,
-    valid: true,
+  const { data } = await axios.get('/shares', {
+    params: {
+      username: [...follow.following, follow.username],
+      limit: 5,
+      lt,
+    }
   })
+
+  const shares = data.shares
 
   return shares
 }
 
 function* fetchShareFeedsSaga(action) {
   try {
-    const radiksShares = yield call(fetchShareFeeds, action)
-
-    const shares = _.map(radiksShares, 'attrs')
+    const shares = yield call(fetchShareFeeds, action)
     yield put({ type: FETCH_SHARE_FEEDS_SUCCESS, payload: shares })
   } catch (error) {
     yield put({ type: FETCH_SHARE_FEEDS_FAIL, payload: error.message })

@@ -150,7 +150,7 @@ class NavbarComp extends Component {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { username, user, loading } = this.props
+    const { user, loading } = this.props
 
     return (
       <Navbar
@@ -160,10 +160,6 @@ class NavbarComp extends Component {
         active={open}
       >
         <Navbar.Brand>
-          <Navbar.Item onClick={this.goToHome}>
-            debut
-          </Navbar.Item>
-
           <Navbar.Item>
             <Input
               onChange={this.onChange}
@@ -203,8 +199,8 @@ class NavbarComp extends Component {
                 <React.Fragment>
                   <Navbar.Item onClick={this.goToProfile}>
                     {
-                      _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-half" /> :
-                      <div className="debut-nav-bar__user-identity mr-one mt-half" onClick={this.goToProfile}>
+                      _.isEmpty(user) && loading ? <IconLoader /> :
+                      <div className="debut-nav-bar__user-identity mt-half" onClick={this.goToProfile}>
                         <img
                           onError={this.addDefaultSrc}
                           src={_.get(user, 'profileImgUrl', defaultImgUrl)}
@@ -234,7 +230,7 @@ class NavbarComp extends Component {
                     Help
                   </Navbar.Item>
 
-                  <div className="is-divider-vertical is-last"></div>
+                  <div className="is-divider-vertical"></div>
 
                   <Navbar.Item onClick={this.signOut}>
                     Sign Out

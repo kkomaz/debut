@@ -2,11 +2,17 @@
 
 .user-tabs {
   background: $white;
-  padding-left: 200px;
+  padding-left: 231px;
   padding-right: 100px;
 
   &.tabs.is-boxed li.is-active a {
-    background: $blue;
+    background: $primary;
     color: $white;
+  }
+}
+
+@media only screen and (max-width: 1500px) {
+  .user-tabs {
+    padding-left: 207px;
   }
 }
