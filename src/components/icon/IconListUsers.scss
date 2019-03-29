@@ -1,6 +1,7 @@
 @import 'src/variables';
 
 .icon-list-users {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
