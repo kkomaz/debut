@@ -34,7 +34,7 @@ class UserIntroForm extends Component {
       hovered: '',
       open: false,
       characterLength: user.description ? user.description.length : 0,
-      standardCharacterLength: 250,
+      standardCharacterLength: 150,
     }
 
     this.fetchCityList = _.debounce(this.fetchCityList, 1000)
