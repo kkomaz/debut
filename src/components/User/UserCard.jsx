@@ -9,10 +9,16 @@ import {
 import './UserCard.scss'
 
 class UserCard extends Component {
+  navigateTo = () => {
+    const { user } = this.props
+
+    return this.props.navigateTo(user)
+  }
+
   render() {
     const { user, defaultImgUrl } = this.props
     return (
-      <Card className="user-card__card" onClick={() => this.props.navigateTo(user)}>
+      <Card className="user-card__card">
         <Card.Content className="user-card__card-banner">
         </Card.Content>
         <Media className="user-card__media">

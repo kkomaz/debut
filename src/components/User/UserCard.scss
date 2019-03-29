@@ -2,7 +2,6 @@
 
 .user-card {
   &__card {
-    cursor: pointer;
     width: 287px;
     height: 279px;
   }
@@ -25,6 +24,7 @@
     position: absolute;
     top: -35px;
     left: 10px;
+    cursor: pointer;
 
     img {
       height: 66px;
@@ -35,6 +35,14 @@
       background-position: 50% 50%;
       background-repeat: no-repeat;
       background-size: cover;
+    }
+  }
+
+  &__name {
+    cursor: pointer;
+
+    &:hover {
+      color: $blue;
     }
   }
 
