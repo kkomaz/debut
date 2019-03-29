@@ -47,7 +47,13 @@ class ShareDetail extends Component {
         throw new Error('That moment does not exist!')
       }
 
-      const adjustedShare = { ...share, attrs: { ...share.attrs, comments: share.comments } }
+      const adjustedShare = { ...share,
+        attrs: {
+          ...share.attrs,
+          comments: share.comments,
+          votes: share.votes,
+        }
+      }
 
       this.props.handleDetailShare(adjustedShare.attrs, false)
     } catch (e) {

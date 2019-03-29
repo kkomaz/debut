@@ -8,6 +8,10 @@
     justify-content: center;
   }
 
+  &__icons-bubble {
+    margin-right: 30px;
+  }
+
   &__view-more-comments {
     &:hover {
       fill: $blue !important;

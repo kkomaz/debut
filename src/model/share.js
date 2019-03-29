@@ -1,5 +1,6 @@
 import { Model } from 'radiks'
 import Comment from 'model/comment'
+import Vote from 'model/vote'
 import _ from 'lodash'
 
 class Share extends Model {
@@ -40,7 +41,12 @@ class Share extends Model {
       share_id: this._id,
     })
 
+    const votes = await Vote.fetchList({
+      share_id: this._id
+    })
+
     this.comments = _.map(comments, 'attrs')
+    this.votes = _.map(votes, 'attrs')
   }
 }
 

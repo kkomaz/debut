@@ -89,6 +89,27 @@ class ActionableContainer extends Component {
             />
             <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
           </div>
+          <div className={iconHeartsClassName}>
+            <Icon
+              className="debut-icon debut-icon--pointer actionable-container__toggle-votes"
+              icon="IconHeart"
+              size={15}
+              onClick={this.addOrRemoveVote}
+              color={!_.isEmpty(voter) ? '#ff3860' : '#8b8687'}
+              linkStyle={{
+                height: 'inherit'
+              }}
+            />
+            <span className="small ml-half" style={{ width: '10px', marginTop: '2px'}}>{count}</span>
+            <span
+              className="small"
+              style={{
+                marginTop: '2px',
+                cursor: 'pointer'
+              }}
+              onClick={this.openModal}
+            >likes</span>
+          </div>
         </div>
         <Modal
           show={showModal}
