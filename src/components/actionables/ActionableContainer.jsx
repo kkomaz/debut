@@ -69,12 +69,12 @@ class ActionableContainer extends Component {
     const { detailObj } = this.props
     const { voter, count, showModal } = this.state
 
-    const iconHeartsClassName = classNames({
-      'actionable-container__icons-hearts': true,
-      'actionable-container__icons-hearts--single': count < 10,
-      'actionable-container__icons-hearts--double': count >= 10,
-      'actionable-container__icons-hearts--triple': count >= 100,
-    })
+    // const iconHeartsClassName = classNames({
+    //   'actionable-container__icons-hearts': true,
+    //   'actionable-container__icons-hearts--single': count < 10,
+    //   'actionable-container__icons-hearts--double': count >= 10,
+    //   'actionable-container__icons-hearts--triple': count >= 100,
+    // })
 
     return (
       <React.Fragment>

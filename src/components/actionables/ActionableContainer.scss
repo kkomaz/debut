@@ -14,20 +14,10 @@
     }
   }
 
-  &__icons-hearts {
+  &__icons-bubble {
     align-items: center;
     display: flex;
-    &--single {
-      padding-right: 5px; // Need to make this dynamic
-    }
-
-    &--double {
-      padding-right: 11px;
-    }
-
-    &--triple {
-      padding-right: 18px;
-    }
+    padding-right: 10px;
   }
 
   &__hide-comments,
