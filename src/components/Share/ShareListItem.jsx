@@ -255,7 +255,7 @@ class ShareListItem extends Component {
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content className={shareListeItemContentClass}>
           <Content style={{ marginBottom: '0' }}>
-            <div className="share-list-item__user-details mb-half" style={{ position: 'relative' }}>
+            <div className="share-list-item__user-details" style={{ position: 'relative' }}>
               <div>
                 <p className="share-list-item__username-date" onClick={this.goToUserProfile}>
                   <strong className="share-list-item__username">{username}</strong> <span className="admin-username__date small">- {formatDate(share.createdAt)}</span>
