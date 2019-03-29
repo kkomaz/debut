@@ -293,7 +293,6 @@ class ShareListItem extends Component {
               <ActionableContainer
                 detailObj={share}
                 voter={voter}
-                toggleVote={this.addOrRemoveVote}
                 toggleComment={this.toggleCommentView}
               />
             </div>
