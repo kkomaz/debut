@@ -12,4 +12,13 @@
     color: $pitch-dark;
     flex: 0 1 100px;
   }
+
+  a {
+    color: $white;
+
+    &.is-active {
+      background: $white;
+      color: $pitch-dark;
+    }
+  }
 }
