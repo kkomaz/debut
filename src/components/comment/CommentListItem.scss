@@ -45,4 +45,10 @@
   &__cancel {
     color: $blue;
   }
+
+  &__text {
+    a {
+      font-size: 12px;
+    }
+  }
 }
