@@ -199,7 +199,7 @@ class NavbarComp extends Component {
                 <React.Fragment>
                   <Navbar.Item onClick={this.goToProfile}>
                     {
-                      _.isEmpty(user) && loading ? <IconLoader className="mr-one mb-half" /> :
+                      _.isEmpty(user) && loading ? <IconLoader /> :
                       <div className="debut-nav-bar__user-identity mt-half" onClick={this.goToProfile}>
                         <img
                           onError={this.addDefaultSrc}
