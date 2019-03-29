@@ -57,13 +57,15 @@ class AdminUsernameRoute extends Component {
   }
 
   onFollowersClick = () => {
+    const { username } = this.props
     this.onMenuItemClick('followers')
-    this.props.history.push('/admin/followers')
+    this.props.history.push(`/${username}/followers`)
   }
 
   onFollowingClick = () => {
+    const { username } = this.props
     this.onMenuItemClick('following')
-    this.props.history.push('/admin/following')
+    this.props.history.push(`/${username}/following`)
   }
 
   render() {

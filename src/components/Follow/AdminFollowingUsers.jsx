@@ -8,10 +8,10 @@ import _ from 'lodash'
 // Component Imports
 import {
   Columns,
-  Card,
 } from 'components/bulma'
 import { BarLoader } from 'components/Loader'
 import { UserContext } from 'components/User/UserProvider'
+import { UserCard } from 'components/User'
 import AdminNoFollowing from 'components/Follow/AdminNoFollowing'
 
 // Model Imports
@@ -113,18 +113,12 @@ class AdminFollowingUsers extends Component {
     const { defaultImgUrl } = this.context.state
     const { className, size, follow, loading } = this.props
 
-    let styles = {}
-
     if (loading) {
       return <BarLoader />
     }
 
     if (_.isEmpty(follow.following) && !loading) {
       return <AdminNoFollowing />
-    }
-
-    if (users.length < 3) {
-      styles = { minWidth: '190px', minHeight: '190px' }
     }
 
     return (
@@ -138,12 +132,11 @@ class AdminFollowingUsers extends Component {
                   size,
                 }}
                 >
-                <Card className="page__card" style={styles} onClick={() => this.onBoxClick(user)}>
-                  <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
-                  <Card.Content className="page__content">
-                    <p className="page__username-text">{user.username}</p>
-                  </Card.Content>
-                </Card>
+                <UserCard
+                  user={user}
+                  defaultImgUrl={defaultImgUrl}
+                  navigateTo={this.onBoxClick}
+                />
               </Columns.Column>
             )
           })
@@ -157,7 +150,7 @@ class AdminFollowingUsers extends Component {
 }
 
 AdminFollowingUsers.defaultProps = {
-  size: 3
+  size: 4
 }
 
 export default withRouter(connect()(AdminFollowingUsers))
