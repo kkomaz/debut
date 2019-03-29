@@ -1,0 +1,48 @@
+@import 'src/variables';
+
+.user-card {
+  &__card {
+    cursor: pointer;
+    width: 287px;
+    height: 279px;
+  }
+
+  &__card-banner {
+    background: $pitch-dark;
+    height: 90px;
+  }
+
+  &__media {
+    position: relative;
+  }
+
+  &__user-identification {
+    padding-top: 10px;
+    padding-left: 4em;
+  }
+
+  &__user-image {
+    position: absolute;
+    top: -35px;
+    left: 10px;
+
+    img {
+      height: 66px;
+      width: 66px;
+      border-radius: 50%;
+      border: 2px solid $white;
+      box-shadow: 0px 1px 0px 0px $shadow;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+  }
+
+  &__content {
+    height: 130px;
+    padding-top: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow: hidden;
+  }
+}

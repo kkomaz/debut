@@ -10,15 +10,13 @@ import {
   Heading,
   Hero,
   Table,
+  Media,
+  Image,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
-import Switch from 'react-bulma-switch/lib';
 import { Loader } from 'components/Loader'
 import { requestPaginatedUsers, revertPaginatedUsersFull } from 'actions/user'
-import { NoUsers } from 'components/User'
-import {
-  isFirefox,
-} from 'utils/browser/compatability'
+import { NoUsers, UserCard } from 'components/User'
 import './Page.scss'
 
 class Page extends Component {
@@ -120,34 +118,14 @@ class Page extends Component {
       <div className="page">
         <Hero color="primary" className="page__hero mb-two">
          <Hero.Body>
-           <Container>
+           <Container className="page__container">
              {
                !userState.paginatedObj.full &&
                <Columns>
-                 <Columns.Column size={7}>
+                 <Columns.Column size={12}>
                    <Heading>Welcome to debut!</Heading>
                    <Heading size={5}>Here are the list of user currently signed up!</Heading>
                    <Heading size={6}>Feel free to adjust your view, explore profiles, and introduce yourself by updating your profile via "My Page"!</Heading>
-                 </Columns.Column>
-                 <Columns.Column size={5}>
-                   <Switch
-                     className="page__slider"
-                     color="success"
-                     onChange={this.toggleSwitch}
-                     checked={showTileView}
-                     rounded
-                     >
-                     Tile View
-                   </Switch>
-                   <Switch
-                     className="page__slider"
-                     color="success"
-                     onChange={this.toggleSwitch}
-                     checked={!showTileView}
-                     rounded
-                     >
-                     Table View
-                   </Switch>
                  </Columns.Column>
                </Columns>
              }
@@ -176,25 +154,14 @@ class Page extends Component {
                         <Columns.Column
                           key={user.username}
                           tablet={{
-                            size: 3,
+                            size: 4,
                           }}
                         >
-                          <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                            <Card.Image
-                              alt={isFirefox ? ' ': ''}
-                              className="page__card-image"
-                              size="5by4"
-                              style={{
-                                backgroundImage: `url(${_.get(user, 'profileImgUrl', defaultImgUrl)})`,
-                                backgroundSize: 'cover',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: '50% 50%',
-                              }}
-                            />
-                            <Card.Content className="page__content">
-                              <p className="page__username-text">{user.username}</p>
-                            </Card.Content>
-                          </Card>
+                          <UserCard
+                            user={user}
+                            defaultImgUrl={defaultImgUrl}
+                            navigateTo={this.onBoxClick}
+                          />
                         </Columns.Column>
                       )
                     })
