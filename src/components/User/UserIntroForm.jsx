@@ -229,7 +229,8 @@ class UserIntroForm extends Component {
     const characterClass = classNames({
       'user-intro-form__character-length': true,
       'user-intro-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
-      'user-intro-form__character-length--danger': leftoverLength < 30
+      'user-intro-form__character-length--danger': leftoverLength < 30,
+      'mb-one': true,
     })
 
     return (
@@ -259,7 +260,7 @@ class UserIntroForm extends Component {
             />
 
             <div className="user-intro-form__characters">
-              <p className={characterClass}>{250 - this.state.characterLength} characters left</p>
+              <p className={characterClass}>({250 - this.state.characterLength})</p>
             </div>
             {
               !valid &&  characterLength > standardCharacterLength && <Help color="danger">Bio is longer than 250 characters.</Help>

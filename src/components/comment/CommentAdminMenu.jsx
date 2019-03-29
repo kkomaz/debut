@@ -11,7 +11,7 @@ class CommentAdminMenu extends Component {
     super(props)
 
     this.state = {
-      active: props.editClick ? 'edit' : 'delete'
+      active: props.onEditClick ? 'edit' : 'delete'
     }
   }
 
@@ -39,11 +39,10 @@ class CommentAdminMenu extends Component {
     if (this.props.onEditClick) {
       return (
         <Menu
-          className="share-admin-menu"
+          className="comment-admin-menu"
           style={{
-            backgroundColor: 'white',
+            backgroundColor: '#383A3F',
             padding: '20px',
-            color: 'white',
             width: '200px',
           }}
         >
@@ -67,9 +66,8 @@ class CommentAdminMenu extends Component {
       <Menu
         className="share-admin-menu"
         style={{
-          backgroundColor: 'white',
+          backgroundColor: '#383A3F',
           padding: '20px',
-          color: 'white',
           width: '200px',
         }}
       >

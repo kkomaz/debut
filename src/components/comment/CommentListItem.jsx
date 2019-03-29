@@ -80,7 +80,7 @@ class CommentListItem extends Component {
               position={position}
               targetRect={targetRect}
               popoverRect={popoverRect}
-              arrowColor="white"
+              arrowColor={'#383A3F'}
               arrowSize={10}
               >
                 <CommentAdminMenu
@@ -120,7 +120,7 @@ class CommentListItem extends Component {
               position={position}
               targetRect={targetRect}
               popoverRect={popoverRect}
-              arrowColor="white"
+              arrowColor={'#383A3F'}
               arrowSize={10}
               >
               {
@@ -163,7 +163,7 @@ class CommentListItem extends Component {
               position={position}
               targetRect={targetRect}
               popoverRect={popoverRect}
-              arrowColor="white"
+              arrowColor={'#383A3F'}
               arrowSize={10}
               >
               {
