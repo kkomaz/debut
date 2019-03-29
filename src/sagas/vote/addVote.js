@@ -6,7 +6,7 @@ const addVote = async (action) => {
   const { username, shareId } = action.payload
   const vote = new Vote({
     username,
-    vote_share_id: shareId,
+    share_id: shareId,
   })
   await vote.save()
 

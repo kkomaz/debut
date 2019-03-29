@@ -141,22 +141,22 @@ class ShareListItem extends Component {
             padding={30}
             onClickOutside={() => this.setState({ isPopoverOpen: false })}
             content={({ position, targetRect, popoverRect }) => (
-                <ArrowContainer
-                  position={position}
-                  targetRect={targetRect}
-                  popoverRect={popoverRect}
-                  arrowColor="white"
-                  arrowSize={10}
-                >
-                  <ShareAdminMenu
-                    disableGoPath={disableGoPath}
-                    disableAdminPath
-                    onEditClick={this.onEditClick}
-                    onDeleteClick={this.setDeleteConfirmation}
-                    username={username}
-                    share={share}
-                  />
-                </ArrowContainer>
+              <ArrowContainer
+                position={position}
+                targetRect={targetRect}
+                popoverRect={popoverRect}
+                arrowColor={'#383A3F'}
+                arrowSize={10}
+              >
+                <ShareAdminMenu
+                  disableGoPath={disableGoPath}
+                  disableAdminPath
+                  onEditClick={this.onEditClick}
+                  onDeleteClick={this.setDeleteConfirmation}
+                  username={username}
+                  share={share}
+                />
+              </ArrowContainer>
             )}
         >
           <Icon
@@ -186,7 +186,7 @@ class ShareListItem extends Component {
                 position={position}
                 targetRect={targetRect}
                 popoverRect={popoverRect}
-                arrowColor="white"
+                arrowColor={'#383A3F'}
                 arrowSize={10}
               >
                 {
