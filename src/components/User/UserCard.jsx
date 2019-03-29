@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import {
-  Button,
   Card,
   Media,
   Image,
@@ -25,6 +24,7 @@ class UserCard extends Component {
           <Media.Item renderAs="figure" position="left">
             <Image
               className="user-card__user-image"
+              onClick={this.navigateTo}
               renderAs="p"
               size={64}
               alt="64x64"
@@ -32,11 +32,10 @@ class UserCard extends Component {
             />
           </Media.Item>
           <Media.Item className="user-card__user-identification">
-            <p className="user-card__name" size={6}>{`@${user.username}`}</p>
+            <p onClick={this.navigateTo} className="user-card__name" size={6}>{`@${user.username}`}</p>
           </Media.Item>
         </Media>
         <Card.Content className="user-card__content">
-          <Button color="primary">Follow</Button>
           <p className="user-card__username-text mt-half small">
             {user.description}
           </p>
