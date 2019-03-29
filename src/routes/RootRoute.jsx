@@ -41,10 +41,6 @@ class RootRoute extends Component {
     this.props.requestSingleUser(username)
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.state.username);
-
-    if (username !== 'kkomaz.id') {
-      this.props.userSession.userSession.signUserOut()
-    }
     // console.log('mounting')
     // Vote.addStreamListener(this.addVotesToParent)
   }

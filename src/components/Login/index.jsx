@@ -57,7 +57,6 @@ class Login extends Component {
                     className="mt-half login__button-sign-in"
                     color="link"
                     onClick={this.signIn}
-                    disabled
                   >
                     Sign in with Blockstack
                   </Button>
