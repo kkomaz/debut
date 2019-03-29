@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import {
   Columns,
   Container,
-  Card,
 } from 'components/bulma'
 import PropTypes from 'prop-types'
 import { User } from 'radiks'
@@ -12,6 +11,7 @@ import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 import { BarLoader } from 'components/Loader'
 import NoFollowers from 'components/Follow/NoFollowers'
+import { UserCard } from 'components/User'
 import './FollowersUsers.scss'
 
 class FollowersUsers extends Component {
@@ -162,15 +162,14 @@ class FollowersUsers extends Component {
                 <Columns.Column
                   key={user.username}
                   tablet={{
-                    size: 3,
+                    size: 4,
                   }}
                 >
-                  <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                    <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
-                    <Card.Content className="page__content">
-                      <p className="page__username-text">{user.username}</p>
-                    </Card.Content>
-                  </Card>
+                  <UserCard
+                    user={user}
+                    defaultImgUrl={defaultImgUrl}
+                    navigateTo={this.onBoxClick}
+                  />
                 </Columns.Column>
               )
             })

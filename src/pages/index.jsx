@@ -4,14 +4,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {
   Button,
-  Card,
   Columns,
   Container,
   Heading,
   Hero,
   Table,
-  Media,
-  Image,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
 import { Loader } from 'components/Loader'
