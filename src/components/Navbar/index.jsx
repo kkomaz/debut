@@ -20,6 +20,7 @@ class NavbarComp extends Component {
       searchResults: [],
       selected: '',
       hovered: '',
+      dropdownOpen: false,
     }
 
     this.fetchList = _.debounce(this.fetchList, 300)
@@ -146,6 +147,10 @@ class NavbarComp extends Component {
     this.setState({ open: !this.state.open })
   }
 
+  toggleDropdown = () => {
+    this.setState({ dropdownOpen: !this.state.dropdownOpen })
+  }
+
   render() {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
@@ -197,10 +202,13 @@ class NavbarComp extends Component {
               {
                 isSignedIn &&
                 <React.Fragment>
-                  <Navbar.Item onClick={this.goToProfile}>
+                  <div className={`navbar-item has-dropdown ${this.state.dropdownOpen ? 'is-active': ''}`}>
                     {
                       _.isEmpty(user) && loading ? <IconLoader /> :
-                      <div className="debut-nav-bar__user-identity mt-half" onClick={this.goToProfile}>
+                      <div
+                        className="debut-nav-bar__user-identity mt-half navbar-link"
+                        onClick={this.toggleDropdown}
+                      >
                         <img
                           onError={this.addDefaultSrc}
                           src={_.get(user, 'profileImgUrl', defaultImgUrl)}
@@ -210,7 +218,18 @@ class NavbarComp extends Component {
                           />
                       </div>
                     }
-                  </Navbar.Item>
+                    <div className="navbar-dropdown is-boxed">
+                      <a className="navbar-item" href="#">
+                        Home
+                      </a>
+                      <a class="navbar-item" href="#">
+                        Help
+                      </a>
+                      <a class="navbar-item" href="#">
+                        Sign Out
+                      </a>
+                    </div>
+                  </div>
 
                   <div className="is-divider-vertical"></div>
 
