@@ -8,6 +8,7 @@ import { IconLoader } from 'components/Loader'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 import axios from 'axios'
+import NavbarList from './NavbarList'
 import './Navbar.scss';
 
 class NavbarComp extends Component {
@@ -219,15 +220,7 @@ class NavbarComp extends Component {
                       </div>
                     }
                     <div className="navbar-dropdown is-boxed">
-                      <a className="navbar-item" href="#">
-                        Home
-                      </a>
-                      <a class="navbar-item" href="#">
-                        Help
-                      </a>
-                      <a class="navbar-item" href="#">
-                        Sign Out
-                      </a>
+                      
                     </div>
                   </div>
 
