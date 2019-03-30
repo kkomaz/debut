@@ -1,13 +1,26 @@
 .followers-users {
-  @media screen and (min-width: 1472px) {
-    max-width: 1000px;
-    width: 1000px;
-  }
-
   &--loading {
     width: 50%;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+@media screen and (min-width: 1472px) {
+  .followers-users {
+    &.container {
+      max-width: 960px;
+      width: 960px;
+    }
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .followers-users {
+    &.container {
+      max-width: 960px;
+      width: 960px;
+    }
   }
 }
