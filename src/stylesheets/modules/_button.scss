@@ -1,6 +1,10 @@
 .button {
   font-size: 14px;
 
+  &.small {
+    font-size: 12px;
+  }
+
   &.is-light {
     background-image: -webkit-linear-gradient(45deg, $pitch-dark 0%, $darkness 100%);
     color: $white;

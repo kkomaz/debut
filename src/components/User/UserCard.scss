@@ -52,4 +52,10 @@
     padding: 10px;
     overflow: hidden;
   }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+  }
 }

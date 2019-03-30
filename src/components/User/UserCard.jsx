@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import {
+  Button,
   Card,
   Media,
   Image,
@@ -48,6 +49,10 @@ class UserCard extends Component {
           </Media.Item>
         </Media>
         <Card.Content className="user-card__content">
+          <div className="user-card__actions">
+            <Button className="small" color="primary">Following</Button>
+          </div>
+
           <p className="user-card__username-text mt-half small">
             {user.description}
           </p>
