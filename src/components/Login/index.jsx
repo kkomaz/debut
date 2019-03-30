@@ -50,9 +50,6 @@ class Login extends Component {
               <Heading size={2} style={{ marginTop: '30px'}}>debut</Heading>
               <img className="mb-one" src={debutInfo} alt="Logo" height={600} width={600} />
                 <Content className="login__sign-in-content">
-                  <Heading size={6}>
-                    Currently in maintenance mode!
-                  </Heading>
                   <Button
                     className="mt-half login__button-sign-in"
                     color="link"

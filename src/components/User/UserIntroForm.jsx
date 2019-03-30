@@ -225,7 +225,7 @@ class UserIntroForm extends Component {
 
   render() {
     const { valid, searchResults, characterLength, standardCharacterLength } = this.state
-    const leftoverLength = 250 - characterLength
+    const leftoverLength = 150 - characterLength
     const characterClass = classNames({
       'user-intro-form__character-length': true,
       'user-intro-form__character-length--warning': leftoverLength < 100 && leftoverLength >= 30,
@@ -260,10 +260,10 @@ class UserIntroForm extends Component {
             />
 
             <div className="user-intro-form__characters">
-              <p className={characterClass}>({250 - this.state.characterLength})</p>
+              <p className={characterClass}>({150 - this.state.characterLength})</p>
             </div>
             {
-              !valid &&  characterLength > standardCharacterLength && <Help color="danger">Bio is longer than 250 characters.</Help>
+              !valid &&  characterLength > standardCharacterLength && <Help color="danger">Bio is longer than 150 characters.</Help>
             }
             {
               !valid && characterLength === 0 && <Help color="danger">Field can not be empty!</Help>
