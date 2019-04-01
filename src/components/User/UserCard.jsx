@@ -3,16 +3,16 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import {
-  Button,
   Card,
   Media,
   Image,
 } from 'components/bulma'
+import UserCardButton from './UserCardButton'
 import './UserCard.scss'
 
 class UserCard extends Component {
   static propTypes = {
-    username: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
     follow: PropTypes.object.isRequired,
   }
@@ -24,7 +24,7 @@ class UserCard extends Component {
   }
 
   render() {
-    const { user, defaultImgUrl } = this.props
+    const { user, defaultImgUrl, follow, currentUser } = this.props
 
     return (
       <Card className="user-card__card">
@@ -50,7 +50,7 @@ class UserCard extends Component {
               className="user-card__user-image"
               onClick={this.navigateTo}
               renderAs="p"
-              size={80}
+              size={96}
               alt="80x80"
               src={_.get(user, 'profileImgUrl', defaultImgUrl)}
             />
@@ -58,7 +58,11 @@ class UserCard extends Component {
         </Media>
         <Card.Content className="user-card__content">
           <div className="user-card__actions">
-            <Button className="small" color="primary">Following</Button>
+            <UserCardButton
+              follow={follow}
+              user={user}
+              currentUser={currentUser}
+            />
           </div>
 
           <p className="user-card__username-text mt-half small">

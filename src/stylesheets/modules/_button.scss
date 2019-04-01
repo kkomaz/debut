@@ -1,12 +1,17 @@
 .button {
   font-size: 14px;
 
+  &:hover {
+    border: 1px solid $blue;
+    color: $blue;
+  }
+
   &.small {
     font-size: 12px;
   }
 
   &.is-light {
-    background-image: -webkit-linear-gradient(45deg, $pitch-dark 0%, $darkness 100%);
+    background-image: $pitch-dark;
     color: $white;
 
     &:active,
