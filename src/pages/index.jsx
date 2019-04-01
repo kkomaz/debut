@@ -109,7 +109,7 @@ class Page extends Component {
   render() {
     const { userState } = this.props
     const { showTileView, page } = this.state
-    const { defaultImgUrl } = this.context.state
+    const { defaultImgUrl, sessionUser } = this.context.state
 
     return (
       <div className="page">
@@ -158,6 +158,7 @@ class Page extends Component {
                             user={user}
                             defaultImgUrl={defaultImgUrl}
                             navigateTo={this.onBoxClick}
+                            currentUser={sessionUser.userData}
                           />
                         </Columns.Column>
                       )

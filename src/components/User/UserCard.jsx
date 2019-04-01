@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import _ from 'lodash'
+import { connect } from 'react-redux'
 import {
   Button,
   Card,
@@ -9,6 +11,12 @@ import {
 import './UserCard.scss'
 
 class UserCard extends Component {
+  static propTypes = {
+    username: PropTypes.string.isRequired,
+    currentUser: PropTypes.object.isRequired,
+    follow: PropTypes.object.isRequired,
+  }
+
   navigateTo = () => {
     const { user } = this.props
 
@@ -20,7 +28,7 @@ class UserCard extends Component {
 
     return (
       <Card className="user-card__card">
-        <Card.Content className="user-card__card-banner" style={{ color: 'white'}}>
+        <Card.Content className="user-card__card-banner">
           <div style={{ paddingLeft: '80px'}}>
             <p
               className="user-card__name"
@@ -62,4 +70,14 @@ class UserCard extends Component {
   }
 }
 
-export default UserCard;
+const mapStateToProps = (state, ownProps) => {
+  const { currentUser } = ownProps
+
+  const follow = state.follow[currentUser.username] || {}
+
+  return {
+    follow,
+  }
+}
+
+export default connect(mapStateToProps, {})(UserCard);
