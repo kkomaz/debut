@@ -133,7 +133,7 @@ class FollowersUsers extends Component {
 
   render() {
     const { users, loading } = this.state
-    const { defaultImgUrl, userData } = this.context.state
+    const { defaultImgUrl, sessionUser } = this.context.state
     const { className, follow } = this.props
 
     if (loading) {
@@ -167,9 +167,10 @@ class FollowersUsers extends Component {
                 >
                   <UserCard
                     user={user}
-                    currentUser={userData}
+                    currentUser={sessionUser.userData}
                     defaultImgUrl={defaultImgUrl}
                     navigateTo={this.onBoxClick}
+                    disableButton
                   />
                 </Columns.Column>
               )

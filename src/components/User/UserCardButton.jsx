@@ -58,13 +58,14 @@ class UserCardButton extends Component {
       user,
       currentUser,
       loading,
+      disableButton,
     } = this.props
 
     const { followingText } = this.state
 
     console.log(followingText)
 
-    if (currentUser.username === user.username) {
+    if (currentUser.username === user.username || disableButton) {
       return null
     }
 

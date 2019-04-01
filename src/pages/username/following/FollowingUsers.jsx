@@ -113,7 +113,7 @@ class FollowingUsers extends Component {
 
   render() {
     const { users, bottomReached, full, loading } = this.state
-    const { defaultImgUrl } = this.context.state
+    const { defaultImgUrl, sessionUser } = this.context.state
     const { className, size, follow } = this.props
 
     if (loading) {
@@ -146,6 +146,7 @@ class FollowingUsers extends Component {
                 >
                   <UserCard
                     user={user}
+                    currentUser={sessionUser.userData}
                     defaultImgUrl={defaultImgUrl}
                     navigateTo={this.onBoxClick}
                   />

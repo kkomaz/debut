@@ -24,7 +24,13 @@ class UserCard extends Component {
   }
 
   render() {
-    const { user, defaultImgUrl, follow, currentUser } = this.props
+    const {
+      user,
+      defaultImgUrl,
+      follow,
+      currentUser,
+      disableButton,
+    } = this.props
 
     return (
       <Card className="user-card__card">
@@ -62,6 +68,7 @@ class UserCard extends Component {
               follow={follow}
               user={user}
               currentUser={currentUser}
+              disableButton={disableButton}
             />
           </div>
 
@@ -72,6 +79,10 @@ class UserCard extends Component {
       </Card>
     )
   }
+}
+
+UserCard.defaultProps = {
+  disableButton: false,
 }
 
 const mapStateToProps = (state, ownProps) => {
