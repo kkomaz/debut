@@ -1,3 +1,10 @@
+@import 'src/variables';
+
 .user-card-button {
   min-width: 90px;
+
+  &:hover {
+    border: 1px solid $blue;
+    color: $blue;
+  }
 }

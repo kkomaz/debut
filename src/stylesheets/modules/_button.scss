@@ -1,11 +1,6 @@
 .button {
   font-size: 14px;
 
-  &:hover {
-    border: 1px solid $blue;
-    color: $blue;
-  }
-
   &.small {
     font-size: 12px;
   }
