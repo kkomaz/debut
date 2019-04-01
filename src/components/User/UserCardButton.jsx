@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+/** @jsx jsx */
+import { Component } from 'react'
+import { jsx } from '@emotion/core'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -7,7 +9,7 @@ import {
   requestFollow,
   requestUnfollow,
 } from 'actions/follow'
-import './UserCardButton.scss'
+import UserCardButtonStyles from './UserCardButtonStyles'
 
 class UserCardButton extends Component {
   constructor(props) {
@@ -68,7 +70,6 @@ class UserCardButton extends Component {
     if (_.includes(follow.following, user.username)) {
       return (
         <Button
-          className="user-card-button"
           color={followingText === 'Following' ? 'primary' : 'danger' }
           onMouseEnter={this.setUnfollowText}
           onMouseLeave={this.setFollowText}
@@ -82,7 +83,7 @@ class UserCardButton extends Component {
 
     return (
       <Button
-        className="user-card-button"
+        css={theme => UserCardButtonStyles(theme)}
         onClick={this.followUser}
         disabled={loading}
       >
