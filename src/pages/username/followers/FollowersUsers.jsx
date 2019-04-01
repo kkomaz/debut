@@ -155,14 +155,17 @@ class FollowersUsers extends Component {
 
     return (
       <Container className="followers-users">
-        <Columns className={className} breakpoint="tablet">
+        <Columns className={className} breakpoint="mobile">
           {
             _.map(users, (user) => {
               return (
                 <Columns.Column
                   key={user.username}
-                  tablet={{
+                  desktop={{
                     size: 4,
+                  }}
+                  mobile={{
+                    size: 6,
                   }}
                 >
                   <UserCard

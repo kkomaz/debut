@@ -114,7 +114,7 @@ class FollowingUsers extends Component {
   render() {
     const { users, bottomReached, full, loading } = this.state
     const { defaultImgUrl, sessionUser } = this.context.state
-    const { className, size, follow } = this.props
+    const { className, follow } = this.props
 
     if (loading) {
       return (
@@ -134,14 +134,17 @@ class FollowingUsers extends Component {
 
     return (
       <Container className="following-users">
-        <Columns className={className} breakpoint="tablet">
+        <Columns className={className} breakpoint="mobile">
           {
             _.map(users, (user) => {
               return (
                 <Columns.Column
                   key={user.username}
-                  tablet={{
-                    size,
+                  desktop={{
+                    size: 4,
+                  }}
+                  mobile={{
+                    size: 6,
                   }}
                 >
                   <UserCard
