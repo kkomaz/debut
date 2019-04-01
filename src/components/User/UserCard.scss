@@ -13,6 +13,7 @@
   }
 
   &__card-banner {
+    overflow: hidden;
     background: $primary;
     height: 90px;
     color: $white;
