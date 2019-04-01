@@ -173,7 +173,6 @@ class FollowersUsers extends Component {
                     currentUser={sessionUser.userData}
                     defaultImgUrl={defaultImgUrl}
                     navigateTo={this.onBoxClick}
-                    disableButton
                   />
                 </Columns.Column>
               )

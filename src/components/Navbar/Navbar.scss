@@ -5,6 +5,7 @@
   color: $white;
   border-bottom: 1px solid hsla(0,0%,100%,.1);
   padding-left: 269px;
+  padding-right: 280px;
   height: 65px;
 
   &__user-options {
@@ -65,7 +66,7 @@
 @media only screen and (max-width: 1500px) {
   .debut-nav-bar {
     padding-left: 134px;
-    padding-right: 144px;
+    padding-right: 136px;
   }
 }
 
