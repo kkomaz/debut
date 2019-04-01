@@ -1,37 +1,14 @@
 @import 'src/variables';
 
 .page {
+  &__container {
+    margin-top: 0 !important;
+  }
+
   &__user-row {
     :hover {
       cursor: pointer;
     }
-  }
-
-  &__card {
-    cursor: pointer;
-    background: $pitch-dark;
-    color: $white;
-    width: 280px;
-  }
-
-  &__card-image {
-    img {
-      color: rgba(0, 0, 0, 0) !important;
-      text-indent:-9999px
-    }
-  }
-
-  &__content {
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__username-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   &__join-text {
@@ -60,7 +37,7 @@
   }
 
   &__user-container {
-    @media screen and (min-width: 1472px) {
+    @media screen and (min-width: 1280px) {
       max-width: 900px;
       width: 900px;
     }

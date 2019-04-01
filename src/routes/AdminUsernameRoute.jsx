@@ -13,8 +13,6 @@ import {
   Container
 } from 'components/bulma'
 import BarLoader from 'components/Loader/BarLoader'
-import AdminFollowersUsers from 'components/Follow/AdminFollowersUsers'
-import AdminFollowingUsers from 'components/Follow/AdminFollowingUsers'
 import { RandomUsers } from 'components/User'
 
 // Stylesheets
@@ -57,13 +55,15 @@ class AdminUsernameRoute extends Component {
   }
 
   onFollowersClick = () => {
+    const { username } = this.props
     this.onMenuItemClick('followers')
-    this.props.history.push('/admin/followers')
+    this.props.history.push(`/${username}/followers`)
   }
 
   onFollowingClick = () => {
+    const { username } = this.props
     this.onMenuItemClick('following')
-    this.props.history.push('/admin/following')
+    this.props.history.push(`/${username}/following`)
   }
 
   render() {
@@ -107,26 +107,6 @@ class AdminUsernameRoute extends Component {
                 render={() => (
                   _.isEmpty(userFollow) ? <BarLoader /> : <AdminActivityFeed userFollow={userFollow} />
                 )}
-              />
-              <Route
-                exact
-                path={`/admin/following`}
-                render={() => (
-                  <AdminFollowingUsers
-                    follow={userFollow}
-                    size={4}
-                  />
-                )}
-              />
-              <Route
-                path={`/admin/followers`}
-                render={() =>
-                  <AdminFollowersUsers
-                    follow={userFollow}
-                    loading={loading}
-                    size={4}
-                  />
-                }
               />
             </Switch>
           </Columns.Column>

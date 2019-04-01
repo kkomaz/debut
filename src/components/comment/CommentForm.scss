@@ -8,9 +8,10 @@
 
   &__characters {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin: 7px 0;
     align-items: center;
+    padding-right: 5px;
   }
 
   &__label {
@@ -19,6 +20,7 @@
 
   &__character-length {
     color: $light_purple;
+    margin-bottom: 0 !important;
   }
 
   &__text-field {

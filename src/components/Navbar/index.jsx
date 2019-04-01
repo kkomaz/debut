@@ -8,6 +8,7 @@ import { IconLoader } from 'components/Loader'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
 import axios from 'axios'
+import NavbarList from './NavbarList'
 import './Navbar.scss';
 
 class NavbarComp extends Component {
@@ -197,10 +198,15 @@ class NavbarComp extends Component {
               {
                 isSignedIn &&
                 <React.Fragment>
-                  <Navbar.Item onClick={this.goToProfile}>
+                  <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToExplore}>
+                    Explore
+                  </Navbar.Item>
+                  <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                     {
                       _.isEmpty(user) && loading ? <IconLoader /> :
-                      <div className="debut-nav-bar__user-identity mt-half" onClick={this.goToProfile}>
+                      <div
+                        className="debut-nav-bar__user-identity navbar-link"
+                      >
                         <img
                           onError={this.addDefaultSrc}
                           src={_.get(user, 'profileImgUrl', defaultImgUrl)}
@@ -210,29 +216,26 @@ class NavbarComp extends Component {
                           />
                       </div>
                     }
-                  </Navbar.Item>
-
-                  <div className="is-divider-vertical"></div>
-
-                  <Navbar.Item onClick={this.goToHome}>
+                    <div className="debut-nav-bar__list navbar-dropdown is-boxed is-right" style={{ padding: '0' }}>
+                      <NavbarList
+                        user={user}
+                        onHomeClick={this.goToHome}
+                        onHelpClick={this.goToHelp}
+                        onProfileClick={this.goToProfile}
+                        onSignOutClick={this.signOut}
+                      />
+                    </div>
+                  </div>
+                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHome}>
                     Home
                   </Navbar.Item>
-
-                  <div className="is-divider-vertical"></div>
-
-                  <Navbar.Item onClick={this.goToExplore}>
-                    Explore
+                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToProfile}>
+                    Profile
                   </Navbar.Item>
-
-                  <div className="is-divider-vertical"></div>
-
-                  <Navbar.Item onClick={this.goToHelp}>
+                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
                     Help
                   </Navbar.Item>
-
-                  <div className="is-divider-vertical"></div>
-
-                  <Navbar.Item onClick={this.signOut}>
+                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.signOut}>
                     Sign Out
                   </Navbar.Item>
                 </React.Fragment>

@@ -8,6 +8,8 @@
 
   &__character-length {
     color: $light_purple;
+    margin-bottom: 0 !important;
+    margin-right: 10px;
   }
 
   &__text-field {
@@ -36,8 +38,9 @@
 
   &__characters {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin: 7px 0;
     align-items: center;
+    padding-right: 5px;
   }
 }

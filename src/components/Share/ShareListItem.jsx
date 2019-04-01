@@ -43,7 +43,7 @@ class ShareListItem extends Component {
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
     onCommentEditClick: PropTypes.func,
-    requestAddVote: PropTypes.func.isRequired,
+    // requestAddVote: PropTypes.func.isRequired,
   }
 
   revertDelete = () => {
@@ -167,7 +167,7 @@ class ShareListItem extends Component {
             linkStyles={{
               position: 'absolute',
               top: '0',
-              right: '5px',
+              right: '11px',
               height: '30px'
             }}
           />
@@ -210,7 +210,7 @@ class ShareListItem extends Component {
           linkStyles={{
             position: 'absolute',
             top: '0',
-            right: '5px',
+            right: '11px',
             height: '30px'
           }}
         />

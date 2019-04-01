@@ -10,7 +10,7 @@ import DebutUser from 'model/debutUser'
 const fetchPaginatedUsers = (action) => {
   const result = DebutUser.fetchList({
     sort: '-createdAt',
-    limit: 16,
+    limit: 15,
     offset: action.payload.offset,
   })
   return result

@@ -326,7 +326,7 @@ class UsernamePage extends Component {
                               linkStyles={{
                                 position: 'absolute',
                                 top: '0',
-                                right: '5px',
+                                right: '23px',
                                 height: '30px'
                               }}
                             />

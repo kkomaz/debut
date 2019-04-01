@@ -42,8 +42,8 @@ class CommentAdminMenu extends Component {
           className="comment-admin-menu"
           style={{
             backgroundColor: '#383A3F',
-            padding: '20px',
-            width: '200px',
+            padding: '15px',
+            width: '120px',
           }}
         >
           <Menu.List>

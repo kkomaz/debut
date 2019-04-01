@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import {
   Columns,
   Container,
-  Card,
 } from 'components/bulma'
 import { BarLoader } from 'components/Loader'
 import PropTypes from 'prop-types'
@@ -12,6 +11,7 @@ import { User } from 'radiks'
 import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 import NoFollowing from 'components/Follow/NoFollowing'
+import { UserCard } from 'components/User'
 import './FollowingUsers.scss'
 
 class FollowingUsers extends Component {
@@ -113,8 +113,8 @@ class FollowingUsers extends Component {
 
   render() {
     const { users, bottomReached, full, loading } = this.state
-    const { defaultImgUrl } = this.context.state
-    const { className, size, follow } = this.props
+    const { defaultImgUrl, sessionUser } = this.context.state
+    const { className, follow } = this.props
 
     if (loading) {
       return (
@@ -134,22 +134,25 @@ class FollowingUsers extends Component {
 
     return (
       <Container className="following-users">
-        <Columns className={className} breakpoint="tablet">
+        <Columns className={className} breakpoint="mobile">
           {
             _.map(users, (user) => {
               return (
                 <Columns.Column
                   key={user.username}
-                  tablet={{
-                    size,
+                  desktop={{
+                    size: 4,
+                  }}
+                  mobile={{
+                    size: 6,
                   }}
                 >
-                  <Card className="page__card" onClick={() => this.onBoxClick(user)}>
-                    <Card.Image size="4by3" src={_.get(user, 'profileImgUrl', defaultImgUrl)} />
-                    <Card.Content className="page__content">
-                      <p className="page__username-text">{user.username}</p>
-                    </Card.Content>
-                  </Card>
+                  <UserCard
+                    user={user}
+                    currentUser={sessionUser.userData}
+                    defaultImgUrl={defaultImgUrl}
+                    navigateTo={this.onBoxClick}
+                  />
                 </Columns.Column>
               )
             })
@@ -164,7 +167,7 @@ class FollowingUsers extends Component {
 }
 
 FollowingUsers.defaultProps = {
-  size: 3
+  size: 4
 }
 
 export default withRouter(connect()(FollowingUsers))

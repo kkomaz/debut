@@ -100,7 +100,7 @@ class CommentListItem extends Component {
             linkStyles={{
               position: 'absolute',
               top: '0',
-              right: '5px',
+              right: '11px',
               height: '30px'
             }}
             />
@@ -143,7 +143,7 @@ class CommentListItem extends Component {
             linkStyles={{
               position: 'absolute',
               top: '0',
-              right: '5px',
+              right: '11px',
               height: '30px'
             }}
           />
@@ -187,7 +187,7 @@ class CommentListItem extends Component {
                 linkStyles={{
                   position: 'absolute',
                   top: '0',
-                  right: '5px',
+                  right: '11px',
                   height: '30px'
                 }}
               />

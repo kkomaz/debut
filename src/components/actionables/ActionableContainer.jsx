@@ -8,7 +8,6 @@ import {
   requestAddVote,
   requestRemoveVote,
 } from 'actions/vote'
-import classNames from 'classnames';
 // Component Imports
 import {
   Modal,
@@ -35,8 +34,8 @@ class ActionableContainer extends Component {
 
   static propTypes = {
     detailObj: PropTypes.object.isRequired,
-    voter: PropTypes.object.isRequired,
-    toggleVote: PropTypes.func.isRequired,
+    // voter: PropTypes.object.isRequired,
+    // toggleVote: PropTypes.func.isRequired,
     toggleComment: PropTypes.func.isRequired,
   }
 
@@ -67,7 +66,7 @@ class ActionableContainer extends Component {
 
   render() {
     const { detailObj } = this.props
-    const { voter, count, showModal } = this.state
+    const { showModal } = this.state
 
     // const iconHeartsClassName = classNames({
     //   'actionable-container__icons-hearts': true,
