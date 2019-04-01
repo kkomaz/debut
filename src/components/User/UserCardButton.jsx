@@ -13,10 +13,8 @@ class UserCardButton extends Component {
   constructor(props) {
     super(props)
 
-    const { follow, user } = props
-
     this.state = {
-      followingText: _.includes(follow.following, user.username) ? 'Following' : ''
+      followingText: 'Following'
     }
   }
 
@@ -62,8 +60,6 @@ class UserCardButton extends Component {
     } = this.props
 
     const { followingText } = this.state
-
-    console.log(followingText)
 
     if (currentUser.username === user.username || disableButton) {
       return null
