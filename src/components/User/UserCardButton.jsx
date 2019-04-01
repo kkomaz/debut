@@ -41,6 +41,7 @@ class UserCardButton extends Component {
     const { user, sessionFollow, viewedFollow, currentUser } = this.props
     const following = _.get(sessionFollow, 'following', [])
     const followers = _.get(viewedFollow, 'followers', [])
+    this.setState({ followingText: 'Following' })
     this.props.requestFollow(currentUser.username, user.username, following, followers)
   }
 
@@ -58,7 +59,10 @@ class UserCardButton extends Component {
       currentUser,
       loading,
     } = this.props
+
     const { followingText } = this.state
+
+    console.log(followingText)
 
     if (currentUser.username === user.username) {
       return null
@@ -83,6 +87,7 @@ class UserCardButton extends Component {
       <Button
         className="user-card-button"
         onClick={this.followUser}
+        disabled={loading}
       >
         Follow
       </Button>
