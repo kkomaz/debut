@@ -19,9 +19,9 @@ class FollowButton extends Component {
   }
 
   followUser = async () => {
-    const { username, sessionFollow, viewedfollow, sessionUser } = this.props
+    const { username, sessionFollow, viewedFollow, sessionUser } = this.props
     const following = _.get(sessionFollow, 'following', [])
-    const followers = _.get(viewedfollow, 'followers', [])
+    const followers = _.get(viewedFollow, 'followers', [])
     this.props.requestFollow(sessionUser.username, username, following, followers)
   }
 
@@ -64,12 +64,12 @@ class FollowButton extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const viewedfollow = state.follow[ownProps.username] || {}
+  const viewedFollow = state.follow[ownProps.username] || {}
   const sessionFollow = state.follow[ownProps.sessionUser.username] || {}
   const loading = state.follow.loading
 
   return {
-    viewedfollow,
+    viewedFollow,
     sessionFollow,
     loading
   }

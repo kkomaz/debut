@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import _ from 'lodash'
+import { Button } from 'components/bulma'
 import {
-  Button,
-} from 'components/bulma'
+  requestFollow,
+  requestUnfollow,
+} from 'actions/follow'
 import './UserCardButton.scss'
 
 class UserCardButton extends Component {
@@ -18,9 +21,12 @@ class UserCardButton extends Component {
   }
 
   static propTypes = {
-    follow: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
+    follow: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    sessionFollow: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    viewedFollow: PropTypes.object.isRequired,
   }
 
   setUnfollowText = () => {
@@ -31,8 +37,27 @@ class UserCardButton extends Component {
     this.setState({ followingText: 'Following' })
   }
 
+  followUser = async () => {
+    const { user, sessionFollow, viewedFollow, currentUser } = this.props
+    const following = _.get(sessionFollow, 'following', [])
+    const followers = _.get(viewedFollow, 'followers', [])
+    this.props.requestFollow(currentUser.username, user.username, following, followers)
+  }
+
+  unfollowUser = async () => {
+    const { user, sessionFollow, viewdfollow, currentUser } = this.props
+    const following = _.get(sessionFollow, 'following', [])
+    const followers = _.get(viewdfollow, 'followers', [])
+    this.props.requestUnfollow(currentUser.username, user.username, following, followers)
+  }
+
   render() {
-    const { follow, user, currentUser } = this.props
+    const {
+      follow,
+      user,
+      currentUser,
+      loading,
+    } = this.props
     const { followingText } = this.state
 
     if (currentUser.username === user.username) {
@@ -46,6 +71,8 @@ class UserCardButton extends Component {
           color={followingText === 'Following' ? 'primary' : 'danger' }
           onMouseEnter={this.setUnfollowText}
           onMouseLeave={this.setFollowText}
+          disabled={loading}
+          onClick={this.unfollowUser}
         >
           {followingText}
         </Button>
@@ -55,6 +82,7 @@ class UserCardButton extends Component {
     return (
       <Button
         className="user-card-button"
+        onClick={this.followUser}
       >
         Follow
       </Button>
@@ -62,4 +90,19 @@ class UserCardButton extends Component {
   }
 }
 
-export default UserCardButton
+const mapStateToProps = (state, ownProps) => {
+  const viewedFollow = state.follow[ownProps.user.username] || {}
+  const sessionFollow = state.follow[ownProps.currentUser.username] || {}
+  const loading = state.follow.loading
+
+  return {
+    viewedFollow,
+    sessionFollow,
+    loading
+  }
+}
+
+export default connect(mapStateToProps, {
+  requestFollow,
+  requestUnfollow,
+})(UserCardButton)
