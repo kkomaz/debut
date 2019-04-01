@@ -34,8 +34,8 @@ class ActionableContainer extends Component {
 
   static propTypes = {
     detailObj: PropTypes.object.isRequired,
-    voter: PropTypes.object.isRequired,
-    toggleVote: PropTypes.func.isRequired,
+    // voter: PropTypes.object.isRequired,
+    // toggleVote: PropTypes.func.isRequired,
     toggleComment: PropTypes.func.isRequired,
   }
 
