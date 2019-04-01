@@ -8,6 +8,7 @@ import {
   Image,
 } from 'components/bulma'
 import UserCardButton from './UserCardButton'
+import { linkifyText } from 'utils/decorator'
 import './UserCard.scss'
 
 class UserCard extends Component {
@@ -40,7 +41,7 @@ class UserCard extends Component {
               className="user-card__name"
               onClick={this.navigateTo}
             >
-              {_.get(user, 'profile.name', user.username)}
+              {user.name || _.get(user, 'profile.name', user.username)}
             </p>
             <p
               className="user-card__username small"
@@ -73,7 +74,7 @@ class UserCard extends Component {
           </div>
 
           <p className="user-card__username-text mt-half small">
-            {user.description}
+            {linkifyText(user.description)}
           </p>
         </Card.Content>
       </Card>

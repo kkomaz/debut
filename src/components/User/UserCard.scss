@@ -6,6 +6,12 @@
     height: 279px;
   }
 
+  &__username-text {
+    a {
+      font-size: 12px;
+    }
+  }
+
   &__card-banner {
     background: $primary;
     height: 90px;
