@@ -43,8 +43,8 @@ class ShareAdminMenu extends Component {
         className="share-admin-menu"
         style={{
           backgroundColor: '#383A3F',
-          padding: '20px',
-          width: '200px',
+          padding: '15px',
+          width: '120px',
         }}
       >
         <Menu.List>

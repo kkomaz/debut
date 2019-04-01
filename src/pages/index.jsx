@@ -144,14 +144,17 @@ class Page extends Component {
                   full={userState.paginatedObj.full}
                 />
               ): showTileView ?
-                <Columns breakpoint="tablet">
+                <Columns breakpoint="mobile">
                   {
                     _.map(userState.paginatedUsers[page].list, (user) => {
                       return (
                         <Columns.Column
                           key={user.username}
-                          tablet={{
+                          desktop={{
                             size: 4,
+                          }}
+                          mobile={{
+                            size: 6,
                           }}
                         >
                           <UserCard
