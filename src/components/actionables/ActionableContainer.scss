@@ -18,11 +18,28 @@
   &__icons-bubble {
     align-items: center;
     display: flex;
+    margin-right: 10px;
   }
 
   &__hide-comments,
   &__view-more-comments {
     color: $primary;
     cursor: pointer;
+  }
+
+  &__icons-hearts {
+    align-items: center;
+    display: flex;
+    &--single {
+      margin-right: 11px; // Need to make this dynamic
+    }
+
+    &--double {
+      padding-right: 18px;
+    }
+
+    &--triple {
+      padding-right: 22px;
+    }
   }
 }

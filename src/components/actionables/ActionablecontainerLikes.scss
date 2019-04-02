@@ -22,15 +22,15 @@
     align-items: center;
     display: flex;
     &--single {
-      padding-right: 5px; // Need to make this dynamic
+      padding-right: 13px; // Need to make this dynamic
     }
 
     &--double {
-      padding-right: 11px;
+      padding-right: 15px;
     }
 
     &--triple {
-      padding-right: 18px;
+      padding-right: 22px;
     }
   }
 

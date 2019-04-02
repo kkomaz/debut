@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames';
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Icon } from 'components/icon'
@@ -8,6 +9,7 @@ import {
   requestAddVote,
   requestRemoveVote,
 } from 'actions/vote'
+
 // Component Imports
 import {
   Modal,
@@ -34,8 +36,8 @@ class ActionableContainer extends Component {
 
   static propTypes = {
     detailObj: PropTypes.object.isRequired,
-    // voter: PropTypes.object.isRequired,
-    // toggleVote: PropTypes.func.isRequired,
+    voter: PropTypes.object.isRequired,
+    toggleVote: PropTypes.func.isRequired,
     toggleComment: PropTypes.func.isRequired,
   }
 
@@ -65,15 +67,17 @@ class ActionableContainer extends Component {
   }
 
   render() {
-    const { detailObj } = this.props
+    const { detailObj, voter } = this.props
     const { showModal } = this.state
 
-    // const iconHeartsClassName = classNames({
-    //   'actionable-container__icons-hearts': true,
-    //   'actionable-container__icons-hearts--single': count < 10,
-    //   'actionable-container__icons-hearts--double': count >= 10,
-    //   'actionable-container__icons-hearts--triple': count >= 100,
-    // })
+    const count = _.get(detailObj, 'votes.length', 0)
+
+    const iconHeartsClassName = classNames({
+      'actionable-container__icons-hearts': true,
+      'actionable-container__icons-hearts--single': count < 10,
+      'actionable-container__icons-hearts--double': count >= 10,
+      'actionable-container__icons-hearts--triple': count >= 100,
+    })
 
     return (
       <React.Fragment>
@@ -87,6 +91,19 @@ class ActionableContainer extends Component {
               onClick={this.props.toggleComment}
             />
             <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
+          </div>
+          <div className={iconHeartsClassName}>
+            <Icon
+              className="debut-icon debut-icon--pointer actionable-container__toggle-votes"
+              icon="IconHeart"
+              size={15}
+              onClick={this.addOrRemoveVote}
+              color={!_.isEmpty(voter) ? '#ff3860' : '#8b8687'}
+              linkStyle={{
+                height: 'inherit'
+              }}
+            />
+            <span className="small ml-half" style={{ width: '10px', marginTop: '2px'}}>{count}</span>
           </div>
         </div>
         <Modal
