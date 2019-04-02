@@ -1,8 +1,9 @@
+/** @jsx jsx */
 import React, { Component } from 'react'
+import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classNames from 'classnames';
 import {
   BulmaLoader,
   Field,
@@ -17,7 +18,6 @@ import {
 } from 'actions/share'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
-import './ShareForm.scss'
 
 class ShareForm extends Component {
   constructor(props) {
@@ -157,10 +157,6 @@ class ShareForm extends Component {
   render() {
     const { valid, editMode } = this.state
     const { editing, submitting } = this.props
-    const characterClass = classNames({
-      'share-form__character-length': true,
-      'super-small': true
-    })
 
     return (
       <React.Fragment>
@@ -168,7 +164,11 @@ class ShareForm extends Component {
           className="share-form"
           onSubmit={this.onSubmit}
         >
-          <Field className="share-form__text-field">
+          <Field
+            css={css`
+              margin-bottom: 0 !important;
+            `}
+          >
             <Textarea
               name="text"
               onChange={this.onChange}
@@ -193,8 +193,30 @@ class ShareForm extends Component {
 
           {
             this.state.imageFile &&
-            <div className="share-form__image-uploaded">
-              <img style={{ maxWidth: '500px', maxHeight: '500px' }} alt='' src={this.state.imageFile} />
+            <div
+              css={theme => css`
+                align-items: center;
+                border-bottom: 1px solid ${theme.colors.shadow};
+                border-left: 1px solid ${theme.colors.shadow};
+                border-right: 1px solid ${theme.colors.shadow};
+                display: flex;
+                padding: 10px 0 10px 20px;
+                justify-content: center;
+
+                a {
+                  align-self: end;
+                }
+              `}
+            >
+              <img
+                css={theme => css`
+                  max-width: 500px;
+                  max-height: 500px;
+                  border: 1px solid ${theme.colors.shadow}
+                `}
+                alt=''
+                src={this.state.imageFile}
+              />
               <Icon
                 className="share-form__image-remove-button debut-icon debut-icon--pointer"
                 icon="IconX"
@@ -205,8 +227,25 @@ class ShareForm extends Component {
             </div>
           }
 
-          <div className="share-form__characters">
-            <p className={characterClass}>({150 - this.state.characterLength})</p>
+          <div
+            css={css`
+              display: flex;
+              justify-content: flex-end;
+              margin: 7px 0;
+              align-items: center;
+              padding-right: 5px;
+            `}
+          >
+            <p
+              className="super-small"
+              css={theme => css`
+                color: ${theme.colors.primary};
+                margin-bottom: 0 !important;
+                margin-right: 10px;
+              `}
+            >
+              ({150 - this.state.characterLength})
+            </p>
             <div className="share-form__options">
               <Label>
                 <Icon
@@ -225,10 +264,21 @@ class ShareForm extends Component {
             </div>
           </div>
 
-          <div className="share-form__submit-wrapper">
+          <div
+            css={css`
+              display: flex;
+              justify-content: flex-end;
+            `}
+          >
             {
               !editMode &&
-              <div className="share-form__submit-footer">
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                  justify-content: flex-end;
+                `}
+              >
                 { submitting && <BulmaLoader className="mr-one" />}
                 <SubmitFooter
                   onCancel={this.onCancel}
@@ -240,7 +290,13 @@ class ShareForm extends Component {
 
             {
               editMode &&
-              <div className="share-form__submit-footer">
+              <div
+                css={css`
+                  display: flex;
+                  align-items: center;
+                  justify-content: flex-end;
+                `}
+              >
                 { editing && <BulmaLoader className="mr-one" />}
                 <SubmitFooter
                   onCancel={this.onCancel}
