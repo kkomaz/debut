@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+/** @jsx jsx */
+import { Component } from 'react'
+import { jsx, css } from '@emotion/core'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
@@ -9,7 +11,6 @@ import {
 } from 'components/bulma'
 import UserCardButton from './UserCardButton'
 import { linkifyText } from 'utils/decorator'
-import './UserCard.scss'
 
 class UserCard extends Component {
   static propTypes = {
@@ -34,27 +35,76 @@ class UserCard extends Component {
     } = this.props
 
     return (
-      <Card className="user-card__card">
-        <Card.Content className="user-card__card-banner">
-          <div style={{ paddingLeft: '80px'}}>
+      <Card
+        css={css`
+          width: 287px;
+          height: 279px;
+        `}
+      >
+        <Card.Content
+          css={theme => css`
+            overflow: hidden;
+            background: ${theme.colors.primary};
+            height: 90px;
+            color: ${theme.colors.white};
+          `}
+        >
+          <div
+            css={css`
+              padding-left: 80px;
+            `}
+          >
             <p
-              className="user-card__name"
+              css={theme => css`
+                font-weight: 800;
+                cursor: pointer;
+
+                &:hover {
+                  color: ${theme.colors.shadow}
+                }
+              `}
               onClick={this.navigateTo}
             >
               {user.name || _.get(user, 'profile.name', user.username)}
             </p>
             <p
-              className="user-card__username small"
+              className="small"
+              css={theme => css`
+                cursor: pointer;
+
+                &:hover {
+                  color: ${theme.colors.shadow};
+                }
+              `}
               onClick={this.navigateTo}
             >
               {user.username}
             </p>
           </div>
         </Card.Content>
-        <Media className="user-card__media">
+        <Media css={css`
+          position: relative;
+        `}>
           <Media.Item renderAs="figure" position="left">
             <Image
-              className="user-card__user-image"
+              css={theme => css`
+                position: absolute;
+                top: -65px;
+                left: 10px;
+                cursor: pointer;
+
+                img {
+                  box-shadow: 0px 2px 0px 0px ${theme.colors.shadow};
+                  height: 80px;
+                  width: 80px;
+                  border-radius: 50%;
+                  border: 2px solid ${theme.colors.white};
+                  box-shadow: 0px 1px 0px 0px ${theme.colors.shadow};
+                  background-position: 50% 50%;
+                  background-repeat: no-repeat;
+                  background-size: cover;
+                }
+              `}
               onClick={this.navigateTo}
               renderAs="p"
               size={96}
@@ -63,8 +113,20 @@ class UserCard extends Component {
             />
           </Media.Item>
         </Media>
-        <Card.Content className="user-card__content">
-          <div className="user-card__actions">
+        <Card.Content
+          css={css`
+            padding: 10px;
+            overflow: hidden;
+            height: 169px;
+          `}
+        >
+          <div
+            css={css`
+              display: flex;
+              justify-content: flex-end;
+              margin-bottom: 15px;
+            `}
+          >
             <UserCardButton
               follow={follow}
               user={user}
@@ -73,7 +135,14 @@ class UserCard extends Component {
             />
           </div>
 
-          <p className="user-card__username-text mt-half small">
+          <p
+            className="mt-half small"
+            css={css`
+              a {
+                font-size: 12px;
+              }
+            `}
+          >
             {linkifyText(user.description)}
           </p>
         </Card.Content>

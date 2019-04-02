@@ -1,5 +1,8 @@
 // Library imports
-import React, { Component } from 'react'
+/** @jsx jsx */
+import { Component } from 'react'
+import { jsx } from '@emotion/core'
+import { ThemeProvider } from 'emotion-theming'
 import { UserSession } from 'blockstack'
 import _ from 'lodash'
 import 'focus-visible/dist/focus-visible.js'
@@ -12,10 +15,15 @@ import { User } from 'radiks'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Follow from 'model/follow'
+import { colors } from 'utils/colors'
 
 // Component/Styles Imports
 import Login from 'components/Login'
 import 'stylesheets/main.scss'
+
+const theme = {
+  colors,
+}
 
 class App extends Component {
   constructor(props) {
@@ -100,19 +108,21 @@ class App extends Component {
     const { userSession } = this.state
 
     return (
-      <div className="App">
-        <ToastContainer className='toast-container' />
-        {
-          this.state.loggedIn ?
-          <RootRoute
-            userSession={userSession}
-          /> :
-          <Login
-            userSession={userSession}
-            loggingIn={this.state.loggingIn}
-          />
-        }
-      </div>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <ToastContainer className='toast-container' />
+          {
+            this.state.loggedIn ?
+            <RootRoute
+              userSession={userSession}
+              /> :
+              <Login
+                userSession={userSession}
+                loggingIn={this.state.loggingIn}
+                />
+            }
+          </div>
+      </ThemeProvider>
     );
   }
 }
