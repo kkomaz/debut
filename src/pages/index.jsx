@@ -113,98 +113,82 @@ class Page extends Component {
 
     return (
       <div className="page">
-        <Hero color="primary" className="page__hero mb-two">
-         <Hero.Body>
-           <Container className="page__container">
-             {
-               !userState.paginatedObj.full &&
-               <Columns>
-                 <Columns.Column size={12}>
-                   <Heading>Welcome to debut!</Heading>
-                   <Heading size={5}>Here are the list of user currently signed up!</Heading>
-                   <Heading size={6}>Feel free to adjust your view, explore profiles, and introduce yourself by updating your profile via "My Page"!</Heading>
-                 </Columns.Column>
-               </Columns>
-             }
-           </Container>
-         </Hero.Body>
-       </Hero>
-          <Container className="page__user-container">
-            {
-              userState.paginatedObj.loading ?
-              <Loader
-                cardWrapped
-                text="App is warming up..."
-              /> :
-              userState.paginatedObj.full ? (
-                <NoUsers
-                  onPreviousClick={this.onPreviousClick}
-                  onNextClick={this.onNextClick}
-                  loading={userState.paginatedObj.loading}
-                  full={userState.paginatedObj.full}
-                />
-              ): showTileView ?
-                <Columns breakpoint="mobile">
-                  {
-                    _.map(userState.paginatedUsers[page].list, (user) => {
-                      return (
-                        <Columns.Column
-                          key={user.username}
-                          desktop={{
-                            size: 4,
-                          }}
-                          mobile={{
-                            size: 6,
-                          }}
-                        >
-                          <UserCard
-                            user={user}
-                            defaultImgUrl={defaultImgUrl}
-                            navigateTo={this.onBoxClick}
-                            currentUser={sessionUser.userData}
-                          />
-                        </Columns.Column>
-                      )
-                    })
-                  }
-                </Columns> :
-                <div style={{ padding: '0 150px' }}>
-                  <Table>
-                    <tbody>
-                      {
-                        _.map(userState.paginatedUsers[page].list, (user) => {
-                          return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
-                            <td>{user.username} has joined debut!</td>
-                          </tr>
-                        })
-                      }
-                    </tbody>
-                  </Table>
-                </div>
-            }
-            <div
-              className="page__pagination pagination mt-two"
-              role="navigation"
-              aria-label="pagination"
+        <Container className="page__user-container">
+          {
+            userState.paginatedObj.loading ?
+            <Loader
+              cardWrapped
+              text="App is warming up..."
+            /> :
+            userState.paginatedObj.full ? (
+              <NoUsers
+                onPreviousClick={this.onPreviousClick}
+                onNextClick={this.onNextClick}
+                loading={userState.paginatedObj.loading}
+                full={userState.paginatedObj.full}
+              />
+            ): showTileView ?
+              <Columns breakpoint="mobile">
+                {
+                  _.map(userState.paginatedUsers[page].list, (user) => {
+                    return (
+                      <Columns.Column
+                        key={user.username}
+                        desktop={{
+                          size: 4,
+                        }}
+                        mobile={{
+                          size: 6,
+                        }}
+                      >
+                        <UserCard
+                          user={user}
+                          defaultImgUrl={defaultImgUrl}
+                          navigateTo={this.onBoxClick}
+                          currentUser={sessionUser.userData}
+                        />
+                      </Columns.Column>
+                    )
+                  })
+                }
+              </Columns> :
+              <div style={{ padding: '0 150px' }}>
+                <Table>
+                  <tbody>
+                    {
+                      _.map(userState.paginatedUsers[page].list, (user) => {
+                        return <tr key={user.username} className="page__user-row" onClick={() => this.onBoxClick(user)}>
+                          <td>{user.username} has joined debut!</td>
+                        </tr>
+                      })
+                    }
+                  </tbody>
+                </Table>
+              </div>
+          }
+          <div
+            className="page__pagination pagination mt-two"
+            role="navigation"
+            aria-label="pagination"
+          >
+            <Button
+              color="link"
+              className="pagination-previous"
+              onClick={this.onPreviousClick}
+              disabled={userState.paginatedObj.loading || page === 0}
             >
-              <Button
-                color="link"
-                className="pagination-previous"
-                onClick={this.onPreviousClick}
-                disabled={userState.paginatedObj.loading || page === 0}
-              >
-                {"<"}
-              </Button>
-              <Button
-                color="link"
-                className="pagination-next"
-                onClick={this.onNextClick}
-                disabled={userState.paginatedObj.loading || userState.paginatedObj.full}
-              >
-                {">"}
-              </Button>
-            </div>
-          </Container>
+              {"<"}
+            </Button>
+            <Button
+              color="link"
+              className="pagination-next"
+              onClick={this.onNextClick}
+              disabled={userState.paginatedObj.loading || userState.paginatedObj.full}
+            >
+              {">"}
+            </Button>
+          </div>
+        </Container>
       </div>
     )
   }
