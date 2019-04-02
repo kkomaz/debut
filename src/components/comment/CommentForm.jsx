@@ -1,8 +1,9 @@
+/** @jsx jsx */
 import React, { Component } from 'react'
+import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import classNames from 'classnames';
 import {
   BulmaLoader,
   Field,
@@ -17,7 +18,6 @@ import {
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
-import './CommentForm.scss';
 
 class CommentForm extends Component {
   constructor(props) {
@@ -167,18 +167,17 @@ class CommentForm extends Component {
     const { valid, editMode } = this.state
     const { commentActions, shareId } = this.props
 
-    const characterClass = classNames({
-      'comment-form__character-length': true,
-      'super-small': true
-    })
-
     return (
       <React.Fragment>
         <form
           className="comment-form"
           onSubmit={this.onSubmit}
         >
-          <Field className="comment-form__text-field">
+          <Field
+            css={css`
+              margin-bottom: 0 !important;
+            `}
+          >
             <Textarea
               name="text"
               onChange={this.onChange}
@@ -203,8 +202,30 @@ class CommentForm extends Component {
 
           {
             this.state.imageFile &&
-            <div className="comment-form__image-uploaded">
-              <img style={{ maxWidth: '500px', maxHeight: '500px' }} alt='' src={this.state.imageFile} />
+            <div
+              css={theme => css`
+                align-items: center;
+                border-bottom: 1px solid ${theme.colors.shadow};
+                border-left: 1px solid ${theme.colors.shadow};
+                border-right: 1px solid ${theme.colors.shadow};
+                display: flex;
+                padding: 10px 0 10px 20px;
+                justify-content: center;
+
+                a {
+                  align-self: end;
+                }
+              `}
+            >
+              <img
+                css={theme =>css`
+                  max-width: 500px;
+                  max-height: 500px;
+                  border: 1px solid ${theme.colors.shadow}
+                `}
+                alt=''
+                src={this.state.imageFile}
+              />
               <Icon
                 className="comment-form__image-remove-button debut-icon debut-icon--pointer"
                 icon="IconX"
@@ -215,9 +236,29 @@ class CommentForm extends Component {
             </div>
           }
 
-          <div className="comment-form__characters">
-            <p className={characterClass}>({150 - this.state.characterLength})</p>
-            <Label className="comment-form__label">
+          <div
+            css={css`
+              align-items: center;
+              display: flex;
+              justify-content: flex-end;
+              margin: 7px 0;
+              padding-right: 5px;
+            `}
+          >
+            <p
+              className="super-small"
+              css={theme => css`
+                color: ${theme.colors.primary};
+                margin-bottom: 0 !important;
+              `}
+            >
+              ({150 - this.state.characterLength})
+            </p>
+            <Label
+              css={css`
+                margin-bottom: 2px !important;
+              `}
+            >
               <Icon
                 className="debut-icon debut-icon--pointer ml-half mr-half"
                 icon="IconCamera"
@@ -233,12 +274,24 @@ class CommentForm extends Component {
             </Label>
             { commentActions.submitting &&
               shareId === commentActions.shareId &&
-              <BulmaLoader className="comment-form__loader"/>
+              <BulmaLoader
+                css={css`
+                  position: absolute;
+                  bottom: 6px;
+                  right: 8px;
+                `}
+              />
             }
           </div>
           {
             editMode &&
-            <div className="comment-form__submit-footer">
+            <div
+              css={css`
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+              `}
+            >
               { commentActions.editing && <BulmaLoader className="mr-one" />}
               <SubmitFooter
                 onCancel={this.onCancel}

@@ -6,8 +6,6 @@ import {
   Button,
   Columns,
   Container,
-  Heading,
-  Hero,
   Table,
 } from 'components/bulma'
 import { UserContext } from 'components/User/UserProvider'
