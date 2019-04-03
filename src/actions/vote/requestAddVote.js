@@ -1,9 +1,9 @@
 import { REQUEST_ADD_VOTE } from 'actions'
 
-const requestAddVote = (username, shareId) => {
+const requestAddVote = (username, share) => {
   return { type: REQUEST_ADD_VOTE, payload: {
     username,
-    shareId,
+    share,
   }}
 }
 

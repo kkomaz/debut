@@ -78,7 +78,7 @@ class ActionableContainer extends Component {
     }
 
     if (liked && _.isEmpty(this.props.voter)) {
-      this.props.requestAddVote(sessionUser.username, detailObj._id)
+      this.props.requestAddVote(sessionUser.username, detailObj)
     }
   }
 
