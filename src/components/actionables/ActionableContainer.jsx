@@ -2,7 +2,6 @@
 import { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import PropTypes from 'prop-types'
-import classNames from 'classnames';
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { Icon } from 'components/icon'
@@ -15,7 +14,6 @@ import {
 // Component Imports
 import { Modal } from 'components/bulma'
 import LikeModalContent from './LikeModalContent'
-import './ActionableContainer.scss'
 
 class ActionableContainer extends Component {
   constructor(props) {
@@ -130,17 +128,36 @@ class ActionableContainer extends Component {
     }
   }
 
+  heartStyle = () => {
+    const { count } = this.state
+
+    if (count < 10) {
+      return css`
+        align-items: center;
+        display: flex;
+        margin-right: 13px;
+      `
+    }
+
+    if (count >= 10 && count < 100) {
+      return css`
+        align-items: center;
+        display: flex;
+        margin-right: 12px;
+      `
+    }
+
+    return css`
+      align-items: center;
+      display: flex;
+      margin-right: 28px;
+    `
+  }
+
   render() {
     const { detailObj, voteActions } = this.props
     const { showModal, count, liked } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
-
-    const iconHeartsClassName = classNames({
-      'actionable-container__icons-hearts': true,
-      'actionable-container__icons-hearts--single': count < 10,
-      'actionable-container__icons-hearts--double': count >= 10,
-      'actionable-container__icons-hearts--triple': count >= 100,
-    })
 
     return (
       <div>
@@ -159,7 +176,7 @@ class ActionableContainer extends Component {
             css={css`
               display: flex;
               justify-content: flex-end;
-              padding: 0 17px;
+              padding: 0 16px;
             `}
           >
             <p
@@ -193,9 +210,20 @@ class ActionableContainer extends Component {
             justify-content: flex-end;
           `}
         >
-          <div className="actionable-container__icons-bubble">
+          <div
+            css={css`
+              align-items: center;
+              display: flex;
+              margin-right: 10px;
+            `}
+          >
             <Icon
-              className="debut-icon debut-icon--pointer actionable-container__view-more-comments mr-half"
+              className="debut-icon debut-icon--pointer mr-half"
+              css={theme => css`
+                &:hover {
+                  fill: ${theme.colors.blue} !important;
+                }
+              `}
               icon="IconBubble"
               size={15}
               color="8b8687"
@@ -203,7 +231,9 @@ class ActionableContainer extends Component {
             />
             <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
           </div>
-          <div className={iconHeartsClassName}>
+          <div
+            css={this.heartStyle()}
+          >
             <Icon
               className="debut-icon debut-icon--pointer actionable-container__toggle-votes"
               icon="IconHeart"
