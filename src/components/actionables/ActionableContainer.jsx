@@ -44,7 +44,10 @@ class ActionableContainer extends Component {
     const { sessionUser } = this.context.state
     const { liked } = this.state
 
-    if (!liked && this.props.voter) {
+    console.log(this.props.voter)
+    console.log(liked, 'liked')
+
+    if (!liked && !_.isEmpty(this.props.voter)) {
       this.props.requestRemoveVote(detailObj, this.props.voter)
     }
 
