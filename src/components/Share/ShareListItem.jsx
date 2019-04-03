@@ -43,7 +43,6 @@ class ShareListItem extends Component {
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
     onCommentEditClick: PropTypes.func,
-    // requestAddVote: PropTypes.func.isRequired,
   }
 
   revertDelete = () => {
@@ -72,52 +71,6 @@ class ShareListItem extends Component {
       offset: _.get(share, 'comments.length', 0)
     })
   }
-
-  /**
-   * This could use some refactoring <3
-  */
-  // renderShareCommentInfo = () => {
-  //   const { share } = this.props
-  //   const { commentView } = this.state
-  //
-  //   const result = (
-  //     share.commentCount && share.commentCount !== _.get(share, 'comments.length', 0) &&
-  //     <p
-  //       onClick={this.fetchShareComments}
-  //       className="small share-list-item__view-more-comments"
-  //       >
-  //       View Comments
-  //     </p>
-  //   )
-  //
-  //   if (result === 0) {
-  //     return null
-  //   }
-  //
-  //   if (_.isEqual(result, false)) {
-  //     if (commentView) {
-  //       return (
-  //         <p
-  //           onClick={this.hideCommentView}
-  //           className="small share-list-item__hide-comments"
-  //           >
-  //           Hide comments
-  //         </p>
-  //       )
-  //     } else {
-  //       return (
-  //         <p
-  //           onClick={this.showCommentView}
-  //           className="small share-list-item__view-more-comments"
-  //           >
-  //           View comments
-  //         </p>
-  //       )
-  //     }
-  //   }
-  //
-  //   return result
-  // }
 
   goToUserProfile = () => {
     const { history, username } = this.props
@@ -218,14 +171,6 @@ class ShareListItem extends Component {
     )
   }
 
-  showCommentView = () => {
-    return this.setState({ commentView: true })
-  }
-
-  hideCommentView = () => {
-    return this.setState({ commentView: false })
-  }
-
   toggleCommentView = () => {
     return this.setState({ commentView: !this.state.commentView })
   }
@@ -254,7 +199,7 @@ class ShareListItem extends Component {
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content className={shareListeItemContentClass}>
-          <Content style={{ marginBottom: '0' }}>
+          <Content style={{ marginBottom: '50px' }}>
             <div className="share-list-item__user-details" style={{ position: 'relative' }}>
               <div>
                 <p className="share-list-item__username-date" onClick={this.goToUserProfile}>
@@ -289,13 +234,12 @@ class ShareListItem extends Component {
               </div>
             }
             </Content>
-            <div className="share-list-item__actionable-container">
-              <ActionableContainer
-                detailObj={share}
-                voter={voter}
-                toggleComment={this.toggleCommentView}
-              />
-            </div>
+            <ActionableContainer
+              detailObj={share}
+              voter={voter || {}}
+              toggleComment={this.toggleCommentView}
+              type="share"
+            />
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>
             <Content>

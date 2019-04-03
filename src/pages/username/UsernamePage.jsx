@@ -69,6 +69,7 @@ class UsernamePage extends Component {
     shares: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     commentEditing: PropTypes.bool.isRequired,
+    voteActions: PropTypes.object.isRequired,
   }
 
   async componentDidMount() {
@@ -417,11 +418,13 @@ const mapStateToProps = (state) => {
   const commentEditing = state.share.commentActions.editing
   const shareEditing = state.share.shareActions.editing
   const sharesLoading = state.share.shares.loading
+  const voteActions = state.share.voteActions
 
   return {
     commentEditing,
     shareEditing,
     sharesLoading,
+    voteActions,
   }
 }
 

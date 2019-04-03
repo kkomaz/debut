@@ -70,6 +70,7 @@ class UserCardButton extends Component {
     if (_.includes(follow.following, user.username)) {
       return (
         <Button
+          css={theme => UserCardButtonStyles(theme)}
           color={followingText === 'Following' ? 'primary' : 'danger' }
           onMouseEnter={this.setUnfollowText}
           onMouseLeave={this.setFollowText}

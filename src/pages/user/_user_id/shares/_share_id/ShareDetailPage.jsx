@@ -86,8 +86,6 @@ class ShareDetail extends Component {
     const { username, share } = this.props
     const { error, showCommentModal, showShareModal } = this.state
 
-    console.log(share)
-
     if (error) {
       return (
         <Container>
