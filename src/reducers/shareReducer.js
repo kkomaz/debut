@@ -29,6 +29,7 @@ import {
   REMOVE_VOTE_SUCCESS,
   ADD_VOTE_SUCCESS,
   ADD_VOTE_FAIL,
+  REMOVE_VOTE_FAIL,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -60,6 +61,7 @@ const defaultSession = {
     submitting: false,
     addVoteFailed: false,
     removeVoteFailed: false,
+    shareId: '',
   }
 }
 
@@ -243,9 +245,37 @@ export default function shareReducer(state = defaultSession, action) {
       toggleNotification('error', action.payload)
       return state
     // Vote Related
+    case REMOVE_VOTE_FAIL: {
+      return { ...state,
+        voteActions: {
+          ...state.voteActions,
+          removeVoteFailed: true,
+          shareId: action.payload,
+        }
+      }
+    }
+    case ADD_VOTE_FAIL: {
+      toggleNotification('error',
+      'There seems to be an issue with liking this moment.  Please try again!  If the problem continues, please send a message in the Help section.'
+    )
+      return { ...state,
+        voteActions: {
+          ...state.voteActions,
+          addVoteFailed: true,
+          shareId: action.payload,
+        }
+      }
+    }
     case REQUEST_REMOVE_VOTE:
     case REQUEST_ADD_VOTE: {
-      return { ...state, voteActions: { ...state.voteActions, submitting: true }}
+      return { ...state,
+        voteActions: {
+          ...state.voteActions,
+          submitting: true,
+          addVoteFailed: false,
+          removeVoteFailed: false,
+          shareId: '',
+        }}
     }
     case REMOVE_VOTE_SUCCESS: {
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share._id)

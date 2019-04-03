@@ -26,7 +26,7 @@ function* removeVoteSaga(action) {
     const vote = yield call(removeVote, action)
     yield put({ type: REMOVE_VOTE_SUCCESS, payload: vote })
   } catch (error) {
-    yield put({ type: REMOVE_VOTE_FAIL, payload: error.message })
+    yield put({ type: REMOVE_VOTE_FAIL, payload: action.payload.share._id })
   }
 }
 

@@ -36,6 +36,24 @@ class ActionableContainer extends Component {
     detailObj: PropTypes.object.isRequired,
     voter: PropTypes.object.isRequired,
     toggleComment: PropTypes.func.isRequired,
+    voteActions: PropTypes.object.isRequired,
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevProps.voteActions.addVoteFailed && this.props.voteActions.addVoteFailed &&
+    this.props.detailObj._id === this.props.voteActions.shareId) {
+      this.setState({
+        liked: !this.state.liked,
+        count: this.state.count - 1
+      })
+    }
+
+    if (!prevProps.voteActions.removeVoteFailed && this.props.voteActions.removeVoteFailed) {
+      this.setState({
+        liked: !this.state.liked,
+        count: this.state.count + 1
+      })
+    }
   }
 
   addOrRemoveVote = () => {
@@ -108,8 +126,6 @@ class ActionableContainer extends Component {
       'actionable-container__icons-hearts--double': count >= 10,
       'actionable-container__icons-hearts--triple': count >= 100,
     })
-
-    console.log(detailObj.votes)
 
     return (
       <div>
@@ -210,10 +226,10 @@ class ActionableContainer extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const submitting = state.share.voteActions.submitting
+  const voteActions = state.share.voteActions
 
   return {
-    submitting
+    voteActions,
   }
 }
 
