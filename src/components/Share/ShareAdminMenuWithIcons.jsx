@@ -17,7 +17,6 @@ class ShareMenuAdmin extends Component {
 
   onEditClick = () => {
     this.setState({ active: 'edit' })
-    console.log('hitting here')
     this.props.onEditClick()
   }
 

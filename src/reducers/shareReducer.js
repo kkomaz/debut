@@ -28,6 +28,7 @@ import {
   REQUEST_REMOVE_VOTE,
   REMOVE_VOTE_SUCCESS,
   ADD_VOTE_SUCCESS,
+  ADD_VOTE_FAIL,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -57,6 +58,8 @@ const defaultSession = {
   },
   voteActions: {
     submitting: false,
+    addVoteFailed: false,
+    removeVoteFailed: false,
   }
 }
 

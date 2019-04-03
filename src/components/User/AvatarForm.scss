@@ -48,17 +48,4 @@
       visibility: inherit;
     }
   }
-
-  &__section {
-    background-color: $white;
-    padding: 20px 0 10px 0;
-    border-bottom: 1px solid black;
-    padding-bottom: 20px;
-  }
-
-  &__section-title {
-    border-bottom: 1px solid $dusty;
-    padding-left: 20px;
-    padding-bottom: 20px;
-  }
 }

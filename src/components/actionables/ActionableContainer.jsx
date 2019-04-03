@@ -13,11 +13,8 @@ import {
 } from 'actions/vote'
 
 // Component Imports
-import {
-  Modal,
-  Section,
-  Heading,
-} from 'components/bulma'
+import { Modal } from 'components/bulma'
+import LikeModalContent from './LikeModalContent'
 import './ActionableContainer.scss'
 
 class ActionableContainer extends Component {
@@ -46,9 +43,6 @@ class ActionableContainer extends Component {
     const { sessionUser } = this.context.state
     const { liked } = this.state
 
-    console.log(this.props.voter)
-    console.log(liked, 'liked')
-
     if (!liked && !_.isEmpty(this.props.voter)) {
       this.props.requestRemoveVote(detailObj, this.props.voter)
     }
@@ -75,7 +69,7 @@ class ActionableContainer extends Component {
         liked: !liked,
         debouncedFunc: _.debounce(() => {
           this.addOrRemoveVote({ remove: true, currentVoter: voter })
-        }, 500)
+        }, 300)
       }, () => {
         this.state.debouncedFunc()
       })
@@ -85,7 +79,7 @@ class ActionableContainer extends Component {
         liked: !liked,
         debouncedFunc: _.debounce(() => {
           this.addOrRemoveVote({ add: true })
-        }, 500)
+        }, 300)
       }, () => {
         this.state.debouncedFunc()
       })
@@ -115,6 +109,8 @@ class ActionableContainer extends Component {
       'actionable-container__icons-hearts--triple': count >= 100,
     })
 
+    console.log(detailObj.votes)
+
     return (
       <div>
         <div>
@@ -135,7 +131,16 @@ class ActionableContainer extends Component {
               padding: 0 17px;
             `}
           >
-            <p className="small">
+            <p
+              className="small"
+              css={theme => css`
+                &:hover {
+                  cursor: pointer;
+                  color: ${theme.colors.blue}
+                }
+              `}
+              onClick={this.openModal}
+            >
               {`${count} ${count > 1 ? 'likes' : 'like'}`}
             </p>
           </div>
@@ -193,25 +198,10 @@ class ActionableContainer extends Component {
           closeOnEsc
         >
           <Modal.Content>
-            <Section className="avatar-form__section">
-              <Heading
-                className="avatar-form__section-title"
-                size={4}
-              >
-                {`Liked ${_.get(detailObj, 'votes.length', 0) === 1 ? `${_.get(detailObj, 'votes.length', 0)} time` : `${_.get(detailObj, 'votes.length', 0)} times`}`}
-              </Heading>
-              <ul style={{ padding: '20px' }}>
-                {
-                  _.map(detailObj.votes, (vote) => {
-                    return (
-                      <li key={vote.username}>
-                        {vote.username}
-                      </li>
-                    )
-                  })
-                }
-              </ul>
-            </Section>
+            <LikeModalContent
+              closeModal={this.closeModal}
+              detailObj={detailObj}
+            />
           </Modal.Content>
         </Modal>
       </div>
