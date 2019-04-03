@@ -1,16 +1,74 @@
 /** @jsx jsx */
 import { Component } from 'react'
+import PropTypes from 'prop-types'
 import { jsx, css } from '@emotion/core'
 import { Icon } from 'components/icon'
 import _ from 'lodash'
+import { BulmaLoader } from 'components/bulma'
 import {
   Section,
   Heading,
 } from 'components/bulma'
+import { User } from 'radiks'
 
 class LikeModalContent extends Component {
-  render() {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      users: {}
+    }
+  }
+
+  static propTypes = {
+    voteActions: PropTypes.object.isRequired,
+    detailObj: PropTypes.object.isRequired,
+  }
+
+  componentDidMount() {
+    const { voteActions } = this.props
+
+    if (!voteActions.submitting) {
+      this.fetchUsers()
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.props.voteActions.submitting & prevProps.voteActions.submitting) {
+      this.fetchUsers()
+    }
+  }
+
+  fetchUsers = async () => {
     const { detailObj } = this.props
+    const usersObj = {}
+    const result = await User.fetchList({
+      username: _.map(detailObj.votes, 'username')
+    })
+
+    const resultsArray = _.map(result, 'attrs')
+
+    _.each(resultsArray, (user) => {
+      usersObj[user.username] = user
+    })
+
+    this.setState({
+      users: usersObj
+    })
+  }
+
+  addDefaultSrc = (evt) => {
+    evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
+  }
+
+  render() {
+    const { detailObj, voteActions } = this.props
+    const { users } = this.state
+
+    if (_.isEmpty(users)) {
+      return <div>Loading...</div>
+    }
+
     return (
       <Section
         css={theme => css`
@@ -44,17 +102,37 @@ class LikeModalContent extends Component {
             onClick={this.props.closeModal}
           />
         </div>
-        <ul style={{ padding: '20px' }}>
-          {
-            _.map(detailObj.votes, (vote) => {
-              return (
-                <li key={vote.username}>
-                  {vote.username}
-                </li>
-              )
-            })
-          }
-        </ul>
+        {
+          voteActions.submitting ?
+          <div
+            css={css`
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding-top: 20px;
+            `}
+          >
+            <BulmaLoader />
+          </div> :
+          <ul style={{ padding: '20px' }}>
+            {
+              _.map(detailObj.votes, (vote) => {
+                return (
+                  <li key={vote.username}>
+                    {vote.username}
+                    <img
+                      onError={this.addDefaultSrc}
+                      src={this.state.users[vote.username].profileImgUrl}
+                      alt="user"
+                      height="42"
+                      width="42"
+                    />
+                  </li>
+                )
+              })
+            }
+          </ul>
+        }
       </Section>
     )
   }

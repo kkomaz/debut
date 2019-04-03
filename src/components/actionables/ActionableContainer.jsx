@@ -118,7 +118,7 @@ class ActionableContainer extends Component {
   }
 
   render() {
-    const { detailObj } = this.props
+    const { detailObj, voteActions } = this.props
     const { showModal, count, liked } = this.state
 
     const iconHeartsClassName = classNames({
@@ -218,6 +218,7 @@ class ActionableContainer extends Component {
             <LikeModalContent
               closeModal={this.closeModal}
               detailObj={detailObj}
+              voteActions={voteActions}
             />
           </Modal.Content>
         </Modal>
