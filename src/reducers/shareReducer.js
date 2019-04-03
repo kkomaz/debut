@@ -246,6 +246,9 @@ export default function shareReducer(state = defaultSession, action) {
       return state
     // Vote Related
     case REMOVE_VOTE_FAIL: {
+      toggleNotification('error',
+      'There seems to be an issue with unliking this moment.  Please try again!  If the problem continues, please send a message in the Help section.'
+      )
       return { ...state,
         voteActions: {
           ...state.voteActions,
@@ -257,7 +260,7 @@ export default function shareReducer(state = defaultSession, action) {
     case ADD_VOTE_FAIL: {
       toggleNotification('error',
       'There seems to be an issue with liking this moment.  Please try again!  If the problem continues, please send a message in the Help section.'
-    )
+      )
       return { ...state,
         voteActions: {
           ...state.voteActions,

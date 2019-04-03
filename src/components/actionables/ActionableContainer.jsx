@@ -48,7 +48,8 @@ class ActionableContainer extends Component {
       })
     }
 
-    if (!prevProps.voteActions.removeVoteFailed && this.props.voteActions.removeVoteFailed) {
+    if (!prevProps.voteActions.removeVoteFailed && this.props.voteActions.removeVoteFailed &&
+    this.props.detailObj._id === this.props.voteActions.shareId) {
       this.setState({
         liked: !this.state.liked,
         count: this.state.count + 1
