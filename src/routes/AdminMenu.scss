@@ -10,5 +10,12 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    text-transform: inherit;
+  }
+
+  &__title {
+    .is-active {
+      background-color: $primary !important;
+    }
   }
 }
