@@ -6,11 +6,11 @@ import { jsx, css } from '@emotion/core'
 import { Icon } from 'components/icon'
 import _ from 'lodash'
 import { BulmaLoader } from 'components/bulma'
-import { BarLoader } from 'components/Loader'
 import {
   Section,
   Heading,
 } from 'components/bulma'
+import { withRouter } from 'react-router-dom'
 import { UserCardButton } from 'components/User'
 import { User } from 'radiks'
 
@@ -65,6 +65,12 @@ class LikeModalContent extends Component {
 
   addDefaultSrc = (evt) => {
     evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
+  }
+
+  navigateToProfile = (username) => {
+    const { history } = this.props
+
+    history.push(`/${username}`)
   }
 
   render() {
@@ -168,9 +174,17 @@ class LikeModalContent extends Component {
                         height="42"
                         width="42"
                         />
-                      <p css={css`
-                        margin-left: 10px;
-                      `}>
+                      <p
+                        css={theme => css`
+                          margin-left: 10px;
+                          cursor: pointer;
+
+                          &:hover {
+                            color: ${theme.colors.blue}
+                          }
+                        `}
+                        onClick={() => this.navigateToProfile(vote.username)}
+                      >
                         {vote.username}
                       </p>
                     </div>
@@ -201,4 +215,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(LikeModalContent)
+export default withRouter(connect(mapStateToProps)(LikeModalContent))
