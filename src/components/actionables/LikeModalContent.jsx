@@ -74,11 +74,8 @@ class LikeModalContent extends Component {
       voteActions,
       defaultImgUrl,
     } = this.props
-    const { users } = this.state
 
-    if (_.isEmpty(users)) {
-      return <div>Loading...</div>
-    }
+    const { users } = this.state
 
     return (
       <Section
@@ -108,13 +105,13 @@ class LikeModalContent extends Component {
           <Icon
             className="debut-icon debut-icon--pointer"
             icon="IconX"
-            size={32}
+            size={25}
             color="8b8687"
             onClick={this.props.closeModal}
           />
         </div>
         {
-          voteActions.submitting ?
+          voteActions.submitting || _.isEmpty(users) ?
           <div
             css={css`
               display: flex;
