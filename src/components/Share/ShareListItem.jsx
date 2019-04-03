@@ -43,7 +43,6 @@ class ShareListItem extends Component {
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
     onCommentEditClick: PropTypes.func,
-    // requestAddVote: PropTypes.func.isRequired,
   }
 
   revertDelete = () => {

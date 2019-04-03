@@ -26,12 +26,11 @@ class ActionableContainer extends Component {
     const voter = props.voter
 
     this.state = {
+      liked: !_.isEmpty(voter),
       count,
-      voter,
       showModal: false,
+      debouncedFunc: null,
     }
-
-    this.addOrRemoveVote = _.debounce(this.addOrRemoveVote, 300)
   }
 
   static propTypes = {
@@ -43,13 +42,48 @@ class ActionableContainer extends Component {
   addOrRemoveVote = () => {
     const { detailObj } = this.props
     const { sessionUser } = this.context.state
+    const { liked } = this.state
 
-    const voter = _.find(detailObj.votes, (vote) => vote.username === sessionUser.username)
+    if (!liked && this.props.voter) {
+      this.props.requestRemoveVote(detailObj, this.props.voter)
+    }
 
-    if (voter) {
-      this.props.requestRemoveVote(detailObj, voter)
-    } else {
+    if (liked && _.isEmpty(this.props.voter)) {
       this.props.requestAddVote(sessionUser.username, detailObj._id)
+    }
+  }
+
+  cancelDebouncedFunc() {
+  if (this.state.debouncedFunc && this.state.debouncedFunc.cancel) {
+    this.state.debouncedFunc.cancel();
+  }
+}
+
+  toggleState = () => {
+    const { voter, count, liked } = this.state
+
+    this.cancelDebouncedFunc();
+
+    if (liked) {
+      this.setState({
+        count: count - 1,
+        liked: !liked,
+        debouncedFunc: _.debounce(() => {
+          this.addOrRemoveVote({ remove: true, currentVoter: voter })
+        }, 500)
+      }, () => {
+        this.state.debouncedFunc()
+      })
+    } else {
+      this.setState({
+        count: count + 1,
+        liked: !liked,
+        debouncedFunc: _.debounce(() => {
+          this.addOrRemoveVote({ add: true })
+        }, 500)
+      }, () => {
+        this.state.debouncedFunc()
+      })
     }
   }
 
@@ -66,10 +100,8 @@ class ActionableContainer extends Component {
   }
 
   render() {
-    const { detailObj, voter } = this.props
-    const { showModal } = this.state
-
-    const count = _.get(detailObj, 'votes.length', 0)
+    const { detailObj } = this.props
+    const { showModal, count, liked } = this.state
 
     const iconHeartsClassName = classNames({
       'actionable-container__icons-hearts': true,
@@ -96,15 +128,21 @@ class ActionableContainer extends Component {
               className="debut-icon debut-icon--pointer actionable-container__toggle-votes"
               icon="IconHeart"
               size={15}
-              onClick={this.addOrRemoveVote}
-              color={!_.isEmpty(voter) ? '#ff3860' : '#8b8687'}
+              onClick={this.toggleState}
+              color={liked ? '#ff3860' : '#8b8687'}
               linkStyle={{
                 height: 'inherit'
               }}
             />
-            <span className="small ml-half" style={{ width: '10px', marginTop: '2px'}}>{count}</span>
+            <span
+              className="small ml-half"
+              style={{ width: '10px', marginTop: '2px'}}
+            >
+              {count}
+            </span>
           </div>
         </div>
+
         <Modal
           show={showModal}
           onClose={this.closeModal}
@@ -137,7 +175,15 @@ class ActionableContainer extends Component {
   }
 }
 
-export default connect(null, {
+const mapStateToProps = (state) => {
+  const submitting = state.share.voteActions.submitting
+
+  return {
+    submitting
+  }
+}
+
+export default connect(mapStateToProps, {
   requestAddVote,
   requestRemoveVote,
 })(ActionableContainer)
