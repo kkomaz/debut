@@ -1,5 +1,8 @@
 import { put, call } from 'redux-saga/effects'
-import { REMOVE_VOTE_SUCCESS, REMOVE_VOTE_FAIL } from 'actions'
+import {
+  REMOVE_VOTE_SUCCESS,
+  REMOVE_VOTE_FAIL,
+} from 'actions'
 import Vote from 'model/vote'
 
 const removeVote = async (action) => {

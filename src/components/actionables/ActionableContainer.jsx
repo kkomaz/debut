@@ -155,7 +155,7 @@ class ActionableContainer extends Component {
   }
 
   render() {
-    const { detailObj, voteActions } = this.props
+    const { detailObj, voteActions, hideComment } = this.props
     const { showModal, count, liked } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
 
@@ -210,27 +210,30 @@ class ActionableContainer extends Component {
             justify-content: flex-end;
           `}
         >
-          <div
-            css={css`
-              align-items: center;
-              display: flex;
-              margin-right: 10px;
-            `}
-          >
-            <Icon
-              className="debut-icon debut-icon--pointer mr-half"
-              css={theme => css`
-                &:hover {
-                  fill: ${theme.colors.blue} !important;
-                }
+          {
+            !hideComment &&
+            <div
+              css={css`
+                align-items: center;
+                display: flex;
+                margin-right: 10px;
               `}
-              icon="IconBubble"
-              size={15}
-              color="8b8687"
-              onClick={this.props.toggleComment}
-            />
-            <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
-          </div>
+            >
+              <Icon
+                className="debut-icon debut-icon--pointer mr-half"
+                css={theme => css`
+                  &:hover {
+                    fill: ${theme.colors.blue} !important;
+                  }
+                `}
+                icon="IconBubble"
+                size={15}
+                color="8b8687"
+                onClick={this.props.toggleComment}
+              />
+              <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
+            </div>
+          }
           <div
             css={this.heartStyle()}
           >
@@ -279,6 +282,10 @@ const mapStateToProps = (state) => {
   return {
     voteActions,
   }
+}
+
+ActionableContainer.defaultProps = {
+  hideComment: false
 }
 
 export default connect(mapStateToProps, {

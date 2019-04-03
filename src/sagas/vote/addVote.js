@@ -1,5 +1,8 @@
 import { put, call } from 'redux-saga/effects'
-import { ADD_VOTE_SUCCESS, ADD_VOTE_FAIL } from 'actions'
+import {
+  ADD_VOTE_SUCCESS,
+  ADD_VOTE_FAIL
+} from 'actions'
 import Vote from 'model/vote'
 
 const addVote = async (action) => {
