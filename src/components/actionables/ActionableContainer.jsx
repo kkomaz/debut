@@ -120,6 +120,7 @@ class ActionableContainer extends Component {
   render() {
     const { detailObj, voteActions } = this.props
     const { showModal, count, liked } = this.state
+    const { sessionUser, defaultImgUrl } = this.context.state
 
     const iconHeartsClassName = classNames({
       'actionable-container__icons-hearts': true,
@@ -219,6 +220,8 @@ class ActionableContainer extends Component {
               closeModal={this.closeModal}
               detailObj={detailObj}
               voteActions={voteActions}
+              currentUser={sessionUser.userData}
+              defaultImgUrl={defaultImgUrl}
             />
           </Modal.Content>
         </Modal>

@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { jsx, css } from '@emotion/core'
 import { Icon } from 'components/icon'
 import _ from 'lodash'
@@ -9,6 +10,7 @@ import {
   Section,
   Heading,
 } from 'components/bulma'
+import { UserCardButton } from 'components/User'
 import { User } from 'radiks'
 
 class LikeModalContent extends Component {
@@ -23,6 +25,9 @@ class LikeModalContent extends Component {
   static propTypes = {
     voteActions: PropTypes.object.isRequired,
     detailObj: PropTypes.object.isRequired,
+    follow: PropTypes.object.isRequired,
+    currentUser: PropTypes.object.isRequired,
+    defaultImgUrl: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
@@ -62,7 +67,13 @@ class LikeModalContent extends Component {
   }
 
   render() {
-    const { detailObj, voteActions } = this.props
+    const {
+      currentUser,
+      detailObj,
+      follow,
+      voteActions,
+      defaultImgUrl,
+    } = this.props
     const { users } = this.state
 
     if (_.isEmpty(users)) {
@@ -118,15 +129,54 @@ class LikeModalContent extends Component {
             {
               _.map(detailObj.votes, (vote) => {
                 return (
-                  <li key={vote.username}>
-                    {vote.username}
-                    <img
-                      onError={this.addDefaultSrc}
-                      src={this.state.users[vote.username].profileImgUrl}
-                      alt="user"
-                      height="42"
-                      width="42"
-                    />
+                  <li
+                    css={theme => css`
+                      border-bottom: 1px solid ${theme.colors.shadow};
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 10px 0;
+                    `}
+                    key={vote.username}
+                  >
+                    <div
+                      css={css`
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                      `}
+                    >
+                      <img
+                        css={theme => css`
+                          box-shadow: 0px 2px 0px 0px ${theme.colors.shadow};
+                          height: 45px;
+                          width: 45px;
+                          border-radius: 50%;
+                          border: 2px solid ${theme.colors.white};
+                          box-shadow: 0px 1px 0px 0px ${theme.colors.shadow};
+                          background-position: 50% 50%;
+                          background-repeat: no-repeat;
+                          background-size: cover;
+                        `}
+                        onError={this.addDefaultSrc}
+                        src={_.get(this.state.users[vote.username], 'profileImgUrl', defaultImgUrl)}
+                        alt="user"
+                        height="42"
+                        width="42"
+                        />
+                      <p css={css`
+                        margin-left: 10px;
+                      `}>
+                        {vote.username}
+                      </p>
+                    </div>
+                    <div>
+                      <UserCardButton
+                        follow={follow}
+                        user={this.state.users[vote.username]}
+                        currentUser={currentUser}
+                      />
+                    </div>
                   </li>
                 )
               })
@@ -137,5 +187,14 @@ class LikeModalContent extends Component {
     )
   }
 }
+const mapStateToProps = (state, ownProps) => {
+  const { currentUser } = ownProps
 
-export default LikeModalContent
+  const follow = state.follow[currentUser.username] || {}
+
+  return {
+    follow,
+  }
+}
+
+export default connect(mapStateToProps)(LikeModalContent)
