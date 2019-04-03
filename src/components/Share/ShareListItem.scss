@@ -55,13 +55,6 @@
     color: $blue;
   }
 
-  &__actionable-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 10px;
-  }
-
   &__hide-comments,
   &__view-more-comments {
     cursor: pointer;

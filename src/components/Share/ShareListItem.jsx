@@ -199,7 +199,7 @@ class ShareListItem extends Component {
     return (
       <Card key={share._id} className={shareListItemClass}>
         <Card.Content className={shareListeItemContentClass}>
-          <Content style={{ marginBottom: '0' }}>
+          <Content style={{ marginBottom: '50px' }}>
             <div className="share-list-item__user-details" style={{ position: 'relative' }}>
               <div>
                 <p className="share-list-item__username-date" onClick={this.goToUserProfile}>
@@ -234,13 +234,11 @@ class ShareListItem extends Component {
               </div>
             }
             </Content>
-            <div className="share-list-item__actionable-container">
-              <ActionableContainer
-                detailObj={share}
-                voter={voter || {}}
-                toggleComment={this.toggleCommentView}
-              />
-            </div>
+            <ActionableContainer
+              detailObj={share}
+              voter={voter || {}}
+              toggleComment={this.toggleCommentView}
+            />
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>
             <Content>

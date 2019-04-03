@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+/** @jsx jsx */
+import { Component } from 'react'
+import { jsx, css } from '@emotion/core'
 import PropTypes from 'prop-types'
 import classNames from 'classnames';
 import _ from 'lodash'
@@ -114,8 +116,47 @@ class ActionableContainer extends Component {
     })
 
     return (
-      <React.Fragment>
-        <div className="actionable-container__icons">
+      <div>
+        <div>
+          <div
+            className="is-divider"
+            css={theme => css`
+              border-top: 1px solid ${theme.colors.shadow};
+              margin-top: 10px !important;
+              margin-bottom: 10px !important;
+            `}
+          >
+          </div>
+
+          <div
+            css={css`
+              display: flex;
+              justify-content: flex-end;
+              padding: 0 17px;
+            `}
+          >
+            <p className="small">
+              {`${count} ${count > 1 ? 'likes' : 'like'}`}
+            </p>
+          </div>
+
+          <div
+            className="is-divider"
+            css={theme => css`
+              border-top: 1px solid ${theme.colors.shadow};
+              margin-top: 10px !important;
+              margin-bottom: 10px !important;
+            `}
+          >
+          </div>
+        </div>
+        <div
+          css={css`
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+          `}
+        >
           <div className="actionable-container__icons-bubble">
             <Icon
               className="debut-icon debut-icon--pointer actionable-container__view-more-comments mr-half"
@@ -173,7 +214,7 @@ class ActionableContainer extends Component {
             </Section>
           </Modal.Content>
         </Modal>
-      </React.Fragment>
+      </div>
     )
   }
 }
