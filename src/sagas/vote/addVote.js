@@ -6,19 +6,22 @@ import {
 import Vote from 'model/vote'
 
 const addVote = async (action) => {
-  const { username, share } = action.payload
-  const vote = new Vote({
-    username,
-    share_id: share._id,
-  })
-  await vote.save()
+  const { username, detailObj, type } = action.payload
+  let vote
 
-  // attrs does not contain id so making a new object this way
-  const voteResult = { ...vote.attrs, _id: vote._id }
+  if (type === 'share') {
+    vote = new Vote({
+      username,
+      share_id: detailObj._id,
+    })
+    await vote.save()
+    // attrs does not contain id so making a new object  this way
+    const voteResult = { ...vote.attrs, _id: vote._id }
 
-  return {
-    vote: voteResult,
-    share_id: share._id
+    return {
+      vote: voteResult,
+      share_id: detailObj._id
+    }
   }
 }
 
@@ -27,7 +30,7 @@ function* addVoteSaga(action) {
     const vote = yield call(addVote, action)
     yield put({ type: ADD_VOTE_SUCCESS, payload: vote })
   } catch (error) {
-    yield put({ type: ADD_VOTE_FAIL, payload: action.payload.share._id })
+    yield put({ type: ADD_VOTE_FAIL, payload: action.payload.detailObj._id })
   }
 }
 

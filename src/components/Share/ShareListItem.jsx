@@ -238,6 +238,7 @@ class ShareListItem extends Component {
               detailObj={share}
               voter={voter || {}}
               toggleComment={this.toggleCommentView}
+              type="share"
             />
           </Card.Content>
           <Card.Content style={{ padding: '0' }}>

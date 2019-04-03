@@ -6,7 +6,7 @@ import {
 import Vote from 'model/vote'
 
 const removeVote = async (action) => {
-  const { vote, share } = action.payload
+  const { vote, detailObj, type } = action.payload
   const voter = await Vote.findOne({ _id: vote._id })
   let result
 
@@ -17,9 +17,12 @@ const removeVote = async (action) => {
   }
 
   if (result) {
-    return {
-      vote,
-      share,
+    if (type === 'share') {
+      return {
+        vote,
+        share: detailObj,
+        type,
+      }
     }
   }
 }
@@ -29,7 +32,7 @@ function* removeVoteSaga(action) {
     const vote = yield call(removeVote, action)
     yield put({ type: REMOVE_VOTE_SUCCESS, payload: vote })
   } catch (error) {
-    yield put({ type: REMOVE_VOTE_FAIL, payload: action.payload.share._id })
+    yield put({ type: REMOVE_VOTE_FAIL, payload: action.payload.detailObj._id })
   }
 }
 

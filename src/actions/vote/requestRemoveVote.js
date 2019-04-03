@@ -1,9 +1,10 @@
 import { REQUEST_REMOVE_VOTE } from 'actions'
 
-const requestRemoveVote = (share, vote) => {
+const requestRemoveVote = (detailObj, vote, type) => {
   return { type: REQUEST_REMOVE_VOTE, payload: {
-    share,
+    detailObj,
     vote,
+    type,
   }}
 }
 

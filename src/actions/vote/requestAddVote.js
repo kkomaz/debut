@@ -1,9 +1,10 @@
 import { REQUEST_ADD_VOTE } from 'actions'
 
-const requestAddVote = (username, share) => {
+const requestAddVote = (detailObj, username, type) => {
   return { type: REQUEST_ADD_VOTE, payload: {
     username,
-    share,
+    detailObj,
+    type,
   }}
 }
 

@@ -32,9 +32,10 @@ class ActionableContainer extends Component {
 
   static propTypes = {
     detailObj: PropTypes.object.isRequired,
-    voter: PropTypes.object.isRequired,
     toggleComment: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
     voteActions: PropTypes.object.isRequired,
+    voter: PropTypes.object.isRequired,
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -69,16 +70,16 @@ class ActionableContainer extends Component {
   }
 
   addOrRemoveVote = () => {
-    const { detailObj } = this.props
+    const { detailObj, type } = this.props
     const { sessionUser } = this.context.state
     const { liked } = this.state
 
     if (!liked && !_.isEmpty(this.props.voter)) {
-      this.props.requestRemoveVote(detailObj, this.props.voter)
+      this.props.requestRemoveVote(detailObj, this.props.voter, type)
     }
 
     if (liked && _.isEmpty(this.props.voter)) {
-      this.props.requestAddVote(sessionUser.username, detailObj)
+      this.props.requestAddVote(detailObj, sessionUser.username, type)
     }
   }
 
@@ -99,7 +100,7 @@ class ActionableContainer extends Component {
         liked: !liked,
         debouncedFunc: _.debounce(() => {
           this.addOrRemoveVote({ remove: true, currentVoter: voter })
-        }, 300)
+        }, 500)
       }, () => {
         this.state.debouncedFunc()
       })
@@ -109,7 +110,7 @@ class ActionableContainer extends Component {
         liked: !liked,
         debouncedFunc: _.debounce(() => {
           this.addOrRemoveVote({ add: true })
-        }, 300)
+        }, 500)
       }, () => {
         this.state.debouncedFunc()
       })
