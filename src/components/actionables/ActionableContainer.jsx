@@ -40,6 +40,8 @@ class ActionableContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { sessionUser } = this.context.state
+
     if (!prevProps.voteActions.addVoteFailed && this.props.voteActions.addVoteFailed &&
     this.props.detailObj._id === this.props.voteActions.shareId) {
       this.setState({
@@ -54,6 +56,17 @@ class ActionableContainer extends Component {
         liked: !this.state.liked,
         count: this.state.count + 1
       })
+    }
+
+    // Update internal state when calling update
+    if (!this.props.voteActions.submitting && prevProps.voteActions.submitting) {
+      if (this.props.detailObj.votes.length !== this.state.count) {
+        const liked = _.find(this.props.detailObj.votes, (vote) => vote.username === sessionUser.username) || false
+        this.setState({
+          liked,
+          count: this.props.detailObj.votes.length
+        })
+      }
     }
   }
 

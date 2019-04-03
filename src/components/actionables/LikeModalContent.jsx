@@ -1,11 +1,12 @@
 /** @jsx jsx */
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { jsx, css } from '@emotion/core'
 import { Icon } from 'components/icon'
 import _ from 'lodash'
 import { BulmaLoader } from 'components/bulma'
+import { BarLoader } from 'components/Loader'
 import {
   Section,
   Heading,
@@ -94,21 +95,27 @@ class LikeModalContent extends Component {
             padding: 1em;
           `}
         >
-          <Heading
-            size={4}
-            css={css`
-              margin-bottom: 0 !important;
-            `}
-            >
-            {`Liked ${_.get(detailObj, 'votes.length', 0) === 1 ? `${_.get(detailObj, 'votes.length', 0)} time` : `${_.get(detailObj, 'votes.length', 0)} times`}`}
-          </Heading>
-          <Icon
-            className="debut-icon debut-icon--pointer"
-            icon="IconX"
-            size={25}
-            color="8b8687"
-            onClick={this.props.closeModal}
-          />
+          {
+            voteActions.submitting || _.isEmpty(users) ?
+            <BulmaLoader /> :
+            <React.Fragment>
+              <Heading
+                size={4}
+                css={css`
+                  margin-bottom: 0 !important;
+                `}
+                >
+                {`Liked ${_.get(detailObj, 'votes.length', 0) === 1 ? `${_.get(detailObj, 'votes.length', 0)} time` : `${_.get(detailObj, 'votes.length', 0)} times`}`}
+              </Heading>
+              <Icon
+                className="debut-icon debut-icon--pointer"
+                icon="IconX"
+                size={25}
+                color="8b8687"
+                onClick={this.props.closeModal}
+              />
+            </React.Fragment>
+          }
         </div>
         {
           voteActions.submitting || _.isEmpty(users) ?
