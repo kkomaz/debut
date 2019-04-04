@@ -35,6 +35,7 @@ class ShareForm extends Component {
       imageFile: currentShare.imageFile || '',
       editMode: !_.isEmpty(currentShare._id),
       showEmojis: false,
+      textAreaRow: 2,
     }
   }
 
@@ -48,6 +49,17 @@ class ShareForm extends Component {
       imageFile: PropTypes.string,
     })
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    const currentTextLines = (this.state.text.match(/\n/g)||[]).length
+    const prevTextLines = (prevState.text.match(/\n/g)||[]).length
+
+    if (currentTextLines < prevTextLines && currentTextLines >= 1) {
+      const difference = prevTextLines - currentTextLines
+      this.setState({ textAreaRow: this.state.textAreaRow - difference })
+    }
+  }
+
   // Emoji functions - start
   showEmojis = (e) => {
     this.setState({
@@ -56,7 +68,6 @@ class ShareForm extends Component {
   }
 
   closeMenu = (e) => {
-    console.log(this.emojiPicker)
     if (this.emojiPicker !== null && !this.emojiPicker.contains(e.target)) {
       this.setState({
         showEmojis: false
@@ -92,7 +103,7 @@ class ShareForm extends Component {
     e.preventDefault()
 
     const { editMode } = this.state
-
+    this.setState({ textAreaRow: 2 })
     return editMode ? this.editShare() : this.createShare()
   }
 
@@ -105,8 +116,6 @@ class ShareForm extends Component {
       username,
       imageFile
     }
-
-    console.log('hitting edit')
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
@@ -125,8 +134,6 @@ class ShareForm extends Component {
       username,
       imageFile
     }
-
-    console.log('hitting create')
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
@@ -148,7 +155,8 @@ class ShareForm extends Component {
       text: '',
       characterLength: 0,
       valid: true,
-      imageFile: ''
+      imageFile: '',
+      textAreaRow: 2
     }, this.props.onCancel)
   }
 
@@ -164,6 +172,12 @@ class ShareForm extends Component {
   }
 
   onEnterPress = (e) => {
+    if (e.keyCode === 13 && e.shiftKey) {
+      if ((this.state.text.match(/\n/g)||[]).length >= 1) {
+        this.setState({ textAreaRow: this.state.textAreaRow + 1 })
+      }
+    }
+
     if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
       e.stopPropagation();
@@ -214,16 +228,18 @@ class ShareForm extends Component {
               name="text"
               onChange={this.onChange}
               placeholder="Share a moment here!"
-              rows={2}
+              rows={this.state.textAreaRow}
               value={this.state.text}
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
+              css={css`
+                border-radius: 3px;
+                border-color: #E0E3DA;
+                font-size: 14px;
+              `}
               style={{
                 fontFamily: 'Poppins, sans-serif',
-                borderRadius: 0,
-                borderColor: '#E0E3DA',
-                fontSize: '14px'
               }}
             />
           </Field>
