@@ -19,7 +19,7 @@ import {
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { Picker } from 'emoji-mart'
-import shareFormStyles from './ShareFormStyles'
+import emojiStyles from 'utils/styles/emojiStyles'
 
 class ShareForm extends Component {
   constructor(props) {
@@ -53,6 +53,10 @@ class ShareForm extends Component {
   componentDidUpdate(prevProps, prevState) {
     const currentTextLines = (this.state.text.match(/\n/g)||[]).length
     const prevTextLines = (prevState.text.match(/\n/g)||[]).length
+
+    if (currentTextLines === 0 && prevTextLines > 0) {
+      this.setState({ textAreaRow: 2 })
+    }
 
     if (currentTextLines < prevTextLines && currentTextLines >= 1) {
       const difference = prevTextLines - currentTextLines
@@ -368,7 +372,7 @@ class ShareForm extends Component {
           this.state.showEmojis ?
           <span
             className="emoji-wrapper"
-            css={theme => shareFormStyles.emojiPickerStyles(editMode)}
+            css={theme => emojiStyles.emojiPickerStyles(editMode)}
             ref={el => (this.emojiPicker = el)}
           >
             <Picker onSelect={this.addEmoji} />
@@ -376,7 +380,7 @@ class ShareForm extends Component {
           :
           <p
             className="emoji-wrapper"
-            css={theme => shareFormStyles.emojiButtonStyles(editMode)}
+            css={theme => emojiStyles.emojiButtonStyles(editMode)}
             onClick={this.showEmojis}
           >
             {String.fromCodePoint(0x1f60a)}
