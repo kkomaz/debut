@@ -18,6 +18,7 @@ import {
 } from 'actions/share'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
+import { Picker } from 'emoji-mart'
 
 class ShareForm extends Component {
   constructor(props) {
@@ -31,7 +32,8 @@ class ShareForm extends Component {
       characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
       imageFile: currentShare.imageFile || '',
-      editMode: !_.isEmpty(currentShare._id)
+      editMode: !_.isEmpty(currentShare._id),
+      showEmojis: false,
     }
   }
 
@@ -45,6 +47,32 @@ class ShareForm extends Component {
       imageFile: PropTypes.string,
     })
   }
+  // Emoji functions - start
+  showEmojis = (e) => {
+    this.setState({
+      showEmojis: true
+    }, () => document.addEventListener('click', this.closeMenu))
+  }
+
+  closeMenu = (e) => {
+    console.log(this.emojiPicker)
+    if (this.emojiPicker !== null && !this.emojiPicker.contains(e.target)) {
+      this.setState({
+        showEmojis: false
+      }, () => document.removeEventListener('click', this.closeMenu))
+    }
+  }
+
+  addEmoji = (e) => {
+    let sym = e.unified.split('-')
+    let codesArray = []
+    sym.forEach(el => codesArray.push('0x' + el))
+    let emojiPic = String.fromCodePoint(...codesArray)
+    this.setState({
+       text: this.state.text + emojiPic
+    })
+  }
+  // Emoji functions - end
 
   onChange = (e) => {
     const { valid } = this.props
@@ -156,11 +184,18 @@ class ShareForm extends Component {
 
   render() {
     const { valid, editMode } = this.state
-    const { editing, submitting } = this.props
+    const { editing, submitting, styles } = this.props
 
     return (
       <React.Fragment>
         <form
+          css={css`
+            position: relative;
+
+            .emoji-wrapper :focus:not(.focus-visible) {
+              outline: none;
+            }
+          `}
           className="share-form"
           onSubmit={this.onSubmit}
         >
@@ -264,6 +299,17 @@ class ShareForm extends Component {
             </div>
           </div>
 
+          {
+            this.state.showEmojis ?
+              <span className="emoji-wrapper" style={styles.emojiPicker} ref={el => (this.emojiPicker = el)}>
+                <Picker onSelect={this.addEmoji} />
+              </span>
+            :
+              <p className="emoji-wrapper" style={styles.getEmojiButton} onClick={this.showEmojis} >
+                {String.fromCodePoint(0x1f60a)}
+              </p>
+          }
+
           <div
             css={css`
               display: flex;
@@ -315,6 +361,21 @@ class ShareForm extends Component {
 ShareForm.defaultProps = {
   onCancel: _.noop,
   onComplete: _.noop,
+  styles: {
+    getEmojiButton: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      cursor: 'pointer',
+    },
+    emojiPicker: {
+      position: 'absolute',
+      top: 0,
+      right: '-338px',
+      float: 'right',
+      zIndex: 1,
+    }
+  }
 }
 
 const mapStateToProps = (state) => {

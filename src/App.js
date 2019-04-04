@@ -20,6 +20,7 @@ import { colors } from 'utils/colors'
 // Component/Styles Imports
 import Login from 'components/Login'
 import 'stylesheets/main.scss'
+import 'emoji-mart/css/emoji-mart.css'
 
 const theme = {
   colors,
