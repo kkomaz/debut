@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -19,6 +19,7 @@ import {
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import { Picker } from 'emoji-mart'
+import shareFormStyles from './ShareFormStyles'
 
 class ShareForm extends Component {
   constructor(props) {
@@ -188,16 +189,19 @@ class ShareForm extends Component {
 
   render() {
     const { valid, editMode } = this.state
-    const { editing, submitting, styles } = this.props
-
-    console.log(valid, 'validity')
+    const { editing, submitting } = this.props
 
     return (
-      <React.Fragment>
+      <div
+        css={css`
+          position: relative;
+
+          .emoji-wrapper :focus:not(.focus-visible) {
+            outline: none;
+          }
+        `}
+      >
         <form
-          css={css`
-            position: relative;
-          `}
           className="share-form"
           onSubmit={this.onSubmit}
         >
@@ -344,25 +348,25 @@ class ShareForm extends Component {
             }
           </div>
         </form>
-        <div
-          css={css`
-            .emoji-wrapper :focus:not(.focus-visible) {
-              outline: none;
-            }
-          `}
-        >
-          {
-            this.state.showEmojis ?
-            <span className="emoji-wrapper" style={styles.emojiPicker} ref={el => (this.emojiPicker = el)}>
-              <Picker onSelect={this.addEmoji} />
-            </span>
-            :
-            <p className="emoji-wrapper" style={styles.getEmojiButton} onClick={this.showEmojis} >
-              {String.fromCodePoint(0x1f60a)}
-            </p>
-          }
-        </div>
-      </React.Fragment>
+        {
+          this.state.showEmojis ?
+          <span
+            className="emoji-wrapper"
+            css={theme => shareFormStyles.emojiPickerStyles(editMode)}
+            ref={el => (this.emojiPicker = el)}
+          >
+            <Picker onSelect={this.addEmoji} />
+          </span>
+          :
+          <p
+            className="emoji-wrapper"
+            css={theme => shareFormStyles.emojiButtonStyles(editMode)}
+            onClick={this.showEmojis}
+          >
+            {String.fromCodePoint(0x1f60a)}
+          </p>
+        }
+      </div>
     )
   }
 }
@@ -370,21 +374,6 @@ class ShareForm extends Component {
 ShareForm.defaultProps = {
   onCancel: _.noop,
   onComplete: _.noop,
-  styles: {
-    getEmojiButton: {
-      position: 'absolute',
-      top: '25px',
-      right: '22px',
-      cursor: 'pointer',
-    },
-    emojiPicker: {
-      position: 'absolute',
-      top: 0,
-      right: '-338px',
-      float: 'right',
-      zIndex: 1,
-    }
-  }
 }
 
 const mapStateToProps = (state) => {
