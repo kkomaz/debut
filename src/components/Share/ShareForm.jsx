@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -18,12 +18,17 @@ import {
 } from 'actions/share'
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
+import { Picker } from 'emoji-mart'
+import emojiStyles from 'utils/styles/emojiStyles'
 
 class ShareForm extends Component {
   constructor(props) {
     super(props)
 
-    const { currentShare = {} } = props
+    const { currentShare = { text: '' } } = props
+
+    const stringRows = (currentShare.text.match(/\n/g)||[]).length
+
 
     this.state = {
       _id: currentShare._id || '',
@@ -31,7 +36,9 @@ class ShareForm extends Component {
       characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
       imageFile: currentShare.imageFile || '',
-      editMode: !_.isEmpty(currentShare._id)
+      editMode: !_.isEmpty(currentShare._id),
+      showEmojis: false,
+      textAreaRow: stringRows > 0 ? stringRows + 1 : 2,
     }
   }
 
@@ -45,6 +52,46 @@ class ShareForm extends Component {
       imageFile: PropTypes.string,
     })
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    const currentTextLines = (this.state.text.match(/\n/g)||[]).length
+    const prevTextLines = (prevState.text.match(/\n/g)||[]).length
+
+    if (currentTextLines === 0 && prevTextLines > 0) {
+      this.setState({ textAreaRow: 2 })
+    }
+
+    if (currentTextLines < prevTextLines && currentTextLines >= 1) {
+      const difference = prevTextLines - currentTextLines
+      this.setState({ textAreaRow: this.state.textAreaRow - difference })
+    }
+  }
+
+  // Emoji functions - start
+  showEmojis = (e) => {
+    this.setState({
+      showEmojis: true
+    }, () => document.addEventListener('click', this.closeMenu))
+  }
+
+  closeMenu = (e) => {
+    if (this.emojiPicker !== null && !this.emojiPicker.contains(e.target)) {
+      this.setState({
+        showEmojis: false
+      }, () => document.removeEventListener('click', this.closeMenu))
+    }
+  }
+
+  addEmoji = (e) => {
+    let sym = e.unified.split('-')
+    let codesArray = []
+    sym.forEach(el => codesArray.push('0x' + el))
+    let emojiPic = String.fromCodePoint(...codesArray)
+    this.setState({
+       text: this.state.text + emojiPic
+    })
+  }
+  // Emoji functions - end
 
   onChange = (e) => {
     const { valid } = this.props
@@ -63,7 +110,7 @@ class ShareForm extends Component {
     e.preventDefault()
 
     const { editMode } = this.state
-
+    this.setState({ textAreaRow: 2 })
     return editMode ? this.editShare() : this.createShare()
   }
 
@@ -115,7 +162,8 @@ class ShareForm extends Component {
       text: '',
       characterLength: 0,
       valid: true,
-      imageFile: ''
+      imageFile: '',
+      textAreaRow: 2
     }, this.props.onCancel)
   }
 
@@ -131,6 +179,12 @@ class ShareForm extends Component {
   }
 
   onEnterPress = (e) => {
+    if (e.keyCode === 13 && e.shiftKey) {
+      if ((this.state.text.match(/\n/g)||[]).length >= 1) {
+        this.setState({ textAreaRow: this.state.textAreaRow + 1 })
+      }
+    }
+
     if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
       e.stopPropagation();
@@ -159,7 +213,15 @@ class ShareForm extends Component {
     const { editing, submitting } = this.props
 
     return (
-      <React.Fragment>
+      <div
+        css={css`
+          position: relative;
+
+          .emoji-wrapper :focus:not(.focus-visible) {
+            outline: none;
+          }
+        `}
+      >
         <form
           className="share-form"
           onSubmit={this.onSubmit}
@@ -173,16 +235,18 @@ class ShareForm extends Component {
               name="text"
               onChange={this.onChange}
               placeholder="Share a moment here!"
-              rows={2}
+              rows={this.state.textAreaRow}
               value={this.state.text}
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
+              css={css`
+                border-radius: 3px;
+                border-color: #E0E3DA;
+                font-size: 14px;
+              `}
               style={{
                 fontFamily: 'Poppins, sans-serif',
-                borderRadius: 0,
-                borderColor: '#E0E3DA',
-                fontSize: '14px'
               }}
             />
           </Field>
@@ -307,7 +371,25 @@ class ShareForm extends Component {
             }
           </div>
         </form>
-      </React.Fragment>
+        {
+          this.state.showEmojis ?
+          <span
+            className="emoji-wrapper"
+            css={theme => emojiStyles.emojiPickerStyles(editMode)}
+            ref={el => (this.emojiPicker = el)}
+          >
+            <Picker onSelect={this.addEmoji} />
+          </span>
+          :
+          <p
+            className="emoji-wrapper"
+            css={theme => emojiStyles.emojiButtonStyles(editMode)}
+            onClick={this.showEmojis}
+          >
+            {String.fromCodePoint(0x1f60a)}
+          </p>
+        }
+      </div>
     )
   }
 }

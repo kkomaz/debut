@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -18,12 +18,16 @@ import {
 import { Icon } from 'components/icon'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
+import { Picker } from 'emoji-mart'
+import emojiStyles from 'utils/styles/emojiStyles'
 
 class CommentForm extends Component {
   constructor(props) {
     super(props)
 
-    const { currentComment = {} } = props
+    const { currentComment = { text: '' } } = props
+
+    const stringRows = (currentComment.text.match(/\n/g)||[]).length
 
     this.state = {
       _id: currentComment._id || '',
@@ -31,7 +35,9 @@ class CommentForm extends Component {
       characterLength: currentComment.text ? currentComment.text.length : 0,
       valid: true,
       imageFile: currentComment.imageFile || '',
-      editMode: !_.isEmpty(currentComment._id)
+      editMode: !_.isEmpty(currentComment._id),
+      showEmojis: false,
+      textAreaRow: stringRows > 0 ? stringRows + 1 : 1,
     }
   }
 
@@ -52,6 +58,47 @@ class CommentForm extends Component {
     username: PropTypes.string.isRequired,
     requestEditComment: PropTypes.func.isRequired,
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    const currentTextLines = (this.state.text.match(/\n/g)||[]).length
+    const prevTextLines = (prevState.text.match(/\n/g)||[]).length
+
+    if (currentTextLines === 0 && prevTextLines > 0) {
+      this.setState({ textAreaRow: 1 })
+    }
+
+    if (currentTextLines < prevTextLines && currentTextLines >= 1) {
+      const difference = prevTextLines - currentTextLines
+      this.setState({ textAreaRow: this.state.textAreaRow - difference })
+    }
+  }
+
+  // Emoji functions - start
+  showEmojis = (e) => {
+    this.setState({
+      showEmojis: true
+    }, () => document.addEventListener('click', this.closeMenu))
+  }
+
+  closeMenu = (e) => {
+    if (this.emojiPicker !== null && !this.emojiPicker.contains(e.target)) {
+      this.setState({
+        showEmojis: false
+      }, () => document.removeEventListener('click', this.closeMenu))
+    }
+  }
+
+  addEmoji = (e) => {
+    let sym = e.unified.split('-')
+    let codesArray = []
+    sym.forEach(el => codesArray.push('0x' + el))
+    let emojiPic = String.fromCodePoint(...codesArray)
+    console.log(this.state.text)
+    this.setState({
+       text: this.state.text + emojiPic
+    })
+  }
+  // Emoji functions - end
 
   onChange = (e) => {
     const { valid } = this.props
@@ -124,7 +171,8 @@ class CommentForm extends Component {
       text: '',
       characterLength: 0,
       valid: true,
-      imageFile: ''
+      imageFile: '',
+      textAreaRow: 1
     }, this.props.onCancel)
   }
 
@@ -140,6 +188,12 @@ class CommentForm extends Component {
   }
 
   onEnterPress = (e) => {
+    if (e.keyCode === 13 && e.shiftKey) {
+      if ((this.state.text.match(/\n/g)||[]).length >= 0) {
+        this.setState({ textAreaRow: this.state.textAreaRow + 1 })
+      }
+    }
+
     if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
       e.stopPropagation();
@@ -168,7 +222,15 @@ class CommentForm extends Component {
     const { commentActions, shareId } = this.props
 
     return (
-      <React.Fragment>
+      <div
+        css={css`
+          position: relative;
+
+          .emoji-wrapper :focus:not(.focus-visible) {
+            outline: none;
+          }
+        `}
+      >
         <form
           className="comment-form"
           onSubmit={this.onSubmit}
@@ -182,15 +244,17 @@ class CommentForm extends Component {
               name="text"
               onChange={this.onChange}
               placeholder="Write a comment..."
-              rows={1}
+              rows={this.state.textAreaRow}
               value={this.state.text}
               onKeyDown={this.onEnterPress}
               maxLength={150}
               color={valid ? null : 'danger'}
+              css={css`
+                border-radius: 3px;
+                border-color: #E0E3DA;
+                font-size: 12px;
+              `}
               style={{
-                borderRadius: 0,
-                borderColor: '#E0E3DA',
-                fontSize: '12px',
                 fontFamily: 'Poppins, sans-serif'
               }}
             />
@@ -278,7 +342,7 @@ class CommentForm extends Component {
                 css={css`
                   position: absolute;
                   bottom: 6px;
-                  right: 8px;
+                  right: -10px;
                 `}
               />
             }
@@ -301,7 +365,25 @@ class CommentForm extends Component {
             </div>
           }
         </form>
-      </React.Fragment>
+        {
+          this.state.showEmojis ?
+          <span
+            className="emoji-wrapper"
+            css={theme => emojiStyles.emojiPickerStyles(editMode)}
+            ref={el => (this.emojiPicker = el)}
+          >
+            <Picker onSelect={this.addEmoji} />
+          </span>
+          :
+          <p
+            className="emoji-wrapper"
+            css={theme => emojiStyles.emojiButtonStyles(editMode)}
+            onClick={this.showEmojis}
+          >
+            {String.fromCodePoint(0x1f60a)}
+          </p>
+        }
+      </div>
     )
   }
 }
