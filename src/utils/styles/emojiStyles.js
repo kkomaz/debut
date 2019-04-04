@@ -5,9 +5,14 @@ export const emojiPickerStyles = (editMode) => {
     return css`
       position: fixed;
       top: 50%;
-      right: 10%;
+      right: 5%;
       transform: translateY(-50%);
       cursor: pointer;
+
+      @media only screen and (max-width: 1087px) {
+        top: 90%;
+        right: 0;
+      }
     `
   }
 
