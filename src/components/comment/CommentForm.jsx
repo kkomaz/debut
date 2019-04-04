@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -8,7 +8,6 @@ import {
   BulmaLoader,
   Field,
   Label,
-  Textarea,
   Help,
 } from 'components/bulma'
 import {
@@ -37,8 +36,9 @@ class CommentForm extends Component {
       imageFile: currentComment.imageFile || '',
       editMode: !_.isEmpty(currentComment._id),
       showEmojis: false,
-      textAreaRow: stringRows > 0 ? stringRows + 1 : 1,
+      textAreaRow: stringRows > 0 ? stringRows + 1 : 2,
     }
+    this.textarea = React.createRef();
   }
 
   static propTypes = {
@@ -59,17 +59,44 @@ class CommentForm extends Component {
     requestEditComment: PropTypes.func.isRequired,
   }
 
+  componentDidMount() {
+    document.addEventListener('input', this.handleCursorPosition.bind(this), true);
+    document.addEventListener('click', this.handleCursorPosition.bind(this), true)
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const currentTextLines = (this.state.text.match(/\n/g)||[]).length
     const prevTextLines = (prevState.text.match(/\n/g)||[]).length
 
     if (currentTextLines === 0 && prevTextLines > 0) {
-      this.setState({ textAreaRow: 1 })
+      this.setState({ textAreaRow: 2 })
     }
 
     if (currentTextLines < prevTextLines && currentTextLines >= 1) {
       const difference = prevTextLines - currentTextLines
       this.setState({ textAreaRow: this.state.textAreaRow - difference })
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('input', this.handleCursorPosition.bind(this), true);
+    document.removeEventListener('click', this.handleCursorPosition.bind(this), true)
+  }
+
+  handleCursorPosition(e) {
+    if (e.target === this.textarea.current) {
+      const { valid } = this.state
+
+      if (!valid) {
+        this.setState({ valid: true })
+      }
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        characterLength: e.target.value.length,
+        curserPositonStart: e.target.selectionStart,
+        curserPositonEnd: e.target.selectionEnd
+      })
     }
   }
 
@@ -93,11 +120,19 @@ class CommentForm extends Component {
     let codesArray = []
     sym.forEach(el => codesArray.push('0x' + el))
     let emojiPic = String.fromCodePoint(...codesArray)
-    console.log(this.state.text)
+    const textareaStrParts = [
+        `${this.textarea.current.value.substring(0, this.state.curserPositonStart)}`,
+        `${emojiPic}`,
+        `${this.textarea.current.value.substring(this.state.curserPositonEnd, this.length)}`,
+      ];
+
+    const textareaValue = textareaStrParts.join('');
+
     this.setState({
-       text: this.state.text + emojiPic
+       text: textareaValue
     })
   }
+
   // Emoji functions - end
 
   onChange = (e) => {
@@ -240,9 +275,8 @@ class CommentForm extends Component {
               margin-bottom: 0 !important;
             `}
           >
-            <Textarea
+            <textarea
               name="text"
-              onChange={this.onChange}
               placeholder="Write a comment..."
               rows={this.state.textAreaRow}
               value={this.state.text}
@@ -253,11 +287,14 @@ class CommentForm extends Component {
                 border-radius: 3px;
                 border-color: #E0E3DA;
                 font-size: 12px;
+                width: 100%;
+                resize: none;
               `}
               style={{
-                fontFamily: 'Poppins, sans-serif'
+                fontFamily: 'Poppins, sans-serif',
               }}
-            />
+              ref={this.textarea}
+            ></textarea>
           </Field>
 
           {

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Component } from 'react'
+import React, { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
@@ -8,7 +8,6 @@ import {
   BulmaLoader,
   Field,
   Label,
-  Textarea,
   Help,
 } from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
@@ -38,8 +37,9 @@ class ShareForm extends Component {
       imageFile: currentShare.imageFile || '',
       editMode: !_.isEmpty(currentShare._id),
       showEmojis: false,
-      textAreaRow: stringRows > 0 ? stringRows + 1 : 2,
+      textAreaRow: stringRows > 0 ? stringRows + 1 : 3,
     }
+    this.textarea = React.createRef();
   }
 
   static propTypes = {
@@ -53,17 +53,44 @@ class ShareForm extends Component {
     })
   }
 
+  componentDidMount() {
+    document.addEventListener('input', this.handleCursorPosition.bind(this), true);
+    document.addEventListener('click', this.handleCursorPosition.bind(this), true)
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const currentTextLines = (this.state.text.match(/\n/g)||[]).length
     const prevTextLines = (prevState.text.match(/\n/g)||[]).length
 
     if (currentTextLines === 0 && prevTextLines > 0) {
-      this.setState({ textAreaRow: 2 })
+      this.setState({ textAreaRow: 3 })
     }
 
     if (currentTextLines < prevTextLines && currentTextLines >= 1) {
       const difference = prevTextLines - currentTextLines
       this.setState({ textAreaRow: this.state.textAreaRow - difference })
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('input', this.handleCursorPosition.bind(this), true);
+    document.removeEventListener('click', this.handleCursorPosition.bind(this), true)
+  }
+
+  handleCursorPosition(e) {
+    if (e.target === this.textarea.current) {
+      const { valid } = this.state
+
+      if (!valid) {
+        this.setState({ valid: true })
+      }
+
+      this.setState({
+        [e.target.name]: e.target.value,
+        characterLength: e.target.value.length,
+        curserPositonStart: e.target.selectionStart,
+        curserPositonEnd: e.target.selectionEnd
+      })
     }
   }
 
@@ -87,14 +114,22 @@ class ShareForm extends Component {
     let codesArray = []
     sym.forEach(el => codesArray.push('0x' + el))
     let emojiPic = String.fromCodePoint(...codesArray)
+    const textareaStrParts = [
+        `${this.textarea.current.value.substring(0, this.state.curserPositonStart)}`,
+        `${emojiPic}`,
+        `${this.textarea.current.value.substring(this.state.curserPositonEnd, this.length)}`,
+      ];
+
+    const textareaValue = textareaStrParts.join('');
+
     this.setState({
-       text: this.state.text + emojiPic
+       text: textareaValue
     })
   }
   // Emoji functions - end
 
   onChange = (e) => {
-    const { valid } = this.props
+    const { valid } = this.state
 
     if (!valid) {
       this.setState({ valid: true })
@@ -110,7 +145,7 @@ class ShareForm extends Component {
     e.preventDefault()
 
     const { editMode } = this.state
-    this.setState({ textAreaRow: 2 })
+    this.setState({ textAreaRow: 3 })
     return editMode ? this.editShare() : this.createShare()
   }
 
@@ -231,7 +266,7 @@ class ShareForm extends Component {
               margin-bottom: 0 !important;
             `}
           >
-            <Textarea
+            <textarea
               name="text"
               onChange={this.onChange}
               placeholder="Share a moment here!"
@@ -244,11 +279,14 @@ class ShareForm extends Component {
                 border-radius: 3px;
                 border-color: #E0E3DA;
                 font-size: 14px;
+                width: 100%;
+                resize: none;
               `}
               style={{
                 fontFamily: 'Poppins, sans-serif',
               }}
-            />
+              ref={this.textarea}
+            ></textarea>
           </Field>
 
           {
