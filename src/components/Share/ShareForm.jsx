@@ -25,7 +25,10 @@ class ShareForm extends Component {
   constructor(props) {
     super(props)
 
-    const { currentShare = {} } = props
+    const { currentShare = { text: '' } } = props
+
+    const stringRows = (currentShare.text.match(/\n/g)||[]).length
+
 
     this.state = {
       _id: currentShare._id || '',
@@ -35,7 +38,7 @@ class ShareForm extends Component {
       imageFile: currentShare.imageFile || '',
       editMode: !_.isEmpty(currentShare._id),
       showEmojis: false,
-      textAreaRow: 2,
+      textAreaRow: stringRows > 0 ? stringRows + 1 : 2,
     }
   }
 

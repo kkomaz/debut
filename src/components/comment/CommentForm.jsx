@@ -25,7 +25,9 @@ class CommentForm extends Component {
   constructor(props) {
     super(props)
 
-    const { currentComment = {} } = props
+    const { currentComment = { text: '' } } = props
+
+    const stringRows = (currentComment.text.match(/\n/g)||[]).length
 
     this.state = {
       _id: currentComment._id || '',
@@ -35,7 +37,7 @@ class CommentForm extends Component {
       imageFile: currentComment.imageFile || '',
       editMode: !_.isEmpty(currentComment._id),
       showEmojis: false,
-      textAreaRow: 1,
+      textAreaRow: stringRows > 0 ? stringRows + 1 : 1,
     }
   }
 
@@ -91,6 +93,7 @@ class CommentForm extends Component {
     let codesArray = []
     sym.forEach(el => codesArray.push('0x' + el))
     let emojiPic = String.fromCodePoint(...codesArray)
+    console.log(this.state.text)
     this.setState({
        text: this.state.text + emojiPic
     })
