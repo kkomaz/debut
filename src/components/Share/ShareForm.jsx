@@ -105,6 +105,8 @@ class ShareForm extends Component {
       imageFile
     }
 
+    console.log('hitting edit')
+
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
     }
@@ -122,6 +124,8 @@ class ShareForm extends Component {
       username,
       imageFile
     }
+
+    console.log('hitting create')
 
     if (_.isEmpty(text)) {
       return this.setState({ valid: false })
@@ -186,15 +190,13 @@ class ShareForm extends Component {
     const { valid, editMode } = this.state
     const { editing, submitting, styles } = this.props
 
+    console.log(valid, 'validity')
+
     return (
       <React.Fragment>
         <form
           css={css`
             position: relative;
-
-            .emoji-wrapper :focus:not(.focus-visible) {
-              outline: none;
-            }
           `}
           className="share-form"
           onSubmit={this.onSubmit}
@@ -299,17 +301,6 @@ class ShareForm extends Component {
             </div>
           </div>
 
-          {
-            this.state.showEmojis ?
-              <span className="emoji-wrapper" style={styles.emojiPicker} ref={el => (this.emojiPicker = el)}>
-                <Picker onSelect={this.addEmoji} />
-              </span>
-            :
-              <p className="emoji-wrapper" style={styles.getEmojiButton} onClick={this.showEmojis} >
-                {String.fromCodePoint(0x1f60a)}
-              </p>
-          }
-
           <div
             css={css`
               display: flex;
@@ -353,6 +344,24 @@ class ShareForm extends Component {
             }
           </div>
         </form>
+        <div
+          css={css`
+            .emoji-wrapper :focus:not(.focus-visible) {
+              outline: none;
+            }
+          `}
+        >
+          {
+            this.state.showEmojis ?
+            <span className="emoji-wrapper" style={styles.emojiPicker} ref={el => (this.emojiPicker = el)}>
+              <Picker onSelect={this.addEmoji} />
+            </span>
+            :
+            <p className="emoji-wrapper" style={styles.getEmojiButton} onClick={this.showEmojis} >
+              {String.fromCodePoint(0x1f60a)}
+            </p>
+          }
+        </div>
       </React.Fragment>
     )
   }
@@ -364,8 +373,8 @@ ShareForm.defaultProps = {
   styles: {
     getEmojiButton: {
       position: 'absolute',
-      top: 0,
-      right: 0,
+      top: '25px',
+      right: '22px',
       cursor: 'pointer',
     },
     emojiPicker: {
