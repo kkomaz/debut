@@ -151,6 +151,14 @@ class FollowingUsers extends Component {
                   currentUser={sessionUser.userData}
                   defaultImgUrl={defaultImgUrl}
                   navigateTo={this.onBoxClick}
+                  styles={{
+                    nameStyles: {
+                      fontSize: '12px',
+                    },
+                    usernameStyles: {
+                      fontSize: '10px'
+                    }
+                  }}
                 />
               </Columns.Column>
             )
