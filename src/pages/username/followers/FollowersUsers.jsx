@@ -1,4 +1,6 @@
+/** @jsx, jsx */
 import React, { Component } from 'react'
+import { css } from '@emotion/core'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
@@ -12,7 +14,6 @@ import { UserContext } from 'components/User/UserProvider'
 import { BarLoader } from 'components/Loader'
 import NoFollowers from 'components/Follow/NoFollowers'
 import { UserCard } from 'components/User'
-import './FollowersUsers.scss'
 
 class FollowersUsers extends Component {
   constructor(props) {
@@ -132,13 +133,33 @@ class FollowersUsers extends Component {
   }
 
   render() {
-    const { users, loading } = this.state
-    const { defaultImgUrl, sessionUser } = this.context.state
-    const { className, follow } = this.props
+    const {
+      bottomReached,
+      full,
+      loading,
+      users,
+    } = this.state
+
+    const {
+      defaultImgUrl,
+      sessionUser,
+    } = this.context.state
+
+    const {
+      className,
+      follow,
+    } = this.props
 
     if (loading) {
       return (
-        <div className="following-users following-users--loading">
+        <div
+          css={css`
+            width: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          `}
+        >
           <BarLoader />
         </div>
       )
@@ -151,7 +172,6 @@ class FollowersUsers extends Component {
         </Container>
       )
     }
-
 
     return (
       <Columns className={className} breakpoint="mobile">
@@ -184,6 +204,9 @@ class FollowersUsers extends Component {
               </Columns.Column>
             )
           })
+        }
+        {
+          bottomReached && !full && <BarLoader style={{ height: '200px' }} />
         }
       </Columns>
     )

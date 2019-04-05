@@ -1,4 +1,6 @@
+/** @jsx, jsx */
 import React, { Component } from 'react'
+import { css } from '@emotion/core'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
@@ -12,7 +14,6 @@ import _ from 'lodash'
 import { UserContext } from 'components/User/UserProvider'
 import NoFollowing from 'components/Follow/NoFollowing'
 import { UserCard } from 'components/User'
-import './FollowingUsers.scss'
 
 class FollowingUsers extends Component {
   constructor(props) {
@@ -118,7 +119,14 @@ class FollowingUsers extends Component {
 
     if (loading) {
       return (
-        <div className="following-users following-users--loading">
+        <div
+          css={css`
+            width: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          `}
+        >
           <BarLoader />
         </div>
       )
@@ -126,7 +134,11 @@ class FollowingUsers extends Component {
 
     if (!loading && _.isEmpty(users)) {
       return (
-        <Container style={{ padding: '0 75px'}}>
+        <Container
+          css={css`
+            padding: 0 75px;
+          `}
+        >
           <NoFollowing username={follow.username} />
         </Container>
       )

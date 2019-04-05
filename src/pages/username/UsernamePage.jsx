@@ -6,8 +6,6 @@ import { CSSTransitionGroup } from 'react-transition-group'
 import { UserContext } from 'components/User/UserProvider'
 import {
   Card,
-  Columns,
-  Container,
   Content,
   Modal,
   Section,
@@ -16,15 +14,11 @@ import {
 import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
 import {
-  UserDapps,
-  UserDescription,
-} from 'components/User'
-import {
   NoShares,
   ShareListItem,
   ShareForm,
 } from 'components/Share'
-import { BarLoader, Loadable } from 'components/Loader'
+import { BarLoader } from 'components/Loader'
 import toggleNotification from 'utils/notifier/toggleNotification'
 import Popover from 'react-tiny-popover'
 import SharePopoverContainer from 'components/Popover/SharePopoverContainer'
@@ -39,8 +33,6 @@ import './UsernamePage.scss';
 class UsernamePage extends Component {
   constructor(props, context) {
     super(props)
-
-    const { sessionUser } = context.state
 
     this.state = {
       userInfo: {
@@ -219,19 +211,15 @@ class UsernamePage extends Component {
   }
 
   render() {
-    const { sessionUser } = this.context.state
-
     const {
       shares,
       username,
       adminMode,
-      user,
       sharesLoading,
     } = this.props
 
     const {
       bottomReached,
-      displayView,
       showModal,
       showCommentModal,
     } = this.state
@@ -266,7 +254,7 @@ class UsernamePage extends Component {
                       linkStyles={{
                         position: 'absolute',
                         top: '0',
-                        right: '23px',
+                        right: '5px',
                         height: '30px'
                       }}
                     />

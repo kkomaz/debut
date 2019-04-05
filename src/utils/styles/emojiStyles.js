@@ -114,7 +114,7 @@ export const emojiButtonStyles = (editMode) => {
   return css`
     position: absolute;
     top: 0;
-    right: 0;
+    right: 9px;
     z-index: 1;
     cursor: pointer;
   `
