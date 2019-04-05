@@ -16,6 +16,17 @@ import FollowingUsers from 'pages/username/following/FollowingUsers'
 import FollowersUsers from 'pages/username/followers/FollowersUsers'
 import IconProofs from 'components/SocialProofs/IconProofs'
 import ShareDetailPage from 'pages/user/_user_id/shares/_share_id/ShareDetailPage'
+import {
+  UserDapps,
+  UserDescription,
+} from 'components/User'
+import {
+  Container,
+  Card,
+  Content,
+  Columns,
+} from 'components/bulma'
+import { Loadable } from 'components/Loader'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -23,13 +34,25 @@ import { forceUserSignOut, forceRedirect } from 'utils/auth'
 import { requestSingleUser } from 'actions/user'
 import { requestFetchFollow } from 'actions/follow'
 import { nodeEnv } from 'utils/constants'
+import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 
 class UsernameRoute extends Component {
-  state = {
-    error: false,
-    profile: {},
-    loading: true,
-    userProofs: []
+  constructor(props, context) {
+    super(props)
+
+    const { sessionUser } = context.state
+
+    this.state = {
+      error: false,
+      profile: {},
+      loading: true,
+      userProofs: [],
+      userInfo: {
+        dapps: [],
+      },
+      adminMode: props.username === sessionUser.username,
+      displayView: true,
+    }
   }
 
   static propTypes = {
@@ -90,7 +113,14 @@ class UsernameRoute extends Component {
           throw new Error(`${username} is currently using an older version of the Blockstack browser.  They have will have to update to newest version.  Located below are social proofs for ${username}.  Send a ping to let them know to stay up to date!`)
         }
       }
-      return this.setState({ profile, loading: false, userProofs })
+
+      this.setState({
+        profile,
+        loading: false,
+        userProofs
+      }, () => {
+        this.loadUserInfo(profile, apps)
+      })
     } catch (e) {
       // If current user is viewing, redirect
       if (sessionUser !== username) {
@@ -105,8 +135,62 @@ class UsernameRoute extends Component {
     }
   }
 
+  loadUserInfo = async(profile, apps) => {
+    const { dapps } = this.props
+    let userDappsRadiks
+
+    try {
+      const filteredDapps = returnFilteredUrls(apps)
+      userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
+
+      if (userDappsRadiks.newDapps.length > 0) {
+        this.props.addDappsToList(userDappsRadiks.newDapps)
+      }
+
+      if (!userDappsRadiks) {
+        throw new Error('User intro data does not exist')
+      }
+
+      this.setState({
+        userInfo: {
+          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
+        },
+        dappLoading: false,
+      })
+    } catch (e) {
+      return this.setState({
+        userInfo: {
+          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
+        },
+        dappLoading: false,
+      })
+    }
+  }
+
+  onCreateEdit = () => {
+    this.setState({ displayView: false })
+  }
+
+  onSubmit = (data) => {
+    this.setState({
+      displayView: true
+    })
+  }
+
+  onCancel = () => {
+    this.setState({ displayView: true })
+  }
+
   render() {
-    const { error, profile, loading, userProofs } = this.state
+    const {
+      error,
+      profile,
+      loading,
+      userProofs,
+      adminMode,
+      userInfo,
+      displayView,
+    } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
 
     const {
@@ -129,103 +213,119 @@ class UsernameRoute extends Component {
       )
     }
 
+    console.log(this.state.userInfo)
+
     return (
       <div className="username-route">
-        <Switch>
-          {
-            <Route
-              exact
-              path={match.url}
-              render={() => {
-                history.listen(location => {
-                  lastLocation = location
-                })
-
-                const prevHistoryPush = this.props.history.push
-                this.props.history.push = (pathname, state = {}) => {
-                  if (lastLocation === null ||
-                      pathname !== lastLocation.pathname + lastLocation.search + lastLocation.hash ||
-                      JSON.stringify(state) !== JSON.stringify(lastLocation.state)
-                  ) {
-                    prevHistoryPush(pathname, state)
-                  }
-                }
-                return (
-                  <React.Fragment>
-                    <UserHero
-                      username={username}
-                      user={user}
-                      defaultImgUrl={defaultImgUrl}
-                      sessionUser={sessionUser}
-                      userProofs={userProofs}
-                      loading={loading}
-                    />
-                    <UsernamePage
-                      user={user}
-                      username={username}
-                      dapps={dapps}
-                      follow={follow}
-                      profile={profile}
-                      shares={shares}
-                      loading={loading}
-                      location={lastLocation}
-                      />
-                  </React.Fragment>
-                )}
-              }
-            />
-          }
-
-          <Route
-            exact
-            path={`${match.url}/moments/:share_id`}
-            render={({ match }) =>
-              <ShareDetailPage
-                match={match}
-                username={username}
-              />
-            }
+        <Container>
+          <UserHero
+            username={username}
+            user={user}
+            defaultImgUrl={defaultImgUrl}
+            sessionUser={sessionUser}
+            userProofs={userProofs}
+            loading={loading}
           />
+          <Columns className="mt-half">
+            <Columns.Column size={4}>
+              <div className="username__description mb-one">
+                <Card className="user-description">
+                  <Card.Content>
+                    <Content>
+                      <Loadable loading={user.loading || !user.data}>
+                        <UserDescription
+                          adminMode={adminMode}
+                          displayView={displayView}
+                          sessionUser={sessionUser}
+                          user={user}
+                          username={username}
+                          onCreateEdit={this.onCreateEdit}
+                          onCancel={this.onCancel}
+                          onSubmit={this.onSubmit}
+                          loading={user.loading}
+                        />
+                      </Loadable>
+                    </Content>
+                  </Card.Content>
+                </Card>
+              </div>
+              <div className="username__dapps mb-one">
+                <UserDapps
+                  adminMode={adminMode}
+                  loading={this.state.dappLoading}
+                  userInfo={userInfo}
+                />
+              </div>
+            </Columns.Column>
+            <Columns.Column size={8}>
+              <Switch>
+                {
+                  <Route
+                    exact
+                    path={match.url}
+                    render={() => {
+                      history.listen(location => {
+                        lastLocation = location
+                      })
 
-          {
-            !_.isEmpty(follow) &&
-            <Route
-              path={`${match.url}/following`}
-              render={() => (
-                <React.Fragment>
-                  <UserHero
-                    username={username}
-                    user={user}
-                    defaultImgUrl={defaultImgUrl}
-                    sessionUser={sessionUser}
-                    userProofs={userProofs}
-                    loading={loading}
+                      const prevHistoryPush = this.props.history.push
+                      this.props.history.push = (pathname, state = {}) => {
+                        if (lastLocation === null ||
+                            pathname !== lastLocation.pathname + lastLocation.search + lastLocation.hash ||
+                            JSON.stringify(state) !== JSON.stringify(lastLocation.state)
+                        ) {
+                          prevHistoryPush(pathname, state)
+                        }
+                      }
+                      return (
+                        <UsernamePage
+                          user={user}
+                          username={username}
+                          dapps={dapps}
+                          follow={follow}
+                          profile={profile}
+                          shares={shares}
+                          loading={loading}
+                          location={lastLocation}
+                        />
+                      )}
+                    }
                   />
-                  <FollowingUsers follow={follow} />
-                </React.Fragment>
-              )}
-            />
-          }
-          {
-            !_.isEmpty(follow) &&
-            <Route
-              path={`${match.url}/followers`}
-              render={() => (
-                <React.Fragment>
-                  <UserHero
-                    username={username}
-                    user={user}
-                    defaultImgUrl={defaultImgUrl}
-                    sessionUser={sessionUser}
-                    userProofs={userProofs}
-                    loading={loading}
+                }
+
+                <Route
+                  exact
+                  path={`${match.url}/moments/:share_id`}
+                  render={({ match }) =>
+                    <ShareDetailPage
+                      match={match}
+                      username={username}
+                    />
+                  }
+                />
+
+                {
+                  !_.isEmpty(follow) &&
+                  <Route
+                    path={`${match.url}/following`}
+                    render={() => (
+                      <FollowingUsers follow={follow} />
+                    )}
                   />
-                  <FollowersUsers follow={follow} />
-                </React.Fragment>
-              )}
-            />
-          }
-        </Switch>
+                }
+                {
+                  !_.isEmpty(follow) &&
+                  <Route
+                    path={`${match.url}/followers`}
+                    render={() => (
+                      <FollowersUsers follow={follow} />
+                    )}
+                  />
+                }
+              </Switch>
+            </Columns.Column>
+          </Columns>
+        </Container>
       </div>
     )
   }
