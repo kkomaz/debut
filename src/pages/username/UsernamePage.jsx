@@ -48,7 +48,6 @@ class UsernamePage extends Component {
       },
       dappLoading: true,
       bottomReached: false,
-      adminMode: props.username === sessionUser.username,
       showModal: false,
       showCommentModal: false,
       currentShare: {},
@@ -72,11 +71,8 @@ class UsernamePage extends Component {
   }
 
   async componentDidMount() {
-    if (!_.isEmpty(this.props.profile)) {
-      this.setState({ dappsLoading: true }, () => {
-        this.loadUserInfo(this.props.profile)
-      })
-    }
+    const { username } = this.props
+    this.props.requestUserShares({ username })
     window.addEventListener('scroll', this.handleScroll)
   }
 
@@ -228,12 +224,12 @@ class UsernamePage extends Component {
     const {
       shares,
       username,
+      adminMode,
       user,
       sharesLoading,
     } = this.props
 
     const {
-      adminMode,
       bottomReached,
       displayView,
       showModal,

@@ -154,32 +154,30 @@ class FollowersUsers extends Component {
 
 
     return (
-      <Container className="followers-users">
-        <Columns className={className} breakpoint="mobile">
-          {
-            _.map(users, (user) => {
-              return (
-                <Columns.Column
-                  key={user.username}
-                  desktop={{
-                    size: 4,
-                  }}
-                  mobile={{
-                    size: 6,
-                  }}
-                >
-                  <UserCard
-                    user={user}
-                    currentUser={sessionUser.userData}
-                    defaultImgUrl={defaultImgUrl}
-                    navigateTo={this.onBoxClick}
-                  />
-                </Columns.Column>
-              )
-            })
-          }
-        </Columns>
-      </Container>
+      <Columns className={className} breakpoint="mobile">
+        {
+          _.map(users, (user) => {
+            return (
+              <Columns.Column
+                key={user.username}
+                desktop={{
+                  size: 4,
+                }}
+                mobile={{
+                  size: 6,
+                }}
+              >
+                <UserCard
+                  user={user}
+                  currentUser={sessionUser.userData}
+                  defaultImgUrl={defaultImgUrl}
+                  navigateTo={this.onBoxClick}
+                />
+              </Columns.Column>
+            )
+          })
+        }
+      </Columns>
     )
   }
 }

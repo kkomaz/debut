@@ -72,11 +72,12 @@ class UsernameRoute extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { username, user } = this.props
+    const { sessionUser } = this.context.state
 
     if (username !== prevProps.username) {
       this.props.requestSingleUser(username)
       this.props.requestFetchFollow(username)
-      this.setState({ loading: true })
+      this.setState({ loading: true, adminMode: sessionUser.username === username })
     }
 
     if (!user.loading && prevProps.user.loading) {
@@ -227,7 +228,7 @@ class UsernameRoute extends Component {
             loading={loading}
           />
           <Columns className="mt-half">
-            <Columns.Column size={4}>
+            <Columns.Column size={3}>
               <div className="username__description mb-one">
                 <Card className="user-description">
                   <Card.Content>
@@ -257,7 +258,7 @@ class UsernameRoute extends Component {
                 />
               </div>
             </Columns.Column>
-            <Columns.Column size={8}>
+            <Columns.Column size={9}>
               <Switch>
                 {
                   <Route
@@ -287,6 +288,7 @@ class UsernameRoute extends Component {
                           shares={shares}
                           loading={loading}
                           location={lastLocation}
+                          adminMode={adminMode}
                         />
                       )}
                     }
