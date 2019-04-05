@@ -84,7 +84,7 @@ class UserHero extends Component {
                   <div className="user-hero__identity-names mr-one">
                     <Heading size={4} style={{ color: 'white' }}>{_.get(user, 'data.profile.name', username)}</Heading>
                     <Heading subtitle size={6} style={{ color: 'white' }}>
-                      {username}
+                      {user.name || username}
                     </Heading>
                   </div>
                   <div className="user-hero__identity-proofs">

@@ -11,7 +11,6 @@ import {
   Section,
   Heading,
 } from 'components/bulma'
-import { fetchUserBlockstackDapps, returnFilteredUrls } from 'utils/apps'
 import { withRouter } from 'react-router-dom'
 import {
   NoShares,
@@ -27,7 +26,6 @@ import { CommentForm } from 'components/comment'
 
 // Action Imports
 import { requestUserShares, resetSharesLoading } from 'actions/share'
-import { addDappsToList } from 'actions/blockstack'
 import './UsernamePage.scss';
 
 class UsernamePage extends Component {
@@ -70,16 +68,12 @@ class UsernamePage extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     const { username } = this.props
-    // const { sessionUser } = this.context.state
-
     if (this.props.username !== prevProps.username) {
       this.props.resetSharesLoading()
     }
 
     if (!this.props.loading && prevProps.loading) {
-      // this.setState({ adminMode: sessionUser.username === username, dappLoading: true })
       this.props.requestUserShares({ username })
-      // this.loadUserInfo(profile)
     }
 
     if (this.props.loading === false) {
@@ -102,42 +96,6 @@ class UsernamePage extends Component {
 
     if (!sharesLoading) {
       this.props.resetSharesLoading()
-    }
-  }
-
-  async loadUserInfo(profile) {
-    const { dapps } = this.props
-    let userDappsRadiks
-
-    try {
-      const apps = _.map(profile.apps, (k,v) => {
-        return v
-      })
-
-      const filteredDapps = returnFilteredUrls(apps)
-      userDappsRadiks = await fetchUserBlockstackDapps(dapps, filteredDapps)
-
-      if (userDappsRadiks.newDapps.length > 0) {
-        this.props.addDappsToList(userDappsRadiks.newDapps)
-      }
-
-      if (!userDappsRadiks) {
-        throw new Error('User intro data does not exist')
-      }
-
-      this.setState({
-        userInfo: {
-          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
-        },
-        dappLoading: false,
-      })
-    } catch (e) {
-      return this.setState({
-        userInfo: {
-          dapps: _.slice(userDappsRadiks.dapps, 0, 21),
-        },
-        dappLoading: false,
-      })
     }
   }
 
@@ -358,6 +316,5 @@ const mapStateToProps = (state) => {
 UsernamePage.contextType = UserContext
 export default withRouter(connect(mapStateToProps, {
   requestUserShares,
-  addDappsToList,
   resetSharesLoading,
 })(UsernamePage))

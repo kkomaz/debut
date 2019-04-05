@@ -10,6 +10,9 @@
 
   &__name {
     margin-bottom: 0 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: normal;
   }
 
   &__description {
