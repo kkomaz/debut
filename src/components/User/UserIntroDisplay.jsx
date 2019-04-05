@@ -60,7 +60,7 @@ const UserIntroDisplay = (props) => {
             icon="IconLocation"
             size={20}
           />
-          <p>{user.area}</p>
+          <p className="small">{user.area}</p>
         </div>
       }
       {
@@ -76,7 +76,16 @@ const UserIntroDisplay = (props) => {
             icon="IconDisplay"
             size={20}
           />
-          <p>{linkifyText(user.websiteUrl)}</p>
+          <p
+            className="small"
+            css={css`
+              a {
+                font-size: 12px;
+              }
+            `}
+          >
+            {linkifyText(user.websiteUrl)}
+          </p>
         </div>
       }
 
@@ -91,7 +100,7 @@ const UserIntroDisplay = (props) => {
           icon="IconCalendar"
           size={20}
         />
-        <p>Joined {moment(user.createdAt).format('MM/YYYY')}</p>
+        <p className="small">Joined {moment(user.createdAt).format('MM/YYYY')}</p>
       </div>
     </div>
   )

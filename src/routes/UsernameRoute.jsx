@@ -291,7 +291,7 @@ class UsernameRoute extends Component {
                               adminMode={adminMode}
                             />
                           </Columns.Column>
-                          <Columns.Column size={3}>
+                            <Columns.Column size={3}>
                             <RandomUsers />
                           </Columns.Column>
                         </React.Fragment>
