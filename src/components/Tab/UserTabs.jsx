@@ -68,7 +68,7 @@ class UserTabs extends Component {
           active={activeTab === 'profile'}
           onClick={() => this.setActiveTab('profile')}
         >
-          Profile
+          Moments
         </Tabs.Tab>
         <Tabs.Tab
           className="user-tabs__tab"

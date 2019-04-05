@@ -214,51 +214,10 @@ class UsernameRoute extends Component {
       )
     }
 
-    console.log(this.state.userInfo)
-
     return (
       <div className="username-route">
         <Container>
-          <UserHero
-            username={username}
-            user={user}
-            defaultImgUrl={defaultImgUrl}
-            sessionUser={sessionUser}
-            userProofs={userProofs}
-            loading={loading}
-          />
           <Columns className="mt-half">
-            <Columns.Column size={3}>
-              <div className="username__description mb-one">
-                <Card className="user-description">
-                  <Card.Content>
-                    <Content>
-                      <Loadable loading={user.loading || !user.data}>
-                        <UserDescription
-                          adminMode={adminMode}
-                          displayView={displayView}
-                          sessionUser={sessionUser}
-                          user={user}
-                          username={username}
-                          onCreateEdit={this.onCreateEdit}
-                          onCancel={this.onCancel}
-                          onSubmit={this.onSubmit}
-                          loading={user.loading}
-                        />
-                      </Loadable>
-                    </Content>
-                  </Card.Content>
-                </Card>
-              </div>
-              <div className="username__dapps mb-one">
-                <UserDapps
-                  adminMode={adminMode}
-                  loading={this.state.dappLoading}
-                  userInfo={userInfo}
-                />
-              </div>
-            </Columns.Column>
-            <Columns.Column size={9}>
               <Switch>
                 {
                   <Route
@@ -279,17 +238,59 @@ class UsernameRoute extends Component {
                         }
                       }
                       return (
-                        <UsernamePage
-                          user={user}
-                          username={username}
-                          dapps={dapps}
-                          follow={follow}
-                          profile={profile}
-                          shares={shares}
-                          loading={loading}
-                          location={lastLocation}
-                          adminMode={adminMode}
-                        />
+                        <React.Fragment>
+                          <UserHero
+                            username={username}
+                            user={user}
+                            defaultImgUrl={defaultImgUrl}
+                            sessionUser={sessionUser}
+                            userProofs={userProofs}
+                            loading={loading}
+                          />
+                          <Columns.Column size={3}>
+                            <div className="username__description mb-one">
+                              <Card className="user-description">
+                                <Card.Content>
+                                  <Content>
+                                    <Loadable loading={user.loading || !user.data}>
+                                      <UserDescription
+                                        adminMode={adminMode}
+                                        displayView={displayView}
+                                        sessionUser={sessionUser}
+                                        user={user}
+                                        username={username}
+                                        onCreateEdit={this.onCreateEdit}
+                                        onCancel={this.onCancel}
+                                        onSubmit={this.onSubmit}
+                                        loading={user.loading}
+                                      />
+                                    </Loadable>
+                                  </Content>
+                                </Card.Content>
+                              </Card>
+                            </div>
+                            <div className="username__dapps mb-one">
+                              <UserDapps
+                                adminMode={adminMode}
+                                loading={this.state.dappLoading}
+                                userInfo={userInfo}
+                              />
+                            </div>
+                          </Columns.Column>
+                          <Columns.Column size={9}>
+                            <UsernamePage
+                              user={user}
+                              username={username}
+                              dapps={dapps}
+                              follow={follow}
+                              profile={profile}
+                              shares={shares}
+                              loading={loading}
+                              location={lastLocation}
+                              adminMode={adminMode}
+                            />
+                          </Columns.Column>
+                        </React.Fragment>
                       )}
                     }
                   />
@@ -311,7 +312,49 @@ class UsernameRoute extends Component {
                   <Route
                     path={`${match.url}/following`}
                     render={() => (
-                      <FollowingUsers follow={follow} />
+                      <React.Fragment>
+                        <UserHero
+                          username={username}
+                          user={user}
+                          defaultImgUrl={defaultImgUrl}
+                          sessionUser={sessionUser}
+                          userProofs={userProofs}
+                          loading={loading}
+                        />
+                        <Columns.Column size={3}>
+                          <div className="username__description mb-one">
+                            <Card className="user-description">
+                              <Card.Content>
+                                <Content>
+                                  <Loadable loading={user.loading || !user.data}>
+                                    <UserDescription
+                                      adminMode={adminMode}
+                                      displayView={displayView}
+                                      sessionUser={sessionUser}
+                                      user={user}
+                                      username={username}
+                                      onCreateEdit={this.onCreateEdit}
+                                      onCancel={this.onCancel}
+                                      onSubmit={this.onSubmit}
+                                      loading={user.loading}
+                                    />
+                                  </Loadable>
+                                </Content>
+                              </Card.Content>
+                            </Card>
+                          </div>
+                          <div className="username__dapps mb-one">
+                            <UserDapps
+                              adminMode={adminMode}
+                              loading={this.state.dappLoading}
+                              userInfo={userInfo}
+                            />
+                          </div>
+                        </Columns.Column>
+                        <Columns.Column size={9}>
+                          <FollowingUsers follow={follow} />
+                        </Columns.Column>
+                      </React.Fragment>
                     )}
                   />
                 }
@@ -320,12 +363,53 @@ class UsernameRoute extends Component {
                   <Route
                     path={`${match.url}/followers`}
                     render={() => (
-                      <FollowersUsers follow={follow} />
+                      <React.Fragment>
+                        <UserHero
+                          username={username}
+                          user={user}
+                          defaultImgUrl={defaultImgUrl}
+                          sessionUser={sessionUser}
+                          userProofs={userProofs}
+                          loading={loading}
+                        />
+                        <Columns.Column size={3}>
+                          <div className="username__description mb-one">
+                            <Card className="user-description">
+                              <Card.Content>
+                                <Content>
+                                  <Loadable loading={user.loading || !user.data}>
+                                    <UserDescription
+                                      adminMode={adminMode}
+                                      displayView={displayView}
+                                      sessionUser={sessionUser}
+                                      user={user}
+                                      username={username}
+                                      onCreateEdit={this.onCreateEdit}
+                                      onCancel={this.onCancel}
+                                      onSubmit={this.onSubmit}
+                                      loading={user.loading}
+                                    />
+                                  </Loadable>
+                                </Content>
+                              </Card.Content>
+                            </Card>
+                          </div>
+                          <div className="username__dapps mb-one">
+                            <UserDapps
+                              adminMode={adminMode}
+                              loading={this.state.dappLoading}
+                              userInfo={userInfo}
+                            />
+                          </div>
+                        </Columns.Column>
+                        <Columns.Column size={9}>
+                          <FollowersUsers follow={follow} />
+                        </Columns.Column>
+                      </React.Fragment>
                     )}
                   />
                 }
               </Switch>
-            </Columns.Column>
           </Columns>
         </Container>
       </div>
