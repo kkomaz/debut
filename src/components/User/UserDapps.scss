@@ -3,3 +3,7 @@
     display: flex;
   }
 }
+
+.user-dapps :focus:not(.focus-visible) {
+  outline: none;
+}

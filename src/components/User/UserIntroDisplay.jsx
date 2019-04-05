@@ -1,4 +1,5 @@
-import React from 'react'
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core'
 import PropTypes from 'prop-types'
 import {
   Heading,
@@ -6,39 +7,54 @@ import {
 import { linkifyText } from 'utils/decorator'
 import { Icon } from 'components/icon'
 import moment from 'moment'
-import './UserIntroDisplay.scss'
 
 const UserIntroDisplay = (props) => {
   const { user } = props
 
   return (
-    <div className="user-intro-display">
-      <div className="user-intro-display__identity mb-one">
+    <div>
+      <div className="mb-one">
         {user.name ?
         <Heading
-          className="user-intro-display__name"
+          css={css`
+            margin-bottom: 0 !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: normal;
+          `}
           size={6}>
             {user.name}
         </Heading> :
         <Heading
-          className="user-intro-display__name"
+          css={css`
+            margin-bottom: 0 !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: normal;
+          `}
           size={6}>
             {user.username}
         </Heading>
         }
-        {/*
-          <p className="mt-half user-intro-display__username">{linkifyText(`@${user.username}`)}</p>
-        */}
       </div>
       {
         user.description &&
-        <p className="user-intro-display__description">
+        <p
+          css={css`
+            margin-bottom: 10px !important;
+          `}
+        >
           {linkifyText(user.description)}
         </p>
       }
       {
         user.area &&
-        <div className="user-intro-display__area">
+        <div
+          css={css`
+            display: flex;
+            justify-content: flex-start;
+          `}
+        >
           <Icon
             className="debut-icon mr-one mb-half"
             icon="IconLocation"
@@ -49,7 +65,12 @@ const UserIntroDisplay = (props) => {
       }
       {
         user.websiteUrl &&
-        <div className="user-intro-display__website">
+        <div
+          css={css`
+            display: flex;
+            justify-content: flex-start;
+          `}
+        >
           <Icon
             className="debut-icon mr-one mb-half"
             icon="IconDisplay"
@@ -59,7 +80,12 @@ const UserIntroDisplay = (props) => {
         </div>
       }
 
-      <div className="user-intro-display__joined">
+      <div
+        css={css`
+          display: flex;
+          justify-content: flex-start;
+        `}
+      >
         <Icon
           className="debut-icon mr-one"
           icon="IconCalendar"
