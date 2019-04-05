@@ -43,6 +43,7 @@ class ShareListItem extends Component {
     username: PropTypes.string.isRequired,
     onEditClick: PropTypes.func,
     onCommentEditClick: PropTypes.func,
+    from: PropTypes.string,
   }
 
   revertDelete = () => {
@@ -266,6 +267,7 @@ class ShareListItem extends Component {
                 shareId={share._id}
                 username={sessionUser.username}
                 currentComment={currentComment}
+                from={this.props.from}
               />
             </div>
           </Content>
@@ -277,7 +279,8 @@ class ShareListItem extends Component {
 
 ShareListItem.defaultProps = {
   onEditClick: _.noop,
-  disableGoPath: false
+  disableGoPath: false,
+  from: '',
 }
 
 const mapStateToProps = (state) => {

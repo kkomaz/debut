@@ -332,7 +332,10 @@ class UsernamePage extends Component {
                               }}
                             />
                           </Popover>
-                          <ShareForm username={username} />
+                          <ShareForm
+                            username={username}
+                            from="profile"
+                          />
                         </div>
                       </Content>
                     </Card.Content>
@@ -361,6 +364,7 @@ class UsernamePage extends Component {
                           username={username}
                           onEditClick={this.openModal}
                           onCommentEditClick={this.openCommentModal}
+                          from="profile"
                         />
                       )
                     })

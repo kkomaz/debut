@@ -50,7 +50,8 @@ class ShareForm extends Component {
       _id: PropTypes.string,
       text: PropTypes.string,
       imageFile: PropTypes.string,
-    })
+    }),
+    from: PropTypes.string,
   }
 
   componentDidMount() {
@@ -414,7 +415,7 @@ class ShareForm extends Component {
           this.state.showEmojis ?
           <span
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiPickerStyles(editMode)}
+            css={theme => emojiStyles.emojiPickerStyles(editMode, this.props.from)}
             ref={el => (this.emojiPicker = el)}
           >
             <Picker onSelect={this.addEmoji} />
@@ -422,7 +423,7 @@ class ShareForm extends Component {
           :
           <p
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiButtonStyles(editMode)}
+            css={theme => emojiStyles.emojiButtonStyles(editMode, this.props.from)}
             onClick={this.showEmojis}
           >
             {String.fromCodePoint(0x1f60a)}
@@ -436,6 +437,7 @@ class ShareForm extends Component {
 ShareForm.defaultProps = {
   onCancel: _.noop,
   onComplete: _.noop,
+  from: '',
 }
 
 const mapStateToProps = (state) => {

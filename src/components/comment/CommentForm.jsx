@@ -57,6 +57,7 @@ class CommentForm extends Component {
     shareId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     requestEditComment: PropTypes.func.isRequired,
+    from: PropTypes.string,
   }
 
   componentDidMount() {
@@ -407,7 +408,7 @@ class CommentForm extends Component {
           this.state.showEmojis ?
           <span
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiPickerStyles(editMode)}
+            css={theme => emojiStyles.emojiPickerCommentStyles(editMode, this.props.from)}
             ref={el => (this.emojiPicker = el)}
           >
             <Picker onSelect={this.addEmoji} />
@@ -415,7 +416,7 @@ class CommentForm extends Component {
           :
           <p
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiButtonStyles(editMode)}
+            css={theme => emojiStyles.emojiButtonStyles(editMode, this.props.from)}
             onClick={this.showEmojis}
           >
             {String.fromCodePoint(0x1f60a)}
