@@ -353,7 +353,7 @@ class ShareForm extends Component {
             <div className="share-form__options">
               <Label>
                 <Icon
-                  className="debut-icon debut-icon--pointer"
+                  className="debut-icon debut-icon--pointer mr-half"
                   icon="IconCamera"
                   size={15}
                 />

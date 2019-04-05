@@ -28,6 +28,10 @@
   }
 }
 
+.username-page__share-form-wrapper :focus:not(.focus-visible) {
+  outline: none;
+}
+
 .share-list-item-transition-enter {
   opacity: 0.01;
 }

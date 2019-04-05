@@ -3,7 +3,7 @@
 .user-tabs {
   background: $white;
   padding-left: 231px;
-  padding-right: 113px;
+  padding-right: 0;
 
   &.tabs.is-boxed li.is-active a {
     background: $primary;
@@ -13,6 +13,6 @@
 
 @media only screen and (max-width: 1500px) {
   .user-tabs {
-    padding-left: 207px;
+    padding-left: 294px;
   }
 }

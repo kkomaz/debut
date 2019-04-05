@@ -34,6 +34,10 @@ class UserCard extends Component {
       disableButton,
     } = this.props
 
+
+
+    console.log(this.props.styles.nameStyles.fontSize)
+
     return (
       <Card
         css={css`
@@ -58,6 +62,7 @@ class UserCard extends Component {
               css={theme => css`
                 font-weight: 800;
                 cursor: pointer;
+                font-size: ${this.props.styles.nameStyles.fontSize};
 
                 &:hover {
                   color: ${theme.colors.shadow}
@@ -71,6 +76,7 @@ class UserCard extends Component {
               className="small"
               css={theme => css`
                 cursor: pointer;
+                font-size: ${this.props.styles.usernameStyles.fontSize};
 
                 &:hover {
                   color: ${theme.colors.shadow};
@@ -153,6 +159,14 @@ class UserCard extends Component {
 
 UserCard.defaultProps = {
   disableButton: false,
+  styles: {
+    nameStyles: {
+      fontSize: '14px',
+    },
+    usernameStyles: {
+      fontSize: '12px',  
+    }
+  }
 }
 
 const mapStateToProps = (state, ownProps) => {

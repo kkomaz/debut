@@ -97,44 +97,6 @@ class UserDescription extends Component {
 
     return (
       <div className="user-description__info-details">
-        <div className="user-description__about-myself">
-            <Popover
-                isOpen={this.state.isPopoverOpen}
-                position="right"
-                padding={30}
-                onClickOutside={() => this.setState({ isPopoverOpen: false })}
-                content={({ position, targetRect, popoverRect }) => (
-                    <ArrowContainer
-                      position={position}
-                      targetRect={targetRect}
-                      popoverRect={popoverRect}
-                      arrowColor={'#383A3F'}
-                      arrowSize={10}
-                    >
-                      <div
-                          style={{
-                            backgroundColor: '#383A3F',
-                            padding: '20px',
-                            color: 'white',
-                            width: '300px',
-                          }}
-                          onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                      >
-                        <p className="small">
-                          Write a small bio about yourself.  Let everyone know who you are!
-                        </p>
-                      </div>
-                    </ArrowContainer>
-                )}
-            >
-              <Icon
-                className="debut-icon debut-icon--pointer"
-                icon="IconQuestionCircle"
-                onClick={() => this.setState({ isPopoverOpen: !this.state.isPopoverOpen })}
-                size={16}
-              />
-            </Popover>
-        </div>
         {
           displayView ?
           <UserIntroDisplay

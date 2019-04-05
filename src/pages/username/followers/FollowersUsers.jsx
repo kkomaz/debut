@@ -1,4 +1,6 @@
+/** @jsx, jsx */
 import React, { Component } from 'react'
+import { css } from '@emotion/core'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
@@ -12,7 +14,6 @@ import { UserContext } from 'components/User/UserProvider'
 import { BarLoader } from 'components/Loader'
 import NoFollowers from 'components/Follow/NoFollowers'
 import { UserCard } from 'components/User'
-import './FollowersUsers.scss'
 
 class FollowersUsers extends Component {
   constructor(props) {
@@ -132,13 +133,33 @@ class FollowersUsers extends Component {
   }
 
   render() {
-    const { users, loading } = this.state
-    const { defaultImgUrl, sessionUser } = this.context.state
-    const { className, follow } = this.props
+    const {
+      bottomReached,
+      full,
+      loading,
+      users,
+    } = this.state
+
+    const {
+      defaultImgUrl,
+      sessionUser,
+    } = this.context.state
+
+    const {
+      className,
+      follow,
+    } = this.props
 
     if (loading) {
       return (
-        <div className="following-users following-users--loading">
+        <div
+          css={css`
+            width: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          `}
+        >
           <BarLoader />
         </div>
       )
@@ -152,34 +173,42 @@ class FollowersUsers extends Component {
       )
     }
 
-
     return (
-      <Container className="followers-users">
-        <Columns className={className} breakpoint="mobile">
-          {
-            _.map(users, (user) => {
-              return (
-                <Columns.Column
-                  key={user.username}
-                  desktop={{
-                    size: 4,
+      <Columns className={className} breakpoint="mobile">
+        {
+          _.map(users, (user) => {
+            return (
+              <Columns.Column
+                key={user.username}
+                desktop={{
+                  size: 4,
+                }}
+                mobile={{
+                  size: 6,
+                }}
+              >
+                <UserCard
+                  user={user}
+                  currentUser={sessionUser.userData}
+                  defaultImgUrl={defaultImgUrl}
+                  navigateTo={this.onBoxClick}
+                  styles={{
+                    nameStyles: {
+                      fontSize: '12px',
+                    },
+                    usernameStyles: {
+                      fontSize: '10px'
+                    }
                   }}
-                  mobile={{
-                    size: 6,
-                  }}
-                >
-                  <UserCard
-                    user={user}
-                    currentUser={sessionUser.userData}
-                    defaultImgUrl={defaultImgUrl}
-                    navigateTo={this.onBoxClick}
-                  />
-                </Columns.Column>
-              )
-            })
-          }
-        </Columns>
-      </Container>
+                />
+              </Columns.Column>
+            )
+          })
+        }
+        {
+          bottomReached && !full && <BarLoader style={{ height: '200px' }} />
+        }
+      </Columns>
     )
   }
 }
