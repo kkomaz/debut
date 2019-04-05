@@ -248,7 +248,7 @@ class UsernameRoute extends Component {
                             userProofs={userProofs}
                             loading={loading}
                           />
-                          <Columns.Column size={3}>
+                          <Columns.Column size={4}>
                             <div className="username__description mb-one">
                               <Card className="user-description">
                                 <Card.Content>
@@ -278,7 +278,7 @@ class UsernameRoute extends Component {
                               />
                             </div>
                           </Columns.Column>
-                          <Columns.Column size={6}>
+                          <Columns.Column size={8}>
                             <UsernamePage
                               user={user}
                               username={username}
@@ -290,9 +290,6 @@ class UsernameRoute extends Component {
                               location={lastLocation}
                               adminMode={adminMode}
                             />
-                          </Columns.Column>
-                            <Columns.Column size={3}>
-                            <RandomUsers />
                           </Columns.Column>
                         </React.Fragment>
                       )}
@@ -325,7 +322,7 @@ class UsernameRoute extends Component {
                           userProofs={userProofs}
                           loading={loading}
                         />
-                        <Columns.Column size={3}>
+                        <Columns.Column size={4}>
                           <div className="username__description mb-one">
                             <Card className="user-description">
                               <Card.Content>
@@ -355,7 +352,7 @@ class UsernameRoute extends Component {
                             />
                           </div>
                         </Columns.Column>
-                        <Columns.Column size={9}>
+                        <Columns.Column size={8}>
                           <FollowingUsers follow={follow} />
                         </Columns.Column>
                       </React.Fragment>
@@ -376,7 +373,7 @@ class UsernameRoute extends Component {
                           userProofs={userProofs}
                           loading={loading}
                         />
-                        <Columns.Column size={3}>
+                        <Columns.Column size={4}>
                           <div className="username__description mb-one">
                             <Card className="user-description">
                               <Card.Content>
@@ -406,7 +403,7 @@ class UsernameRoute extends Component {
                             />
                           </div>
                         </Columns.Column>
-                        <Columns.Column size={9}>
+                        <Columns.Column size={8}>
                           <FollowersUsers follow={follow} />
                         </Columns.Column>
                       </React.Fragment>

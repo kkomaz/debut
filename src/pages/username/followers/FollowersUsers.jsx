@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
   Columns,
-  Container,
 } from 'components/bulma'
 import PropTypes from 'prop-types'
 import { User } from 'radiks'
