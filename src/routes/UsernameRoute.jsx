@@ -27,7 +27,6 @@ import {
   Columns,
 } from 'components/bulma'
 import { Loadable } from 'components/Loader'
-import { RandomUsers } from 'components/User'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -248,7 +247,7 @@ class UsernameRoute extends Component {
                             userProofs={userProofs}
                             loading={loading}
                           />
-                          <Columns.Column size={4}>
+                          <Columns.Column size={3}>
                             <div className="username__description mb-one">
                               <Card className="user-description">
                                 <Card.Content>
@@ -278,7 +277,7 @@ class UsernameRoute extends Component {
                               />
                             </div>
                           </Columns.Column>
-                          <Columns.Column size={8}>
+                          <Columns.Column size={9}>
                             <UsernamePage
                               user={user}
                               username={username}
@@ -322,7 +321,7 @@ class UsernameRoute extends Component {
                           userProofs={userProofs}
                           loading={loading}
                         />
-                        <Columns.Column size={4}>
+                        <Columns.Column size={3}>
                           <div className="username__description mb-one">
                             <Card className="user-description">
                               <Card.Content>
@@ -352,7 +351,7 @@ class UsernameRoute extends Component {
                             />
                           </div>
                         </Columns.Column>
-                        <Columns.Column size={8}>
+                        <Columns.Column size={9}>
                           <FollowingUsers follow={follow} />
                         </Columns.Column>
                       </React.Fragment>
@@ -373,7 +372,7 @@ class UsernameRoute extends Component {
                           userProofs={userProofs}
                           loading={loading}
                         />
-                        <Columns.Column size={4}>
+                        <Columns.Column size={3}>
                           <div className="username__description mb-one">
                             <Card className="user-description">
                               <Card.Content>
@@ -403,7 +402,7 @@ class UsernameRoute extends Component {
                             />
                           </div>
                         </Columns.Column>
-                        <Columns.Column size={8}>
+                        <Columns.Column size={9}>
                           <FollowersUsers follow={follow} />
                         </Columns.Column>
                       </React.Fragment>
