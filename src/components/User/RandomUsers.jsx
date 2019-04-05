@@ -52,7 +52,7 @@ class RandomUsers extends Component {
         <Card.Content className="random-users__card-content">
           <div className="random-users__content mb-one">
             <div className="random-users__title-container">
-              <Heading className="random-users__header" size={6}>Signed up users on debut</Heading>
+              <Heading className="random-users__header" size={6}>Users on debut</Heading>
               <Heading size={6}>· </Heading>
             </div>
             <div className="random-users__refresh-container ml-half">
