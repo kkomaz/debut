@@ -14,7 +14,7 @@ const UserIntroDisplay = (props) => {
   return (
     <div className="user-intro-display">
       <div className="user-intro-display__identity mb-one">
-        {user.name ? <Heading className="user-intro-display__name" size={5}>{user.name}</Heading> :
+        {user.name ? <Heading className="user-intro-display__name" size={6}>{user.name}</Heading> :
         <Heading
           className="user-intro-display__name"
           size={5}>
