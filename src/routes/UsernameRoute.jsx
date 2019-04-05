@@ -27,6 +27,7 @@ import {
   Columns,
 } from 'components/bulma'
 import { Loadable } from 'components/Loader'
+import { RandomUsers } from 'components/User'
 
 // Util imports
 import { appUrl } from 'utils/constants'
@@ -277,7 +278,7 @@ class UsernameRoute extends Component {
                               />
                             </div>
                           </Columns.Column>
-                          <Columns.Column size={9}>
+                          <Columns.Column size={6}>
                             <UsernamePage
                               user={user}
                               username={username}
@@ -289,6 +290,9 @@ class UsernameRoute extends Component {
                               location={lastLocation}
                               adminMode={adminMode}
                             />
+                          </Columns.Column>
+                          <Columns.Column size={3}>
+                            <RandomUsers />
                           </Columns.Column>
                         </React.Fragment>
                       )}
