@@ -167,9 +167,7 @@ class FollowersUsers extends Component {
 
     if (!loading && _.isEmpty(users)) {
       return (
-        <Container style={{ padding: '0 75px'}}>
-          <NoFollowers username={follow.username} />
-        </Container>
+        <NoFollowers username={follow.username} />
       )
     }
 

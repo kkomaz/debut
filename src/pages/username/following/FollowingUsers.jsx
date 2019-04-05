@@ -1,11 +1,10 @@
 /** @jsx, jsx */
-import React, { Component } from 'react'
 import { css } from '@emotion/core'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import {
   Columns,
-  Container,
 } from 'components/bulma'
 import { BarLoader } from 'components/Loader'
 import PropTypes from 'prop-types'
@@ -134,13 +133,7 @@ class FollowingUsers extends Component {
 
     if (!loading && _.isEmpty(users)) {
       return (
-        <Container
-          css={css`
-            padding: 0 75px;
-          `}
-        >
-          <NoFollowing username={follow.username} />
-        </Container>
+        <NoFollowing username={follow.username} />
       )
     }
 
