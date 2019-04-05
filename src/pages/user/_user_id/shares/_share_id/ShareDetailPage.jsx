@@ -99,21 +99,19 @@ class ShareDetail extends Component {
     }
 
     return (
-      <Container>
-        <Columns>
-          <Columns.Column size={6} offset={1}>
-            <ShareListItem
-              share={share}
-              username={username}
-              onEditClick={this.openEditModal}
-              onCommentEditClick={this.openCommentModal}
-              disableGoPath
-            />
-          </Columns.Column>
-          <Columns.Column size={4}>
-            <RandomUsers />
-          </Columns.Column>
-        </Columns>
+      <React.Fragment>
+        <Columns.Column size={6} offset={1}>
+          <ShareListItem
+            share={share}
+            username={username}
+            onEditClick={this.openEditModal}
+            onCommentEditClick={this.openCommentModal}
+            disableGoPath
+          />
+        </Columns.Column>
+        <Columns.Column size={4}>
+          <RandomUsers />
+        </Columns.Column>
         {
           showCommentModal &&
           <Modal
@@ -155,7 +153,7 @@ class ShareDetail extends Component {
             </Modal.Content>
           </Modal>
         }
-      </Container>
+      </React.Fragment>
     )
   }
 }
