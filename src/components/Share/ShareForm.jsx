@@ -281,6 +281,7 @@ class ShareForm extends Component {
                 font-size: 14px;
                 width: 100%;
                 resize: none;
+                padding: 10px;
               `}
               style={{
                 fontFamily: 'Poppins, sans-serif',

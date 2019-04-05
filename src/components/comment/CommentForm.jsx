@@ -289,6 +289,7 @@ class CommentForm extends Component {
                 font-size: 12px;
                 width: 100%;
                 resize: none;
+                padding: 10px;
               `}
               style={{
                 fontFamily: 'Poppins, sans-serif',
