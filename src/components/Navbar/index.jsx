@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import Navbar from 'react-bulma-components/lib/components/navbar'
-import { Input, Dropdown } from 'components/bulma'
+import { Input, Dropdown, Container } from 'components/bulma'
 import { IconLoader } from 'components/Loader'
 import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
@@ -160,88 +160,90 @@ class NavbarComp extends Component {
         fixed="top"
         active={open}
       >
-        <Navbar.Brand>
-          <Navbar.Item>
-            <Input
-              onChange={this.onChange}
-              value={this.state.searchedUser}
-              placeholder="Search for debut user"
-            />
-            <Dropdown
-              ref={(dropdown) => this.dropdown = dropdown }
-              value={this.state.selected}
-              color="info"
-              onChange={this.onDropdownChange}
-            >
-              {
-                _.map(searchResults, (username) => {
-                  return (
-                    <Dropdown.Item
-                      onMouseEnter={() => this.setState({ hovered: username })}
-                      value={username}
-                      style={this.state.hovered === username ? { background: '#E0E3DA' } : {} }
-                    >
-                      {username}
-                    </Dropdown.Item>
-                  )
-                })
-              }
-            </Dropdown>
-          </Navbar.Item>
-
-          <Navbar.Burger
-            onClick={this.toggleNavbar}
-          />
-        </Navbar.Brand>
-        <Navbar.Menu className="debut-nav-bar__menu">
-          <Navbar.Container position="end">
-              {
-                isSignedIn &&
-                <React.Fragment>
-                  <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToExplore}>
-                    Explore
-                  </Navbar.Item>
-                  <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
-                    {
-                      _.isEmpty(user) && loading ? <IconLoader /> :
-                      <div
-                        className="debut-nav-bar__user-identity navbar-link"
+        <Container style={{ marginTop: '0', paddingRight: '11px' }}>
+          <Navbar.Brand>
+            <Navbar.Item>
+              <Input
+                onChange={this.onChange}
+                value={this.state.searchedUser}
+                placeholder="Search for debut user"
+              />
+              <Dropdown
+                ref={(dropdown) => this.dropdown = dropdown }
+                value={this.state.selected}
+                color="info"
+                onChange={this.onDropdownChange}
+              >
+                {
+                  _.map(searchResults, (username) => {
+                    return (
+                      <Dropdown.Item
+                        onMouseEnter={() => this.setState({ hovered: username })}
+                        value={username}
+                        style={this.state.hovered === username ? { background: '#E0E3DA' } : {} }
                       >
-                        <img
-                          onError={this.addDefaultSrc}
-                          src={_.get(user, 'profileImgUrl', defaultImgUrl)}
-                          alt="user"
-                          height="45"
-                          width="45"
-                          />
+                        {username}
+                      </Dropdown.Item>
+                    )
+                  })
+                }
+              </Dropdown>
+            </Navbar.Item>
+
+            <Navbar.Burger
+              onClick={this.toggleNavbar}
+            />
+          </Navbar.Brand>
+          <Navbar.Menu className="debut-nav-bar__menu">
+            <Navbar.Container position="end">
+                {
+                  isSignedIn &&
+                  <React.Fragment>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToExplore}>
+                      Explore
+                    </Navbar.Item>
+                    <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
+                      {
+                        _.isEmpty(user) && loading ? <IconLoader /> :
+                        <div
+                          className="debut-nav-bar__user-identity navbar-link"
+                        >
+                          <img
+                            onError={this.addDefaultSrc}
+                            src={_.get(user, 'profileImgUrl', defaultImgUrl)}
+                            alt="user"
+                            height="45"
+                            width="45"
+                            />
+                        </div>
+                      }
+                      <div className="debut-nav-bar__list navbar-dropdown is-boxed is-right" style={{ padding: '0' }}>
+                        <NavbarList
+                          user={user}
+                          onHomeClick={this.goToHome}
+                          onHelpClick={this.goToHelp}
+                          onProfileClick={this.goToProfile}
+                          onSignOutClick={this.signOut}
+                        />
                       </div>
-                    }
-                    <div className="debut-nav-bar__list navbar-dropdown is-boxed is-right" style={{ padding: '0' }}>
-                      <NavbarList
-                        user={user}
-                        onHomeClick={this.goToHome}
-                        onHelpClick={this.goToHelp}
-                        onProfileClick={this.goToProfile}
-                        onSignOutClick={this.signOut}
-                      />
                     </div>
-                  </div>
-                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHome}>
-                    Home
-                  </Navbar.Item>
-                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToProfile}>
-                    Profile
-                  </Navbar.Item>
-                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
-                    Help
-                  </Navbar.Item>
-                  <Navbar.Item className="debut-nav-bar__user-options" onClick={this.signOut}>
-                    Sign Out
-                  </Navbar.Item>
-                </React.Fragment>
-              }
-          </Navbar.Container>
-        </Navbar.Menu>
+                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHome}>
+                      Home
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToProfile}>
+                      Profile
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
+                      Help
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.signOut}>
+                      Sign Out
+                    </Navbar.Item>
+                  </React.Fragment>
+                }
+            </Navbar.Container>
+          </Navbar.Menu>
+        </Container>
       </Navbar>
     )
   }
