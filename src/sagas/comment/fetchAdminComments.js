@@ -26,7 +26,9 @@ const fetchAdminComments = async (action) => {
 function* fetchAdminCommentsSaga(action) {
   try {
     const comments = yield call(fetchAdminComments, action)
-    yield put({ type: FETCH_ADMIN_COMMENTS_SUCCESS, payload: comments })
+    yield put({ type: FETCH_ADMIN_COMMENTS_SUCCESS, payload: {
+      comments,
+    }})
   } catch (error) {
     yield put({ type: FETCH_ADMIN_COMMENTS_FAIL, payload: error.message })
   }

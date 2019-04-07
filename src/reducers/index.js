@@ -4,6 +4,7 @@ import blockstackReducer from './blockstackReducer'
 import shareReducer from './shareReducer'
 import followReducer from './followReducer'
 import feedReducer from './feedReducer'
+import recentReducer from './recentReducer'
 
 const rootReducer = combineReducers({
   blockstack: blockstackReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   follow: followReducer,
   share: shareReducer,
   user: userReducer,
+  recent: recentReducer,
 });
 
 export default rootReducer;
