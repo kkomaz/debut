@@ -27,7 +27,8 @@ export default function recentReducer(state = defaultState, action) {
       return {
         ...state, comments: {
           ...state.comments,
-          list: filterListFromList(state.comments.list, action.payload.comments)
+          list: filterListFromList(state.comments.list, action.payload.comments),
+          loading: false,
         }
       }
     }
