@@ -99,20 +99,31 @@ class AdminUsernameRoute extends Component {
               </Menu.List>
             </Menu>
           </Columns.Column>
-          <Columns.Column size={6}>
-            <Switch>
-              <Route
-                exact
-                path={match.url}
-                render={() => (
-                  _.isEmpty(userFollow) ? <BarLoader /> : <AdminActivityFeed userFollow={userFollow} />
-                )}
-              />
-            </Switch>
-          </Columns.Column>
-          <Columns.Column size={4}>
-            <RandomUsers />
-          </Columns.Column>
+          <Switch>
+            <Route
+              exact
+              path={match.url}
+              render={() => (
+                _.isEmpty(userFollow) ?
+                <React.Fragment>
+                  <Columns.Column size={6}>
+                    <BarLoader />
+                  </Columns.Column>
+                  <Columns.Column size={4}>
+                    <RandomUsers />
+                  </Columns.Column>
+                </React.Fragment> :
+                <React.Fragment>
+                  <Columns.Column size={6}>
+                    <AdminActivityFeed userFollow={userFollow} />
+                  </Columns.Column>
+                  <Columns.Column size={4}>
+                    <RandomUsers />
+                  </Columns.Column>
+                </React.Fragment>
+              )}
+            />
+          </Switch>
         </Columns>
       </Container>
     )

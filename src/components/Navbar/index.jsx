@@ -211,7 +211,13 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
-                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToExplore}>
+                    <Navbar.Item>
+                      Notifications
+                    </Navbar.Item>
+                    <Navbar.Item
+                      className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
+                      onClick={this.goToExplore}
+                    >
                       Explore
                     </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
