@@ -1,5 +1,7 @@
+/** @jsx jsx */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import Navbar from 'react-bulma-components/lib/components/navbar'
@@ -160,7 +162,17 @@ class NavbarComp extends Component {
         fixed="top"
         active={open}
       >
-        <Container style={{ marginTop: '0', paddingRight: '11px' }}>
+
+        <Container
+          css={css`
+            margin-top: 0;
+            padding-right: 11px;
+
+            @media only screen and (max-width: 1087px) {
+              padding-right: 0;
+            }
+          `}
+        >
           <Navbar.Brand>
             <Navbar.Item>
               <Input
