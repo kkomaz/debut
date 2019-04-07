@@ -159,9 +159,10 @@ class CommentForm extends Component {
 
   editComment = async () => {
     const { _id, text, imageFile } = this.state
-    const { username } = this.props
+    const { username, share } = this.props
 
     const params = {
+      share_creator: share.username,
       text,
       username,
       imageFile
@@ -177,9 +178,10 @@ class CommentForm extends Component {
 
   createComment = async () => {
     const { text, imageFile } = this.state
-    const { username, shareId } = this.props
+    const { username, shareId, share } = this.props
 
     const params = {
+      share_creator: share.username,
       share_id: shareId,
       creator: username,
       text,
@@ -432,19 +434,22 @@ CommentForm.defaultProps = {
   onComplete: _.noop,
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const submitting = state.share.commentActions.submitting
   const editing = state.share.commentActions.editing
   const shareId = state.share.commentActions.shareId
 
+  const share = _.find(state.share.shares.list, (share) => share._id === ownProps.shareId)
+
   const commentActions = {
     submitting,
     editing,
-    shareId
+    shareId,
   }
 
   return {
-    commentActions
+    commentActions,
+    share,
   }
 }
 
