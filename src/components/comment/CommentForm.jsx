@@ -162,7 +162,7 @@ class CommentForm extends Component {
     const { username, share } = this.props
 
     const params = {
-      share_creator: share.username,
+      parent_creator: share.username,
       text,
       username,
       imageFile
@@ -181,7 +181,7 @@ class CommentForm extends Component {
     const { username, shareId, share } = this.props
 
     const params = {
-      share_creator: share.username,
+      parent_creator: share.username,
       share_id: shareId,
       creator: username,
       text,

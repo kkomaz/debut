@@ -14,6 +14,7 @@ import {
 } from 'components/bulma'
 import BarLoader from 'components/Loader/BarLoader'
 import { RandomUsers } from 'components/User'
+import NotificationComments from 'pages/admin/notifications-comments/NotificationComments'
 
 // Stylesheets
 import './AdminMenu.scss'
@@ -26,7 +27,7 @@ class AdminUsernameRoute extends Component {
     const pathArray = props.location.pathname.split('/')
     const path = _.last(pathArray)
 
-    const paths = ['following', 'followers']
+    const paths = ['following', 'followers', 'notifications-comments']
 
     if (!_.includes(paths, path)) {
       activeMenu = 'activityFeed'
@@ -66,6 +67,11 @@ class AdminUsernameRoute extends Component {
     this.props.history.push(`/${username}/following`)
   }
 
+  onNotificationCommentsClick = () => {
+    this.onMenuItemClick('notifications-comments')
+    this.props.history.push('/admin/notifications-comments')
+  }
+
   render() {
     const {
       match,
@@ -96,6 +102,15 @@ class AdminUsernameRoute extends Component {
                   onClick={this.onFollowersClick}>
                     {followersText}
                 </Menu.List.Item>
+                <Menu.List.Item>
+                  <Menu.List title="Notifications">
+                    <Menu.List.Item
+                      active={active === 'notifications-comments'}
+                      onClick={this.onNotificationCommentsClick}>
+                        Comments
+                    </Menu.List.Item>
+                  </Menu.List>
+                </Menu.List.Item>
               </Menu.List>
             </Menu>
           </Columns.Column>
@@ -121,6 +136,14 @@ class AdminUsernameRoute extends Component {
                     <RandomUsers />
                   </Columns.Column>
                 </React.Fragment>
+              )}
+            />
+            <Route
+              path={`${match.url}/notifications-comments`}
+              render={() => (
+                <Columns.Column size={10}>
+                  <NotificationComments />
+                </Columns.Column>
               )}
             />
           </Switch>

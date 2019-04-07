@@ -4,7 +4,7 @@ class Comment extends Model {
   static className = "Comment"
 
   static schema = {
-    share_creator: {
+    parent_creator: {
       type: String,
       decrypted: true
     },
