@@ -141,9 +141,14 @@ class AdminUsernameRoute extends Component {
             <Route
               path={`${match.url}/notifications-comments`}
               render={() => (
-                <Columns.Column size={10}>
-                  <NotificationComments />
-                </Columns.Column>
+                <React.Fragment>
+                  <Columns.Column size={6}>
+                    <NotificationComments />
+                  </Columns.Column>
+                  <Columns.Column size={4}>
+                    <RandomUsers />
+                  </Columns.Column>
+                </React.Fragment>
               )}
             />
           </Switch>

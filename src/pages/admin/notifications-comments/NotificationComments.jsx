@@ -43,14 +43,18 @@ class NotificationComments extends Component {
     })
   }
 
+  onCommentCreatorClick = (e, username) => {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log(username)
+  }
+
   render() {
     const { commentsObj } = this.props
 
     if (commentsObj.loading) {
       return <div>Loading...</div>
     }
-
-    console.log(commentsObj.list)
 
     return (
       <div className="notification-comments">
@@ -62,16 +66,20 @@ class NotificationComments extends Component {
           {
             _.map(commentsObj.list, (comment) => {
               return (
-                <Card key={comment._id} className="mb-one">
+                <Card
+                  key={comment._id}
+                  className="mb-one"
+                  onClick={() => console.log('hitting the card')}
+                >
                   <Card.Content>
                     <Content>
                       <div>
-                        <p className="share-list-item__username-date" onClick={this.goToUserProfile}>
-                          <strong className="share-list-item__username">{comment.creator}</strong> <span className="admin-username__date small">- {formatDate(comment.createdAt)}</span>
+                        <p onClick={(e) => this.onCommentCreatorClick(e, comment.creator)} style={{ cursor: 'pointer'}}>
+                          <strong>{comment.creator}</strong> <span className="small">- {formatDate(comment.createdAt)}</span>
                         </p>
 
                         <p>
-                          Comment to {comment.parent_creator}
+                          Responding to {comment.parent_creator}
                         </p>
                       </div>
                       <p>
