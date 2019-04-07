@@ -279,6 +279,7 @@ class CommentForm extends Component {
             `}
           >
             <textarea
+              onChange={_.noop}
               name="text"
               placeholder="Write a comment..."
               rows={this.state.textAreaRow}

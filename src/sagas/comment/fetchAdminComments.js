@@ -1,23 +1,26 @@
-import _ from 'lodash'
+import axios from 'axios'
 import { put, call } from 'redux-saga/effects'
 import {
   FETCH_ADMIN_COMMENTS_SUCCESS,
   FETCH_ADMIN_COMMENTS_FAIL,
 } from 'actions'
-import Comment from 'model/comment'
 
-const fetchAdminComments = (action) => {
+const fetchAdminComments = async (action) => {
   const {
     parent_creator,
     limit,
     lt,
   } = action.payload
 
-  return Comment.fetchList({
-    parent_creator,
-    limit,
-    lt,
+  const result = await axios.get('/comments', {
+    params: {
+      parent_creator,
+      limit,
+      lt,
+    }
   })
+
+  return result.data.comments;
 }
 
 function* fetchAdminCommentsSaga(action) {
