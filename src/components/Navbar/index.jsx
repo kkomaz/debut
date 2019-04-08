@@ -61,12 +61,12 @@ class NavbarComp extends Component {
     })
 
     const comment = result.data.comments[0]
+
     if (comment) {
       view = await View.findOne({ parent_id: comment._id }) || null
     } else {
-      view = { empty: true }
+      view = {}
     }
-
 
     this.props.setView(view)
 
@@ -217,6 +217,8 @@ class NavbarComp extends Component {
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
     const { user, loading, view } = this.props
 
+    console.log(view)
+
     return (
       <Navbar
         className="debut-nav-bar"
@@ -289,7 +291,7 @@ class NavbarComp extends Component {
                           min-width: 16px;
                           opacity: 1;
                           padding: 2px 4px 3px;
-                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                          display: ${!view ? 'flex' : 'none'};
                         `}
                       >
                         N
