@@ -17,7 +17,6 @@ import NavbarList from './NavbarList'
 import Navbar from 'react-bulma-components/lib/components/navbar'
 
 // Model Imports
-import Comment from 'model/comment'
 import View from 'model/view'
 
 // Action Imports
@@ -52,6 +51,7 @@ class NavbarComp extends Component {
 
   componentDidMount = async () => {
     const { sessionUser } = this.context.state
+    let view
 
     const result = await axios.get('/comments', {
       params: {
@@ -61,8 +61,12 @@ class NavbarComp extends Component {
     })
 
     const comment = result.data.comments[0]
+    if (comment) {
+      view = await View.findOne({ parent_id: comment._id }) || null
+    } else {
+      view = { empty: true }
+    }
 
-    const view = await View.findOne({ parent_id: comment._id }) || null
 
     this.props.setView(view)
 
