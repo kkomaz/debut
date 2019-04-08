@@ -34,10 +34,6 @@ class UserCard extends Component {
       disableButton,
     } = this.props
 
-
-
-    console.log(this.props.styles.nameStyles.fontSize)
-
     return (
       <Card
         css={css`
@@ -55,7 +51,7 @@ class UserCard extends Component {
         >
           <div
             css={css`
-              padding-left: 80px;
+              padding-left: ${this.props.styles.nameContainerStyles.paddingLeft};
             `}
           >
             <p
@@ -164,7 +160,10 @@ UserCard.defaultProps = {
       fontSize: '14px',
     },
     usernameStyles: {
-      fontSize: '12px',  
+      fontSize: '12px',
+    },
+    nameContainerStyles: {
+      paddingLeft: '80px'
     }
   }
 }

@@ -15,6 +15,7 @@ import { IconLoader } from 'components/Loader'
 import { UserContext } from 'components/User/UserProvider'
 import NavbarList from './NavbarList'
 import Navbar from 'react-bulma-components/lib/components/navbar'
+import { Icon } from 'components/icon'
 
 // Model Imports
 import View from 'model/view'
@@ -285,6 +286,12 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
+                    <Navbar.Item
+                      className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
+                      onClick={this.goToExplore}
+                    >
+                      Explore
+                    </Navbar.Item>
                     <Navbar.Item onClick={this.goToRecent}>
                       <div
                         css={theme => css`
@@ -307,12 +314,12 @@ class NavbarComp extends Component {
                         N
                       </div>
                       Recent
-                    </Navbar.Item>
-                    <Navbar.Item
-                      className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
-                      onClick={this.goToExplore}
-                    >
-                      Explore
+                      <Icon
+                        className="ml-half"
+                        color="white"
+                        icon="IconBubble"
+                        size={14}
+                      />
                     </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
