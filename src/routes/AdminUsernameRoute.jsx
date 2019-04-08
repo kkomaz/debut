@@ -1,5 +1,7 @@
+/** @jsx jsx */
 // Library Imports
 import React, { Component } from 'react'
+import { jsx, css } from '@emotion/core'
 import PropTypes from 'prop-types'
 import _ from 'lodash';
 import { Switch, Route, withRouter } from 'react-router-dom'
@@ -101,9 +103,30 @@ class AdminUsernameRoute extends Component {
       <Container>
         <Columns>
           <Columns.Column size={2}>
-            <Menu className="admin-menu">
+            <Menu
+              className="admin-menu"
+              css={css`
+                .admin-menu__recent {
+                  margin-top: 10px !important;
+                  padding-left: 0 !important;
+                  margin-left: 20px !important;
+                }
+              `}
+            >
               <Menu.List title={username} className="admin-menu__title">
                 <Menu.List.Item active={active === 'activityFeed'} onClick={this.onActivityFeedClick}>Activity Feed</Menu.List.Item>
+                <Menu.List.Item>
+                  <Menu.List
+                    className="admin-menu__recent"
+                    title="Recent"
+                  >
+                    <Menu.List.Item
+                      active={active === 'recent-comments'}
+                      onClick={this.onNotificationCommentsClick}>
+                        Comments
+                    </Menu.List.Item>
+                  </Menu.List>
+                </Menu.List.Item>
                 <Menu.List.Item
                   active={active === 'following'}
                   onClick={this.onFollowingClick}>
@@ -113,15 +136,6 @@ class AdminUsernameRoute extends Component {
                   active={active === 'followers'}
                   onClick={this.onFollowersClick}>
                     {followersText}
-                </Menu.List.Item>
-                <Menu.List.Item>
-                  <Menu.List title="Recent">
-                    <Menu.List.Item
-                      active={active === 'recent-comments'}
-                      onClick={this.onNotificationCommentsClick}>
-                        Comments
-                    </Menu.List.Item>
-                  </Menu.List>
                 </Menu.List.Item>
               </Menu.List>
             </Menu>
