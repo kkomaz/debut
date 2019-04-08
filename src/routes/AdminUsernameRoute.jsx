@@ -14,7 +14,7 @@ import {
 } from 'components/bulma'
 import BarLoader from 'components/Loader/BarLoader'
 import { RandomUsers } from 'components/User'
-import NotificationComments from 'pages/admin/notifications-comments/NotificationComments'
+import RecentComments from 'pages/admin/recent-comments/RecentComments'
 
 // Stylesheets
 import './AdminMenu.scss'
@@ -27,7 +27,7 @@ class AdminUsernameRoute extends Component {
     const pathArray = props.location.pathname.split('/')
     const path = _.last(pathArray)
 
-    const paths = ['following', 'followers', 'notifications-comments']
+    const paths = ['following', 'followers', 'recent-comments']
 
     if (!_.includes(paths, path)) {
       activeMenu = 'activityFeed'
@@ -68,8 +68,8 @@ class AdminUsernameRoute extends Component {
   }
 
   onNotificationCommentsClick = () => {
-    this.onMenuItemClick('notifications-comments')
-    this.props.history.push('/admin/notifications-comments')
+    this.onMenuItemClick('recent-comments')
+    this.props.history.push('/admin/recent-comments')
   }
 
   render() {
@@ -103,9 +103,9 @@ class AdminUsernameRoute extends Component {
                     {followersText}
                 </Menu.List.Item>
                 <Menu.List.Item>
-                  <Menu.List title="Notifications">
+                  <Menu.List title="Recent">
                     <Menu.List.Item
-                      active={active === 'notifications-comments'}
+                      active={active === 'recent-comments'}
                       onClick={this.onNotificationCommentsClick}>
                         Comments
                     </Menu.List.Item>
@@ -139,11 +139,11 @@ class AdminUsernameRoute extends Component {
               )}
             />
             <Route
-              path={`${match.url}/notifications-comments`}
+              path={`${match.url}/recent-comments`}
               render={() => (
                 <React.Fragment>
                   <Columns.Column size={6}>
-                    <NotificationComments />
+                    <RecentComments />
                   </Columns.Column>
                   <Columns.Column size={4}>
                     <RandomUsers />

@@ -212,7 +212,7 @@ class NavbarComp extends Component {
                   isSignedIn &&
                   <React.Fragment>
                     <Navbar.Item>
-                      Notifications
+                      Recent
                     </Navbar.Item>
                     <Navbar.Item
                       className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
