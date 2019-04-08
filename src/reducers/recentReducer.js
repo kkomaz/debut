@@ -24,6 +24,15 @@ export default function recentReducer(state = defaultState, action) {
       }
     }
     case FETCH_ADMIN_COMMENTS_SUCCESS: {
+      if (action.payload.comments.length === 0) {
+        return {
+          ...state, comments: {
+            ...state.comments,
+            full: true,
+            loading: false,
+          }
+        }
+      }
       return {
         ...state, comments: {
           ...state.comments,

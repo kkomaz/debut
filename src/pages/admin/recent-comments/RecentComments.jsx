@@ -13,6 +13,9 @@ import { jsx, css } from '@emotion/core'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 
+// Component Imports
+import { BarLoader } from 'components/Loader'
+
 // Action Imports
 import { requestAdminComments } from 'actions/comment'
 
@@ -30,6 +33,16 @@ const formatDate = (input) => {
 }
 
 class RecentComments extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      bottomReached: false,
+    }
+
+    this.handleScroll = _.debounce(this.handleScroll, 300)
+  }
+
   static propTypes = {
     commentsObj: PropTypes.shape({
       list: PropTypes.array.isRequired,
@@ -45,6 +58,11 @@ class RecentComments extends Component {
       parent_creator: sessionUser.username,
       limit: 10
     })
+    window.addEventListener('scroll', this.handleScroll)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 
   onCommentCreatorClick = (e, username) => {
@@ -61,11 +79,46 @@ class RecentComments extends Component {
     history.push(`/${sessionUser.username}/moments/${shareId}`)
   }
 
-  render() {
+  handleScroll = () => {
+    const { bottomReached } = this.state
+    const { sessionUser } = this.context.state
     const { commentsObj } = this.props
 
-    if (commentsObj.loading) {
-      return <div>Loading...</div>
+    const html = document.documentElement; // get the html element
+    // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
+    // html.offsetHeight - read-only property returns the height of an element, including vertical padding and borders, as an integer.
+    const windowHeight = "innerHeight" in window ? window.innerHeight : html.offsetHeight;
+    const body = document.body; // get the document body
+    const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight); // Find the max value of the overall doc
+    const windowBottom = windowHeight + window.pageYOffset; // Viewport + height offset post scroll
+
+    /**
+     * if windowBottom is larger then you know you reached the bottom
+    */
+    if (windowBottom >= docHeight) {
+      this.setState({ bottomReached: true }, () => {
+        if (!commentsObj.full && commentsObj.list.length >= 10) {
+          const comment = _.last(commentsObj.list)
+
+          this.props.requestAdminComments({
+            parent_creator: sessionUser.username,
+            limit: 10,
+            lt: _.get(comment, 'createdAt', null),
+          })
+        }
+      });
+    } else if ((windowBottom < docHeight) && bottomReached) {
+      this.setState({ bottomReached: false });
+    }
+  }
+
+
+  render() {
+    const { commentsObj } = this.props
+    const { bottomReached } = this.state
+
+    if (commentsObj.loading && commentsObj.list.length === 0) {
+      return <BarLoader style={{ height: '200px' }} />
     }
 
     return (
@@ -135,6 +188,9 @@ class RecentComments extends Component {
                 </Card>
               )
             })
+          }
+          {
+            bottomReached && commentsObj.list.length >= 10 && !commentsObj.full && <BarLoader style={{ height: '200px' }} />
           }
         </CSSTransitionGroup>
       </div>
