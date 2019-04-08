@@ -46,6 +46,18 @@ class AdminUsernameRoute extends Component {
     userFollow: PropTypes.object.isRequired,
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      const arrayPaths = this.props.location.pathname.split('/')
+      const last = _.last(arrayPaths)
+
+
+      if (last !== 'admin') {
+        this.setState({ active: _.last(arrayPaths)})
+      }
+    }
+  }
+
   onMenuItemClick = (value) => {
     this.setState({ active: value })
   }

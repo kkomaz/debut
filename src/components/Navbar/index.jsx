@@ -18,6 +18,7 @@ import Navbar from 'react-bulma-components/lib/components/navbar'
 
 // Model Imports
 import View from 'model/view'
+import Comment from 'model/comment'
 
 // Action Imports
 import { setView } from 'actions/view'
@@ -45,6 +46,7 @@ class NavbarComp extends Component {
     history: PropTypes.object.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
+    setNavbarTab: PropTypes.func.isRequired,
     setView: PropTypes.func.isRequired,
     view: PropTypes.object,
   }
@@ -63,9 +65,9 @@ class NavbarComp extends Component {
     const comment = result.data.comments[0]
 
     if (comment) {
-      view = await View.findOne({ parent_id: comment._id }) || null
+      view = await View.findOne({ parent_id: comment._id }) || {}
     } else {
-      view = {}
+      view = { initial: true }
     }
 
     this.props.setView(view)
@@ -75,6 +77,8 @@ class NavbarComp extends Component {
         comment
       })
     }
+
+    Comment.addStreamListener(this.handleComments)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -87,8 +91,13 @@ class NavbarComp extends Component {
     }
   }
 
-  componentWillUnmount() {
-    console.log('unmounting')
+  handleComments = (comment) => {
+    const { sessionUser } = this.context.state
+
+    if (comment.attrs.parent_creator === sessionUser.username) {
+      this.props.setView({})
+      this.setState({ comment: comment.attrs })
+    }
   }
 
   goToHome = () => {
@@ -217,8 +226,6 @@ class NavbarComp extends Component {
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
     const { user, loading, view } = this.props
 
-    console.log(view)
-
     return (
       <Navbar
         className="debut-nav-bar"
@@ -291,7 +298,7 @@ class NavbarComp extends Component {
                           min-width: 16px;
                           opacity: 1;
                           padding: 2px 4px 3px;
-                          display: ${!view ? 'flex' : 'none'};
+                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
                         `}
                       >
                         N

@@ -3,7 +3,7 @@ import {
 } from 'actions'
 
 const defaultState = {
-  data: {},
+  data: { initial: true },
 }
 
 export default function viewReducer(state = defaultState, action) {

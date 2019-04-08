@@ -30,6 +30,8 @@ class RootRoute extends Component {
       profileClicked: false,
       username: userData.username
     };
+
+    this.adminUsernameRef = React.createRef();
   }
 
   static propTypes = {
@@ -41,15 +43,7 @@ class RootRoute extends Component {
     this.props.requestSingleUser(username)
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.state.username);
-    // console.log('mounting')
-    // Vote.addStreamListener(this.addVotesToParent)
   }
-
-  // addVotesToParent = (result) => {
-  //   const vote = result.attrs
-  //
-  //   console.log(vote)
-  // }
 
   setHomePageClickedTrue = () => {
     this.setState({ homePageClicked: true });

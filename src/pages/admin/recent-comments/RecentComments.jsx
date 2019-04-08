@@ -70,6 +70,20 @@ class RecentComments extends Component {
 
     return (
       <div className="recent-comments">
+        <div
+          className="mb-half"
+          css={theme => css`
+            display: flex;
+            justify-content: center;
+            background: ${theme.colors.danger};
+            color: ${theme.colors.white};
+            padding: 10px;
+          `}
+        >
+          <p className="small">
+            Note: This feature is currently in beta/development.
+          </p>
+        </div>
         <CSSTransitionGroup
           transitionName="recent-comments-feed-transition"
           transitionEnterTimeout={500}
