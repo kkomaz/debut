@@ -22,6 +22,7 @@ import Comment from 'model/comment'
 
 // Action Imports
 import { setView } from 'actions/view'
+import { addAdminComment } from 'actions/comment'
 
 // CSS Imports
 import './Navbar.scss';
@@ -43,6 +44,7 @@ class NavbarComp extends Component {
   }
 
   static propTypes = {
+    addAdminComment: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
@@ -96,6 +98,7 @@ class NavbarComp extends Component {
 
     if (comment.attrs.parent_creator === sessionUser.username) {
       this.props.setView({})
+      this.props.addAdminComment(comment.attrs)
       this.setState({ comment: comment.attrs })
     }
   }
@@ -372,6 +375,7 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default withRouter(connect(mapStateToProps, {
+  addAdminComment,
   setView,
 })(NavbarComp))
 NavbarComp.contextType = UserContext

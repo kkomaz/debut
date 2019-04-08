@@ -1,6 +1,7 @@
 import {
   REQUEST_ADMIN_COMMENTS,
   FETCH_ADMIN_COMMENTS_SUCCESS,
+  ADD_ADMIN_COMMENT,
 } from 'actions'
 import {
   filterListFromList,
@@ -16,6 +17,14 @@ const defaultState = {
 
 export default function recentReducer(state = defaultState, action) {
   switch (action.type) {
+    case ADD_ADMIN_COMMENT: {
+      return {
+        ...state, comments: {
+          ...state.comments,
+          list: [action.payload, ...state.comments.list]
+        }
+      }
+    }
     case REQUEST_ADMIN_COMMENTS: {
       return {
         ...state, comments: {
