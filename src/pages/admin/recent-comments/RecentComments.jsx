@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom'
 import { requestAdminComments } from 'actions/comment'
 
 // CSS imports
-import './NotificationComments.scss'
+import './RecentComments.scss'
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -29,11 +29,11 @@ const formatDate = (input) => {
   return postedDate
 }
 
-class NotificationComments extends Component {
+class RecentComments extends Component {
   static propTypes = {
     commentsObj: PropTypes.shape({
       list: PropTypes.array.isRequired,
-      full: PropTypes.object.isRequired,
+      full: PropTypes.bool.isRequired,
       loading: PropTypes.bool.isRequired,
     }).isRequired
   }
@@ -58,7 +58,7 @@ class NotificationComments extends Component {
     const { history } = this.props
     const { sessionUser } = this.context.state
 
-    history.push(`/${sessionUser.username}/moments/shareId`)
+    history.push(`/${sessionUser.username}/moments/${shareId}`)
   }
 
   render() {
@@ -138,5 +138,5 @@ const mapStateToProps = (state) => {
 
 export default withRouter(connect(mapStateToProps, {
   requestAdminComments,
-})(NotificationComments))
-NotificationComments.contextType = UserContext
+})(RecentComments))
+RecentComments.contextType = UserContext

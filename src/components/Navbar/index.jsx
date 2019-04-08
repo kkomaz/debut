@@ -1,16 +1,26 @@
 /** @jsx jsx */
+
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, css } from '@emotion/core'
+import axios from 'axios'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import Navbar from 'react-bulma-components/lib/components/navbar'
+import { withRouter } from 'react-router-dom'
+
+// Components
 import { Input, Dropdown, Container } from 'components/bulma'
 import { IconLoader } from 'components/Loader'
-import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
-import axios from 'axios'
 import NavbarList from './NavbarList'
+import Navbar from 'react-bulma-components/lib/components/navbar'
+
+// Model Imports
+import Comment from 'model/comment'
+import View from 'model/view'
+
+// CSS Imports
 import './Navbar.scss';
 
 class NavbarComp extends Component {
@@ -23,6 +33,7 @@ class NavbarComp extends Component {
       searchResults: [],
       selected: '',
       hovered: '',
+      view: null,
     }
 
     this.fetchList = _.debounce(this.fetchList, 300)
@@ -34,6 +45,20 @@ class NavbarComp extends Component {
     setHomePageClickedTrue: PropTypes.func.isRequired,
   }
 
+  componentDidMount = async () => {
+    const { sessionUser } = this.context.state
+
+    const comments = await Comment.fetchList({
+      limit: 1,
+      sort: '-createdAt',
+      parent_creator: sessionUser.username
+    })
+    const comment = comments[0].attrs
+
+    const view = await View.findOne({ parent_id: comment._id }) || null
+    this.setState({ view })
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (this.dropdown.state.open) {
       document.addEventListener('keydown', this.onKeyPress, false)
@@ -42,6 +67,10 @@ class NavbarComp extends Component {
     if (!this.dropdown.state.open) {
       document.removeEventListener('keydown', this.onKeyPress)
     }
+  }
+
+  componentWillUnmount() {
+    console.log('unmounting')
   }
 
   goToHome = () => {
@@ -149,11 +178,22 @@ class NavbarComp extends Component {
     this.setState({ open: !this.state.open })
   }
 
+  goToRecent = async () => {
+    const { history } = this.props
+    this.setState({
+      view: { a: true }
+    }, () => {
+      history.push('/admin/recent-comments')
+    })
+  }
+
   render() {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
     const { user, loading } = this.props
+
+    console.log(this.state.view)
 
     return (
       <Navbar
@@ -211,7 +251,27 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
-                    <Navbar.Item>
+                    <Navbar.Item onClick={this.goToRecent}>
+                      <div
+                        css={theme => css`
+                          align-self: flex-start;
+                          background: ${theme.colors.blue};
+                          border-radius: 15px;
+                          color: ${theme.colors.white};
+                          justify-content: center;
+                          align-items: center;
+                          height: 23px;
+                          width: 23px;
+                          box-sizing: border-box;
+                          line-height: 1;
+                          min-width: 16px;
+                          opacity: 1;
+                          padding: 2px 4px 3px;
+                          display: ${!_.isEmpty(this.state.view) ? 'none' : 'flex'};
+                        `}
+                      >
+                        N
+                      </div>
                       Recent
                     </Navbar.Item>
                     <Navbar.Item
