@@ -5,10 +5,11 @@ export default class View extends Model {
 
   static schema = {
     type: {
-      type: String
+      type: String,
     },
     parent_id: {
       type: String,
+      decrypted: true,
     }
   }
 };

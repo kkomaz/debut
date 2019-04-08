@@ -20,6 +20,9 @@ import Navbar from 'react-bulma-components/lib/components/navbar'
 import Comment from 'model/comment'
 import View from 'model/view'
 
+// Action Imports
+import { setView } from 'actions/view'
+
 // CSS Imports
 import './Navbar.scss';
 
@@ -43,20 +46,31 @@ class NavbarComp extends Component {
     history: PropTypes.object.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
+    setView: PropTypes.func.isRequired,
+    view: PropTypes.object,
   }
 
   componentDidMount = async () => {
     const { sessionUser } = this.context.state
 
-    const comments = await Comment.fetchList({
-      limit: 1,
-      sort: '-createdAt',
-      parent_creator: sessionUser.username
+    const result = await axios.get('/comments', {
+      params: {
+        parent_creator: sessionUser.username,
+        limit: 1,
+      }
     })
-    const comment = comments[0].attrs
+
+    const comment = result.data.comments[0]
 
     const view = await View.findOne({ parent_id: comment._id }) || null
-    this.setState({ view })
+
+    this.props.setView(view)
+
+    if (_.isEmpty(view)) {
+      this.setState({
+        comment
+      })
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -179,21 +193,25 @@ class NavbarComp extends Component {
   }
 
   goToRecent = async () => {
-    const { history } = this.props
-    this.setState({
-      view: { a: true }
-    }, () => {
-      history.push('/admin/recent-comments')
-    })
+    const { history, view } = this.props
+    const { comment } = this.state
+
+    if (_.isEmpty(view)) {
+      const result = new View({
+        type: 'comment',
+        parent_id: comment._id
+      })
+      const newView = await result.save()
+      this.props.setView({ ...newView.attrs, _id: newView._id })
+    }
+    history.push('/admin/recent-comments')
   }
 
   render() {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { user, loading } = this.props
-
-    console.log(this.state.view)
+    const { user, loading, view } = this.props
 
     return (
       <Navbar
@@ -267,7 +285,7 @@ class NavbarComp extends Component {
                           min-width: 16px;
                           opacity: 1;
                           padding: 2px 4px 3px;
-                          display: ${!_.isEmpty(this.state.view) ? 'none' : 'flex'};
+                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
                         `}
                       >
                         N
@@ -330,13 +348,17 @@ class NavbarComp extends Component {
 const mapStateToProps = (state, ownProps) => {
   const user = _.find(state.user.users, (user) => user._id === ownProps.username) || {}
   const loading = state.user.loading
+  const view = state.view.data
 
   return {
     user,
     loading,
+    view,
   };
 };
 
 
-export default withRouter(connect(mapStateToProps)(NavbarComp))
+export default withRouter(connect(mapStateToProps, {
+  setView,
+})(NavbarComp))
 NavbarComp.contextType = UserContext
