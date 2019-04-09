@@ -292,61 +292,52 @@ class NavbarComp extends Component {
                     >
                       Explore
                     </Navbar.Item>
-                    <Navbar.Item onClick={this.goToRecent}>
-                      <div
-                        css={theme => css`
-                          align-self: flex-start;
-                          background: ${theme.colors.blue};
-                          border-radius: 15px;
-                          color: ${theme.colors.white};
-                          justify-content: center;
-                          align-items: center;
-                          height: 23px;
-                          width: 23px;
-                          box-sizing: border-box;
-                          line-height: 1;
-                          min-width: 16px;
-                          opacity: 1;
-                          padding: 2px 4px 3px;
-                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
-                          position: absolute;
-                          left: -6px;
-                          top: 5px;
-                          cursor: pointer;
-                        `}
-                      >
-                        N
-                      </div>
-                      Recent
-                      <Icon
-                        className="ml-half"
-                        color="white"
-                        icon="IconBubble"
-                        size={14}
-                      />
-                    </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
                         _.isEmpty(user) && loading ? <IconLoader /> :
-                        <div
-                          className="debut-nav-bar__user-identity navbar-link"
-                        >
+                        <div className="debut-nav-bar__user-identity navbar-link">
                           <img
                             onError={this.addDefaultSrc}
                             src={_.get(user, 'profileImgUrl', defaultImgUrl)}
                             alt="user"
                             height="45"
                             width="45"
-                            />
+                          />
+                          <div
+                            css={theme => css`
+                              align-self: flex-start;
+                              background: ${theme.colors.blue};
+                              border-radius: 15px;
+                              color: ${theme.colors.white};
+                              justify-content: center;
+                              align-items: center;
+                              height: 23px;
+                              width: 23px;
+                              box-sizing: border-box;
+                              line-height: 1;
+                              min-width: 16px;
+                              opacity: 1;
+                              padding: 2px 4px 3px;
+                              display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                              position: absolute;
+                              left: -6px;
+                              top: 5px;
+                              cursor: pointer;
+                            `}
+                          >
+                            N
+                          </div>
                         </div>
                       }
                       <div className="debut-nav-bar__list navbar-dropdown is-boxed is-right" style={{ padding: '0' }}>
                         <NavbarList
-                          user={user}
-                          onHomeClick={this.goToHome}
+                          goToRecent={this.goToRecent}
                           onHelpClick={this.goToHelp}
+                          onHomeClick={this.goToHome}
                           onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
+                          user={user}
+                          view={view}
                         />
                       </div>
                     </div>
