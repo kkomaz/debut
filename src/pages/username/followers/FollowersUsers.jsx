@@ -178,28 +178,18 @@ class FollowersUsers extends Component {
               <Columns.Column
                 key={user.username}
                 desktop={{
-                  size: 4,
+                  size: 6,
                 }}
                 mobile={{
                   size: 6,
                 }}
               >
                 <UserCard
-                  user={user}
+                  cardWidth="auto"
                   currentUser={sessionUser.userData}
                   defaultImgUrl={defaultImgUrl}
                   navigateTo={this.onBoxClick}
-                  styles={{
-                    nameStyles: {
-                      fontSize: '12px',
-                    },
-                    usernameStyles: {
-                      fontSize: '10px'
-                    },
-                    nameContainerStyles: {
-                      paddingLeft: '70px'
-                    }
-                  }}
+                  user={user}
                 />
               </Columns.Column>
             )

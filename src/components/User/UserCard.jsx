@@ -27,6 +27,8 @@ class UserCard extends Component {
 
   render() {
     const {
+      cardHeight,
+      cardWidth,
       user,
       defaultImgUrl,
       follow,
@@ -37,8 +39,8 @@ class UserCard extends Component {
     return (
       <Card
         css={css`
-          width: 287px;
-          height: 279px;
+          width: ${cardWidth};
+          height: ${cardHeight};
         `}
       >
         <Card.Content
@@ -154,6 +156,8 @@ class UserCard extends Component {
 }
 
 UserCard.defaultProps = {
+  cardHeight: '279px',
+  cardWidth: '287px',
   disableButton: false,
   styles: {
     nameStyles: {
