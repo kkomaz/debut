@@ -48,11 +48,6 @@ class NavbarList extends Component {
           <Menu.List.Item
             onClick={this.props.onHelpClick}
           >
-            Help
-          </Menu.List.Item>
-          <Menu.List.Item
-            onClick={this.props.onHelpClick}
-          >
             <a
               onClick={this.props.goToRecent}
               css={css`
@@ -91,6 +86,11 @@ class NavbarList extends Component {
                   />
               </div>
             </a>
+          </Menu.List.Item>
+          <Menu.List.Item
+            onClick={this.props.onHelpClick}
+          >
+            Help
           </Menu.List.Item>
           <Menu.List.Item
             onClick={this.props.onSignOutClick}
