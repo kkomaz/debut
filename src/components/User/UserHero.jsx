@@ -101,7 +101,7 @@ class UserHero extends Component {
               </Media.Item>
             </Media>
           </Columns.Column>
-          <Columns.Column size={12} style={{ paddingTop: '0' }}>
+          <Columns.Column size={8} offset={4} style={{ paddingTop: '0' }}>
             <UserTabs username={username} />
           </Columns.Column>
         </Columns>
