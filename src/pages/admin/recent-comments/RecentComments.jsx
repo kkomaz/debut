@@ -121,16 +121,6 @@ class RecentComments extends Component {
       return <BarLoader style={{ height: '200px' }} />
     }
 
-    if (!commentsObj.loading && commentsObj.list.length === 0) {
-      return (
-        <Card>
-          <Card.Content>
-            <p>Currently no comments replied to your moments!</p>
-          </Card.Content>
-        </Card>
-      )
-    }
-
     return (
       <div className="recent-comments">
         <div
@@ -150,6 +140,17 @@ class RecentComments extends Component {
             </p>
           </div>
         </div>
+
+        {
+          !commentsObj.loading && commentsObj.list.length === 0 && (
+            <Card>
+              <Card.Content>
+                <p>Currently no comments replied to your moments!</p>
+              </Card.Content>
+            </Card>
+          )
+        }
+
         <CSSTransitionGroup
           transitionName="recent-comments-feed-transition"
           transitionEnterTimeout={500}
