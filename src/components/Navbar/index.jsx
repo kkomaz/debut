@@ -1,16 +1,31 @@
 /** @jsx jsx */
+
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { jsx, css } from '@emotion/core'
+import axios from 'axios'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import Navbar from 'react-bulma-components/lib/components/navbar'
+import { withRouter } from 'react-router-dom'
+
+// Components
 import { Input, Dropdown, Container } from 'components/bulma'
 import { IconLoader } from 'components/Loader'
-import { withRouter } from 'react-router-dom'
 import { UserContext } from 'components/User/UserProvider'
-import axios from 'axios'
 import NavbarList from './NavbarList'
+import Navbar from 'react-bulma-components/lib/components/navbar'
+import { Icon } from 'components/icon'
+
+// Model Imports
+import View from 'model/view'
+import Comment from 'model/comment'
+
+// Action Imports
+import { setView } from 'actions/view'
+import { addAdminComment } from 'actions/comment'
+
+// CSS Imports
 import './Navbar.scss';
 
 class NavbarComp extends Component {
@@ -23,15 +38,50 @@ class NavbarComp extends Component {
       searchResults: [],
       selected: '',
       hovered: '',
+      view: null,
     }
 
     this.fetchList = _.debounce(this.fetchList, 300)
   }
 
   static propTypes = {
+    addAdminComment: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
+    setNavbarTab: PropTypes.func.isRequired,
+    setView: PropTypes.func.isRequired,
+    view: PropTypes.object,
+  }
+
+  componentDidMount = async () => {
+    const { sessionUser } = this.context.state
+    let view
+
+    const result = await axios.get('/comments', {
+      params: {
+        parent_creator: sessionUser.username,
+        limit: 1,
+      }
+    })
+
+    const comment = result.data.comments[0]
+
+    if (comment) {
+      view = await View.findOne({ parent_id: comment._id }) || {}
+    } else {
+      view = { initial: true }
+    }
+
+    this.props.setView(view)
+
+    if (_.isEmpty(view)) {
+      this.setState({
+        comment
+      })
+    }
+
+    Comment.addStreamListener(this.handleComments)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -41,6 +91,16 @@ class NavbarComp extends Component {
 
     if (!this.dropdown.state.open) {
       document.removeEventListener('keydown', this.onKeyPress)
+    }
+  }
+
+  handleComments = (comment) => {
+    const { sessionUser } = this.context.state
+
+    if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid) {
+      this.props.setView({})
+      this.props.addAdminComment(comment.attrs)
+      this.setState({ comment: comment.attrs })
     }
   }
 
@@ -149,11 +209,26 @@ class NavbarComp extends Component {
     this.setState({ open: !this.state.open })
   }
 
+  goToRecent = async () => {
+    const { history, view } = this.props
+    const { comment } = this.state
+
+    if (_.isEmpty(view)) {
+      const result = new View({
+        type: 'comment',
+        parent_id: comment._id
+      })
+      const newView = await result.save()
+      this.props.setView({ ...newView.attrs, _id: newView._id })
+    }
+    history.push('/admin/recent-comments')
+  }
+
   render() {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { user, loading } = this.props
+    const { user, loading, view } = this.props
 
     return (
       <Navbar
@@ -211,8 +286,44 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
-                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToExplore}>
+                    <Navbar.Item
+                      className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
+                      onClick={this.goToExplore}
+                    >
                       Explore
+                    </Navbar.Item>
+                    <Navbar.Item onClick={this.goToRecent}>
+                      <div
+                        css={theme => css`
+                          align-self: flex-start;
+                          background: ${theme.colors.blue};
+                          border-radius: 15px;
+                          color: ${theme.colors.white};
+                          justify-content: center;
+                          align-items: center;
+                          height: 23px;
+                          width: 23px;
+                          box-sizing: border-box;
+                          line-height: 1;
+                          min-width: 16px;
+                          opacity: 1;
+                          padding: 2px 4px 3px;
+                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                          position: absolute;
+                          left: -6px;
+                          top: 5px;
+                          cursor: pointer;
+                        `}
+                      >
+                        N
+                      </div>
+                      Recent
+                      <Icon
+                        className="ml-half"
+                        color="white"
+                        icon="IconBubble"
+                        size={14}
+                      />
                     </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
@@ -264,13 +375,18 @@ class NavbarComp extends Component {
 const mapStateToProps = (state, ownProps) => {
   const user = _.find(state.user.users, (user) => user._id === ownProps.username) || {}
   const loading = state.user.loading
+  const view = state.view.data
 
   return {
     user,
     loading,
+    view,
   };
 };
 
 
-export default withRouter(connect(mapStateToProps)(NavbarComp))
+export default withRouter(connect(mapStateToProps, {
+  addAdminComment,
+  setView,
+})(NavbarComp))
 NavbarComp.contextType = UserContext

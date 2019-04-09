@@ -120,7 +120,7 @@ class App extends Component {
               <Login
                 userSession={userSession}
                 loggingIn={this.state.loggingIn}
-                />
+              />
             }
           </div>
       </ThemeProvider>

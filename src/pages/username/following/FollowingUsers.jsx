@@ -162,6 +162,9 @@ class FollowingUsers extends Component {
                     },
                     usernameStyles: {
                       fontSize: '10px'
+                    },
+                    nameContainerStyles: {
+                      paddingLeft: '70px'
                     }
                   }}
                 />

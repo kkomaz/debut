@@ -29,6 +29,7 @@ const formatDate = (input) => {
   }
   return postedDate
 }
+
 class ShareListItem extends Component {
   state = {
     showDeleteConfirmation: false,
@@ -188,6 +189,7 @@ class ShareListItem extends Component {
     const shareListItemTextClass = classNames({
       'share-list-item__text': true,
       'share-list-item__text--show-delete': showDeleteConfirmation,
+      'mt-half': true,
     })
 
     const shareListeItemContentClass = classNames({
