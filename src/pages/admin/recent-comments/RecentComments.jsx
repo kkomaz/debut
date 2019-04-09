@@ -20,7 +20,7 @@ import { BarLoader } from 'components/Loader'
 import { requestAdminComments } from 'actions/comment'
 
 // CSS imports
-import './RecentComments.scss'
+import recentCommentStyles from './RecentCommentStyles'
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -122,7 +122,10 @@ class RecentComments extends Component {
     }
 
     return (
-      <div className="recent-comments">
+      <div
+        css={theme => recentCommentStyles.feedTransitionStyles()}
+        className="recent-comments"
+      >
         <div
           className="mb-half"
           css={theme => css`
