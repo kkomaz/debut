@@ -86,7 +86,6 @@ class NavbarList extends Component {
                 Recent
                 <Icon
                   className="ml-half mb-quarter"
-                  color="white"
                   icon="IconBubble"
                   size={14}
                   />

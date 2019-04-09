@@ -15,7 +15,6 @@ import { IconLoader } from 'components/Loader'
 import { UserContext } from 'components/User/UserProvider'
 import NavbarList from './NavbarList'
 import Navbar from 'react-bulma-components/lib/components/navbar'
-import { Icon } from 'components/icon'
 
 // Model Imports
 import View from 'model/view'
