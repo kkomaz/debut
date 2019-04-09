@@ -121,6 +121,16 @@ class RecentComments extends Component {
       return <BarLoader style={{ height: '200px' }} />
     }
 
+    if (!commentsObj.loading && commentsObj.list.length === 0) {
+      return (
+        <Card>
+          <Card.Content>
+            <p>Currently no comments replied to your moments!</p>
+          </Card.Content>
+        </Card>
+      )
+    }
+
     return (
       <div className="recent-comments">
         <div
@@ -133,9 +143,12 @@ class RecentComments extends Component {
             padding: 10px;
           `}
         >
-          <p className="small">
-            Note: This feature is currently in beta/development.
-          </p>
+          <div>
+            <p className="small">Get real time feedback whenever someone comments on your moments!</p>
+            <p className="small">
+              Note: This feature is currently in alpha/development.
+            </p>
+          </div>
         </div>
         <CSSTransitionGroup
           transitionName="recent-comments-feed-transition"
