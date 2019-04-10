@@ -134,6 +134,7 @@ class RecentComments extends Component {
             background: ${theme.colors.danger};
             color: ${theme.colors.white};
             padding: 10px;
+            border-radius: 4px;
           `}
         >
           <div>
