@@ -15,7 +15,6 @@ import './NavbarList.scss'
 class NavbarList extends Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
-    onHomeClick: PropTypes.func.isRequired,
     onHelpClick: PropTypes.func.isRequired,
     onProfileClick: PropTypes.func.isRequired,
     onSignOutClick: PropTypes.func.isRequired,
@@ -35,11 +34,6 @@ class NavbarList extends Component {
         }}
       >
         <Menu.List>
-          <Menu.List.Item
-            onClick={this.props.onHomeClick}
-          >
-            Home
-          </Menu.List.Item>
           <Menu.List.Item
             onClick={this.props.onProfileClick}
           >
@@ -72,7 +66,7 @@ class NavbarList extends Component {
                   padding: 2px 4px 3px;
                   display: ${_.isEmpty(view) ? 'flex' : 'none'};
                   position: absolute;
-                  top: 50%;
+                  top: 46%;
                   left: 60%;
                   transform: translateY(-50%);
                 `}

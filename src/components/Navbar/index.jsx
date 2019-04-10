@@ -289,6 +289,9 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToHome}>
+                      Home
+                    </Navbar.Item>
                     <Navbar.Item
                       className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
                       onClick={this.goToExplore}
@@ -336,7 +339,6 @@ class NavbarComp extends Component {
                         <NavbarList
                           goToRecent={this.goToRecent}
                           onHelpClick={this.goToHelp}
-                          onHomeClick={this.goToHome}
                           onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
                           user={user}
@@ -344,9 +346,6 @@ class NavbarComp extends Component {
                         />
                       </div>
                     </div>
-                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHome}>
-                      Home
-                    </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToProfile}>
                       Profile
                     </Navbar.Item>
