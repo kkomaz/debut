@@ -1,4 +1,5 @@
 /** @jsx jsx */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
 // Library Imports
 import React, { Component } from 'react'
@@ -15,6 +16,7 @@ import { IconLoader } from 'components/Loader'
 import { UserContext } from 'components/User/UserProvider'
 import NavbarList from './NavbarList'
 import Navbar from 'react-bulma-components/lib/components/navbar'
+import { Icon } from 'components/icon'
 
 // Model Imports
 import View from 'model/view'
@@ -347,6 +349,40 @@ class NavbarComp extends Component {
                     </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToProfile}>
                       Profile
+                    </Navbar.Item>
+                    <Navbar.Item
+                      className="debut-nav-bar__user-options"
+                      onClick={this.goToRecent}
+                    >
+                      <div
+                        css={theme => css`
+                          background: ${theme.colors.blue};
+                          border-radius: 15px;
+                          color: ${theme.colors.white};
+                          justify-content: center;
+                          align-items: center;
+                          height: 18px;
+                          width: 18px;
+                          box-sizing: border-box;
+                          line-height: 1;
+                          min-width: 16px;
+                          opacity: 1;
+                          padding: 2px 4px 3px;
+                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                          position: absolute;
+                          top: 49%;
+                          left: 12%;
+                          transform: translateY(-50%);
+                        `}
+                      />
+                      <div className="mr-quarter">
+                        Recent
+                        <Icon
+                          className="ml-half mb-quarter"
+                          icon="IconBubble"
+                          size={14}
+                          />
+                      </div>
                     </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
                       Help

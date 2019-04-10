@@ -6,6 +6,24 @@
   border-bottom: 1px solid hsla(0,0%,100%,.1);
   height: 65px;
 
+  a {
+    color: white;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: #4a4a4a;
+
+      svg {
+        fill: #4a4a4a;
+      }
+    }
+  }
+
+  svg {
+    fill: white;
+  }
+
   &__user-options {
     display: none !important;
 
