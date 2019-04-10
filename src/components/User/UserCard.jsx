@@ -49,6 +49,8 @@ class UserCard extends Component {
             background: ${theme.colors.primary};
             height: 90px;
             color: ${theme.colors.white};
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
           `}
         >
           <div
