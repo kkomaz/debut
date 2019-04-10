@@ -96,7 +96,9 @@ class NavbarComp extends Component {
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
-    if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid) {
+    console.log(comment.c)
+
+    if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
       this.props.setView({})
       this.props.addAdminComment(comment.attrs)
       this.setState({ comment: comment.attrs })
