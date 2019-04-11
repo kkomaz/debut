@@ -2,6 +2,7 @@ import { put, call } from 'redux-saga/effects'
 import axios from 'axios'
 import { DELETE_SHARE_SUCCESS, DELETE_SHARE_FAIL } from 'actions'
 import Share from 'model/share'
+import Mention from 'model/mention'
 
 const deleteShare = async (action) => {
   const share = action.payload
@@ -14,6 +15,12 @@ const deleteShare = async (action) => {
   })
 
   axios.put(`/comment/?share_id=${share._id}`)
+
+  const mention = await Mention.findOne({ parent_id: share._id })
+
+  if (mention) {
+    await mention.destory()
+  }
 
   return deletedShare.save()
 }

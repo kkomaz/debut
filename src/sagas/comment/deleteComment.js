@@ -2,6 +2,7 @@ import { put, call } from 'redux-saga/effects'
 import { DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAIL } from 'actions'
 import Comment from 'model/comment'
 import Share from 'model/share'
+import Mention from 'model/mention'
 
 const deleteComment = async (action) => {
   const { comment, share } = action.payload
@@ -21,6 +22,12 @@ const deleteComment = async (action) => {
 
   await currentShare.save()
   await deletedComment.save()
+
+  const mention = await Mention.findOne({ parent_id: comment._id })
+
+  if (mention) {
+    await mention.destory()
+  }
 
   return { ...deletedComment.attrs, _id: deletedComment._id }
 }
