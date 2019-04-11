@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom'
 import { BarLoader } from 'components/Loader'
 
 // Action Imports
-import { requestAdminComments } from 'actions/comment'
+import { requestMentions } from 'actions/mention'
 
 // CSS imports
 import recentCommentStyles from '../recent-comments/RecentCommentStyles'
@@ -32,7 +32,7 @@ const formatDate = (input) => {
   return postedDate
 }
 
-class RecentComments extends Component {
+class Mentions extends Component {
   constructor(props) {
     super(props)
 
@@ -44,7 +44,7 @@ class RecentComments extends Component {
   }
 
   static propTypes = {
-    commentsObj: PropTypes.shape({
+    mentionsObj: PropTypes.shape({
       list: PropTypes.array.isRequired,
       full: PropTypes.bool.isRequired,
       loading: PropTypes.bool.isRequired,
@@ -54,8 +54,8 @@ class RecentComments extends Component {
   componentDidMount() {
     const { sessionUser } = this.context.state
 
-    this.props.requestAdminComments({
-      parent_creator: sessionUser.username,
+    this.props.requestMentions({
+      username: sessionUser.username,
       limit: 10
     })
     window.addEventListener('scroll', this.handleScroll)
@@ -82,7 +82,7 @@ class RecentComments extends Component {
   handleScroll = () => {
     const { bottomReached } = this.state
     const { sessionUser } = this.context.state
-    const { commentsObj } = this.props
+    const { mentionsObj } = this.props
 
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
@@ -97,11 +97,11 @@ class RecentComments extends Component {
     */
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true }, () => {
-        if (!commentsObj.full && commentsObj.list.length >= 10) {
-          const comment = _.last(commentsObj.list)
+        if (!mentionsObj.full && mentionsObj.list.length >= 10) {
+          const comment = _.last(mentionsObj.list)
 
-          this.props.requestAdminComments({
-            parent_creator: sessionUser.username,
+          this.props.requestMentions({
+            username: sessionUser.username,
             limit: 10,
             lt: _.get(comment, 'createdAt', null),
           })
@@ -114,12 +114,14 @@ class RecentComments extends Component {
 
 
   render() {
-    const { commentsObj } = this.props
+    const { mentionsObj } = this.props
     const { bottomReached } = this.state
 
-    if (commentsObj.loading && commentsObj.list.length === 0) {
+    if (mentionsObj.loading && mentionsObj.list.length === 0) {
       return <BarLoader style={{ height: '200px' }} />
     }
+
+    console.log(mentionsObj)
 
     return (
       <div
@@ -145,7 +147,7 @@ class RecentComments extends Component {
         </div>
 
         {
-          !commentsObj.loading && commentsObj.list.length === 0 && (
+          !mentionsObj.loading && mentionsObj.list.length === 0 && (
             <Card>
               <Card.Content>
                 <p>Currently no comments replied to your moments!</p>
@@ -160,7 +162,7 @@ class RecentComments extends Component {
           transitionLeaveTimeout={300}
         >
           {
-            _.map(commentsObj.list, (comment) => {
+            _.map(mentionsObj.list, (comment) => {
               return (
                 <Card
                   css={css`
@@ -194,7 +196,7 @@ class RecentComments extends Component {
                             color: ${theme.colors.powder}
                           `}
                         >
-                          Responding to {comment.parent_creator}
+                          Responding to {comment.username}
                         </p>
                       </div>
                       <p className="small">
@@ -207,7 +209,7 @@ class RecentComments extends Component {
             })
           }
           {
-            bottomReached && commentsObj.list.length >= 10 && !commentsObj.full && <BarLoader style={{ height: '200px' }} />
+            bottomReached && mentionsObj.list.length >= 10 && !mentionsObj.full && <BarLoader style={{ height: '200px' }} />
           }
         </CSSTransitionGroup>
       </div>
@@ -216,14 +218,14 @@ class RecentComments extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const comments = state.recent.comments
+  const mentions = state.recent.mentions
 
   return {
-    commentsObj: comments,
+    mentionsObj: mentions,
   }
 }
 
 export default withRouter(connect(mapStateToProps, {
-  requestAdminComments,
-})(RecentComments))
-RecentComments.contextType = UserContext
+  requestMentions,
+})(Mentions))
+Mentions.contextType = UserContext
