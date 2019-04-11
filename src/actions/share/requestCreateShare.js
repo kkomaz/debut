@@ -1,7 +1,10 @@
 import { REQUEST_CREATE_SHARE } from 'actions'
 
-const requestCreateShare = (params) => {
-  return { type: REQUEST_CREATE_SHARE, params }
+const requestCreateShare = (username, params) => {
+  return { type: REQUEST_CREATE_SHARE, payload: {
+    username,
+    params,
+  }}
 }
 
 export default requestCreateShare

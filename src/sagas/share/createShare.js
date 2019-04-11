@@ -6,7 +6,7 @@ import Mention from 'model/mention'
 import checkMentions from 'utils/mentions/checkMentions'
 
 const createShare = async (action) => {
-  const { params } = action
+  const { params, username } = action.payload
   let mentions = []
   const share = new Share({
     ...params,
@@ -15,15 +15,16 @@ const createShare = async (action) => {
   share.save()
 
   /**
-   * Don't make this async await because don't want to wait for this 
+   * Don't make this async await because don't want to wait for this
   */
   const mention = [...new Set(checkMentions(params.text))]
+  const filteredMentions = _.filter(mention, (m) => m.substring(1).trim() !== username)
 
-  if (!_.isEmpty(mention)) {
-    for (let i = 0; i < mention.length; i++) {
+  if (!_.isEmpty(filteredMentions)) {
+    for (let i = 0; i < filteredMentions.length; i++) {
       const result = new Mention({
         type: 'Share',
-        username: mention[i].substring(1).trim(),
+        username: filteredMentions[i].substring(1).trim(),
         parent_id: share._id,
       })
 

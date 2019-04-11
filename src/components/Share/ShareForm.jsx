@@ -182,7 +182,7 @@ class ShareForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestCreateShare(params)
+    this.props.requestCreateShare(username, params)
     this.setState({
       text: '',
       characterLength: 0,
