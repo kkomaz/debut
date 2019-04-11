@@ -3,13 +3,15 @@ import {
 } from 'actions'
 
 const defaultState = {
-  data: { initial: true },
+  comment: {
+    initial: true,
+  }
 }
 
 export default function viewReducer(state = defaultState, action) {
   switch (action.type) {
     case SET_VIEW: {
-      return { ...state, data: action.payload }
+      return { ...state, [action.payload.key]: action.payload.view }
     }
     default:
       return state

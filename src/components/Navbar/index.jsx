@@ -56,6 +56,21 @@ class NavbarComp extends Component {
   }
 
   componentDidMount = async () => {
+    this.setCommentView()
+    this.setMentionView()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.dropdown.state.open) {
+      document.addEventListener('keydown', this.onKeyPress, false)
+    }
+
+    if (!this.dropdown.state.open) {
+      document.removeEventListener('keydown', this.onKeyPress)
+    }
+  }
+
+  setCommentView = async () => {
     const { sessionUser } = this.context.state
     let view
 
@@ -74,7 +89,7 @@ class NavbarComp extends Component {
       view = { initial: true }
     }
 
-    this.props.setView(view)
+    this.props.setView(view, 'comment')
 
     if (_.isEmpty(view)) {
       this.setState({
@@ -85,23 +100,15 @@ class NavbarComp extends Component {
     Comment.addStreamListener(this.handleComments)
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.dropdown.state.open) {
-      document.addEventListener('keydown', this.onKeyPress, false)
-    }
-
-    if (!this.dropdown.state.open) {
-      document.removeEventListener('keydown', this.onKeyPress)
-    }
+  setMentionView = async () => {
+    console.log('setting mention view')
   }
 
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
-    console.log(comment.c)
-
     if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
-      this.props.setView({})
+      this.props.setView({}, 'comment')
       this.props.addAdminComment(comment.attrs)
       this.setState({ comment: comment.attrs })
     }
@@ -213,16 +220,16 @@ class NavbarComp extends Component {
   }
 
   goToRecent = async () => {
-    const { history, view } = this.props
+    const { history, viewObj } = this.props
     const { comment } = this.state
 
-    if (_.isEmpty(view)) {
+    if (_.isEmpty(viewObj.comment)) {
       const result = new View({
         type: 'comment',
         parent_id: comment._id
       })
       const newView = await result.save()
-      this.props.setView({ ...newView.attrs, _id: newView._id })
+      this.props.setView({ ...newView.attrs, _id: newView._id }, 'comment')
     }
     history.push('/admin/recent-comments')
   }
@@ -237,7 +244,7 @@ class NavbarComp extends Component {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { user, loading, view } = this.props
+    const { user, loading, viewObj } = this.props
 
     return (
       <Navbar
@@ -330,7 +337,7 @@ class NavbarComp extends Component {
                               min-width: 16px;
                               opacity: 1;
                               padding: 2px 4px 3px;
-                              display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                              display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
                               position: absolute;
                               left: -6px;
                               top: 5px;
@@ -349,7 +356,7 @@ class NavbarComp extends Component {
                           onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
                           user={user}
-                          view={view}
+                          view={viewObj.comment}
                         />
                       </div>
                     </div>
@@ -374,7 +381,7 @@ class NavbarComp extends Component {
                           min-width: 16px;
                           opacity: 1;
                           padding: 2px 4px 3px;
-                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                          display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
                           position: absolute;
                           top: 49%;
                           left: 12%;
@@ -412,12 +419,12 @@ class NavbarComp extends Component {
 const mapStateToProps = (state, ownProps) => {
   const user = _.find(state.user.users, (user) => user._id === ownProps.username) || {}
   const loading = state.user.loading
-  const view = state.view.data
+  const viewObj = state.view
 
   return {
     user,
     loading,
-    view,
+    viewObj,
   };
 };
 
