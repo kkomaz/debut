@@ -19,11 +19,13 @@ class NavbarList extends Component {
     onProfileClick: PropTypes.func.isRequired,
     onSignOutClick: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
-    view: PropTypes.object.isRequired
+    viewObj: PropTypes.shape({
+      comment: PropTypes.object.isRequired,
+    }).isRequired
   }
 
   render() {
-    const { view } = this.props
+    const { viewObj } = this.props
 
     return (
       <Menu
@@ -65,7 +67,7 @@ class NavbarList extends Component {
                   min-width: 16px;
                   opacity: 1;
                   padding: 2px 4px 3px;
-                  display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                  display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
                   position: absolute;
                   top: 46%;
                   left: 60%;
@@ -82,8 +84,38 @@ class NavbarList extends Component {
               </div>
             </a>
           </Menu.List.Item>
-          <Menu.List.Item onClick={this.props.goToRecentMentions}>
-            Recent @
+          <Menu.List.Item>
+            <a
+              onClick={this.props.goToRecentMentions}
+              css={css`
+                position: relative;
+              `}
+              className="navbarlist__recent-comments"
+              to="/"
+            >
+              <div
+                css={theme => css`
+                  background: ${theme.colors.blue};
+                  border-radius: 15px;
+                  color: ${theme.colors.white};
+                  justify-content: center;
+                  align-items: center;
+                  height: 18px;
+                  width: 18px;
+                  box-sizing: border-box;
+                  line-height: 1;
+                  min-width: 16px;
+                  opacity: 1;
+                  padding: 2px 4px 3px;
+                  display: ${_.isEmpty(viewObj.mention) ? 'flex' : 'none'};
+                  position: absolute;
+                  top: 46%;
+                  left: 60%;
+                  transform: translateY(-50%);
+                `}
+              />
+              Recent @
+            </a>
           </Menu.List.Item>
           <Menu.List.Item
             onClick={this.props.onHelpClick}

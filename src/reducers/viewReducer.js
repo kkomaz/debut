@@ -5,6 +5,9 @@ import {
 const defaultState = {
   comment: {
     initial: true,
+  },
+  mention: {
+    initial: true,
   }
 }
 

@@ -23,6 +23,7 @@ const createShare = async (action) => {
   if (!_.isEmpty(filteredMentions)) {
     for (let i = 0; i < filteredMentions.length; i++) {
       const result = new Mention({
+        creator: username,
         type: 'Share',
         username: filteredMentions[i].substring(1).trim(),
         parent_id: share._id,

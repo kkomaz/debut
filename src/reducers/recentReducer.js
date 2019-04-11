@@ -2,6 +2,7 @@ import {
   REQUEST_ADMIN_COMMENTS,
   FETCH_ADMIN_COMMENTS_SUCCESS,
   ADD_ADMIN_COMMENT,
+  ADD_ADMIN_MENTION,
   REQUEST_MENTIONS,
   FETCH_MENTIONS_SUCCESS,
 } from 'actions'
@@ -61,6 +62,14 @@ export default function recentReducer(state = defaultState, action) {
     // Comment End
 
     // Mention Start
+    case ADD_ADMIN_MENTION: {
+      return {
+        ...state, mentions: {
+          ...state.mentions,
+          list: [action.payload, ...state.mentions.list]
+        }
+      }
+    }
     case REQUEST_MENTIONS: {
       return {
         ...state, mentions: {

@@ -21,10 +21,12 @@ import { Icon } from 'components/icon'
 // Model Imports
 import View from 'model/view'
 import Comment from 'model/comment'
+import Mention from 'model/mention'
 
 // Action Imports
 import { setView } from 'actions/view'
 import { addAdminComment } from 'actions/comment'
+import { addAdminMention } from 'actions/mention'
 
 // CSS Imports
 import './Navbar.scss';
@@ -39,13 +41,15 @@ class NavbarComp extends Component {
       searchResults: [],
       selected: '',
       hovered: '',
-      view: null,
+      comment: null,
+      currentMentionView: null,
     }
 
     this.fetchList = _.debounce(this.fetchList, 300)
   }
 
   static propTypes = {
+    addAdminMention: PropTypes.func.isRequired,
     addAdminComment: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
@@ -81,15 +85,14 @@ class NavbarComp extends Component {
       }
     })
 
-    const comment = result.data.comments[0]
+    const comment = _.get(result, 'data.comments[0]')
 
     if (comment) {
-      view = await View.findOne({ parent_id: comment._id }) || {}
+      const foundView = await View.findOne({ parent_id: comment._id }) || {}
+      view = foundView.attrs
     } else {
       view = { initial: true }
     }
-
-    this.props.setView(view, 'comment')
 
     if (_.isEmpty(view)) {
       this.setState({
@@ -97,11 +100,40 @@ class NavbarComp extends Component {
       })
     }
 
+    this.props.setView(view, 'comment')
+
     Comment.addStreamListener(this.handleComments)
   }
 
   setMentionView = async () => {
-    console.log('setting mention view')
+    const { sessionUser } = this.context.state
+    let view
+
+    const result = await axios.get('/mentions', {
+      params: {
+        username: sessionUser.username,
+        limit: 1,
+      }
+    })
+
+    const mention = _.get(result, 'data.mentions[0]')
+
+    if (mention) {
+      const foundMention = await View.findOne({ parent_id: mention._id }) || {}
+      view = foundMention.attrs
+    } else {
+      view = { initial: true }
+    }
+
+    if (_.isEmpty(view)) {
+      this.setState({
+        currentMentionView: mention.attrs,
+      })
+    }
+
+    this.props.setView(view, 'mention')
+
+    Mention.addStreamListener(this.handleMentions)
   }
 
   handleComments = (comment) => {
@@ -111,6 +143,19 @@ class NavbarComp extends Component {
       this.props.setView({}, 'comment')
       this.props.addAdminComment(comment.attrs)
       this.setState({ comment: comment.attrs })
+    }
+  }
+
+  handleMentions = async (mention) => {
+    const { sessionUser } = this.context.state
+
+    // Should refactor this via mongo
+    if (mention.attrs.username === sessionUser.username && mention.attrs.creator !== sessionUser.username) {
+      this.props.setView({}, 'mention')
+      const result = await Mention.findById(mention.attrs._id)
+      const updatedMention = { ...result.attrs, parent: result.parent }
+      this.props.addAdminMention(updatedMention)
+      this.setState({ currentMentionView: updatedMention })
     }
   }
 
@@ -234,8 +279,18 @@ class NavbarComp extends Component {
     history.push('/admin/recent-comments')
   }
 
-  goToRecentMentions = () => {
-    const { history } = this.props
+  goToRecentMentions = async () => {
+    const { history, viewObj } = this.props
+    const { currentMentionView } = this.state
+
+    if (_.isEmpty(viewObj.mention)) {
+      const result = new View({
+        type: 'mention',
+        parent_id: currentMentionView._id
+      })
+      const newView = await result.save()
+      this.props.setView({ ...newView.attrs, _id: newView._id }, 'mention')
+    }
 
     history.push('/admin/mentions')
   }
@@ -337,7 +392,7 @@ class NavbarComp extends Component {
                               min-width: 16px;
                               opacity: 1;
                               padding: 2px 4px 3px;
-                              display: ${_.some([viewObj.comment], (elem) => _.isEmpty(elem)) ? 'flex': 'none'};
+                              display: ${_.some([viewObj.comment, viewObj.mention], (elem) => _.isEmpty(elem)) ? 'flex': 'none'};
                               position: absolute;
                               left: -6px;
                               top: 5px;
@@ -356,7 +411,7 @@ class NavbarComp extends Component {
                           onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
                           user={user}
-                          view={viewObj.comment}
+                          viewObj={viewObj}
                         />
                       </div>
                     </div>
@@ -394,10 +449,31 @@ class NavbarComp extends Component {
                           className="ml-half mb-quarter"
                           icon="IconBubble"
                           size={14}
-                          />
+                        />
                       </div>
                     </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToRecentMentions}>
+                      <div
+                        css={theme => css`
+                          background: ${theme.colors.blue};
+                          border-radius: 15px;
+                          color: ${theme.colors.white};
+                          justify-content: center;
+                          align-items: center;
+                          height: 18px;
+                          width: 18px;
+                          box-sizing: border-box;
+                          line-height: 1;
+                          min-width: 16px;
+                          opacity: 1;
+                          padding: 2px 4px 3px;
+                          display: ${_.isEmpty(viewObj.mention) ? 'flex' : 'none'};
+                          position: absolute;
+                          top: 49%;
+                          left: 12%;
+                          transform: translateY(-50%);
+                        `}
+                      />
                       Recent @
                     </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
@@ -430,6 +506,7 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default withRouter(connect(mapStateToProps, {
+  addAdminMention,
   addAdminComment,
   setView,
 })(NavbarComp))

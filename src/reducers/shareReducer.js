@@ -34,7 +34,8 @@ import {
 import _ from 'lodash'
 import {
   filterListFromList,
-  removeObjFromList
+  removeObjFromList,
+  updateObjFromList
 } from 'reducers/utils'
 import toggleNotification from 'utils/notifier/toggleNotification'
 
@@ -146,7 +147,12 @@ export default function shareReducer(state = defaultSession, action) {
         }
       }
 
-      return state
+      return { ...state,
+        shares: {
+          ...state.shares,
+          list: updateObjFromList(state.shares.list, action.payload)
+        }
+      }
     }
     case REMOVE_DETAIL_SHARE: {
       if (state.shareActions.added) {
