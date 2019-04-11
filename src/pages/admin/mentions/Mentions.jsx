@@ -95,7 +95,7 @@ class Mentions extends Component {
     if (mention.parent.radiksType === 'Share') {
       history.push(`/${mention.parent.username}/moments/${mention.parent._id}`)
     } else {
-      history.push(`/${sessionUser.username}/momments/${mention.parent.share_id}`)
+      history.push(`/${sessionUser.username}/moments/${mention.parent.share_id}`)
     }
 
   }
@@ -205,7 +205,7 @@ class Mentions extends Component {
                               }
                             `}
                           >
-                            {mention.parent.username}
+                            {mention.parent.username || mention.parent.creator}
                           </strong> <span className="small">- {formatDate(mention.createdAt)}</span>
                         </p>
 

@@ -192,7 +192,7 @@ class CommentForm extends Component {
       return this.setState({ valid: false })
     }
 
-    this.props.requestCreateComment(params, shareId)
+    this.props.requestCreateComment(username, params, shareId)
     this.setState({
       text: '',
       characterLength: 0,

@@ -1,10 +1,14 @@
+import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
 import { CREATE_COMMENT_SUCCESS, CREATE_COMMENT_FAIL } from 'actions'
 import Comment from 'model/comment'
 import Share from 'model/share'
+import Mention from 'model/mention'
+import checkMentions from 'utils/mentions/checkMentions'
 
 const createComment = async (action) => {
-  const { params } = action.payload
+  let mentions = []
+  const { params, username } = action.payload
   const comment = new Comment({
     ...params,
     valid: true,
@@ -24,6 +28,26 @@ const createComment = async (action) => {
   }
 
   await share.save()
+
+  /**
+   * Don't make this async await because don't want to wait for this
+  */
+  const mention = [...new Set(checkMentions(params.text))]
+  const filteredMentions = _.filter(mention, (m) => m.substring(1).trim() !== username)
+
+  if (!_.isEmpty(filteredMentions)) {
+    for (let i = 0; i < filteredMentions.length; i++) {
+      const result = new Mention({
+        type: 'Comment',
+        username: filteredMentions[i].substring(1).trim(),
+        parent_id: comment._id,
+      })
+
+      const newMention = result.save()
+      mentions.push({ ...newMention.attrs, _id: newMention._id })
+    }
+  }
+
 
   return { ...comment.attrs, _id: comment._id }
 }
