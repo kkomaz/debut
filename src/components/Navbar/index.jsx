@@ -337,7 +337,7 @@ class NavbarComp extends Component {
                               min-width: 16px;
                               opacity: 1;
                               padding: 2px 4px 3px;
-                              display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
+                              display: ${_.some([viewObj.comment], (elem) => _.isEmpty(elem)) ? 'flex': 'none'};
                               position: absolute;
                               left: -6px;
                               top: 5px;
