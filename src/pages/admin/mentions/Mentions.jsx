@@ -20,7 +20,11 @@ import { BarLoader } from 'components/Loader'
 import { requestMentions } from 'actions/mention'
 
 // CSS imports
-import recentCommentStyles from '../recent-comments/RecentCommentStyles'
+import recentCommentStyles from './MentionStyles'
+
+// Util Imports
+import { linkifyText } from 'utils/decorator'
+
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -30,6 +34,17 @@ const formatDate = (input) => {
     return moment(input).utc().format("MMM DD")
   }
   return postedDate
+}
+
+const typeToTextFilter = (type) => {
+  switch (type) {
+    case 'Comment': {
+      return "comment"
+    }
+    default: {
+      return "moment"
+    }
+  }
 }
 
 class Mentions extends Component {
@@ -98,12 +113,12 @@ class Mentions extends Component {
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true }, () => {
         if (!mentionsObj.full && mentionsObj.list.length >= 10) {
-          const comment = _.last(mentionsObj.list)
+          const mention = _.last(mentionsObj.list)
 
           this.props.requestMentions({
             username: sessionUser.username,
             limit: 10,
-            lt: _.get(comment, 'createdAt', null),
+            lt: _.get(mention, 'createdAt', null),
           })
         }
       });
@@ -121,12 +136,10 @@ class Mentions extends Component {
       return <BarLoader style={{ height: '200px' }} />
     }
 
-    console.log(mentionsObj)
-
     return (
       <div
         css={theme => recentCommentStyles.feedTransitionStyles()}
-        className="recent-comments"
+        className="mentions"
       >
         <div
           className="mb-half"
@@ -139,7 +152,7 @@ class Mentions extends Component {
           `}
         >
           <div>
-            <p className="small">Get real time feedback whenever someone comments on your moments!</p>
+            <p className="small">Get real time feedback whenever someone mentions on your moments!</p>
             <p className="small">
               Note: This feature is currently in alpha/development.
             </p>
@@ -150,34 +163,34 @@ class Mentions extends Component {
           !mentionsObj.loading && mentionsObj.list.length === 0 && (
             <Card>
               <Card.Content>
-                <p>Currently no comments replied to your moments!</p>
+                <p>Currently no mentions replied to your moments!</p>
               </Card.Content>
             </Card>
           )
         }
 
         <CSSTransitionGroup
-          transitionName="recent-comments-feed-transition"
+          transitionName="mentions-feed-transition"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}
         >
           {
-            _.map(mentionsObj.list, (comment) => {
+            _.map(mentionsObj.list, (mention) => {
               return (
                 <Card
                   css={css`
                     cursor: pointer;
                   `}
-                  key={comment._id}
+                  key={mention._id}
                   className="mb-one"
-                  onClick={() => this.navigateToMoment(comment.share_id)}
+                  onClick={() => this.navigateToMoment(mention.share_id)}
                 >
                   <Card.Content>
                     <Content>
                       <div>
                         <p>
                           <strong
-                            onClick={(e) => this.onCommentCreatorClick(e, comment.creator)}
+                            onClick={(e) => this.onCommentCreatorClick(e, mention.creator)}
                             css={theme => css`
                               cursor: pointer;
 
@@ -186,8 +199,8 @@ class Mentions extends Component {
                               }
                             `}
                           >
-                            {comment.creator}
-                          </strong> <span className="small">- {formatDate(comment.createdAt)}</span>
+                            {mention.parent.username}
+                          </strong> <span className="small">- {formatDate(mention.createdAt)}</span>
                         </p>
 
                         <p
@@ -196,11 +209,18 @@ class Mentions extends Component {
                             color: ${theme.colors.powder}
                           `}
                         >
-                          Responding to {comment.username}
+                          Mentioned {mention.username} via {typeToTextFilter(mention.type)}
                         </p>
                       </div>
-                      <p className="small">
-                        {comment.text}
+                      <p
+                        css={css`
+                          a {
+                            font-size: 12px;
+                          }
+                        `}
+                        className="small"
+                      >
+                        {linkifyText(mention.parent.text)}
                       </p>
                     </Content>
                   </Card.Content>

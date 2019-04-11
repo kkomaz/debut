@@ -30,7 +30,7 @@ class AdminUsernameRoute extends Component {
     const pathArray = props.location.pathname.split('/')
     const path = _.last(pathArray)
 
-    const paths = ['following', 'followers', 'recent-comments']
+    const paths = ['following', 'followers', 'recent-comments', 'mentions']
 
     if (!_.includes(paths, path)) {
       activeMenu = 'activityFeed'

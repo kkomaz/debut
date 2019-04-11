@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
 import {
-  Button,
   Card,
   Modal,
   Section,
@@ -17,7 +16,6 @@ import classNames from 'classnames';
 
 // Model Imports
 import Share from 'model/share'
-import axios from 'axios'
 
 // Component Import
 import { ShareListItem, AdminNoShares, ShareForm } from 'components/Share'
@@ -156,16 +154,6 @@ class AdminActivityFeed extends Component {
     })
   }
 
-  fetchMoments = async () => {
-    const result = await axios.get('/mentions', {
-      params: {
-        username: 'kkomaz.id'
-      }
-    })
-
-    console.log(result)
-  }
-
   render() {
     const { feedShares, userFollow } = this.props
     const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
@@ -180,9 +168,6 @@ class AdminActivityFeed extends Component {
 
     return (
       <div className="admin-activity-feed">
-        <Button onClick={this.fetchMoments}>
-          Fetch Moments
-        </Button>
         {
           !feedShares.loading && feedShares.list.length === 0 && <AdminNoShares className="mb-one" />
         }
