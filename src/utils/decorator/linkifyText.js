@@ -10,7 +10,7 @@ let config = [
       const user = result[0].substring(1).trim()
       return (
         <span key={key}>
-          <Link to={`/${user}`}>{result[0]}</Link>
+          <Link to={`/${user}`} onClick={(e) => e.stopPropagation()}>{result[0]}</Link>
         </span>
       )
     }

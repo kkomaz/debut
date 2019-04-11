@@ -80,18 +80,24 @@ class Mentions extends Component {
     window.removeEventListener('scroll', this.handleScroll)
   }
 
-  onCommentCreatorClick = (e, username) => {
+  onParentUserClick = (e, username) => {
+    e.preventDefault()
     e.stopPropagation()
     const { history } = this.props
 
     history.push(`/${username}`)
   }
 
-  navigateToMoment = (shareId) => {
+  navigateToParent = (mention) => {
     const { history } = this.props
     const { sessionUser } = this.context.state
 
-    history.push(`/${sessionUser.username}/moments/${shareId}`)
+    if (mention.parent.radiksType === 'Share') {
+      history.push(`/${mention.parent.username}/moments/${mention.parent._id}`)
+    } else {
+      history.push(`/${sessionUser.username}/momments/${mention.parent.share_id}`)
+    }
+
   }
 
   handleScroll = () => {
@@ -183,14 +189,14 @@ class Mentions extends Component {
                   `}
                   key={mention._id}
                   className="mb-one"
-                  onClick={() => this.navigateToMoment(mention.share_id)}
+                  onClick={() => this.navigateToParent(mention)}
                 >
                   <Card.Content>
                     <Content>
                       <div>
                         <p>
                           <strong
-                            onClick={(e) => this.onCommentCreatorClick(e, mention.creator)}
+                            onClick={(e) => this.onParentUserClick(e, mention.parent.username)}
                             css={theme => css`
                               cursor: pointer;
 
