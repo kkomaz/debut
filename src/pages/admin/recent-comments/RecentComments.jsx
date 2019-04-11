@@ -22,6 +22,9 @@ import { requestAdminComments } from 'actions/comment'
 // CSS imports
 import recentCommentStyles from './RecentCommentStyles'
 
+// Util Imports
+import { linkifyText } from 'utils/decorator'
+
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
   const postedDateArray = postedDate.split(' ')
@@ -198,8 +201,15 @@ class RecentComments extends Component {
                           Responding to {comment.parent_creator}
                         </p>
                       </div>
-                      <p className="small">
-                        {comment.text}
+                      <p
+                        css={css`
+                          a {
+                            font-size: 12px;
+                          }
+                        `}
+                        className="small"
+                      >
+                        {linkifyText(comment.text)}
                       </p>
                     </Content>
                   </Card.Content>
