@@ -14,10 +14,11 @@ import './NavbarList.scss'
 
 class NavbarList extends Component {
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    goToRecentMentions: PropTypes.func.isRequired,
     onHelpClick: PropTypes.func.isRequired,
     onProfileClick: PropTypes.func.isRequired,
     onSignOutClick: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired,
     view: PropTypes.object.isRequired
   }
 
@@ -80,6 +81,9 @@ class NavbarList extends Component {
                   />
               </div>
             </a>
+          </Menu.List.Item>
+          <Menu.List.Item onClick={this.props.goToRecentMentions}>
+            Recent @
           </Menu.List.Item>
           <Menu.List.Item
             onClick={this.props.onHelpClick}

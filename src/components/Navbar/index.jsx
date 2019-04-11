@@ -227,6 +227,12 @@ class NavbarComp extends Component {
     history.push('/admin/recent-comments')
   }
 
+  goToRecentMentions = () => {
+    const { history } = this.props
+
+    history.push('/admin/mentions')
+  }
+
   render() {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
@@ -338,6 +344,7 @@ class NavbarComp extends Component {
                       <div className="debut-nav-bar__list navbar-dropdown is-boxed is-right" style={{ padding: '0' }}>
                         <NavbarList
                           goToRecent={this.goToRecent}
+                          goToRecentMentions={this.goToRecentMentions}
                           onHelpClick={this.goToHelp}
                           onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
@@ -382,6 +389,9 @@ class NavbarComp extends Component {
                           size={14}
                           />
                       </div>
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToRecentMentions}>
+                      Recent @
                     </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
                       Help
