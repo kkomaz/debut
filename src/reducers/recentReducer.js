@@ -2,12 +2,14 @@ import {
   REQUEST_ADMIN_COMMENTS,
   FETCH_ADMIN_COMMENTS_SUCCESS,
   ADD_ADMIN_COMMENT,
+  REMOVE_ADMIN_COMMENT,
   ADD_ADMIN_MENTION,
   REQUEST_MENTIONS,
   FETCH_MENTIONS_SUCCESS,
 } from 'actions'
 import {
   filterListFromList,
+  removeObjFromList,
 } from 'reducers/utils'
 
 const defaultState = {
@@ -31,6 +33,14 @@ export default function recentReducer(state = defaultState, action) {
         ...state, comments: {
           ...state.comments,
           list: [action.payload, ...state.comments.list]
+        }
+      }
+    }
+    case REMOVE_ADMIN_COMMENT: {
+      return {
+        ...state, comments: {
+          ...state.comments,
+          list: removeObjFromList(state.comments.list, action.payload)
         }
       }
     }

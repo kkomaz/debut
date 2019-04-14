@@ -25,7 +25,7 @@ import Mention from 'model/mention'
 
 // Action Imports
 import { setView } from 'actions/view'
-import { addAdminComment } from 'actions/comment'
+import { addAdminComment, removeAdminComment } from 'actions/comment'
 import { addAdminMention } from 'actions/mention'
 
 // CSS Imports
@@ -49,12 +49,13 @@ class NavbarComp extends Component {
   }
 
   static propTypes = {
-    addAdminMention: PropTypes.func.isRequired,
     addAdminComment: PropTypes.func.isRequired,
+    addAdminMention: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    setProfileClickedTrue: PropTypes.func.isRequired,
+    removeAdminComment: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
     setNavbarTab: PropTypes.func.isRequired,
+    setProfileClickedTrue: PropTypes.func.isRequired,
     setView: PropTypes.func.isRequired,
     view: PropTypes.object,
   }
@@ -139,10 +140,15 @@ class NavbarComp extends Component {
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
+    if (comment.attrs.parent_creator === sessionUser.username && !comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
+      this.props.setView({ initial: true }, 'comment')
+      this.props.removeAdminComment(comment.attrs)
+    }
+
     if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
       this.props.setView({}, 'comment')
       this.props.addAdminComment(comment.attrs)
-      this.setState({ comment: comment.attrs })
+      this.setState({ currentCommentView: comment.attrs })
     }
   }
 
@@ -268,6 +274,9 @@ class NavbarComp extends Component {
     const { history, viewObj } = this.props
     const { currentCommentView } = this.state
 
+    /**
+     * Creating the View will remove the notification
+    */
     if (_.isEmpty(viewObj.comment)) {
       const result = new View({
         type: 'comment',
@@ -506,8 +515,9 @@ const mapStateToProps = (state, ownProps) => {
 
 
 export default withRouter(connect(mapStateToProps, {
-  addAdminMention,
   addAdminComment,
+  addAdminMention,
+  removeAdminComment,
   setView,
 })(NavbarComp))
 NavbarComp.contextType = UserContext
