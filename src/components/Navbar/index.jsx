@@ -41,7 +41,7 @@ class NavbarComp extends Component {
       searchResults: [],
       selected: '',
       hovered: '',
-      comment: null,
+      currentCommentView: null,
       currentMentionView: null,
     }
 
@@ -266,12 +266,12 @@ class NavbarComp extends Component {
 
   goToRecent = async () => {
     const { history, viewObj } = this.props
-    const { comment } = this.state
+    const { currentCommentView } = this.state
 
     if (_.isEmpty(viewObj.comment)) {
       const result = new View({
         type: 'comment',
-        parent_id: comment._id
+        parent_id: currentCommentView._id
       })
       const newView = await result.save()
       this.props.setView({ ...newView.attrs, _id: newView._id }, 'comment')
