@@ -40,11 +40,10 @@ class ShareListItem extends Component {
   static propTypes = {
     cardClass: PropTypes.string.isRequired,
     disableGoPath: PropTypes.bool,
+    from: PropTypes.string,
+    onCommentEditClick: PropTypes.func,
     share: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
-    onEditClick: PropTypes.func,
-    onCommentEditClick: PropTypes.func,
-    from: PropTypes.string,
   }
 
   revertDelete = () => {
@@ -53,11 +52,6 @@ class ShareListItem extends Component {
 
   setDeleteConfirmation = () => {
     this.setState({ showDeleteConfirmation: true })
-  }
-
-  onEditClick = () => {
-    const { share } = this.props
-    this.props.onEditClick(share)
   }
 
   deleteShare = () => {
@@ -106,7 +100,6 @@ class ShareListItem extends Component {
                 <ShareAdminMenu
                   disableGoPath={disableGoPath}
                   disableAdminPath
-                  onEditClick={this.onEditClick}
                   onDeleteClick={this.setDeleteConfirmation}
                   username={username}
                   share={share}
@@ -148,7 +141,6 @@ class ShareListItem extends Component {
                   _.isEqual(sessionUser.username, username) &&
                   <ShareAdminMenu
                     disableGoPath={disableGoPath}
-                    onEditClick={this.onEditClick}
                     onDeleteClick={this.setDeleteConfirmation}
                     username={username}
                     share={share}
@@ -280,7 +272,6 @@ class ShareListItem extends Component {
 }
 
 ShareListItem.defaultProps = {
-  onEditClick: _.noop,
   disableGoPath: false,
   from: '',
 }

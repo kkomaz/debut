@@ -35,7 +35,6 @@ class ShareForm extends Component {
       characterLength: currentShare.text ? currentShare.text.length : 0,
       valid: true,
       imageFile: currentShare.imageFile || '',
-      editMode: !_.isEmpty(currentShare._id),
       showEmojis: false,
       textAreaRow: stringRows > 0 ? stringRows + 1 : 3,
     }
@@ -145,9 +144,8 @@ class ShareForm extends Component {
   onSubmit = (e) => {
     e.preventDefault()
 
-    const { editMode } = this.state
     this.setState({ textAreaRow: 3 })
-    return editMode ? this.editShare() : this.createShare()
+    return this.createShare()
   }
 
   editShare = async () => {
@@ -205,13 +203,12 @@ class ShareForm extends Component {
 
   onCancelImage = (e) => {
     e.preventDefault()
-    const { editMode } = this.state
     this.fileInput.value = ''
     this.setState({
       imageFile: ''
     })
 
-    return editMode && this.props.onCancel
+    this.props.onCancel()
   }
 
   onEnterPress = (e) => {
@@ -245,8 +242,8 @@ class ShareForm extends Component {
   };
 
   render() {
-    const { valid, editMode } = this.state
-    const { editing, submitting } = this.props
+    const { valid } = this.state
+    const { submitting } = this.props
 
     return (
       <div
@@ -374,48 +371,27 @@ class ShareForm extends Component {
               justify-content: flex-end;
             `}
           >
-            {
-              !editMode &&
-              <div
-                css={css`
-                  display: flex;
-                  align-items: center;
-                  justify-content: flex-end;
-                `}
-              >
-                { submitting && <BulmaLoader className="mr-one" />}
-                <SubmitFooter
-                  onCancel={this.onCancel}
-                  onSubmit={this.onSubmit}
-                  submitting={submitting}
-                />
-              </div>
-            }
-
-            {
-              editMode &&
-              <div
-                css={css`
-                  display: flex;
-                  align-items: center;
-                  justify-content: flex-end;
-                `}
-              >
-                { editing && <BulmaLoader className="mr-one" />}
-                <SubmitFooter
-                  onCancel={this.onCancel}
-                  onSubmit={this.onSubmit}
-                  submitting={editing}
-                />
-              </div>
-            }
+            <div
+              css={css`
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+              `}
+            >
+              { submitting && <BulmaLoader className="mr-one" />}
+              <SubmitFooter
+                onCancel={this.onCancel}
+                onSubmit={this.onSubmit}
+                submitting={submitting}
+              />
+            </div>
           </div>
         </form>
         {
           this.state.showEmojis ?
           <span
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiPickerStyles(editMode, this.props.from)}
+            css={theme => emojiStyles.emojiPickerStyles(this.props.from)}
             ref={el => (this.emojiPicker = el)}
           >
             <Picker onSelect={this.addEmoji} />
@@ -423,7 +399,7 @@ class ShareForm extends Component {
           :
           <p
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiButtonStyles(editMode, this.props.from)}
+            css={theme => emojiStyles.emojiButtonStyles(this.props.from)}
             onClick={this.showEmojis}
           >
             {String.fromCodePoint(0x1f60a)}

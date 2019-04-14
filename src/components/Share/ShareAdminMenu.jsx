@@ -18,11 +18,6 @@ class ShareAdminMenu extends Component {
     history: PropTypes.object.isRequired,
   }
 
-  onEditClick = () => {
-    this.setState({ active: 'edit' })
-    this.props.onEditClick()
-  }
-
   onDeleteClick = () => {
     this.setState({ active: 'delete' })
     this.props.onDeleteClick()
@@ -48,14 +43,6 @@ class ShareAdminMenu extends Component {
         }}
       >
         <Menu.List>
-          {
-            !disableAdminPath &&
-            <Menu.List.Item
-              active={active === 'edit'}
-              onClick={this.onEditClick}>
-              Edit
-            </Menu.List.Item>
-          }
           {
             !disableAdminPath &&
             <Menu.List.Item

@@ -6,12 +6,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
-import {
-  Card,
-  Modal,
-  Section,
-  Heading,
-} from 'components/bulma'
+import { Card } from 'components/bulma'
 import classNames from 'classnames';
 
 // Model Imports
@@ -19,7 +14,6 @@ import Share from 'model/share'
 
 // Component Import
 import { ShareListItem, AdminNoShares, ShareForm } from 'components/Share'
-import { CommentForm } from 'components/comment'
 import { BarLoader } from 'components/Loader'
 import { BulmaLoader } from 'components/bulma'
 
@@ -87,14 +81,6 @@ class AdminActivityFeed extends Component {
     }
   }
 
-  openCommentModal = (comment) => {
-    return this.setState({ showCommentModal: true, currentComment: comment })
-  }
-
-  closeCommentModal = () => {
-    return this.setState({ showCommentModal: false })
-  }
-
   requestFetchShareFeeds = ({ follow, offset }) => {
     const { feedShares } = this.props
     const share = _.last(feedShares.list)
@@ -139,6 +125,17 @@ class AdminActivityFeed extends Component {
     return this.setState({ showMoreOptions: false })
   }
 
+  /**
+   * Archived
+  */
+  openCommentModal = (comment) => {
+    return this.setState({ showCommentModal: true, currentComment: comment })
+  }
+
+  closeCommentModal = () => {
+    return this.setState({ showCommentModal: false })
+  }
+
   closeShareModal = () => {
     this.setState({ showShareModal: false })
   }
@@ -156,7 +153,12 @@ class AdminActivityFeed extends Component {
 
   render() {
     const { feedShares, userFollow } = this.props
-    const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
+    const {
+      bottomReached,
+      // showCommentModal,
+      showMoreOptions,
+      // showShareModal,
+    } = this.state
 
     if (feedShares.loading) {
       return (
@@ -209,8 +211,6 @@ class AdminActivityFeed extends Component {
                 cardClass={cardClass}
                 share={feedShare}
                 username={feedShare.username}
-                onCommentEditClick={this.openCommentModal}
-                onEditClick={this.openShareModal}
               />
             )
           })
@@ -219,25 +219,27 @@ class AdminActivityFeed extends Component {
           bottomReached && feedShares.list.length >= 5 && !feedShares.full && <BarLoader style={{ height: '200px' }} />
         }
         </CSSTransitionGroup>
-        <Modal
-          show={showShareModal}
-          onClose={this.closeShareModal}
-          closeOnEsc
-        >
-          <Modal.Content>
-            <Section style={{ backgroundColor: 'white' }}>
-              <Heading size={6}>Shared Moment</Heading>
-              <ShareForm
-                username={userFollow.username}
-                currentShare={this.state.currentShare}
-                onCancel={this.closeShareModal}
-                onComplete={this.closeShareModal}
-              />
-            </Section>
-          </Modal.Content>
-        </Modal>
+        {/*
+          <Modal
+            show={showShareModal}
+            onClose={this.closeShareModal}
+            closeOnEsc
+          >
+            <Modal.Content>
+              <Section style={{ backgroundColor: 'white' }}>
+                <Heading size={6}>Shared Moment</Heading>
+                <ShareForm
+                  username={userFollow.username}
+                  currentShare={this.state.currentShare}
+                  onCancel={this.closeShareModal}
+                  onComplete={this.closeShareModal}
+                />
+              </Section>
+            </Modal.Content>
+          </Modal>
+        */}
 
-        {
+        {/*
           showCommentModal &&
           <Modal
             show={showCommentModal}
@@ -257,7 +259,7 @@ class AdminActivityFeed extends Component {
               </Section>
             </Modal.Content>
           </Modal>
-        }
+        */}
       </div>
     )
   }
