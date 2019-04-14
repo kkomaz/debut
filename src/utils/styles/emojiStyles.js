@@ -80,7 +80,7 @@ export const emojiPickerCommentStyles = (from) => {
   `
 }
 
-export const emojiButtonStyles = (editMode) => {
+export const emojiButtonStyles = () => {
   return css`
     position: absolute;
     top: 0;

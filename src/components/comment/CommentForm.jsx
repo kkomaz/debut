@@ -1,23 +1,27 @@
 /** @jsx jsx */
+
+// Library Imports
 import React, { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { Picker } from 'emoji-mart'
+
+// Action Imports
+import { requestCreateComment } from 'actions/comment'
+
+// Component Imports
+import { Icon } from 'components/icon'
 import {
   BulmaLoader,
   Field,
   Label,
   Help,
 } from 'components/bulma'
-import {
-  requestCreateComment,
-  requestEditComment,
-} from 'actions/comment'
-import { Icon } from 'components/icon'
+
+// Utility Imports
 import toggleNotification from 'utils/notifier/toggleNotification'
-import SubmitFooter from 'components/UI/Form/SubmitFooter'
-import { Picker } from 'emoji-mart'
 import emojiStyles from 'utils/styles/emojiStyles'
 
 class CommentForm extends Component {
@@ -34,7 +38,6 @@ class CommentForm extends Component {
       characterLength: currentComment.text ? currentComment.text.length : 0,
       valid: true,
       imageFile: currentComment.imageFile || '',
-      editMode: !_.isEmpty(currentComment._id),
       showEmojis: false,
       textAreaRow: stringRows > 0 ? stringRows + 1 : 2,
     }
@@ -152,28 +155,7 @@ class CommentForm extends Component {
   onSubmit = (e) => {
     e.preventDefault()
 
-    const { editMode } = this.state
-
-    return editMode ? this.editComment() : this.createComment()
-  }
-
-  editComment = async () => {
-    const { _id, text, imageFile } = this.state
-    const { username, share } = this.props
-
-    const params = {
-      parent_creator: share.username,
-      text,
-      username,
-      imageFile
-    }
-
-    if (_.isEmpty(text)) {
-      return this.setState({ valid: false })
-    }
-
-    this.props.requestEditComment(_id, params)
-    this.props.onComplete()
+    this.createComment()
   }
 
   createComment = async () => {
@@ -216,13 +198,12 @@ class CommentForm extends Component {
 
   onCancelImage = (e) => {
     e.preventDefault()
-    const { editMode } = this.state
     this.fileInput.value = ''
     this.setState({
       imageFile: ''
     })
 
-    return editMode && this.props.onCancel
+    this.props.onCancel()
   }
 
   onEnterPress = (e) => {
@@ -256,7 +237,7 @@ class CommentForm extends Component {
   };
 
   render() {
-    const { valid, editMode } = this.state
+    const { valid } = this.state
     const { commentActions, shareId } = this.props
 
     return (
@@ -389,29 +370,12 @@ class CommentForm extends Component {
               />
             }
           </div>
-          {
-            editMode &&
-            <div
-              css={css`
-                display: flex;
-                align-items: center;
-                justify-content: flex-end;
-              `}
-            >
-              { commentActions.editing && <BulmaLoader className="mr-one" />}
-              <SubmitFooter
-                onCancel={this.onCancel}
-                onSubmit={this.onSubmit}
-                submitting={commentActions.editing}
-              />
-            </div>
-          }
         </form>
         {
           this.state.showEmojis ?
           <span
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiPickerCommentStyles(editMode, this.props.from)}
+            css={theme => emojiStyles.emojiPickerCommentStyles(this.props.from)}
             ref={el => (this.emojiPicker = el)}
           >
             <Picker onSelect={this.addEmoji} />
@@ -419,7 +383,7 @@ class CommentForm extends Component {
           :
           <p
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiButtonStyles(editMode, this.props.from)}
+            css={theme => emojiStyles.emojiButtonStyles()}
             onClick={this.showEmojis}
           >
             {String.fromCodePoint(0x1f60a)}
@@ -456,5 +420,4 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(mapStateToProps, {
   requestCreateComment,
-  requestEditComment,
 })(CommentForm)

@@ -1,9 +1,14 @@
 /** @jsx jsx */
+
+// Library Imports
 import React, { Component } from 'react'
-import { jsx, css } from '@emotion/core'
-import _ from 'lodash'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
+import { jsx, css } from '@emotion/core'
+import PropTypes from 'prop-types'
+import { Picker } from 'emoji-mart'
+
+// Component Imports
 import {
   BulmaLoader,
   Field,
@@ -11,13 +16,11 @@ import {
   Help,
 } from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
-import {
-  requestCreateShare,
-  requestEditShare
-} from 'actions/share'
+import { requestCreateShare } from 'actions/share'
 import { Icon } from 'components/icon'
+
+// Util Imports
 import toggleNotification from 'utils/notifier/toggleNotification'
-import { Picker } from 'emoji-mart'
 import emojiStyles from 'utils/styles/emojiStyles'
 
 class ShareForm extends Component {
@@ -146,24 +149,6 @@ class ShareForm extends Component {
 
     this.setState({ textAreaRow: 3 })
     return this.createShare()
-  }
-
-  editShare = async () => {
-    const { _id, text, imageFile } = this.state
-    const { username } = this.props
-
-    const params = {
-      text,
-      username,
-      imageFile
-    }
-
-    if (_.isEmpty(text)) {
-      return this.setState({ valid: false })
-    }
-
-    this.props.requestEditShare(_id, params)
-    this.props.onComplete()
   }
 
   createShare = async () => {
@@ -428,5 +413,4 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   requestCreateShare,
-  requestEditShare,
 })(ShareForm)
