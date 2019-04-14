@@ -16,10 +16,12 @@ const deleteShare = async (action) => {
 
   axios.put(`/comment/?share_id=${share._id}`)
 
-  const mention = await Mention.findOne({ parent_id: share._id })
+  const mentions = await Mention.fetchList({ parent_id: share._id })
 
-  if (mention) {
-    await mention.destory()
+  if (mentions.length > 0) {
+    for (let i = 0; i < mentions.length; i++) {
+      await mentions[i].destroy()
+    }
   }
 
   return deletedShare.save()
