@@ -96,7 +96,7 @@ class NavbarComp extends Component {
 
     if (_.isEmpty(view)) {
       this.setState({
-        comment
+        currentCommentView: comment,
       })
     }
 
