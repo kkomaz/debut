@@ -128,7 +128,7 @@ class NavbarComp extends Component {
 
     if (_.isEmpty(view)) {
       this.setState({
-        currentMentionView: mention.attrs,
+        currentMentionView: mention,
       })
     }
 
@@ -140,11 +140,13 @@ class NavbarComp extends Component {
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
+    // Delete
     if (comment.attrs.parent_creator === sessionUser.username && !comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
       this.props.setView({ initial: true }, 'comment')
       this.props.removeAdminComment(comment.attrs)
     }
 
+    // Add
     if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
       this.props.setView({}, 'comment')
       this.props.addAdminComment(comment.attrs)
@@ -154,8 +156,7 @@ class NavbarComp extends Component {
 
   handleMentions = async (mention) => {
     const { sessionUser } = this.context.state
-
-    // Should refactor this via mongo
+    // Should refactor this via mongo (add)
     if (mention.attrs.username === sessionUser.username && mention.attrs.creator !== sessionUser.username) {
       this.props.setView({}, 'mention')
       const result = await Mention.findById(mention.attrs._id)
