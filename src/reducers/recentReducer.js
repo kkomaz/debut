@@ -1,9 +1,11 @@
+import _ from 'lodash'
 import {
   REQUEST_ADMIN_COMMENTS,
   FETCH_ADMIN_COMMENTS_SUCCESS,
   ADD_ADMIN_COMMENT,
   REMOVE_ADMIN_COMMENT,
   ADD_ADMIN_MENTION,
+  REMOVE_ADMIN_MENTION,
   REQUEST_MENTIONS,
   FETCH_MENTIONS_SUCCESS,
 } from 'actions'
@@ -77,6 +79,14 @@ export default function recentReducer(state = defaultState, action) {
         ...state, mentions: {
           ...state.mentions,
           list: [action.payload, ...state.mentions.list]
+        }
+      }
+    }
+    case REMOVE_ADMIN_MENTION: {
+      return {
+        ...state, mentions: {
+          ...state.mentions,
+          list: _.filter(state.mentions.list, (mention) => mention.parent_id !== action.payload)
         }
       }
     }

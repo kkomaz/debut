@@ -22,11 +22,12 @@ import { Icon } from 'components/icon'
 import View from 'model/view'
 import Comment from 'model/comment'
 import Mention from 'model/mention'
+import Share from 'model/share'
 
 // Action Imports
 import { setView } from 'actions/view'
 import { addAdminComment, removeAdminComment } from 'actions/comment'
-import { addAdminMention } from 'actions/mention'
+import { addAdminMention, removeAdminMention } from 'actions/mention'
 
 // CSS Imports
 import './Navbar.scss';
@@ -53,6 +54,7 @@ class NavbarComp extends Component {
     addAdminMention: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     removeAdminComment: PropTypes.func.isRequired,
+    removeAdminMention: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
     setNavbarTab: PropTypes.func.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
@@ -63,6 +65,7 @@ class NavbarComp extends Component {
   componentDidMount = async () => {
     this.setCommentView()
     this.setMentionView()
+    this.addShareStreamListener()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -137,6 +140,20 @@ class NavbarComp extends Component {
     Mention.addStreamListener(this.handleMentions)
   }
 
+  addShareStreamListener() {
+    Share.addStreamListener(this.handleShare)
+  }
+
+  handleShare = (share) => {
+    const { sessionUser } = this.context.state
+
+    // Remove Mention View on Share Delete
+    if (!share.attrs.valid && _.includes(share.attrs.mentions, sessionUser.username)) {
+      this.props.setView({ initial: true }, 'mention')
+      this.props.removeAdminMention(share.attrs._id)
+    }
+  }
+
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
@@ -156,6 +173,7 @@ class NavbarComp extends Component {
 
   handleMentions = async (mention) => {
     const { sessionUser } = this.context.state
+
     // Should refactor this via mongo (add)
     if (mention.attrs.username === sessionUser.username && mention.attrs.creator !== sessionUser.username) {
       this.props.setView({}, 'mention')
@@ -519,6 +537,7 @@ export default withRouter(connect(mapStateToProps, {
   addAdminComment,
   addAdminMention,
   removeAdminComment,
+  removeAdminMention,
   setView,
 })(NavbarComp))
 NavbarComp.contextType = UserContext

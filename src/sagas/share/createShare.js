@@ -8,30 +8,40 @@ import checkMentions from 'utils/mentions/checkMentions'
 const createShare = async (action) => {
   const { params, username } = action.payload
   let mentions = []
-  const share = new Share({
-    ...params,
-    valid: true,
-  })
-  share.save()
+  let share
 
-  /**
-   * Don't make this async await because don't want to wait for this
-  */
   const mention = [...new Set(checkMentions(params.text))]
   const filteredMentions = _.filter(mention, (m) => m.substring(1).trim() !== username)
 
   if (!_.isEmpty(filteredMentions)) {
+    share = new Share({
+      ...params,
+      valid: true,
+      mentions: filteredMentions,
+    })
+    share.save()
+
+    /**
+     * Don't make this async await because don't want to wait for this
+    */
     for (let i = 0; i < filteredMentions.length; i++) {
       const result = new Mention({
         creator: username,
         type: 'Share',
-        username: filteredMentions[i].substring(1).trim(),
+        username: filteredMentions[i],
         parent_id: share._id,
       })
 
       const newMention = result.save()
       mentions.push({ ...newMention.attrs, _id: newMention._id })
     }
+  } else {
+    share = new Share({
+      ...params,
+      valid: true,
+      mentions: [],
+    })
+    share.save()
   }
 
   return {

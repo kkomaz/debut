@@ -152,12 +152,6 @@ class AdminActivityFeed extends Component {
     })
   }
 
-  deleteMention = async () => {
-    const result = await Mention.findOne({ username: 'kkomaz.id' })
-    const mention = result
-    await mention.destroy()
-  }
-
   render() {
     const { feedShares, userFollow } = this.props
     const {
@@ -177,9 +171,6 @@ class AdminActivityFeed extends Component {
 
     return (
       <div className="admin-activity-feed">
-        <Button onClick={this.deleteMention}>
-          Delete Mention
-        </Button>
         {
           !feedShares.loading && feedShares.list.length === 0 && <AdminNoShares className="mb-one" />
         }

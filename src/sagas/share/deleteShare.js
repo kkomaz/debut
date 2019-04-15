@@ -20,7 +20,8 @@ const deleteShare = async (action) => {
 
   if (mentions.length > 0) {
     for (let i = 0; i < mentions.length; i++) {
-      await mentions[i].destroy()
+      const currentMention = await Mention.findById(mentions[i].id)
+      await currentMention.destroy()
     }
   }
 
