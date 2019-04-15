@@ -6,11 +6,12 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
-import { Card } from 'components/bulma'
+import { Card, Button } from 'components/bulma'
 import classNames from 'classnames';
 
 // Model Imports
 import Share from 'model/share'
+import Mention from 'model/mention'
 
 // Component Import
 import { ShareListItem, AdminNoShares, ShareForm } from 'components/Share'
@@ -151,6 +152,12 @@ class AdminActivityFeed extends Component {
     })
   }
 
+  deleteMention = async () => {
+    const result = await Mention.findOne({ username: 'kkomaz.id' })
+    const mention = result
+    await mention.destroy()
+  }
+
   render() {
     const { feedShares, userFollow } = this.props
     const {
@@ -170,6 +177,9 @@ class AdminActivityFeed extends Component {
 
     return (
       <div className="admin-activity-feed">
+        <Button onClick={this.deleteMention}>
+          Delete Mention
+        </Button>
         {
           !feedShares.loading && feedShares.list.length === 0 && <AdminNoShares className="mb-one" />
         }
