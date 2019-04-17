@@ -148,19 +148,29 @@ class NavbarComp extends Component {
     const { sessionUser } = this.context.state
 
     // Remove Mention View on Share Delete
-    if (!share.attrs.valid && _.includes(share.attrs.mentions, sessionUser.username)) {
-      this.props.setView({ initial: true }, 'mention')
-      this.props.removeAdminMention(share.attrs._id)
+    if (!share.attrs.valid) {
+
+      // Remove Share Mention
+      if (_.includes(share.attrs.mentions, sessionUser.username)) {
+        this.props.setView({ initial: true }, 'mention')
+        this.props.removeAdminMention(share.attrs._id)
+      }
     }
   }
 
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
-    // Delete
+    // Delete Comment
     if (comment.attrs.parent_creator === sessionUser.username && !comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
       this.props.setView({ initial: true }, 'comment')
       this.props.removeAdminComment(comment.attrs)
+
+      // Remove Comment Mention
+      if (_.includes(comment.attrs.mentions, sessionUser.username)) {
+        this.props.setView({ initial: true }, 'mention')
+        this.props.removeAdminMention(comment.attrs._id)
+      }
     }
 
     // Add
