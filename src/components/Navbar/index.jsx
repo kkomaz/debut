@@ -161,16 +161,16 @@ class NavbarComp extends Component {
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
+    // Remove Comment Mention
+    if (_.includes(comment.attrs.mentions, sessionUser.username) && !comment.attrs.valid) {
+      this.props.setView({ initial: true }, 'mention')
+      this.props.removeAdminMention(comment.attrs._id)
+    }
+
     // Delete Comment
     if (comment.attrs.parent_creator === sessionUser.username && !comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
       this.props.setView({ initial: true }, 'comment')
       this.props.removeAdminComment(comment.attrs)
-
-      // Remove Comment Mention
-      if (_.includes(comment.attrs.mentions, sessionUser.username)) {
-        this.props.setView({ initial: true }, 'mention')
-        this.props.removeAdminMention(comment.attrs._id)
-      }
     }
 
     // Add

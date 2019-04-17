@@ -18,12 +18,13 @@ const createComment = async (action) => {
   const filteredMentions = _.filter(mention, (m) => m.substring(1).trim() !== username)
 
   if (!_.isEmpty(filteredMentions)) {
-    const comment = new Comment({
+    comment = new Comment({
       ...params,
       valid: true,
       mentions: filteredMentions,
     })
-    comment.save()
+
+    await comment.save()
 
     const share = await Share.findById(params.share_id)
 
@@ -42,7 +43,7 @@ const createComment = async (action) => {
     for (let i = 0; i < filteredMentions.length; i++) {
       const result = new Mention({
         type: 'Comment',
-        username: filteredMentions[i].substring(1).trim(),
+        username: filteredMentions[i],
         parent_id: comment._id,
       })
 
@@ -72,7 +73,6 @@ const createComment = async (action) => {
     await share.save()
   }
 
-
   return { ...comment.attrs, _id: comment._id }
 }
 
@@ -81,6 +81,7 @@ function* createCommentSaga(action) {
     const comment = yield call(createComment, action)
     yield put({ type: CREATE_COMMENT_SUCCESS, payload: comment })
   } catch (error) {
+    console.log(error)
     yield put({ type: CREATE_COMMENT_FAIL, payload: error.message })
   }
 }

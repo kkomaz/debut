@@ -6,12 +6,11 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
-import { Card, Button } from 'components/bulma'
+import { Card } from 'components/bulma'
 import classNames from 'classnames';
 
 // Model Imports
 import Share from 'model/share'
-import Mention from 'model/mention'
 
 // Component Import
 import { ShareListItem, AdminNoShares, ShareForm } from 'components/Share'
