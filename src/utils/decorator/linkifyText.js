@@ -12,7 +12,6 @@ let config = [
     regex: /@[a-z0-9]+\.+[a-z]+\.?[a-z]+/gim,
     fn: (key, result) => {
       const user = result[0].substring(1).trim()
-      debugger
       return (
         <span key={key}>
           <Link to={`/${user}`} onClick={(e) => e.stopPropagation()}>{result[0]}</Link>
@@ -23,7 +22,6 @@ let config = [
   {
     regex: /(http|https):\/\/(\S+)\.([a-z]{2,}?)(.*?)( |\,|$|\.)/gim,
     fn: (key, result) => {
-      debugger
       return (
         <span key={key}>
           <a target="_blank" rel="noopener noreferrer" href={`${result[1]}://${result[2]}.${result[3]}${result[4]}`}>{result[2]}.{result[3]}{result[4]}</a>{result[5]}
