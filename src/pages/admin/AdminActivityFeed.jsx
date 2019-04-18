@@ -80,6 +80,7 @@ class AdminActivityFeed extends Component {
     }
 
     if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id) && share.attrs.valid) {
+      debugger
       if (!this.state.showMoreOptions) {
         this.setState({ showMoreOptions: true })
       }

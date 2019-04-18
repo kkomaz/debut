@@ -369,7 +369,7 @@ class CommentForm extends Component {
                 css={css`
                   position: absolute;
                   bottom: 6px;
-                  right: -10px;
+                  right: -15px;
                 `}
               />
             }

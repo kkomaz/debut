@@ -30,10 +30,6 @@ class Share extends Model {
       type: Array,
       decrypted: true
     },
-    commentCount: {
-      type: Number,
-      decrypted: true
-    },
     mentions: {
       type: Array,
       decrypted: true,

@@ -206,7 +206,7 @@ export default function shareReducer(state = defaultSession, action) {
     case CREATE_COMMENT_SUCCESS:
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
       const shareComments = _.get(share, 'comments', [])
-      const updatedShare = { ...share, comments: [...shareComments, action.payload ], commentCount: share.commentCount ? share.commentCount + 1 : 1 }
+      const updatedShare = { ...share, comments: [...shareComments, action.payload ] }
       const updatedSharesList = updateSingleObjectFromList(updatedShare, state.shares.list)
       toggleNotification('success', 'Comment successfully created')
       return { ...state,
@@ -217,7 +217,7 @@ export default function shareReducer(state = defaultSession, action) {
       const share = _.find(state.shares.list, (share) => share._id === action.payload.share_id)
       const shareComments = _.get(share, 'comments', [])
       const filteredComments = removeObjFromList(shareComments, action.payload)
-      const updatedShare = { ...share, comments: filteredComments, commentCount: share.commentCount - 1 }
+      const updatedShare = { ...share, comments: filteredComments }
       const updatedShareList = updateSingleObjectFromList(updatedShare, state.shares.list)
       toggleNotification('success', 'Comment successfully deleted')
       return { ...state,

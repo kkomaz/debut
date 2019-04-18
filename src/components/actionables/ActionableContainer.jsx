@@ -232,7 +232,7 @@ class ActionableContainer extends Component {
                 color="8b8687"
                 onClick={this.props.toggleComment}
               />
-              <span className="small">{_.get(detailObj, 'commentCount', 0)}</span>
+              <span className="small">{_.get(detailObj, 'comments.length', 0)}</span>
             </div>
           }
           <div

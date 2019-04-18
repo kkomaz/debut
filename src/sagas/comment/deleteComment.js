@@ -1,26 +1,13 @@
 import { put, call } from 'redux-saga/effects'
 import { DELETE_COMMENT_SUCCESS, DELETE_COMMENT_FAIL } from 'actions'
 import Comment from 'model/comment'
-import Share from 'model/share'
 import Mention from 'model/mention'
 
 const deleteComment = async (action) => {
-  const { comment, share } = action.payload
+  const { comment } = action.payload
 
   const deletedComment = await Comment.findById(comment._id)
-  const currentShare = await Share.findById(share._id)
 
-  deletedComment.update({
-    text: '',
-    imageFile: '',
-    valid: false
-  })
-
-  currentShare.update({
-    commentCount: currentShare.attrs.commentCount - 1
-  })
-
-  await currentShare.save()
   await deletedComment.save()
 
   const mentions = await Mention.fetchList({ parent_id: comment._id })

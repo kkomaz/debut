@@ -2,7 +2,6 @@ import _ from 'lodash'
 import { put, call } from 'redux-saga/effects'
 import { CREATE_COMMENT_SUCCESS, CREATE_COMMENT_FAIL } from 'actions'
 import Comment from 'model/comment'
-import Share from 'model/share'
 import Mention from 'model/mention'
 import checkMentions from 'utils/mentions/checkMentions'
 
@@ -26,20 +25,6 @@ const createComment = async (action) => {
 
     await comment.save()
 
-    const share = await Share.findById(params.share_id)
-
-    if (share.attrs.commentCount) {
-      share.update({
-        commentCount: share.attrs.commentCount + 1
-      })
-    } else {
-      share.update({
-        commentCount: 1
-      })
-    }
-
-    await share.save()
-
     for (let i = 0; i < filteredMentions.length; i++) {
       const result = new Mention({
         type: 'Comment',
@@ -57,20 +42,6 @@ const createComment = async (action) => {
       mentions: [],
     })
     await comment.save()
-
-    const share = await Share.findById(params.share_id)
-
-    if (share.attrs.commentCount) {
-      share.update({
-        commentCount: share.attrs.commentCount + 1
-      })
-    } else {
-      share.update({
-        commentCount: 1
-      })
-    }
-
-    await share.save()
   }
 
   return { ...comment.attrs, _id: comment._id }
