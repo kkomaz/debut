@@ -17,13 +17,14 @@ import { withRouter } from 'react-router-dom'
 import { BarLoader } from 'components/Loader'
 
 // Action Imports
-import { requestAdminComments } from 'actions/comment'
+import { requestMentions } from 'actions/mention'
 
 // CSS imports
-import recentCommentStyles from './RecentCommentStyles'
+import recentCommentStyles from './MentionStyles'
 
 // Util Imports
 import { linkifyText } from 'utils/decorator'
+
 
 const formatDate = (input) => {
   const postedDate = moment(input).fromNow()
@@ -35,7 +36,18 @@ const formatDate = (input) => {
   return postedDate
 }
 
-class RecentComments extends Component {
+const typeToTextFilter = (type) => {
+  switch (type) {
+    case 'Comment': {
+      return "comment"
+    }
+    default: {
+      return "moment"
+    }
+  }
+}
+
+class Mentions extends Component {
   constructor(props) {
     super(props)
 
@@ -47,7 +59,7 @@ class RecentComments extends Component {
   }
 
   static propTypes = {
-    commentsObj: PropTypes.shape({
+    mentionsObj: PropTypes.shape({
       list: PropTypes.array.isRequired,
       full: PropTypes.bool.isRequired,
       loading: PropTypes.bool.isRequired,
@@ -57,8 +69,8 @@ class RecentComments extends Component {
   componentDidMount() {
     const { sessionUser } = this.context.state
 
-    this.props.requestAdminComments({
-      parent_creator: sessionUser.username,
+    this.props.requestMentions({
+      username: sessionUser.username,
       limit: 10
     })
     window.addEventListener('scroll', this.handleScroll)
@@ -68,24 +80,30 @@ class RecentComments extends Component {
     window.removeEventListener('scroll', this.handleScroll)
   }
 
-  onCommentCreatorClick = (e, username) => {
+  onParentUserClick = (e, username) => {
+    e.preventDefault()
     e.stopPropagation()
     const { history } = this.props
 
     history.push(`/${username}`)
   }
 
-  navigateToMoment = (shareId) => {
+  navigateToParent = (mention) => {
     const { history } = this.props
     const { sessionUser } = this.context.state
 
-    history.push(`/${sessionUser.username}/moments/${shareId}`)
+    if (mention.parent.radiksType === 'Share') {
+      history.push(`/${mention.parent.username}/moments/${mention.parent._id}`)
+    } else {
+      history.push(`/${sessionUser.username}/moments/${mention.parent.share_id}`)
+    }
+
   }
 
   handleScroll = () => {
     const { bottomReached } = this.state
     const { sessionUser } = this.context.state
-    const { commentsObj } = this.props
+    const { mentionsObj } = this.props
 
     const html = document.documentElement; // get the html element
     // window.innerHeight - Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar.
@@ -100,13 +118,13 @@ class RecentComments extends Component {
     */
     if (windowBottom >= docHeight) {
       this.setState({ bottomReached: true }, () => {
-        if (!commentsObj.full && commentsObj.list.length >= 10) {
-          const comment = _.last(commentsObj.list)
+        if (!mentionsObj.full && mentionsObj.list.length >= 10) {
+          const mention = _.last(mentionsObj.list)
 
-          this.props.requestAdminComments({
-            parent_creator: sessionUser.username,
+          this.props.requestMentions({
+            username: sessionUser.username,
             limit: 10,
-            lt: _.get(comment, 'createdAt', null),
+            lt: _.get(mention, 'createdAt', null),
           })
         }
       });
@@ -117,17 +135,17 @@ class RecentComments extends Component {
 
 
   render() {
-    const { commentsObj } = this.props
+    const { mentionsObj } = this.props
     const { bottomReached } = this.state
 
-    if (commentsObj.loading && commentsObj.list.length === 0) {
+    if (mentionsObj.loading && mentionsObj.list.length === 0) {
       return <BarLoader style={{ height: '200px' }} />
     }
 
     return (
       <div
         css={theme => recentCommentStyles.feedTransitionStyles()}
-        className="recent-comments"
+        className="mentions"
       >
         <div
           className="mb-half"
@@ -141,7 +159,7 @@ class RecentComments extends Component {
           `}
         >
           <div>
-            <p className="small">Get real time feedback whenever someone comments on your moments!</p>
+            <p className="small">Get real time feedback whenever someone mentions on your moments!</p>
             <p className="small">
               Note: This feature is currently in alpha/development.
             </p>
@@ -149,37 +167,37 @@ class RecentComments extends Component {
         </div>
 
         {
-          !commentsObj.loading && commentsObj.list.length === 0 && (
+          !mentionsObj.loading && mentionsObj.list.length === 0 && (
             <Card>
               <Card.Content>
-                <p>Currently no comments replied to your moments!</p>
+                <p>Currently no mentions replied to your moments!</p>
               </Card.Content>
             </Card>
           )
         }
 
         <CSSTransitionGroup
-          transitionName="recent-comments-feed-transition"
+          transitionName="mentions-feed-transition"
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}
         >
           {
-            _.map(commentsObj.list, (comment) => {
+            _.map(mentionsObj.list, (mention) => {
               return (
                 <Card
                   css={css`
                     cursor: pointer;
                   `}
-                  key={comment._id}
+                  key={mention._id}
                   className="mb-one"
-                  onClick={() => this.navigateToMoment(comment.share_id)}
+                  onClick={() => this.navigateToParent(mention)}
                 >
                   <Card.Content>
                     <Content>
                       <div>
                         <p>
                           <strong
-                            onClick={(e) => this.onCommentCreatorClick(e, comment.creator)}
+                            onClick={(e) => this.onParentUserClick(e, mention.parent.username)}
                             css={theme => css`
                               cursor: pointer;
 
@@ -188,8 +206,8 @@ class RecentComments extends Component {
                               }
                             `}
                           >
-                            {comment.creator}
-                          </strong> <span className="small">- {formatDate(comment.createdAt)}</span>
+                            {mention.parent.username || mention.parent.creator}
+                          </strong> <span className="small">- {formatDate(mention.createdAt)}</span>
                         </p>
 
                         <p
@@ -198,7 +216,7 @@ class RecentComments extends Component {
                             color: ${theme.colors.powder}
                           `}
                         >
-                          Responding to {comment.parent_creator}
+                          Mentioned {mention.username} via {typeToTextFilter(mention.type)}
                         </p>
                       </div>
                       <p
@@ -209,7 +227,7 @@ class RecentComments extends Component {
                         `}
                         className="small"
                       >
-                        {linkifyText(comment.text)}
+                        {linkifyText(mention.parent.text)}
                       </p>
                     </Content>
                   </Card.Content>
@@ -218,7 +236,7 @@ class RecentComments extends Component {
             })
           }
           {
-            bottomReached && commentsObj.list.length >= 10 && !commentsObj.full && <BarLoader style={{ height: '200px' }} />
+            bottomReached && mentionsObj.list.length >= 10 && !mentionsObj.full && <BarLoader style={{ height: '200px' }} />
           }
         </CSSTransitionGroup>
       </div>
@@ -227,14 +245,14 @@ class RecentComments extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const comments = state.recent.comments
+  const mentions = state.recent.mentions
 
   return {
-    commentsObj: comments,
+    mentionsObj: mentions,
   }
 }
 
 export default withRouter(connect(mapStateToProps, {
-  requestAdminComments,
-})(RecentComments))
-RecentComments.contextType = UserContext
+  requestMentions,
+})(Mentions))
+Mentions.contextType = UserContext

@@ -1,22 +1,7 @@
 import { css } from '@emotion/core'
 
-export const emojiPickerStyles = (editMode, from) => {
-  if (editMode) {
-    return css`
-      position: fixed;
-      top: 50%;
-      right: 5%;
-      transform: translateY(-50%);
-      cursor: pointer;
-
-      @media only screen and (max-width: 1087px) {
-        top: 90%;
-        right: 0;
-      }
-    `
-  }
-
-  if (!editMode && from === 'profile') {
+export const emojiPickerStyles = (from) => {
+  if (from === 'profile') {
     return css`
       position: absolute;
       top: 50%;
@@ -55,23 +40,8 @@ export const emojiPickerStyles = (editMode, from) => {
   `
 }
 
-export const emojiPickerCommentStyles = (editMode, from) => {
-  if (editMode) {
-    return css`
-      position: fixed;
-      top: 50%;
-      right: 5%;
-      transform: translateY(-50%);
-      cursor: pointer;
-
-      @media only screen and (max-width: 1087px) {
-        top: 90%;
-        right: 0;
-      }
-    `
-  }
-
-  if (!editMode && from === 'profile') {
+export const emojiPickerCommentStyles = (from) => {
+  if (from === 'profile') {
     return css`
       position: absolute;
       top: 60%;
@@ -110,11 +80,21 @@ export const emojiPickerCommentStyles = (editMode, from) => {
   `
 }
 
-export const emojiButtonStyles = (editMode) => {
+export const emojiButtonStyles = () => {
   return css`
     position: absolute;
-    top: 0;
-    right: 9px;
+    bottom: 39px;
+    right: 0;
+    z-index: 1;
+    cursor: pointer;
+  `
+}
+
+export const emojiCommentButtonStyles = () => {
+  return css`
+    position: absolute;
+    bottom: 2px;
+    right: 0;
     z-index: 1;
     cursor: pointer;
   `
@@ -124,6 +104,7 @@ const emojiStyles = {
   emojiPickerStyles,
   emojiButtonStyles,
   emojiPickerCommentStyles,
+  emojiCommentButtonStyles,
 }
 
 export default emojiStyles

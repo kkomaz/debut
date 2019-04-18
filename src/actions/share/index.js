@@ -9,3 +9,4 @@ export { default as requestDisplayHiddenShares } from './requestDisplayHiddenSha
 export { default as handleDetailShare } from './handleDetailShare'
 export { default as removeDetailShare } from './removeDetailShare'
 export { default as resetSharesFeed } from './resetSharesFeed'
+export { default as requestRemoveShareFeeds } from './requestRemoveShareFeeds'

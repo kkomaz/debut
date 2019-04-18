@@ -33,12 +33,17 @@ class Share extends Model {
     commentCount: {
       type: Number,
       decrypted: true
+    },
+    mentions: {
+      type: Array,
+      decrypted: true,
     }
   }
 
   async afterFetch() {
     const comments = await Comment.fetchList({
       share_id: this._id,
+      valid: true,
     })
 
     const votes = await Vote.fetchList({

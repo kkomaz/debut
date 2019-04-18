@@ -21,10 +21,13 @@ import { Icon } from 'components/icon'
 // Model Imports
 import View from 'model/view'
 import Comment from 'model/comment'
+import Mention from 'model/mention'
+import Share from 'model/share'
 
 // Action Imports
 import { setView } from 'actions/view'
-import { addAdminComment } from 'actions/comment'
+import { addAdminComment, removeAdminComment } from 'actions/comment'
+import { addAdminMention, removeAdminMention } from 'actions/mention'
 
 // CSS Imports
 import './Navbar.scss';
@@ -39,7 +42,8 @@ class NavbarComp extends Component {
       searchResults: [],
       selected: '',
       hovered: '',
-      view: null,
+      currentCommentView: null,
+      currentMentionView: null,
     }
 
     this.fetchList = _.debounce(this.fetchList, 300)
@@ -47,42 +51,21 @@ class NavbarComp extends Component {
 
   static propTypes = {
     addAdminComment: PropTypes.func.isRequired,
+    addAdminMention: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    setProfileClickedTrue: PropTypes.func.isRequired,
+    removeAdminComment: PropTypes.func.isRequired,
+    removeAdminMention: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
     setNavbarTab: PropTypes.func.isRequired,
+    setProfileClickedTrue: PropTypes.func.isRequired,
     setView: PropTypes.func.isRequired,
     view: PropTypes.object,
   }
 
   componentDidMount = async () => {
-    const { sessionUser } = this.context.state
-    let view
-
-    const result = await axios.get('/comments', {
-      params: {
-        parent_creator: sessionUser.username,
-        limit: 1,
-      }
-    })
-
-    const comment = result.data.comments[0]
-
-    if (comment) {
-      view = await View.findOne({ parent_id: comment._id }) || {}
-    } else {
-      view = { initial: true }
-    }
-
-    this.props.setView(view)
-
-    if (_.isEmpty(view)) {
-      this.setState({
-        comment
-      })
-    }
-
-    Comment.addStreamListener(this.handleComments)
+    this.setCommentView()
+    this.setMentionView()
+    this.addShareStreamListener()
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -95,15 +78,118 @@ class NavbarComp extends Component {
     }
   }
 
+  setCommentView = async () => {
+    const { sessionUser } = this.context.state
+    let view
+
+    const result = await axios.get('/comments', {
+      params: {
+        parent_creator: sessionUser.username,
+        limit: 1,
+      }
+    })
+
+    const comment = _.get(result, 'data.comments[0]')
+
+    if (comment) {
+      const foundView = await View.findOne({ parent_id: comment._id }) || {}
+      view = foundView.attrs
+    } else {
+      view = { initial: true }
+    }
+
+    if (_.isEmpty(view)) {
+      this.setState({
+        currentCommentView: comment,
+      })
+    }
+
+    this.props.setView(view, 'comment')
+
+    Comment.addStreamListener(this.handleComments)
+  }
+
+  setMentionView = async () => {
+    const { sessionUser } = this.context.state
+    let view
+
+    const result = await axios.get('/mentions', {
+      params: {
+        username: sessionUser.username,
+        limit: 1,
+      }
+    })
+
+    const mention = _.get(result, 'data.mentions[0]')
+
+    if (mention) {
+      const foundMention = await View.findOne({ parent_id: mention._id }) || {}
+      view = foundMention.attrs
+    } else {
+      view = { initial: true }
+    }
+
+    if (_.isEmpty(view)) {
+      this.setState({
+        currentMentionView: mention,
+      })
+    }
+
+    this.props.setView(view, 'mention')
+
+    Mention.addStreamListener(this.handleMentions)
+  }
+
+  addShareStreamListener() {
+    Share.addStreamListener(this.handleShare)
+  }
+
+  handleShare = (share) => {
+    const { sessionUser } = this.context.state
+
+    // Remove Mention View on Share Delete
+    if (!share.attrs.valid) {
+      // Remove Share Mention
+      if (_.includes(share.attrs.mentions, sessionUser.username)) {
+        this.props.setView({ initial: true }, 'mention')
+        this.props.removeAdminMention(share.attrs._id)
+      }
+    }
+  }
+
   handleComments = (comment) => {
     const { sessionUser } = this.context.state
 
-    console.log(comment.c)
+    // Remove Comment Mention
+    if (_.includes(comment.attrs.mentions, sessionUser.username) && !comment.attrs.valid) {
+      this.props.setView({ initial: true }, 'mention')
+      this.props.removeAdminMention(comment.attrs._id)
+    }
 
+    // Delete Comment
+    if (comment.attrs.parent_creator === sessionUser.username && !comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
+      this.props.setView({ initial: true }, 'comment')
+      this.props.removeAdminComment(comment.attrs)
+    }
+
+    // Add
     if (comment.attrs.parent_creator === sessionUser.username && comment.attrs.valid && comment.attrs.creator !== sessionUser.username) {
-      this.props.setView({})
+      this.props.setView({}, 'comment')
       this.props.addAdminComment(comment.attrs)
-      this.setState({ comment: comment.attrs })
+      this.setState({ currentCommentView: comment.attrs })
+    }
+  }
+
+  handleMentions = async (mention) => {
+    const { sessionUser } = this.context.state
+
+    // Should refactor this via mongo (add)
+    if (mention.attrs.username === sessionUser.username && mention.attrs.creator !== sessionUser.username) {
+      this.props.setView({}, 'mention')
+      const result = await Mention.findById(mention.attrs._id)
+      const updatedMention = { ...result.attrs, parent: result.parent }
+      this.props.addAdminMention(updatedMention)
+      this.setState({ currentMentionView: updatedMention })
     }
   }
 
@@ -213,25 +299,44 @@ class NavbarComp extends Component {
   }
 
   goToRecent = async () => {
-    const { history, view } = this.props
-    const { comment } = this.state
+    const { history, viewObj } = this.props
+    const { currentCommentView } = this.state
 
-    if (_.isEmpty(view)) {
+    /**
+     * Creating the View will remove the notification
+    */
+    if (_.isEmpty(viewObj.comment)) {
       const result = new View({
         type: 'comment',
-        parent_id: comment._id
+        parent_id: currentCommentView._id
       })
       const newView = await result.save()
-      this.props.setView({ ...newView.attrs, _id: newView._id })
+      this.props.setView({ ...newView.attrs, _id: newView._id }, 'comment')
     }
     history.push('/admin/recent-comments')
+  }
+
+  goToRecentMentions = async () => {
+    const { history, viewObj } = this.props
+    const { currentMentionView } = this.state
+
+    if (_.isEmpty(viewObj.mention)) {
+      const result = new View({
+        type: 'mention',
+        parent_id: currentMentionView._id
+      })
+      const newView = await result.save()
+      this.props.setView({ ...newView.attrs, _id: newView._id }, 'mention')
+    }
+
+    history.push('/admin/mentions')
   }
 
   render() {
     const { open, searchResults } = this.state
     const { sessionUser, defaultImgUrl } = this.context.state
     const isSignedIn = sessionUser.userSession.isUserSignedIn()
-    const { user, loading, view } = this.props
+    const { user, loading, viewObj } = this.props
 
     return (
       <Navbar
@@ -324,7 +429,7 @@ class NavbarComp extends Component {
                               min-width: 16px;
                               opacity: 1;
                               padding: 2px 4px 3px;
-                              display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                              display: ${_.some([viewObj.comment, viewObj.mention], (elem) => _.isEmpty(elem)) ? 'flex': 'none'};
                               position: absolute;
                               left: -6px;
                               top: 5px;
@@ -338,11 +443,12 @@ class NavbarComp extends Component {
                       <div className="debut-nav-bar__list navbar-dropdown is-boxed is-right" style={{ padding: '0' }}>
                         <NavbarList
                           goToRecent={this.goToRecent}
+                          goToRecentMentions={this.goToRecentMentions}
                           onHelpClick={this.goToHelp}
                           onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
                           user={user}
-                          view={view}
+                          viewObj={viewObj}
                         />
                       </div>
                     </div>
@@ -367,7 +473,7 @@ class NavbarComp extends Component {
                           min-width: 16px;
                           opacity: 1;
                           padding: 2px 4px 3px;
-                          display: ${_.isEmpty(view) ? 'flex' : 'none'};
+                          display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
                           position: absolute;
                           top: 49%;
                           left: 12%;
@@ -380,8 +486,32 @@ class NavbarComp extends Component {
                           className="ml-half mb-quarter"
                           icon="IconBubble"
                           size={14}
-                          />
+                        />
                       </div>
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToRecentMentions}>
+                      <div
+                        css={theme => css`
+                          background: ${theme.colors.blue};
+                          border-radius: 15px;
+                          color: ${theme.colors.white};
+                          justify-content: center;
+                          align-items: center;
+                          height: 18px;
+                          width: 18px;
+                          box-sizing: border-box;
+                          line-height: 1;
+                          min-width: 16px;
+                          opacity: 1;
+                          padding: 2px 4px 3px;
+                          display: ${_.isEmpty(viewObj.mention) ? 'flex' : 'none'};
+                          position: absolute;
+                          top: 49%;
+                          left: 12%;
+                          transform: translateY(-50%);
+                        `}
+                      />
+                      Recent @
                     </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options" onClick={this.goToHelp}>
                       Help
@@ -402,18 +532,21 @@ class NavbarComp extends Component {
 const mapStateToProps = (state, ownProps) => {
   const user = _.find(state.user.users, (user) => user._id === ownProps.username) || {}
   const loading = state.user.loading
-  const view = state.view.data
+  const viewObj = state.view
 
   return {
     user,
     loading,
-    view,
+    viewObj,
   };
 };
 
 
 export default withRouter(connect(mapStateToProps, {
   addAdminComment,
+  addAdminMention,
+  removeAdminComment,
+  removeAdminMention,
   setView,
 })(NavbarComp))
 NavbarComp.contextType = UserContext

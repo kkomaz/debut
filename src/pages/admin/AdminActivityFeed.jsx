@@ -6,12 +6,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { CSSTransitionGroup } from 'react-transition-group'
 import ReactCSSTransitionReplace from 'react-css-transition-replace';
-import {
-  Card,
-  Modal,
-  Section,
-  Heading,
-} from 'components/bulma'
+import { Card } from 'components/bulma'
 import classNames from 'classnames';
 
 // Model Imports
@@ -19,13 +14,13 @@ import Share from 'model/share'
 
 // Component Import
 import { ShareListItem, AdminNoShares, ShareForm } from 'components/Share'
-import { CommentForm } from 'components/comment'
 import { BarLoader } from 'components/Loader'
 import { BulmaLoader } from 'components/bulma'
 
 // Action Imports
 import {
   requestAddShareFeeds,
+  requestRemoveShareFeeds,
   requestFetchShareFeeds,
   requestDisplayHiddenShares,
   resetSharesFeed,
@@ -52,6 +47,7 @@ class AdminActivityFeed extends Component {
 
   static propTypes = {
     userFollow: PropTypes.object.isRequired,
+    requestRemoveShareFeeds: PropTypes.func.isRequired,
     feedShares: PropTypes.shape({
       list: PropTypes.array.isRequired,
       full: PropTypes.bool.isRequired,
@@ -79,20 +75,16 @@ class AdminActivityFeed extends Component {
 
   addShareToActivites = (share) => {
     const { userFollow, feedShares } = this.props
-    if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id)) {
+    if (_.includes(userFollow.following, share.attrs.username) && _.find(feedShares.list, (feedShare) => feedShare._id === share._id) && !share.attrs.valid) {
+      this.props.requestRemoveShareFeeds(share.attrs)
+    }
+
+    if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id) && share.attrs.valid) {
       if (!this.state.showMoreOptions) {
         this.setState({ showMoreOptions: true })
       }
       this.props.requestAddShareFeeds(share.attrs)
     }
-  }
-
-  openCommentModal = (comment) => {
-    return this.setState({ showCommentModal: true, currentComment: comment })
-  }
-
-  closeCommentModal = () => {
-    return this.setState({ showCommentModal: false })
   }
 
   requestFetchShareFeeds = ({ follow, offset }) => {
@@ -139,6 +131,17 @@ class AdminActivityFeed extends Component {
     return this.setState({ showMoreOptions: false })
   }
 
+  /**
+   * Archived
+  */
+  openCommentModal = (comment) => {
+    return this.setState({ showCommentModal: true, currentComment: comment })
+  }
+
+  closeCommentModal = () => {
+    return this.setState({ showCommentModal: false })
+  }
+
   closeShareModal = () => {
     this.setState({ showShareModal: false })
   }
@@ -156,7 +159,12 @@ class AdminActivityFeed extends Component {
 
   render() {
     const { feedShares, userFollow } = this.props
-    const { showCommentModal, bottomReached, showMoreOptions, showShareModal } = this.state
+    const {
+      bottomReached,
+      // showCommentModal,
+      showMoreOptions,
+      // showShareModal,
+    } = this.state
 
     if (feedShares.loading) {
       return (
@@ -209,8 +217,6 @@ class AdminActivityFeed extends Component {
                 cardClass={cardClass}
                 share={feedShare}
                 username={feedShare.username}
-                onCommentEditClick={this.openCommentModal}
-                onEditClick={this.openShareModal}
               />
             )
           })
@@ -219,25 +225,27 @@ class AdminActivityFeed extends Component {
           bottomReached && feedShares.list.length >= 5 && !feedShares.full && <BarLoader style={{ height: '200px' }} />
         }
         </CSSTransitionGroup>
-        <Modal
-          show={showShareModal}
-          onClose={this.closeShareModal}
-          closeOnEsc
-        >
-          <Modal.Content>
-            <Section style={{ backgroundColor: 'white' }}>
-              <Heading size={6}>Shared Moment</Heading>
-              <ShareForm
-                username={userFollow.username}
-                currentShare={this.state.currentShare}
-                onCancel={this.closeShareModal}
-                onComplete={this.closeShareModal}
-              />
-            </Section>
-          </Modal.Content>
-        </Modal>
+        {/*
+          <Modal
+            show={showShareModal}
+            onClose={this.closeShareModal}
+            closeOnEsc
+          >
+            <Modal.Content>
+              <Section style={{ backgroundColor: 'white' }}>
+                <Heading size={6}>Shared Moment</Heading>
+                <ShareForm
+                  username={userFollow.username}
+                  currentShare={this.state.currentShare}
+                  onCancel={this.closeShareModal}
+                  onComplete={this.closeShareModal}
+                />
+              </Section>
+            </Modal.Content>
+          </Modal>
+        */}
 
-        {
+        {/*
           showCommentModal &&
           <Modal
             show={showCommentModal}
@@ -257,7 +265,7 @@ class AdminActivityFeed extends Component {
               </Section>
             </Modal.Content>
           </Modal>
-        }
+        */}
       </div>
     )
   }
@@ -276,6 +284,7 @@ const mapStateToProps = (state, ownProps) => {
 export default withRouter(connect(mapStateToProps, {
   requestFetchShareFeeds,
   requestAddShareFeeds,
+  requestRemoveShareFeeds,
   requestDisplayHiddenShares,
   resetSharesFeed,
 })(AdminActivityFeed))

@@ -19,13 +19,7 @@ class CommentAdminMenu extends Component {
     username: PropTypes.string.isRequired,
     share: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
-    onEditClick: PropTypes.func.isRequired,
     onDeleteClick: PropTypes.func.isRequired,
-  }
-
-  onEditClick = () => {
-    this.setState({ active: 'edit' })
-    this.props.onEditClick()
   }
 
   onDeleteClick = () => {
@@ -47,11 +41,6 @@ class CommentAdminMenu extends Component {
           }}
         >
           <Menu.List>
-            <Menu.List.Item
-              active={active === 'edit'}
-              onClick={this.onEditClick}>
-                Edit
-            </Menu.List.Item>
             <Menu.List.Item
               active={active === 'delete'}
               onClick={this.onDeleteClick}>

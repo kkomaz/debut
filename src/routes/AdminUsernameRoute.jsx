@@ -17,6 +17,7 @@ import {
 import BarLoader from 'components/Loader/BarLoader'
 import { RandomUsers } from 'components/User'
 import RecentComments from 'pages/admin/recent-comments/RecentComments'
+import Mentions from 'pages/admin/mentions/Mentions'
 
 // Stylesheets
 import './AdminMenu.scss'
@@ -29,7 +30,7 @@ class AdminUsernameRoute extends Component {
     const pathArray = props.location.pathname.split('/')
     const path = _.last(pathArray)
 
-    const paths = ['following', 'followers', 'recent-comments']
+    const paths = ['following', 'followers', 'recent-comments', 'mentions']
 
     if (!_.includes(paths, path)) {
       activeMenu = 'activityFeed'
@@ -86,6 +87,11 @@ class AdminUsernameRoute extends Component {
     this.props.history.push('/admin/recent-comments')
   }
 
+  onNotificationMentionsClick = () => {
+    this.onMenuItemClick('mentions')
+    this.props.history.push('/admin/mentions')
+  }
+
   render() {
     const {
       match,
@@ -124,6 +130,11 @@ class AdminUsernameRoute extends Component {
                       active={active === 'recent-comments'}
                       onClick={this.onNotificationCommentsClick}>
                         Comments
+                    </Menu.List.Item>
+                    <Menu.List.Item
+                      active={active === 'mentions'}
+                      onClick={this.onNotificationMentionsClick}>
+                        Mentions
                     </Menu.List.Item>
                   </Menu.List>
                 </Menu.List.Item>
@@ -170,6 +181,19 @@ class AdminUsernameRoute extends Component {
                 <React.Fragment>
                   <Columns.Column size={6}>
                     <RecentComments />
+                  </Columns.Column>
+                  <Columns.Column size={4}>
+                    <RandomUsers />
+                  </Columns.Column>
+                </React.Fragment>
+              )}
+            />
+            <Route
+              path={`${match.url}/mentions`}
+              render={() => (
+                <React.Fragment>
+                  <Columns.Column size={6}>
+                    <Mentions />
                   </Columns.Column>
                   <Columns.Column size={4}>
                     <RandomUsers />

@@ -6,9 +6,6 @@ import _ from 'lodash'
 import {
   Columns,
   Container,
-  Modal,
-  Section,
-  Heading,
 } from 'components/bulma'
 
 // Model Imports
@@ -20,8 +17,6 @@ import { handleDetailShare, removeDetailShare } from 'actions/share'
 // Component Imports
 import { ShareListItem, InvalidShare } from 'components/Share'
 import { RandomUsers } from 'components/User'
-import { CommentForm } from 'components/comment'
-import { ShareForm } from 'components/Share'
 
 class ShareDetail extends Component {
   state = {
@@ -66,6 +61,10 @@ class ShareDetail extends Component {
     this.props.removeDetailShare(share)
   }
 
+  /**
+   * Archived Funcs
+  */
+
   openEditModal = (share) => {
     return this.setState({ showShareModal: true, currentShare: share })
   }
@@ -82,9 +81,11 @@ class ShareDetail extends Component {
     return this.setState({ showCommentModal: false })
   }
 
+  // ----------------------//
+
   render() {
     const { username, share } = this.props
-    const { error, showCommentModal, showShareModal } = this.state
+    const { error } = this.state
 
     if (error) {
       return (
@@ -112,7 +113,7 @@ class ShareDetail extends Component {
         <Columns.Column size={4}>
           <RandomUsers />
         </Columns.Column>
-        {
+        {/*
           showCommentModal &&
           <Modal
             show={showCommentModal}
@@ -132,8 +133,8 @@ class ShareDetail extends Component {
               </Section>
             </Modal.Content>
           </Modal>
-        }
-        {
+        */}
+        {/*
           showShareModal &&
           <Modal
             show={showShareModal}
@@ -152,7 +153,7 @@ class ShareDetail extends Component {
               </Section>
             </Modal.Content>
           </Modal>
-        }
+        */}
       </React.Fragment>
     )
   }

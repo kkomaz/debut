@@ -6,6 +6,7 @@ import shareSaga from 'sagas/share'
 import followSaga from 'sagas/follow'
 import feedSaga from 'sagas/feed'
 import voteSaga from 'sagas/vote'
+import mentionSaga from 'sagas/mention'
 
 export default function* rootSaga() {
   yield [
@@ -15,6 +16,7 @@ export default function* rootSaga() {
     fork(shareSaga),
     fork(userSaga),
     fork(feedSaga),
-    fork(voteSaga)
+    fork(voteSaga),
+    fork(mentionSaga)
   ]
 }
