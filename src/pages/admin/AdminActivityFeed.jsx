@@ -20,6 +20,7 @@ import { BulmaLoader } from 'components/bulma'
 // Action Imports
 import {
   requestAddShareFeeds,
+  requestRemoveShareFeeds,
   requestFetchShareFeeds,
   requestDisplayHiddenShares,
   resetSharesFeed,
@@ -46,6 +47,7 @@ class AdminActivityFeed extends Component {
 
   static propTypes = {
     userFollow: PropTypes.object.isRequired,
+    requestRemoveShareFeeds: PropTypes.func.isRequired,
     feedShares: PropTypes.shape({
       list: PropTypes.array.isRequired,
       full: PropTypes.bool.isRequired,
@@ -73,7 +75,11 @@ class AdminActivityFeed extends Component {
 
   addShareToActivites = (share) => {
     const { userFollow, feedShares } = this.props
-    if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id)) {
+    if (_.includes(userFollow.following, share.attrs.username) && _.find(feedShares.list, (feedShare) => feedShare._id === share._id) && !share.attrs.valid) {
+      this.props.requestRemoveShareFeeds(share.attrs)
+    }
+
+    if (_.includes(userFollow.following, share.attrs.username) && !_.find(feedShares.list, (feedShare) => feedShare._id === share._id) && share.attrs.valid) {
       if (!this.state.showMoreOptions) {
         this.setState({ showMoreOptions: true })
       }
@@ -278,6 +284,7 @@ const mapStateToProps = (state, ownProps) => {
 export default withRouter(connect(mapStateToProps, {
   requestFetchShareFeeds,
   requestAddShareFeeds,
+  requestRemoveShareFeeds,
   requestDisplayHiddenShares,
   resetSharesFeed,
 })(AdminActivityFeed))

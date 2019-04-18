@@ -30,6 +30,7 @@ import {
   ADD_VOTE_SUCCESS,
   ADD_VOTE_FAIL,
   REMOVE_VOTE_FAIL,
+  REQUEST_REMOVE_SHARE_FEEDS,
 } from 'actions'
 import _ from 'lodash'
 import {
@@ -129,6 +130,12 @@ export default function shareReducer(state = defaultSession, action) {
         list: [share, ...state.shares.list],
         loading: false
       }}
+    }
+    case REQUEST_REMOVE_SHARE_FEEDS: {
+      const share = { ...action.payload, hidden: false }
+      return { ...state,
+        shares: { ...state.shares, list: removeObjFromList(state.shares.list, share) },
+      }
     }
     case HANDLE_DETAIL_SHARE: {
       const share = _.find(state.shares.list, (share) => share._id === action.payload._id)

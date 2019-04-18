@@ -149,7 +149,6 @@ class NavbarComp extends Component {
 
     // Remove Mention View on Share Delete
     if (!share.attrs.valid) {
-
       // Remove Share Mention
       if (_.includes(share.attrs.mentions, sessionUser.username)) {
         this.props.setView({ initial: true }, 'mention')
