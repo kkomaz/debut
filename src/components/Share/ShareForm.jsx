@@ -332,7 +332,9 @@ class ShareForm extends Component {
             >
               ({150 - this.state.characterLength})
             </p>
-            <div className="share-form__options">
+            <div css={css`
+              margin-right: 15px;
+            `}>
               <Label>
                 <Icon
                   className="debut-icon debut-icon--pointer mr-half"

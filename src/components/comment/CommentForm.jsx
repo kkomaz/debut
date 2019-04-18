@@ -341,24 +341,28 @@ class CommentForm extends Component {
             >
               ({150 - this.state.characterLength})
             </p>
-            <Label
-              css={css`
-                margin-bottom: 2px !important;
-              `}
-            >
-              <Icon
-                className="debut-icon debut-icon--pointer ml-half mr-half"
-                icon="IconCamera"
-                size={15}
-                />
-              <input
-                type="file"
-                onChange={this.storeFile}
-                hidden
-                accept="image/*"
-                ref={fileInput => this.fileInput = fileInput}
-                />
-            </Label>
+            <div css={css`
+              margin-right: 15px;
+            `}>
+              <Label
+                css={css`
+                  margin-bottom: 2px !important;
+                `}
+              >
+                <Icon
+                  className="debut-icon debut-icon--pointer ml-half mr-half"
+                  icon="IconCamera"
+                  size={15}
+                  />
+                <input
+                  type="file"
+                  onChange={this.storeFile}
+                  hidden
+                  accept="image/*"
+                  ref={fileInput => this.fileInput = fileInput}
+                  />
+              </Label>
+            </div>
             { commentActions.submitting &&
               shareId === commentActions.shareId &&
               <BulmaLoader
@@ -383,7 +387,7 @@ class CommentForm extends Component {
           :
           <p
             className="emoji-wrapper"
-            css={theme => emojiStyles.emojiButtonStyles()}
+            css={theme => emojiStyles.emojiCommentButtonStyles()}
             onClick={this.showEmojis}
           >
             {String.fromCodePoint(0x1f60a)}

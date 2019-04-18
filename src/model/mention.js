@@ -28,7 +28,6 @@ export default class Mention extends Model {
     let result = this.attrs.type === 'Comment' ? await Comment.findOne({ _id: this.attrs.parent_id }) : await Share.findOne({ _id: this.attrs.parent_id })
 
     if (result === undefined) {
-      debugger
       this.parent = {}
     } else {
       this.parent = result.attrs
