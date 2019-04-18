@@ -32,7 +32,7 @@ const createShare = async (action) => {
         parent_id: share._id,
       })
 
-      const newMention = result.save()
+      const newMention = await result.save()
       mentions.push({ ...newMention.attrs, _id: newMention._id })
     }
   } else {

@@ -47,7 +47,7 @@ const createComment = async (action) => {
         parent_id: comment._id,
       })
 
-      const newMention = result.save()
+      const newMention = await result.save()
       mentions.push({ ...newMention.attrs, _id: newMention._id })
     }
   } else {

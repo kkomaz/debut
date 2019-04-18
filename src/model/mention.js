@@ -25,7 +25,13 @@ export default class Mention extends Model {
   }
 
   async afterFetch() {
-    const result = this.attrs.type === 'Comment' ? await Comment.findOne({ _id: this.attrs.parent_id }) : await Share.findOne({ _id: this.attrs.parent_id })
-    this.parent = result.attrs
+    let result = this.attrs.type === 'Comment' ? await Comment.findOne({ _id: this.attrs.parent_id }) : await Share.findOne({ _id: this.attrs.parent_id })
+
+    if (result === undefined) {
+      debugger
+      this.parent = {}
+    } else {
+      this.parent = result.attrs
+    }
   }
 };
