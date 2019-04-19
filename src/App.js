@@ -45,12 +45,7 @@ class App extends Component {
     // If already signed in
     if (userSession.isUserSignedIn()) {
       this.setState({ loggedIn: true }, async () => {
-        const userData = userSession.loadUserData()
-        const radiksUser = await User.findOne({ username: userData.username })
-
-        if (radiksUser && !radiksUser.attrs.radiksSignature) {
-          await User.createWithCurrentUser()
-        }
+        await User.createWithCurrentUser()
       })
     }
 
@@ -70,13 +65,9 @@ class App extends Component {
 
       try {
         const radiksUser = await User.findOne({ username: userData.username })
-
-        if (radiksUser && !radiksUser.attrs.radiksSignature) {
-          await User.createWithCurrentUser()
-        }
+        const currentUser = await User.createWithCurrentUser()
 
         if (!radiksUser) {
-          const currentUser = await User.createWithCurrentUser()
           const profileImgUrl = _.get(currentUser, 'attrs.profile.image[0].contentUrl', null)
           if (profileImgUrl) {
             currentUser.update({
