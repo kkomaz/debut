@@ -225,6 +225,12 @@ class NavbarComp extends Component {
     history.push('/')
   }
 
+  goToEarn = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/earn')
+  }
+
   onChange = (e) => {
     e.preventDefault()
     if (!this.dropdown.state.open) {
@@ -394,6 +400,9 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
+                      Earn
+                    </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToHome}>
                       Home
                     </Navbar.Item>
