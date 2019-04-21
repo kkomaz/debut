@@ -10,6 +10,7 @@ class AprilEarn extends Component {
       valid: props.currentMonth === 3
     }
   }
+
   static propTypes = {
     currentMonth: PropTypes.number.isRequired,
   }
