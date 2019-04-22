@@ -9,6 +9,7 @@ import { BulmaLoader } from 'components/bulma'
 import {
   Section,
   Heading,
+  ModalHeader,
 } from 'components/bulma'
 import { withRouter } from 'react-router-dom'
 import { UserCardButton } from 'components/User'
@@ -93,36 +94,11 @@ class LikeModalContent extends Component {
           padding-bottom: 20px;
         `}
       >
-        <div
-          css={theme => css`
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid ${theme.colors.shadow};
-            padding: 1em;
-          `}
-        >
-          {
-            voteActions.submitting || _.isEmpty(users) ?
-            <BulmaLoader /> :
-            <React.Fragment>
-              <Heading
-                size={4}
-                css={css`
-                  margin-bottom: 0 !important;
-                `}
-                >
-                {`Liked ${_.get(detailObj, 'votes.length', 0) === 1 ? `${_.get(detailObj, 'votes.length', 0)} time` : `${_.get(detailObj, 'votes.length', 0)} times`}`}
-              </Heading>
-              <Icon
-                className="debut-icon debut-icon--pointer"
-                icon="IconX"
-                size={25}
-                color="8b8687"
-                onClick={this.props.closeModal}
-              />
-            </React.Fragment>
-          }
-        </div>
+        <ModalHeader
+          loading={voteActions.submitting || _.isEmpty(users)}
+          headerText={`Liked ${_.get(detailObj, 'votes.length', 0) === 1 ? `${_.get(detailObj, 'votes.length', 0)} time` : `${_.get(detailObj, 'votes.length', 0)} times`}`}
+          closeModal={this.props.closeModal}
+        />
         {
           voteActions.submitting || _.isEmpty(users) ?
           <div

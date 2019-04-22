@@ -12,6 +12,7 @@ import earnImg from 'assets/earn3.jpg'
 
 // Component Imports
 import { AprilEarn } from 'components/earn'
+import { UserContext } from 'components/User/UserProvider'
 
 class Earn extends Component {
   constructor(props) {
@@ -23,6 +24,8 @@ class Earn extends Component {
   }
 
   render() {
+    const { sessionUser } = this.context.state
+
     return (
       <div>
         <Hero
@@ -96,6 +99,7 @@ class Earn extends Component {
         <Container>
           <AprilEarn
             currentMonth={this.state.currentMonth}
+            sessionUser={sessionUser}
           />
         </Container>
       </div>
@@ -104,3 +108,4 @@ class Earn extends Component {
 }
 
 export default Earn
+Earn.contextType = UserContext

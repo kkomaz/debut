@@ -13,13 +13,17 @@ class AprilEarn extends Component {
 
   static propTypes = {
     currentMonth: PropTypes.number.isRequired,
+    sessionUser: PropTypes.object.isRequired
   }
 
   render() {
+    const { sessionUser } = this.props
+
     return (
       <div>
         <TwitterEarnCard
           valid={this.state.valid}
+          sessionUser={sessionUser}
         />
       </div>
     )

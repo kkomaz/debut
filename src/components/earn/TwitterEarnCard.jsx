@@ -1,4 +1,6 @@
 /** @jsx jsx */
+
+// Library Imports
 import { css, jsx } from '@emotion/core'
 import React, { Component } from 'react'
 import _ from 'lodash'
@@ -6,14 +8,22 @@ import PropTypes from 'prop-types'
 import {
   Button,
   Card,
+  Columns,
   Content,
   Image,
   Modal,
+  ModalHeader,
   Section,
 } from 'components/bulma'
-import twitterEarn from 'assets/twitter_earn.jpg'
+
+// Component Imports
 import { Icon } from 'components/icon'
 import TwitterEarnForm from './TwitterEarnForm'
+
+// Util Imports
+import twitterEarn from 'assets/twitter_earn.jpg'
+import tweetFormImg from 'assets/tweet_1.jpg'
+import tweetFormImg2 from 'assets/tweet_2.jpg'
 
 class TwitterEarnCard extends Component {
   state = {
@@ -22,6 +32,7 @@ class TwitterEarnCard extends Component {
 
   static propTypes = {
     valid: PropTypes.bool.isRequired,
+    sessionUser: PropTypes.object.isRequired,
   }
 
   openTwitterTask = () => {
@@ -37,10 +48,8 @@ class TwitterEarnCard extends Component {
   }
 
   render() {
-    const { valid } = this.props
+    const { valid, sessionUser } = this.props
     const { showModal } = this.state
-
-    console.log(this.state.showModal)
 
     return (
       <React.Fragment>
@@ -119,9 +128,34 @@ class TwitterEarnCard extends Component {
             <Section
               css={css`
                 background-color: white;
+                padding-top: 0;
               `}
             >
-              <TwitterEarnForm />
+              <ModalHeader
+                headerText="Tweet and Share"
+                closeModal={this.closeModal}
+              />
+              <Columns className="mt-half">
+                <Columns.Column size={6}>
+                  <Image
+                    css={css`
+                      background-image: url(${tweetFormImg});
+                      background-size: cover;
+                      background-repeat: no-repeat;
+                      background-position: 50% 50%;
+                      margin: 0;
+                      height: 300px;
+                      width: 100%;
+                    `}
+                  />
+                </Columns.Column>
+                <Columns.Column size={6}>
+                  <TwitterEarnForm
+                    username={sessionUser.username}
+                    onCancel={this.closeModal}
+                  />
+                </Columns.Column>
+              </Columns>
             </Section>
           </Modal.Content>
         </Modal>
