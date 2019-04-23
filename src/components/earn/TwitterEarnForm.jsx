@@ -55,7 +55,7 @@ class TwitterEarnForm extends Component {
     } = this.state
 
     if (_.isEmpty(twitterId) || _.isEmpty(tweetLink) || _.isEmpty(btcAddress)) {
-      this.setState({ valid: false })
+      return this.setState({ valid: false })
     }
   }
 
