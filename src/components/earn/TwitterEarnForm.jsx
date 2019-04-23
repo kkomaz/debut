@@ -10,6 +10,7 @@ import _ from 'lodash'
 import {
   Control,
   Field,
+  Help,
   Input,
   Label,
 } from 'components/bulma'
@@ -19,6 +20,8 @@ import { TwitterMentionButton } from 'react-twitter-embed';
 class TwitterEarnForm extends Component {
   state = {
     twitterId: '',
+    tweetLink: '',
+    btcAddress: '',
     valid: true,
   }
 
@@ -28,6 +31,11 @@ class TwitterEarnForm extends Component {
   }
 
   onChange = (e) => {
+    const { valid } = this.state
+
+    if (!valid) {
+      this.setState({ valid: true })
+    }
     this.setState({
       [e.target.name]: e.target.value,
     })
@@ -37,14 +45,27 @@ class TwitterEarnForm extends Component {
     this.props.onCancel()
   }
 
-  onSubmit = () => {
-    console.log('submitting')
+  onSubmit = (e) => {
+    e.preventDefault()
+
+    const {
+      twitterId,
+      tweetLink,
+      btcAddress,
+    } = this.state
+
+    if (_.isEmpty(twitterId) || _.isEmpty(tweetLink) || _.isEmpty(btcAddress)) {
+      this.setState({ valid: false })
+    }
   }
 
   render() {
-    const { username } = this.props
-
-    console.log(TwitterMentionButton)
+    const {
+      username,
+    } = this.props
+    const {
+      valid,
+    } = this.state
 
     return (
       <React.Fragment>
@@ -116,6 +137,24 @@ class TwitterEarnForm extends Component {
                 value={this.state.btcAddress}
               />
           </Field>
+          {
+            !valid ?
+            <Help
+              color="danger"
+              css={css`
+                margin-top: 19px;
+                margin-bottom: 19px;
+              `}
+            >
+              No empty fields allowed.
+            </Help> :
+            <div
+              css={css`
+                padding-top: 22px;
+                padding-bottom: 22px;
+            `}>
+            </div>
+          }
           <SubmitFooter
             onCancel={this.onCancel}
             onSubmit={this.onSubmit}
