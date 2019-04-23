@@ -1,6 +1,9 @@
+/** @jsx jsx */
+
 // Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { css, jsx } from '@emotion/core'
 import _ from 'lodash'
 
 // Component Imports
@@ -16,6 +19,7 @@ import { TwitterMentionButton } from 'react-twitter-embed';
 class TwitterEarnForm extends Component {
   state = {
     twitterId: '',
+    valid: true,
   }
 
   static propTypes = {
@@ -38,18 +42,49 @@ class TwitterEarnForm extends Component {
   }
 
   render() {
+    const { username } = this.props
+
+    console.log(TwitterMentionButton)
+
     return (
       <React.Fragment>
-        <TwitterMentionButton
-          options={{ text: 'Join the debut community and earn some BTC!  More info at', via: 'the_debut_app' }}
-        />
+        <div
+          css={css`
+            height: 20px;
+            width: 61px;
+            margin-bottom: 10px;
+          `}
+        >
+          <TwitterMentionButton
+            options={{ text: 'Join the debut community and earn some BTC!  More info at', via: 'the_debut_app' }}
+          />
+        </div>
         <form
           onSubmit={this.onSubmit}
         >
           <Field>
+            <Label
+              css={css`
+                margin-bottom: 0 !important;
+              `}
+            >
+              Blockstack ID
+            </Label>
+            <p
+              css={css`
+                font-size: 14px;
+              `}
+            >
+              {username}
+            </p>
+          </Field>
+          <Field>
             <Label>Twitter ID</Label>
             <Control>
               <Input
+                css={css`
+                  font-size: 14px;
+                `}
                 name="twitterId"
                 placeholder="Twitter ID"
                 onChange={this.onChange}
@@ -60,6 +95,9 @@ class TwitterEarnForm extends Component {
           <Field>
             <Label>Tweet Link</Label>
               <Input
+                css={css`
+                  font-size: 14px;
+                `}
                 name="tweetLink"
                 placeholder="Tweet Link"
                 onChange={this.onChange}
@@ -69,6 +107,9 @@ class TwitterEarnForm extends Component {
           <Field>
             <Label>BTC Address</Label>
               <Input
+                css={css`
+                  font-size: 14px;
+                `}
                 name="btcAddress"
                 placeholder="BTC Address"
                 onChange={this.onChange}
