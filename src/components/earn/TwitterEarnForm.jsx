@@ -11,6 +11,7 @@ import {
   Label,
 } from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
+import { TwitterMentionButton } from 'react-twitter-embed';
 
 class TwitterEarnForm extends Component {
   state = {
@@ -38,43 +39,48 @@ class TwitterEarnForm extends Component {
 
   render() {
     return (
-      <form
-        onSubmit={this.onSubmit}
-      >
-        <Field>
-          <Label>Twitter ID</Label>
-          <Control>
-            <Input
-              name="twitterId"
-              placeholder="Twitter ID"
-              onChange={this.onChange}
-              value={this.state.twitterId}
-            />
-          </Control>
-        </Field>
-        <Field>
-          <Label>Tweet Link</Label>
-            <Input
-              name="tweetLink"
-              placeholder="Tweet Link"
-              onChange={this.onChange}
-              value={this.state.tweetLink}
-            />
-        </Field>
-        <Field>
-          <Label>BTC Address</Label>
-            <Input
-              name="btcAddress"
-              placeholder="BTC Address"
-              onChange={this.onChange}
-              value={this.state.btcAddress}
-            />
-        </Field>
-        <SubmitFooter
-          onCancel={this.onCancel}
-          onSubmit={this.onSubmit}
+      <React.Fragment>
+        <TwitterMentionButton
+          options={{ text: 'Join the debut community and earn some BTC!  More info at', via: 'the_debut_app' }}
         />
-      </form>
+        <form
+          onSubmit={this.onSubmit}
+        >
+          <Field>
+            <Label>Twitter ID</Label>
+            <Control>
+              <Input
+                name="twitterId"
+                placeholder="Twitter ID"
+                onChange={this.onChange}
+                value={this.state.twitterId}
+              />
+            </Control>
+          </Field>
+          <Field>
+            <Label>Tweet Link</Label>
+              <Input
+                name="tweetLink"
+                placeholder="Tweet Link"
+                onChange={this.onChange}
+                value={this.state.tweetLink}
+              />
+          </Field>
+          <Field>
+            <Label>BTC Address</Label>
+              <Input
+                name="btcAddress"
+                placeholder="BTC Address"
+                onChange={this.onChange}
+                value={this.state.btcAddress}
+              />
+          </Field>
+          <SubmitFooter
+            onCancel={this.onCancel}
+            onSubmit={this.onSubmit}
+          />
+        </form>
+      </React.Fragment>
     )
   }
 }
