@@ -1,14 +1,12 @@
 /** @jsx jsx */
-import React, { Component } from 'react'
+import { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { jsx, css } from '@emotion/core'
-import { Icon } from 'components/icon'
 import _ from 'lodash'
 import { BulmaLoader } from 'components/bulma'
 import {
   Section,
-  Heading,
   ModalHeader,
 } from 'components/bulma'
 import { withRouter } from 'react-router-dom'

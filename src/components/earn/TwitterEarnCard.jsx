@@ -19,20 +19,26 @@ import {
 // Component Imports
 import { Icon } from 'components/icon'
 import TwitterEarnForm from './TwitterEarnForm'
+import TwitterEarnGuidelines from './TwitterEarnGuidelines'
 
 // Util Imports
 import twitterEarn from 'assets/twitter_earn.jpg'
 import tweetFormImg from 'assets/tweet_1.jpg'
-import tweetFormImg2 from 'assets/tweet_2.jpg'
 
 class TwitterEarnCard extends Component {
   state = {
     showModal: false,
+    showTwitterForm: false,
   }
 
   static propTypes = {
     valid: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
+  }
+
+  onCancel = () => {
+    this.showTwitterFormFalse()
+    this.closeModal()
   }
 
   openTwitterTask = () => {
@@ -47,9 +53,17 @@ class TwitterEarnCard extends Component {
     this.setState({ showModal: true })
   }
 
+  showTwitterFormTrue = () => {
+    this.setState({ showTwitterForm: true })
+  }
+
+  showTwitterFormFalse = () => {
+    this.setState({ showTwitterForm: false })
+  }
+
   render() {
     const { valid, sessionUser } = this.props
-    const { showModal } = this.state
+    const { showModal, showTwitterForm } = this.state
 
     return (
       <React.Fragment>
@@ -144,16 +158,46 @@ class TwitterEarnCard extends Component {
                       background-repeat: no-repeat;
                       background-position: 50% 50%;
                       margin: 0;
-                      height: 300px;
+                      height: 100%;
                       width: 100%;
+
+                      @media only screen and (max-width: 769px) {
+                        height: 200px;
+                      }
                     `}
                   />
                 </Columns.Column>
-                <Columns.Column size={6}>
-                  <TwitterEarnForm
-                    username={sessionUser.username}
-                    onCancel={this.closeModal}
-                  />
+                <Columns.Column
+                  css={css`
+                    position: relative;
+                  `}
+                  size={6}
+                >
+                  {
+                    showTwitterForm ?
+                    <React.Fragment>
+                      <Button
+                        onClick={this.showTwitterFormFalse}
+                        color="light"
+                        css={css`
+                          position: absolute;
+                          bottom: 13px;
+                          left: 12px;
+                        `}
+                      >
+                        Back
+                      </Button>
+                      <TwitterEarnForm
+                        username={sessionUser.username}
+                        onCancel={this.onCancel}
+                      />
+                    </React.Fragment>
+                    :
+                    <TwitterEarnGuidelines
+                      onDecline={this.closeModal}
+                      onAccept={this.showTwitterFormTrue}
+                    />
+                  }
                 </Columns.Column>
               </Columns>
             </Section>
