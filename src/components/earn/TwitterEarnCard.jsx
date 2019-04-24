@@ -29,12 +29,9 @@ class TwitterEarnCard extends Component {
   constructor(props) {
     super(props)
 
-    const task = _.find(props.tasks, (task) => task.type === 'twitter')
-
     this.state = {
       showModal: false,
       showTwitterForm: false,
-      task,
     }
   }
 
@@ -66,14 +63,13 @@ class TwitterEarnCard extends Component {
   }
 
   isValid = () => {
-    const { valid } = this.props
-    const { task } = this.state
+    const { valid, task } = this.props
     return valid && _.isEmpty(task)
   }
 
   render() {
-    const { valid, sessionUser } = this.props
-    const { showModal, showTwitterForm, task } = this.state
+    const { valid, sessionUser, task } = this.props
+    const { showModal, showTwitterForm } = this.state
 
     return (
       <React.Fragment>
@@ -213,6 +209,7 @@ class TwitterEarnCard extends Component {
                       <TwitterEarnForm
                         username={sessionUser.username}
                         onCancel={this.onCancel}
+                        onComplete={this.onCancel}
                       />
                     </React.Fragment>
                     :

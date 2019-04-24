@@ -24,7 +24,7 @@ class AprilEarn extends Component {
     currentMonth: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
-    tasks: PropTypes.array.isRequired,
+    twitterTask: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
@@ -32,7 +32,7 @@ class AprilEarn extends Component {
   }
 
   render() {
-    const { sessionUser, tasks, loading } = this.props
+    const { sessionUser, twitterTask, loading } = this.props
 
     return (
       <div>
@@ -41,7 +41,7 @@ class AprilEarn extends Component {
           <TwitterEarnCard
             valid={this.state.valid}
             sessionUser={sessionUser}
-            tasks={tasks}
+            task={twitterTask}
           />
         }
       </div>
@@ -53,9 +53,11 @@ const mapStateToProps = (state, ownProps) => {
   const tasks = _.filter(state.task.list, (task) => task.month === 3)
   const loading = state.task.loading
 
+  const twitterTask = _.find(tasks, (task) => task.type === 'twitter')
+
   return {
-    tasks,
-    loading
+    loading,
+    twitterTask,
   }
 }
 

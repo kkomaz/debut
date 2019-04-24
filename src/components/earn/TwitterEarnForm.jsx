@@ -33,6 +33,7 @@ class TwitterEarnForm extends Component {
   static propTypes = {
     username: PropTypes.string.isRequired,
     onCancel: PropTypes.func.isRequired,
+    onComplete: PropTypes.func,
   }
 
   onChange = (e) => {
@@ -75,6 +76,7 @@ class TwitterEarnForm extends Component {
     }
 
     this.props.requestTaskCreateTwitter(params)
+    this.props.onComplete()
   }
 
   render() {
@@ -185,6 +187,7 @@ class TwitterEarnForm extends Component {
 
 TwitterEarnForm.defaultProps = {
   onCancel: _.noop,
+  onComplete: _.noop,
 }
 
 export default connect(null, {
