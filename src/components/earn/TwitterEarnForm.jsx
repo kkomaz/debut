@@ -5,6 +5,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { css, jsx } from '@emotion/core'
 import _ from 'lodash'
+import { connect } from 'react-redux'
+import moment from 'moment'
 
 // Component Imports
 import {
@@ -15,7 +17,10 @@ import {
   Label,
 } from 'components/bulma'
 import SubmitFooter from 'components/UI/Form/SubmitFooter'
-import { TwitterMentionButton } from 'react-twitter-embed';
+import { TwitterMentionButton } from 'react-twitter-embed'
+
+// Action Imports
+import { requestTaskCreateTwitter } from 'actions/task'
 
 class TwitterEarnForm extends Component {
   state = {
@@ -54,9 +59,22 @@ class TwitterEarnForm extends Component {
       btcAddress,
     } = this.state
 
+    const { username } = this.props
+
     if (_.isEmpty(twitterId) || _.isEmpty(tweetLink) || _.isEmpty(btcAddress)) {
       return this.setState({ valid: false })
     }
+
+    const params = {
+      type: 'twitter',
+      username,
+      twitter_id: twitterId,
+      tweet_link: tweetLink,
+      btc_address: btcAddress,
+      month: moment().month()
+    }
+
+    this.props.requestTaskCreateTwitter(params)
   }
 
   render() {
@@ -169,4 +187,6 @@ TwitterEarnForm.defaultProps = {
   onCancel: _.noop,
 }
 
-export default TwitterEarnForm
+export default connect(null, {
+  requestTaskCreateTwitter,
+})(TwitterEarnForm)

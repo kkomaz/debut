@@ -10,7 +10,7 @@ export default class Task extends Model {
     username: {
       type: String,
     },
-    twitter_name: {
+    twitter_id: {
       type: String,
     },
     tweet_link: {
