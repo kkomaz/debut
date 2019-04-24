@@ -7,7 +7,7 @@ import followSaga from 'sagas/follow'
 import feedSaga from 'sagas/feed'
 import voteSaga from 'sagas/vote'
 import mentionSaga from 'sagas/mention'
-import taskSaga from 'sagas/earn'
+import taskSaga from 'sagas/task'
 
 export default function* rootSaga() {
   yield [
