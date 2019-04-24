@@ -1,5 +1,12 @@
+// Library Imports
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+// Action Imports
+import { requestFetchTasks } from 'actions/task'
+
+// Component Imports
 import TwitterEarnCard from './TwitterEarnCard'
 
 class AprilEarn extends Component {
@@ -16,6 +23,10 @@ class AprilEarn extends Component {
     sessionUser: PropTypes.object.isRequired
   }
 
+  componentDidMount() {
+    this.props.requestFetchTasks(3)
+  }
+
   render() {
     const { sessionUser } = this.props
 
@@ -30,4 +41,6 @@ class AprilEarn extends Component {
   }
 }
 
-export default AprilEarn
+export default connect(null, {
+  requestFetchTasks,
+})(AprilEarn)
