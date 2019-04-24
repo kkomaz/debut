@@ -2,12 +2,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 // Action Imports
 import { requestFetchTasks } from 'actions/task'
 
 // Component Imports
 import TwitterEarnCard from './TwitterEarnCard'
+import { BarLoader } from 'components/Loader'
 
 class AprilEarn extends Component {
   constructor(props) {
@@ -20,7 +22,9 @@ class AprilEarn extends Component {
 
   static propTypes = {
     currentMonth: PropTypes.number.isRequired,
-    sessionUser: PropTypes.object.isRequired
+    loading: PropTypes.bool.isRequired,
+    sessionUser: PropTypes.object.isRequired,
+    tasks: PropTypes.array.isRequired,
   }
 
   componentDidMount() {
@@ -28,19 +32,33 @@ class AprilEarn extends Component {
   }
 
   render() {
-    const { sessionUser } = this.props
+    const { sessionUser, tasks, loading } = this.props
 
     return (
       <div>
-        <TwitterEarnCard
-          valid={this.state.valid}
-          sessionUser={sessionUser}
-        />
+        {
+          loading ? <BarLoader /> :
+          <TwitterEarnCard
+            valid={this.state.valid}
+            sessionUser={sessionUser}
+            tasks={tasks}
+          />
+        }
       </div>
     )
   }
 }
 
-export default connect(null, {
+const mapStateToProps = (state, ownProps) => {
+  const tasks = _.filter(state.task.list, (task) => task.month === 3)
+  const loading = state.task.loading
+
+  return {
+    tasks,
+    loading
+  }
+}
+
+export default connect(mapStateToProps, {
   requestFetchTasks,
 })(AprilEarn)

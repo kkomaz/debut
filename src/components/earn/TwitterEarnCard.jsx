@@ -26,23 +26,27 @@ import twitterEarn from 'assets/twitter_earn.jpg'
 import tweetFormImg from 'assets/tweet_1.jpg'
 
 class TwitterEarnCard extends Component {
-  state = {
-    showModal: false,
-    showTwitterForm: false,
+  constructor(props) {
+    super(props)
+
+    const task = _.find(props.tasks, (task) => task.type === 'twitter')
+
+    this.state = {
+      showModal: false,
+      showTwitterForm: false,
+      task,
+    }
   }
 
   static propTypes = {
     valid: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
+    tasks: PropTypes.array.isRequired,
   }
 
   onCancel = () => {
     this.showTwitterFormFalse()
     this.closeModal()
-  }
-
-  openTwitterTask = () => {
-    console.log('opening twitter task')
   }
 
   closeModal = () => {
@@ -61,16 +65,22 @@ class TwitterEarnCard extends Component {
     this.setState({ showTwitterForm: false })
   }
 
+  isValid = () => {
+    const { valid } = this.props
+    const { task } = this.state
+    return valid && _.isEmpty(task)
+  }
+
   render() {
     const { valid, sessionUser } = this.props
-    const { showModal, showTwitterForm } = this.state
+    const { showModal, showTwitterForm, task } = this.state
 
     return (
       <React.Fragment>
         <Card
-          onClick={valid ? this.openModal : _.noop}
+          onClick={this.isValid() ? this.openModal : _.noop}
           css={css`
-            cursor: ${valid ? 'pointer' : 'default'};
+            cursor: ${this.isValid() ? 'pointer' : 'default'};
             &:hover {
               box-shadow: rgba(0, 0, 0, 0.12) 0px 8px 24px;
             }
@@ -121,12 +131,25 @@ class TwitterEarnCard extends Component {
                     Share and tweet about debut.  Invite friends and family.  Get rewarded.
                   </p>
                   <div className="mt-two">
-                    <Button
-                      color="primary"
-                      disabled={!valid}
+                    {
+                      this.isValid() ?
+                      <Button
+                        color="primary"
+                        disabled={!valid }
+                        >
+                        Begin
+                      </Button> :
+                      <Button
+                        color="primary"
+                        disabled
                       >
-                      Begin
-                    </Button>
+                        {
+                          task ?
+                          'Completed' :
+                          'Incomplete'
+                        }
+                      </Button>
+                    }
                   </div>
                 </div>
               </div>
