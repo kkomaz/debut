@@ -4,6 +4,7 @@ import {
   FETCH_TASKS_SUCCESS,
 } from 'actions'
 import { filterListFromList } from './utils'
+import toggleNotification from 'utils/notifier/toggleNotification'
 
 const defaultState = {
   list: [],
@@ -16,6 +17,7 @@ export default function taskReducer(state = defaultState, action) {
       return { ...state, loading: true }
     }
     case TASK_CREATE_TWITTER_SUCCESS: {
+      toggleNotification('success', 'Task Completed!')
       return { ...state, list: [...state.list, action.payload] }
     }
     case FETCH_TASKS_SUCCESS: {

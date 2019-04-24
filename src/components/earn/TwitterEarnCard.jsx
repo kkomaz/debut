@@ -38,7 +38,7 @@ class TwitterEarnCard extends Component {
   static propTypes = {
     valid: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
-    tasks: PropTypes.array.isRequired,
+    task: PropTypes.object.isRequired,
   }
 
   onCancel = () => {

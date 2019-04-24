@@ -8,7 +8,8 @@ import {
 
 const fetchTasks = async (action) => {
   const tasks = await Task.fetchList({
-    month: action.payload.month
+    month: action.payload.month,
+    username: action.payload.username,
   })
 
   return _.map(tasks, 'attrs')

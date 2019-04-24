@@ -12,7 +12,7 @@ import moment from 'moment'
 import earnImg from 'assets/earn3.jpg'
 
 // Component Imports
-import { AprilEarn } from 'components/earn'
+import { AprilEarn, SubmissionHistory } from 'components/earn'
 import { UserContext } from 'components/User/UserProvider'
 
 class Earn extends Component {
@@ -118,6 +118,23 @@ class Earn extends Component {
           <div
             css={css`
               display: flex;
+              justify-content: center;
+              margin-bottom: 10px;
+            `}
+          >
+            <p
+              onClick={() => this.setcurrentMonthView('history')}
+              css={theme => css`
+                color: ${theme.colors.blue};
+                cursor: pointer;
+              `}
+            >
+              Submission history
+            </p>
+          </div>
+          <div
+            css={css`
+              display: flex;
               width: 100%;
               justify-content: center;
               margin-bottom: 20px;
@@ -199,6 +216,12 @@ class Earn extends Component {
             <AprilEarn
               currentMonth={this.state.currentMonth}
               sessionUser={sessionUser}
+            />
+          }
+          {
+            currentMonthView === 'history' &&
+            <SubmissionHistory
+              username={sessionUser.username}
             />
           }
         </Container>

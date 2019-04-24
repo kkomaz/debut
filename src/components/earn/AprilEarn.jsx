@@ -24,7 +24,7 @@ class AprilEarn extends Component {
     currentMonth: PropTypes.number.isRequired,
     loading: PropTypes.bool.isRequired,
     sessionUser: PropTypes.object.isRequired,
-    twitterTask: PropTypes.object.isRequired,
+    twitterTask: PropTypes.object,
   }
 
   componentDidMount() {

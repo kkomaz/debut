@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import PropTypes from 'prop-types'
 import { css, jsx } from '@emotion/core'
+import _ from 'lodash'
 import {
   Button,
   Heading
@@ -113,7 +114,11 @@ const TwitterEarnGuidelines = (props) => {
 TwitterEarnGuidelines.propTypes = {
   onDecline: PropTypes.func.isRequired,
   onAccept: PropTypes.func.isRequired,
-  setShowTwitterForm: PropTypes.func.isRequired,
+  setShowTwitterForm: PropTypes.func,
+}
+
+TwitterEarnGuidelines.defaultProps = {
+  setShowTwitterForm: _.noop,
 }
 
 export default TwitterEarnGuidelines
