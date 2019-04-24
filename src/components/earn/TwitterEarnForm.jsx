@@ -77,7 +77,7 @@ class TwitterEarnForm extends Component {
           `}
         >
           <TwitterMentionButton
-            options={{ text: 'Join the debut community and earn some BTC!  More info at', via: 'the_debut_app' }}
+            options={{ text: 'Join the debut community.  Share moments, explore feeds, and earn some BTC!  More info at', via: 'the_debut_app' }}
           />
         </div>
         <form
