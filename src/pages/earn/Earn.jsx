@@ -11,7 +11,7 @@ import {
   Hero,
 } from 'components/bulma'
 import moment from 'moment'
-import earnImg from 'assets/earn3.jpg'
+import earnImg from 'assets/earn3.png'
 
 // Component Imports
 import { AprilEarn, SubmissionHistory } from 'components/earn'

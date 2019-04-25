@@ -97,7 +97,7 @@ class TwitterEarnForm extends Component {
           `}
         >
           <TwitterMentionButton
-            options={{ text: 'Join the debut community.  Share moments, explore feeds, and earn some BTC!  More info at', via: 'the_debut_app' }}
+            options={{ text: 'Join the debut community.  Share moments, explore feeds, and earn some BTC! #makethedebut More info at', via: 'the_debut_app' }}
           />
         </div>
         <form
@@ -140,7 +140,7 @@ class TwitterEarnForm extends Component {
                   font-size: 14px;
                 `}
                 name="tweetLink"
-                placeholder="Tweet Link"
+                placeholder="https://twitter.com/the_debut_app/status/....."
                 onChange={this.onChange}
                 value={this.state.tweetLink}
               />
