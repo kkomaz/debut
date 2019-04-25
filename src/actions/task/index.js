@@ -1,2 +1,2 @@
-export { default as requestTaskCreateTwitter } from './requestTaskCreateTwitter'
+export { default as requestCreateTask } from './requestCreateTask'
 export { default as requestFetchTasks } from './requestFetchTasks'

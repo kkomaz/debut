@@ -1,10 +1,13 @@
 /** @jsx jsx */
 import { jsx, css } from '@emotion/core'
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import {
   Button,
+  Heading,
+  Modal,
+  Section,
   Table,
 } from 'components/bulma'
 import Task from 'model/task'
@@ -17,6 +20,8 @@ class SubmissionHistory extends Component {
     tasks: [],
     submissions: {},
     error: undefined,
+    showModal: false,
+    currentTask: {},
   }
 
   static propTypes = {
@@ -74,75 +79,136 @@ class SubmissionHistory extends Component {
     return 'Rejected'
   }
 
+  closeModal = () => {
+    this.setState({ showModal: false })
+  }
+
+  openModal = (task) => {
+    this.setState({
+      showModal: true,
+      currentTask: task,
+    })
+  }
+
+  deleteTask = () => {
+    console.log(this.state.currentTask)
+  }
+
   render() {
+    const { showModal } = this.state
+
     return (
-      <Table>
-        <thead>
-          <tr>
-            <th>
-              <abbr title="Blockstack ID">Blockstack ID</abbr>
-            </th>
-            <th>
-              <abbr title="Task">Task</abbr>
-            </th>
-            <th>
-              <abbr title="Completed At">Completed At</abbr>
-            </th>
-            <th>
-              <abbr title="Link">Link</abbr>
-            </th>
-            <th>
-              <abbr title="Parent Username">Parent Username</abbr>
-            </th>
-            <th>
-              <abbr title="Status">Status</abbr>
-            </th>
-            <th>
-              <abbr title="Actions">Actions</abbr>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            _.map(this.state.tasks, (task) => {
-              return (
-                <tr key={task._id}>
-                  <td>
-                    {task.username}
-                  </td>
+      <React.Fragment>
+        <Table>
+          <thead>
+            <tr>
+              <th>
+                <abbr title="Blockstack ID">Blockstack ID</abbr>
+              </th>
+              <th>
+                <abbr title="Task">Task</abbr>
+              </th>
+              <th>
+                <abbr title="Completed At">Completed At</abbr>
+              </th>
+              <th>
+                <abbr title="Link">Link</abbr>
+              </th>
+              <th>
+                <abbr title="Parent Username">Parent Username</abbr>
+              </th>
+              <th>
+                <abbr title="Status">Status</abbr>
+              </th>
+              <th>
+                <abbr title="Actions">Actions</abbr>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              _.map(this.state.tasks, (task) => {
+                return (
+                  <tr key={task._id}>
+                    <td>
+                      {task.username}
+                    </td>
                     <td
+                      css={css`
+                        text-transform: capitalize;
+                        `}
+                        >
+                        {task.type}
+                      </td>
+                      <td>
+                        {moment(task.createdAt).utc().format("MMM DD YYYY")}
+                      </td>
+                      <td>
+                        {linkifyText(task.link)}
+                      </td>
+                      <td>
+                        {task.parent_username}
+                      </td>
+                      <td>
+                        {this.renderStatus(task)}
+                      </td>
+                      <td>
+                        <Button
+                          onClick={() => this.openModal(task)}
+                          color="danger"
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </Table>
+          <Modal
+            show={showModal}
+            onClose={this.closeModal}
+            closeOnEsc
+          >
+            <Modal.Content>
+              <Section
+                css={css`
+                  align-items: center;
+                  background-color: white;
+                  display: flex;
+                  justify-content: center;
+                  flex-direction: column;
+                `}
+              >
+                <Heading size={6}>
+                  Are you sure you want to delete this task?
+                </Heading>
+                <div
+                  css={css`
+                    display: flex;
+                    align-items: center;
+                  `}
+                >
+                  <Button
                     css={css`
-                      text-transform: capitalize;
-                      `}
-                      >
-                      {task.type}
-                    </td>
-                    <td>
-                      {moment(task.createdAt).utc().format("MMM DD YYYY")}
-                    </td>
-                    <td>
-                      {linkifyText(task.link)}
-                    </td>
-                    <td>
-                      {task.parent_username}
-                    </td>
-                    <td>
-                      {this.renderStatus(task)}
-                    </td>
-                    <td>
-                      <Button onClick={() => this.edit(task)} color="primary" css={css`margin-right: 5px;`}>
-                        Edit
-                      </Button>
-                      <Button onClick={() => this.delete(task)} color="danger">
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                )
-            })
-          }
-        </tbody>
-      </Table>
+                      margin-right: 10px;
+                    `}
+                    onClick={this.closeModal}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={this.deleteTask}
+                    color="danger"
+                  >
+                    Confirm
+                  </Button>
+                </div>
+              </Section>
+            </Modal.Content>
+          </Modal>
+      </React.Fragment>
     )
   }
 }

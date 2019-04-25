@@ -1,5 +1,5 @@
 import {
-  TASK_CREATE_TWITTER_SUCCESS,
+  CREATE_TASK_SUCCESS,
   REQUEST_FETCH_TASKS,
   FETCH_TASKS_SUCCESS,
 } from 'actions'
@@ -16,7 +16,7 @@ export default function taskReducer(state = defaultState, action) {
     case REQUEST_FETCH_TASKS: {
       return { ...state, loading: true }
     }
-    case TASK_CREATE_TWITTER_SUCCESS: {
+    case CREATE_TASK_SUCCESS: {
       toggleNotification('success', 'Task Completed!')
       return { ...state, list: [...state.list, action.payload] }
     }

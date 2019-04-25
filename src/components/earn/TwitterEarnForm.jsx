@@ -20,7 +20,7 @@ import SubmitFooter from 'components/UI/Form/SubmitFooter'
 import { TwitterMentionButton } from 'react-twitter-embed'
 
 // Action Imports
-import { requestTaskCreateTwitter } from 'actions/task'
+import { requestCreateTask } from 'actions/task'
 
 class TwitterEarnForm extends Component {
   state = {
@@ -75,7 +75,7 @@ class TwitterEarnForm extends Component {
       month: moment().month()
     }
 
-    this.props.requestTaskCreateTwitter(params)
+    this.props.requestCreateTask(params)
     this.props.onComplete()
   }
 
@@ -191,5 +191,5 @@ TwitterEarnForm.defaultProps = {
 }
 
 export default connect(null, {
-  requestTaskCreateTwitter,
+  requestCreateTask,
 })(TwitterEarnForm)
