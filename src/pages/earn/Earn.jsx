@@ -97,7 +97,7 @@ class Earn extends Component {
                           font-weight: 800;
                         `}
                       >
-                        35%
+                        40%
                       </span>* of the App Mining rewards debut receieves amongst the pool of participants.
                   </h4>
                   <h4 css={theme => css`
@@ -148,7 +148,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(3)}
               disabled={currentMonth < 3}
             >
-              April (50%)
+              April (40%)
             </Button>
             <Button
               color="primary"
@@ -158,7 +158,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(4)}
               disabled={currentMonth < 4}
             >
-              May (50%)
+              May (40%)
             </Button>
             <Button
               color="primary"
@@ -168,7 +168,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(5)}
               disabled={currentMonth < 5}
             >
-              June (50%)
+              June (40%)
             </Button>
             <Button
               color="primary"
@@ -178,7 +178,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(6)}
               disabled={currentMonth < 6}
             >
-              July (50%)
+              July (40%)
             </Button>
             <Button
               color="primary"
@@ -188,7 +188,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(7)}
               disabled={currentMonth < 7}
             >
-              August (30%)
+              August (20%)
             </Button>
             <Button
               color="primary"
@@ -198,7 +198,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(8)}
               disabled={currentMonth < 8}
             >
-              September (30%)
+              September (20%)
             </Button>
             <Button
               color="primary"
@@ -208,7 +208,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(9)}
               disabled={currentMonth < 9}
             >
-              October (30%)
+              October (20%)
             </Button>
           </div>
           {

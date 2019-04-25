@@ -4,11 +4,13 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import {
+  Button,
   Table,
 } from 'components/bulma'
 import Task from 'model/task'
 import Submission from 'model/submission'
 import moment from 'moment'
+import { linkifyText } from 'utils/decorator'
 
 class SubmissionHistory extends Component {
   state = {
@@ -78,13 +80,25 @@ class SubmissionHistory extends Component {
         <thead>
           <tr>
             <th>
+              <abbr title="Blockstack ID">Blockstack ID</abbr>
+            </th>
+            <th>
               <abbr title="Task">Task</abbr>
             </th>
             <th>
               <abbr title="Completed At">Completed At</abbr>
             </th>
             <th>
+              <abbr title="Link">Link</abbr>
+            </th>
+            <th>
+              <abbr title="Parent Username">Parent Username</abbr>
+            </th>
+            <th>
               <abbr title="Status">Status</abbr>
+            </th>
+            <th>
+              <abbr title="Actions">Actions</abbr>
             </th>
           </tr>
         </thead>
@@ -93,21 +107,38 @@ class SubmissionHistory extends Component {
             _.map(this.state.tasks, (task) => {
               return (
                 <tr key={task._id}>
-                  <td
+                  <td>
+                    {task.username}
+                  </td>
+                    <td
                     css={css`
                       text-transform: capitalize;
-                    `}
-                  >
-                    {task.type}
-                  </td>
-                  <td>
-                    {moment(task.createdAt).utc().format("MMM DD YYYY")}
-                  </td>
-                  <td>
-                    {this.renderStatus(task)}
-                  </td>
-                </tr>
-              )
+                      `}
+                      >
+                      {task.type}
+                    </td>
+                    <td>
+                      {moment(task.createdAt).utc().format("MMM DD YYYY")}
+                    </td>
+                    <td>
+                      {linkifyText(task.link)}
+                    </td>
+                    <td>
+                      {task.parent_username}
+                    </td>
+                    <td>
+                      {this.renderStatus(task)}
+                    </td>
+                    <td>
+                      <Button onClick={() => this.edit(task)} color="primary" css={css`margin-right: 5px;`}>
+                        Edit
+                      </Button>
+                      <Button onClick={() => this.delete(task)} color="danger">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                )
             })
           }
         </tbody>

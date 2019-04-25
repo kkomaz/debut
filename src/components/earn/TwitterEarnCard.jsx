@@ -125,7 +125,7 @@ class TwitterEarnCard extends Component {
                     color="#00acee"
                   />
                   <h4 className="mt-one">
-                    Twitter <span css={theme => css`color: ${theme.colors.blue}`}>(35%)</span>
+                    Twitter <span css={theme => css`color: ${theme.colors.blue}`}>(40%)</span>
                   </h4>
                   <p>
                     Share and tweet about debut.  Invite friends and family.  Get rewarded.
