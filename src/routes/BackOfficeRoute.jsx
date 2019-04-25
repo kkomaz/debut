@@ -20,10 +20,6 @@ class BackOfficeRoute extends Component {
           path={`${match.url}`}
           render={() => <BoSubmissionHistory />}
         />
-        <Route
-          path={`${match.url}/settings`}
-          render={() => <div>Settings</div>}
-        />
       </Switch>
     )
   }

@@ -69,7 +69,7 @@ class TwitterEarnForm extends Component {
     const params = {
       type: 'twitter',
       username,
-      twitter_id: twitterId,
+      parent_username: twitterId,
       link: tweetLink,
       btc_address: btcAddress,
       month: moment().month()

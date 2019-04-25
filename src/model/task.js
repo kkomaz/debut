@@ -12,7 +12,7 @@ export default class Task extends Model {
       type: String,
       decrypted: true,
     },
-    twitter_id: {
+    parent_username: {
       type: String,
       decrypted: true,
     },

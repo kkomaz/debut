@@ -10,7 +10,6 @@ import {
   Card,
   Columns,
   Content,
-  Image,
   Modal,
   ModalHeader,
   Section,
@@ -64,7 +63,12 @@ class TwitterEarnCard extends Component {
 
   isValid = () => {
     const { valid, task } = this.props
+
     return valid && _.isEmpty(task)
+  }
+
+  addDefaultSrc = (evt) => {
+    evt.target.src = 'https://i.imgur.com/w1ur3Lq.jpg'
   }
 
   render() {
@@ -95,7 +99,7 @@ class TwitterEarnCard extends Component {
                   display: flex;
                 `}
               >
-                <Image
+                <div
                   style={{
                     backgroundImage: `url(${twitterEarn})`,
                     backgroundSize: 'cover',
@@ -170,7 +174,7 @@ class TwitterEarnCard extends Component {
               />
               <Columns className="mt-half">
                 <Columns.Column size={6}>
-                  <Image
+                  <div
                     css={css`
                       background-image: url(${tweetFormImg});
                       background-size: cover;

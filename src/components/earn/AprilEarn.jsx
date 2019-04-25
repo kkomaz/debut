@@ -53,7 +53,7 @@ const mapStateToProps = (state, ownProps) => {
   const tasks = _.filter(state.task.list, (task) => task.month === 3)
   const loading = state.task.loading
 
-  const twitterTask = _.find(tasks, (task) => task.type === 'twitter')
+  const twitterTask = _.find(tasks, (task) => task.type === 'twitter' && task.username === ownProps.sessionUser.username)
 
   return {
     loading,

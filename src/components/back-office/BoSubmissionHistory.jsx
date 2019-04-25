@@ -1,5 +1,4 @@
 /** @jsx jsx */
-import React from 'react'
 import { jsx, css } from '@emotion/core'
 import { Component } from 'react'
 import _ from 'lodash'
@@ -8,6 +7,8 @@ import Task from 'model/task'
 import Submission from 'model/submission'
 import moment from 'moment'
 import { linkifyText } from 'utils/decorator'
+import { UserContext } from 'components/User/UserProvider'
+import { withRouter } from 'react-router-dom'
 
 class SubmissionHistory extends Component {
   state = {
@@ -15,6 +16,15 @@ class SubmissionHistory extends Component {
     submissions: {},
     error: undefined,
     selectedMonth: moment().month(),
+  }
+
+  componentDidMount() {
+    const { sessionUser } = this.context.state
+    const { history } = this.props
+
+    if (sessionUser.username !== 'kkomaz.id') {
+      history.push('/')
+    }
   }
 
   onChange = (e) => {
@@ -169,7 +179,10 @@ class SubmissionHistory extends Component {
                 <abbr title="Completed At">Completed At</abbr>
               </th>
               <th>
-                <abbr title="Linkt">Link</abbr>
+                <abbr title="Link">Link</abbr>
+              </th>
+              <th>
+                <abbr title="Parent Username">Parent Username</abbr>
               </th>
               <th>
                 <abbr title="Status">Status</abbr>
@@ -201,6 +214,9 @@ class SubmissionHistory extends Component {
                         {linkifyText(task.link)}
                       </td>
                       <td>
+                        {task.parent_username}
+                      </td>
+                      <td>
                         {this.renderStatus(task)}
                       </td>
                       <td>
@@ -222,4 +238,5 @@ class SubmissionHistory extends Component {
   }
 }
 
-export default SubmissionHistory
+SubmissionHistory.contextType = UserContext
+export default withRouter(SubmissionHistory)
