@@ -15,6 +15,10 @@ export default class Submission extends Model {
     approved: {
       type: Boolean,
       decrypted: true,
+    },
+    month: {
+      type: Boolean,
+      decrypted: true,
     }
   }
 }

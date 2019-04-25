@@ -16,6 +16,7 @@ import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
 import { requestSingleUser } from 'actions/user'
 import EarnRoute from './EarnRoute'
+import BackOfficeRoute from './BackOfficeRoute'
 
 import "./RootRoute.scss";
 
@@ -110,6 +111,15 @@ class RootRoute extends Component {
                   username={username}
                   userSession={userSession}
                   location={location}
+                />
+              }
+            />
+
+            <Route
+              path="/back-office"
+              render={({ match }) =>
+                <BackOfficeRoute
+                  match={match}
                 />
               }
             />

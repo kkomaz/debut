@@ -70,7 +70,7 @@ class TwitterEarnForm extends Component {
       type: 'twitter',
       username,
       twitter_id: twitterId,
-      tweet_link: tweetLink,
+      link: tweetLink,
       btc_address: btcAddress,
       month: moment().month()
     }

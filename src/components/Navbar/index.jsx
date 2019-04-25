@@ -231,6 +231,12 @@ class NavbarComp extends Component {
     history.push('/earn')
   }
 
+  goToBackOffice = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/back-office')
+  }
+
   onChange = (e) => {
     e.preventDefault()
     if (!this.dropdown.state.open) {
@@ -400,6 +406,12 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
+                    {
+                      user.username === 'kkomaz.id' &&
+                      <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToBackOffice}>
+                        Back Office
+                      </Navbar.Item>
+                    }
                     <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
                       Earn
                     </Navbar.Item>

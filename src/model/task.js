@@ -16,7 +16,7 @@ export default class Task extends Model {
       type: String,
       decrypted: true,
     },
-    tweet_link: {
+    link: {
       type: String,
       decrypted: true,
     },
