@@ -5,7 +5,9 @@ import { Component } from 'react'
 import { jsx, css } from '@emotion/core'
 import {
   Button,
+  Card,
   Container,
+  Heading,
   Hero,
 } from 'components/bulma'
 import moment from 'moment'
@@ -14,6 +16,9 @@ import earnImg from 'assets/earn3.jpg'
 // Component Imports
 import { AprilEarn, SubmissionHistory } from 'components/earn'
 import { UserContext } from 'components/User/UserProvider'
+
+// Util Imports
+import { linkifyText } from 'utils/decorator'
 
 class Earn extends Component {
   constructor(props) {
@@ -224,6 +229,65 @@ class Earn extends Component {
               username={sessionUser.username}
             />
           }
+          <Card
+            css={css`
+              margin-top: 50px;
+            `}
+          >
+            <Card.Content>
+              <div
+                css={css`
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  padding: 50px;
+                  flex-direction: column;
+                `}
+              >
+                <Heading size={4}>
+                  Earn Rules
+                </Heading>
+                <ul>
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    1. For the first 3 months, (May, June, July) debut will split 40% of the app mining rewards received from Blockstack amongst the approved users.
+                    Learn more about app mining via {linkifyText('https://app.co/mining')}
+                  </li>
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    2. The next 3 months, (August, September, October) debut will reduce the split to 20% of the app mining rewards.
+                  </li>
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    3. If/When more tasks are added, the weight on each task will be properly redistributed based on the 40/20 percentage depending on the month.
+                  </li>
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    4. debut has the right to reject any submission.
+                  </li>
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    5. debut has the right to discontinue the earn feature at any time.
+                  </li>
+                </ul>
+              </div>
+            </Card.Content>
+          </Card>
         </Container>
       </div>
     )

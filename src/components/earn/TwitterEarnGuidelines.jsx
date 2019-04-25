@@ -24,7 +24,7 @@ const TwitterEarnGuidelines = (props) => {
         `}
       >
         <strong>
-            Please each line carefully.  Failure to follow these guidelines will disqualify your entry or receive your BTC that month.
+          Please each line carefully.  Failure to follow these guidelines will disqualify your entry.
         </strong>
       </p>
       <p
@@ -40,7 +40,7 @@ const TwitterEarnGuidelines = (props) => {
           margin-bottom: 5px;
         `}
       >
-        2. Twitter account must have more than five followers
+        2. Twitter account must have more than <strong>100</strong> followers
       </p>
 
       <p
@@ -80,12 +80,20 @@ const TwitterEarnGuidelines = (props) => {
           margin-bottom: 5px;
         `}
       >
-        All fields can be editable until the end of the month in which your entry will go into a review process.  If accepted, you will receive your BTC from
-        the next months rewards.  (May submission recieves June awards)  If rejected, refer to guidelines 1-4.
+        If you make a mistake after submission, you can delete your submission and re-submit until the end of the current month.
+      </p>
+
+      <p
+        css={css`
+          margin-bottom: 5px;
+        `}
+      >
+        During the review process, if approved, you will receive your BTC from the next months rewards.
+        (<strong>May</strong> submission recieves <strong>June</strong> awards)  If rejected, refer to guidelines 1-5.
       </p>
 
       <p>
-        If suspected of using a twitter bot, you will automatically be disqualified that current month.
+        If suspected of using a <strong>twitter bot</strong>, you will automatically be disqualified that current month.
       </p>
       <div
         css={css`
