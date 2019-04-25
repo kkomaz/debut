@@ -8,11 +8,14 @@ import {
   Table,
 } from 'components/bulma'
 import Task from 'model/task'
+import Submission from 'model/submission'
 import moment from 'moment'
 
 class SubmissionHistory extends Component {
   state = {
-    tasks: []
+    tasks: [],
+    submissions: {},
+    error: undefined,
   }
 
   static propTypes = {
@@ -21,13 +24,53 @@ class SubmissionHistory extends Component {
 
   componentDidMount = async () => {
     const { username } = this.props
-    const result = await Task.fetchList({
-      username
+    let tasks
+    let submissions = {}
+    let error
+
+    try {
+      const result = await Task.fetchList({
+        username
+      })
+      tasks = _.map(result, 'attrs')
+    } catch (e) {
+      error = [...this.state.error, { message: 'Task Fetch failed' }]
+    }
+
+    try {
+      const result = await Submission.fetchList({
+        username
+      })
+      const submissionsArray = _.map(result, 'attrs')
+
+      if (submissionsArray.length > 0) {
+        _.each(submissionsArray, (s) => {
+          submissions[s.task_id] = s
+        })
+      }
+    } catch (e) {
+      error = [...this.state.error, { message: 'Submission Fetch failed' }]
+    }
+
+    return this.setState({
+      tasks,
+      submissions,
+      error,
     })
+  }
 
-    const tasks = _.map(result, 'attrs')
+  renderStatus = (task) => {
+    const { submissions } = this.state
 
-    return this.setState({ tasks })
+    if (!submissions[task._id]) {
+      return 'Pending'
+    }
+
+    if (submissions[task._id].approved) {
+      return 'Approved'
+    }
+
+    return 'Rejected'
   }
 
   render() {
@@ -50,7 +93,7 @@ class SubmissionHistory extends Component {
           {
             _.map(this.state.tasks, (task) => {
               return (
-                <tr>
+                <tr key={task._id}>
                   <td
                     css={css`
                       text-transform: capitalize;
@@ -62,7 +105,7 @@ class SubmissionHistory extends Component {
                     {moment(task.createdAt).utc().format("MMM DD YYYY")}
                   </td>
                   <td>
-                    Pending
+                    {this.renderStatus(task)}
                   </td>
                 </tr>
               )
