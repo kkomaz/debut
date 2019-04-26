@@ -9,6 +9,7 @@ import {
 import "./_login.scss"
 import debutInfo from 'assets/debut_info.png'
 import { Loader } from 'components/Loader'
+import { isIE } from 'utils/browser/compatability'
 
 class Login extends Component {
   state = {
@@ -19,10 +20,24 @@ class Login extends Component {
     loggingIn: PropTypes.bool.isRequired,
   }
 
+  componentDidMount() {
+    if (!isIE) {
+      const search = window.location.search
+      const params = new URLSearchParams(search)
+      const landing = params.get('landing')
+
+      if (landing === 'true') {
+        this.signIn()
+      }
+    }
+  }
+
   signIn = (e) => {
     const { userSession } = this.props
 
-    e.preventDefault()
+    if (e) {
+      e.preventDefault()
+    }
     userSession.redirectToSignIn()
     this.setState({ loadingUser: true })
   }
