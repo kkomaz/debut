@@ -1,8 +1,19 @@
 /** @jsx jsx */
-import { jsx, css } from '@emotion/core'
+
+// Library Imports
 import React, { Component } from 'react'
+import { jsx, css } from '@emotion/core'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
+import moment from 'moment'
+
+// Utils Imports
+import { linkifyText } from 'utils/decorator'
+import Task from 'model/task'
+import Submission from 'model/submission'
+
+// Component Imports
 import {
   Button,
   Heading,
@@ -10,14 +21,15 @@ import {
   Section,
   Table,
 } from 'components/bulma'
-import Task from 'model/task'
-import Submission from 'model/submission'
-import moment from 'moment'
-import { linkifyText } from 'utils/decorator'
+
+// Action Imports
+import {
+  requestDeleteTask,
+  requestFetchTasks,
+} from 'actions/task'
 
 class SubmissionHistory extends Component {
   state = {
-    tasks: [],
     submissions: {},
     error: undefined,
     showModal: false,
@@ -27,22 +39,15 @@ class SubmissionHistory extends Component {
   static propTypes = {
     username: PropTypes.string.isRequired,
     currentMonth: PropTypes.number.isRequired,
+    tasks: PropTypes.array.isRequired,
   }
 
   componentDidMount = async () => {
     const { username } = this.props
-    let tasks
     let submissions = {}
     let error
 
-    try {
-      const result = await Task.fetchList({
-        username
-      })
-      tasks = _.map(result, 'attrs')
-    } catch (e) {
-      error = [...this.state.error, { message: 'Task Fetch failed' }]
-    }
+    this.props.requestFetchTasks({ username })
 
     try {
       const result = await Submission.fetchList({
@@ -60,7 +65,6 @@ class SubmissionHistory extends Component {
     }
 
     return this.setState({
-      tasks,
       submissions,
       error,
     })
@@ -91,8 +95,8 @@ class SubmissionHistory extends Component {
     })
   }
 
-  deleteTask = () => {
-    console.log(this.state.currentTask)
+  deleteTask = (task) => {
+    this.props.requestDeleteTask(task._id)
   }
 
   render() {
@@ -132,7 +136,7 @@ class SubmissionHistory extends Component {
           </thead>
           <tbody>
             {
-              _.map(this.state.tasks, (task) => {
+              _.map(this.props.tasks, (task) => {
                 return (
                   <tr key={task._id}>
                     <td>
@@ -162,7 +166,7 @@ class SubmissionHistory extends Component {
                       </td>
                       <td>
                         <Button
-                          onClick={() => this.openModal(task)}
+                          onClick={() => this.deleteTask(task)}
                           color="danger"
                           disabled={task.month !== currentMonth}
                         >
@@ -222,4 +226,13 @@ class SubmissionHistory extends Component {
   }
 }
 
-export default SubmissionHistory
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.task.list,
+  }
+}
+
+export default connect(mapStateToProps, {
+  requestDeleteTask,
+  requestFetchTasks,
+})(SubmissionHistory)

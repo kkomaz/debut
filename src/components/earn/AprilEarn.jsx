@@ -28,7 +28,7 @@ class AprilEarn extends Component {
   }
 
   componentDidMount() {
-    this.props.requestFetchTasks(3)
+    this.props.requestFetchTasks({ month: 3 })
   }
 
   render() {
