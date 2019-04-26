@@ -40,7 +40,7 @@ const TwitterEarnGuidelines = (props) => {
           margin-bottom: 5px;
         `}
       >
-        2. Twitter account must have more than <strong>100</strong> followers
+        2. Twitter account must have <strong css={theme => css`color: ${theme.colors.danger};`}>100</strong> or more followers
       </p>
 
       <p
@@ -80,7 +80,7 @@ const TwitterEarnGuidelines = (props) => {
           margin-bottom: 5px;
         `}
       >
-        If you make a mistake after submission, you can delete your submission and re-submit until the end of the current month.
+        If you make a mistake after submission, you can <strong>delete your submission</strong> and re-submit until the end of the current month.
       </p>
 
       <p

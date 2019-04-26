@@ -118,6 +118,9 @@ class SubmissionHistory extends Component {
                 <abbr title="Parent Username">Parent Username</abbr>
               </th>
               <th>
+                <abbr title="BTC Address">BTC Address</abbr>
+              </th>
+              <th>
                 <abbr title="Status">Status</abbr>
               </th>
               <th>
@@ -148,6 +151,9 @@ class SubmissionHistory extends Component {
                       </td>
                       <td>
                         {task.parent_username}
+                      </td>
+                      <td>
+                        {task.btc_address}
                       </td>
                       <td>
                         {this.renderStatus(task)}

@@ -56,7 +56,6 @@ class NavbarComp extends Component {
     removeAdminComment: PropTypes.func.isRequired,
     removeAdminMention: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
-    setNavbarTab: PropTypes.func.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setView: PropTypes.func.isRequired,
     view: PropTypes.object,
