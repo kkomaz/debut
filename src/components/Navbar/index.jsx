@@ -425,7 +425,13 @@ class NavbarComp extends Component {
                     </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
-                        _.isEmpty(user) && loading ? <IconLoader /> :
+                        _.isEmpty(user) && loading ?
+                        <IconLoader
+                          css={css`
+                            margin-right: 40px;
+                            margin-left: 12px;
+                          `}
+                        /> :
                         <div className="debut-nav-bar__user-identity navbar-link">
                           <img
                             onError={this.addDefaultSrc}

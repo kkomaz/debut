@@ -10,7 +10,6 @@ import moment from 'moment'
 
 // Utils Imports
 import { linkifyText } from 'utils/decorator'
-import Task from 'model/task'
 import Submission from 'model/submission'
 
 // Component Imports
