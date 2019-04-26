@@ -411,17 +411,20 @@ class NavbarComp extends Component {
                         Back Office
                       </Navbar.Item>
                     }
-                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
-                      Earn
-                    </Navbar.Item>
                     <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToHome}>
                       Home
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToProfile}>
+                      Profile
                     </Navbar.Item>
                     <Navbar.Item
                       className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
                       onClick={this.goToExplore}
                     >
                       Explore
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
+                      Earn
                     </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
@@ -471,7 +474,6 @@ class NavbarComp extends Component {
                           goToRecent={this.goToRecent}
                           goToRecentMentions={this.goToRecentMentions}
                           onHelpClick={this.goToHelp}
-                          onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
                           user={user}
                           viewObj={viewObj}

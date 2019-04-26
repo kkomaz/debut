@@ -16,7 +16,6 @@ class NavbarList extends Component {
   static propTypes = {
     goToRecentMentions: PropTypes.func.isRequired,
     onHelpClick: PropTypes.func.isRequired,
-    onProfileClick: PropTypes.func.isRequired,
     onSignOutClick: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
     viewObj: PropTypes.shape({
@@ -37,11 +36,6 @@ class NavbarList extends Component {
         }}
       >
         <Menu.List>
-          <Menu.List.Item
-            onClick={this.props.onProfileClick}
-          >
-            Profile
-          </Menu.List.Item>
           <Menu.List.Item
             onClick={this.props.onHelpClick}
           >
