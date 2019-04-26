@@ -227,6 +227,7 @@ class Earn extends Component {
             currentMonthView === 'history' &&
             <SubmissionHistory
               username={sessionUser.username}
+              currentMonth={currentMonth}
             />
           }
           <Card

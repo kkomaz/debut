@@ -26,6 +26,7 @@ class SubmissionHistory extends Component {
 
   static propTypes = {
     username: PropTypes.string.isRequired,
+    currentMonth: PropTypes.number.isRequired,
   }
 
   componentDidMount = async () => {
@@ -96,6 +97,7 @@ class SubmissionHistory extends Component {
 
   render() {
     const { showModal } = this.state
+    const { currentMonth } = this.props
 
     return (
       <React.Fragment>
@@ -162,6 +164,7 @@ class SubmissionHistory extends Component {
                         <Button
                           onClick={() => this.openModal(task)}
                           color="danger"
+                          disabled={task.month !== currentMonth}
                         >
                           Delete
                         </Button>
