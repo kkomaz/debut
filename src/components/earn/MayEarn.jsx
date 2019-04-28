@@ -45,7 +45,6 @@ class MayEarn extends Component {
 
   render() {
     const {
-      currentMonth,
       loading,
       sessionUser,
       twitterTask,
@@ -53,17 +52,14 @@ class MayEarn extends Component {
 
     return (
       <div>
-        {
-          currentMonth !== 4 &&
-          <Heading
-            size={6}
-            css={css`
-              text-align: center;
-              `}
-              >
-              Task will be available May 1st, 2019
-            </Heading>
-        }
+        <Heading
+          size={6}
+          css={css`
+            text-align: center;
+            `}
+            >
+            Task will be available May 1st, 2019
+        </Heading>
 
         <Heading
           size={6}

@@ -14,6 +14,7 @@ import {
   ModalHeader,
   Section,
 } from 'components/bulma'
+import moment from 'moment'
 
 // Component Imports
 import { Icon } from 'components/icon'
@@ -75,6 +76,9 @@ class TwitterEarnCard extends Component {
     const { valid, sessionUser, task } = this.props
     const { showModal, showTwitterForm } = this.state
 
+    // change to disabled={!valid} on begin
+    // Remove moment
+
     return (
       <React.Fragment>
         <Card
@@ -135,7 +139,7 @@ class TwitterEarnCard extends Component {
                       this.isValid() ?
                       <Button
                         color="primary"
-                        disabled={!valid }
+                        disabled={moment().month() !== 4}
                         >
                         Begin
                       </Button> :

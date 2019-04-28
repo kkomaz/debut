@@ -15,7 +15,6 @@ import earnImg from 'assets/earn3.png'
 
 // Component Imports
 import {
-  AprilEarn,
   MayEarn,
   SubmissionHistory,
 } from 'components/earn'
@@ -28,7 +27,8 @@ class Earn extends Component {
   constructor(props) {
     super(props)
 
-    const currentMonth = moment().month()
+    // Remove hardcoded value
+    const currentMonth = 4 || moment().month()
 
     this.state = {
       currentMonth,
@@ -154,16 +154,6 @@ class Earn extends Component {
               css={css`
                 margin-right: 10px;
               `}
-              onClick={() => this.setcurrentMonthView(3)}
-              disabled={currentMonth < 3}
-            >
-              April (30%)
-            </Button>
-            <Button
-              color="primary"
-              css={css`
-                margin-right: 10px;
-              `}
               onClick={() => this.setcurrentMonthView(4)}
               disabled={currentMonth < 3}
             >
@@ -221,13 +211,6 @@ class Earn extends Component {
             </Button>
           </div>
           {
-            currentMonthView === 3 &&
-            <AprilEarn
-              currentMonth={this.state.currentMonth}
-              sessionUser={sessionUser}
-            />
-          }
-          {
             currentMonthView === 4 &&
             <MayEarn
               currentMonth={this.state.currentMonth}
@@ -274,7 +257,7 @@ class Earn extends Component {
                     `}
                   >
                     2. Users can perform tasks such as tweeting to earn BTC and split the rewards debut receives from App Mining - {linkifyText('https://app.co/mining')}. (30%) <br />
-                  If the pilot continues, debut will split 30% of the app mining rewards for the month of June and July to user who's submissions have been <strong>approved</strong>.
+                  If the pilot continues, debut will split 30% of the app mining rewards for the month of June and July to user whose submissions have been <strong>approved</strong>.
                   </li>
 
                   <li
