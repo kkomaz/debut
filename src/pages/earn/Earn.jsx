@@ -14,7 +14,11 @@ import moment from 'moment'
 import earnImg from 'assets/earn3.png'
 
 // Component Imports
-import { AprilEarn, SubmissionHistory } from 'components/earn'
+import {
+  AprilEarn,
+  MayEarn,
+  SubmissionHistory,
+} from 'components/earn'
 import { UserContext } from 'components/User/UserProvider'
 
 // Util Imports
@@ -102,7 +106,7 @@ class Earn extends Component {
                           font-weight: 800;
                         `}
                       >
-                        40%
+                        30%
                       </span>* of the App Mining rewards debut receieves amongst the pool of participants.
                   </h4>
                   <h4 css={theme => css`
@@ -153,7 +157,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(3)}
               disabled={currentMonth < 3}
             >
-              April (40%)
+              April (30%)
             </Button>
             <Button
               color="primary"
@@ -161,9 +165,9 @@ class Earn extends Component {
                 margin-right: 10px;
               `}
               onClick={() => this.setcurrentMonthView(4)}
-              disabled={currentMonth < 4}
+              disabled={currentMonth < 3}
             >
-              May (40%)
+              May (30%)
             </Button>
             <Button
               color="primary"
@@ -173,7 +177,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(5)}
               disabled={currentMonth < 5}
             >
-              June (40%)
+              June (30%)
             </Button>
             <Button
               color="primary"
@@ -183,7 +187,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(6)}
               disabled={currentMonth < 6}
             >
-              July (40%)
+              July (30%)
             </Button>
             <Button
               color="primary"
@@ -193,7 +197,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(7)}
               disabled={currentMonth < 7}
             >
-              August (20%)
+              August (15%)
             </Button>
             <Button
               color="primary"
@@ -203,7 +207,7 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(8)}
               disabled={currentMonth < 8}
             >
-              September (20%)
+              September (15%)
             </Button>
             <Button
               color="primary"
@@ -213,12 +217,19 @@ class Earn extends Component {
               onClick={() => this.setcurrentMonthView(9)}
               disabled={currentMonth < 9}
             >
-              October (20%)
+              October (15%)
             </Button>
           </div>
           {
             currentMonthView === 3 &&
             <AprilEarn
+              currentMonth={this.state.currentMonth}
+              sessionUser={sessionUser}
+            />
+          }
+          {
+            currentMonthView === 4 &&
+            <MayEarn
               currentMonth={this.state.currentMonth}
               sessionUser={sessionUser}
             />
@@ -254,22 +265,31 @@ class Earn extends Component {
                       margin-bottom: 10px;
                     `}
                   >
-                    1. For the first 3 months, (May, June, July) debut will split 40% of the app mining rewards received from Blockstack amongst the approved users.
-                    Learn more about app mining via {linkifyText('https://app.co/mining')}
+                    1.  In the month of May, debut will pilot a <strong>Earn</strong> system.
+                  </li>
+
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    2. Users can perform tasks such as tweeting to earn BTC and split the rewards debut receives from App Mining - {linkifyText('https://app.co/mining')}. (30%) <br />
+                  If the pilot continues, debut will split 30% of the app mining rewards for the month of June and July to user who's submissions have been <strong>approved</strong>.
+                  </li>
+
+                  <li
+                    css={css`
+                      margin-bottom: 10px;
+                    `}
+                  >
+                    2. The next 3 months, (August, September, October) debut will reduce the split to 15% of the app mining rewards.
                   </li>
                   <li
                     css={css`
                       margin-bottom: 10px;
                     `}
                   >
-                    2. The next 3 months, (August, September, October) debut will reduce the split to 20% of the app mining rewards.
-                  </li>
-                  <li
-                    css={css`
-                      margin-bottom: 10px;
-                    `}
-                  >
-                    3. If/When more tasks are added, the weight on each task will be properly redistributed based on the 40/20 percentage depending on the month.
+                    3. If/When more tasks are added, the weight on each task will be properly redistributed based on the 30/15 percentage depending on the month.
                   </li>
                   <li
                     css={css`
