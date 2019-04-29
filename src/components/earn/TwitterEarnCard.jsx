@@ -64,8 +64,25 @@ class TwitterEarnCard extends Component {
 
   isValid = () => {
     const { valid, task } = this.props
+    const currentMonth = moment().month()
+
+    if (currentMonth === 3) {
+      return false
+    }
 
     return valid && _.isEmpty(task)
+  }
+
+  isStartDisabled = () => {
+    const { valid } = this.props
+
+    const currentMonth = moment().month()
+
+    if (currentMonth === 3) {
+      return true
+    }
+
+    return !valid
   }
 
   addDefaultSrc = (evt) => {
@@ -73,11 +90,8 @@ class TwitterEarnCard extends Component {
   }
 
   render() {
-    const { valid, sessionUser, task } = this.props
+    const { sessionUser, task } = this.props
     const { showModal, showTwitterForm } = this.state
-
-    // change to disabled={!valid} on begin
-    // Remove moment
 
     return (
       <React.Fragment>
@@ -139,7 +153,7 @@ class TwitterEarnCard extends Component {
                       this.isValid() ?
                       <Button
                         color="primary"
-                        disabled={moment().month() !== 4}
+                        disabled={this.isStartDisabled}
                         >
                         Begin
                       </Button> :
