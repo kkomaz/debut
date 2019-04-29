@@ -56,7 +56,6 @@ class NavbarComp extends Component {
     removeAdminComment: PropTypes.func.isRequired,
     removeAdminMention: PropTypes.func.isRequired,
     setHomePageClickedTrue: PropTypes.func.isRequired,
-    setNavbarTab: PropTypes.func.isRequired,
     setProfileClickedTrue: PropTypes.func.isRequired,
     setView: PropTypes.func.isRequired,
     view: PropTypes.object,
@@ -223,6 +222,18 @@ class NavbarComp extends Component {
     const { history } = this.props
     this.toggleNavbar()
     history.push('/')
+  }
+
+  goToEarn = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/earn')
+  }
+
+  goToBackOffice = () => {
+    const { history } = this.props
+    this.toggleNavbar()
+    history.push('/back-office')
   }
 
   onChange = (e) => {
@@ -394,8 +405,17 @@ class NavbarComp extends Component {
                 {
                   isSignedIn &&
                   <React.Fragment>
+                    {
+                      user.username === 'kkomaz.id' &&
+                      <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToBackOffice}>
+                        Back Office
+                      </Navbar.Item>
+                    }
                     <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToHome}>
                       Home
+                    </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToProfile}>
+                      Profile
                     </Navbar.Item>
                     <Navbar.Item
                       className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop"
@@ -403,9 +423,18 @@ class NavbarComp extends Component {
                     >
                       Explore
                     </Navbar.Item>
+                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
+                      Earn
+                    </Navbar.Item>
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
-                        _.isEmpty(user) && loading ? <IconLoader /> :
+                        _.isEmpty(user) && loading ?
+                        <IconLoader
+                          css={css`
+                            margin-right: 40px;
+                            margin-left: 12px;
+                          `}
+                        /> :
                         <div className="debut-nav-bar__user-identity navbar-link">
                           <img
                             onError={this.addDefaultSrc}
@@ -445,7 +474,6 @@ class NavbarComp extends Component {
                           goToRecent={this.goToRecent}
                           goToRecentMentions={this.goToRecentMentions}
                           onHelpClick={this.goToHelp}
-                          onProfileClick={this.goToProfile}
                           onSignOutClick={this.signOut}
                           user={user}
                           viewObj={viewObj}

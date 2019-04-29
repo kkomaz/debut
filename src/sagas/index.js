@@ -7,6 +7,7 @@ import followSaga from 'sagas/follow'
 import feedSaga from 'sagas/feed'
 import voteSaga from 'sagas/vote'
 import mentionSaga from 'sagas/mention'
+import taskSaga from 'sagas/task'
 
 export default function* rootSaga() {
   yield [
@@ -17,6 +18,7 @@ export default function* rootSaga() {
     fork(userSaga),
     fork(feedSaga),
     fork(voteSaga),
-    fork(mentionSaga)
+    fork(mentionSaga),
+    fork(taskSaga)
   ]
 }

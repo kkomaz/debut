@@ -15,7 +15,8 @@ import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
 import { requestSingleUser } from 'actions/user'
-// import Vote from 'model/vote'
+import EarnRoute from './EarnRoute'
+import BackOfficeRoute from './BackOfficeRoute'
 
 import "./RootRoute.scss";
 
@@ -109,6 +110,25 @@ class RootRoute extends Component {
                   match={match}
                   username={username}
                   userSession={userSession}
+                  location={location}
+                />
+              }
+            />
+
+            <Route
+              path="/back-office"
+              render={({ match }) =>
+                <BackOfficeRoute
+                  match={match}
+                />
+              }
+            />
+
+            <Route
+              path="/earn"
+              render={({ match, location }) =>
+                <EarnRoute
+                  match={match}
                   location={location}
                 />
               }

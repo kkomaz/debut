@@ -6,14 +6,16 @@ import followReducer from './followReducer'
 import feedReducer from './feedReducer'
 import recentReducer from './recentReducer'
 import viewReducer from './viewReducer'
+import taskReducer from './taskReducer'
 
 const rootReducer = combineReducers({
   blockstack: blockstackReducer,
   feed: feedReducer,
   follow: followReducer,
-  share: shareReducer,
-  user: userReducer,
   recent: recentReducer,
+  share: shareReducer,
+  task: taskReducer,
+  user: userReducer,
   view: viewReducer,
 });
 
