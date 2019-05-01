@@ -108,9 +108,6 @@ class SubmissionHistory extends Component {
           <thead>
             <tr>
               <th>
-                <abbr title="Blockstack ID">Blockstack ID</abbr>
-              </th>
-              <th>
                 <abbr title="Task">Task</abbr>
               </th>
               <th>
@@ -138,9 +135,6 @@ class SubmissionHistory extends Component {
               _.map(this.props.tasks, (task) => {
                 return (
                   <tr key={task._id}>
-                    <td>
-                      {task.username}
-                    </td>
                     <td
                       css={css`
                         text-transform: capitalize;
