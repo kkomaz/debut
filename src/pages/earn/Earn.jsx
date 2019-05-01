@@ -27,8 +27,7 @@ class Earn extends Component {
   constructor(props) {
     super(props)
 
-    // Remove hardcoded value
-    const currentMonth = 4 || moment().month()
+    const currentMonth = moment().month()
 
     this.state = {
       currentMonth,

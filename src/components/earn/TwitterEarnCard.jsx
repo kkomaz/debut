@@ -76,12 +76,6 @@ class TwitterEarnCard extends Component {
   isStartDisabled = () => {
     const { valid } = this.props
 
-    const currentMonth = moment().month()
-
-    if (currentMonth === 3) {
-      return true
-    }
-
     return !valid
   }
 
