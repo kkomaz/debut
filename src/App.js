@@ -44,9 +44,16 @@ class App extends Component {
 
     // If already signed in
     if (userSession.isUserSignedIn()) {
-      this.setState({ loggedIn: true }, async () => {
-        await User.createWithCurrentUser()
-      })
+      const userData = userSession.loadUserData();
+
+      if (userData.username) {
+        this.setState({ loggedIn: true }, async () => {
+          await User.createWithCurrentUser()
+        })
+      } else {
+        console.log('hitting the else')
+        return this.setState({ loggedIn: true })
+      }
     }
 
     // If pending sign-in
