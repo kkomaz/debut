@@ -124,15 +124,17 @@ class RootRoute extends Component {
               }
             />
 
-            <Route
-              path="/earn"
-              render={({ match, location }) =>
-                <EarnRoute
-                  match={match}
-                  location={location}
-                />
-              }
-            />
+            {/*
+              <Route
+                path="/earn"
+                render={({ match, location }) =>
+                  <EarnRoute
+                    match={match}
+                    location={location}
+                  />
+                }
+              />
+            */}
 
             <Route
               exact

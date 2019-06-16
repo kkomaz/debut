@@ -423,9 +423,11 @@ class NavbarComp extends Component {
                     >
                       Explore
                     </Navbar.Item>
-                    <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
+                    {/*
+                      <Navbar.Item className="debut-nav-bar__user-options debut-nav-bar__user-options--desktop" onClick={this.goToEarn}>
                       Earn
-                    </Navbar.Item>
+                      </Navbar.Item>
+                    */}
                     <div className={`debut-nav-bar__list-icon navbar-item has-dropdown is-hoverable`}>
                       {
                         _.isEmpty(user) && loading ?
