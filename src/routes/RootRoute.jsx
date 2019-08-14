@@ -15,7 +15,6 @@ import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
 import { requestSingleUser } from 'actions/user'
-import EarnRoute from './EarnRoute'
 import BackOfficeRoute from './BackOfficeRoute'
 
 import "./RootRoute.scss";

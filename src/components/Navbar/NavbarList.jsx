@@ -37,79 +37,69 @@ class NavbarList extends Component {
       >
         <Menu.List>
           <Menu.List.Item
-            onClick={this.props.onHelpClick}
+            css={css`
+              position: relative;
+            `}
+            onClick={this.props.goToRecent}
           >
-            <a
-              onClick={this.props.goToRecent}
-              css={css`
-                position: relative;
+            <div
+              css={theme => css`
+                background: ${theme.colors.blue};
+                border-radius: 15px;
+                color: ${theme.colors.white};
+                justify-content: center;
+                align-items: center;
+                height: 18px;
+                width: 18px;
+                box-sizing: border-box;
+                line-height: 1;
+                min-width: 16px;
+                opacity: 1;
+                padding: 2px 4px 3px;
+                display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
+                position: absolute;
+                top: 50%;
+                left: -18px;
+                transform: translateY(-50%);
               `}
-              className="navbarlist__recent-comments"
-              to="/"
-            >
-              <div
-                css={theme => css`
-                  background: ${theme.colors.blue};
-                  border-radius: 15px;
-                  color: ${theme.colors.white};
-                  justify-content: center;
-                  align-items: center;
-                  height: 18px;
-                  width: 18px;
-                  box-sizing: border-box;
-                  line-height: 1;
-                  min-width: 16px;
-                  opacity: 1;
-                  padding: 2px 4px 3px;
-                  display: ${_.isEmpty(viewObj.comment) ? 'flex' : 'none'};
-                  position: absolute;
-                  top: 46%;
-                  left: 60%;
-                  transform: translateY(-50%);
-                `}
+            />
+            <div className="mr-quarter">
+              Recent
+              <Icon
+                className="ml-half mb-quarter"
+                icon="IconBubble"
+                size={14}
               />
-              <div className="mr-quarter">
-                Recent
-                <Icon
-                  className="ml-half mb-quarter"
-                  icon="IconBubble"
-                  size={14}
-                  />
-              </div>
-            </a>
+            </div>
           </Menu.List.Item>
-          <Menu.List.Item>
-            <a
-              onClick={this.props.goToRecentMentions}
-              css={css`
-                position: relative;
+          <Menu.List.Item
+            css={css`
+              position: relative;
+            `}
+            onClick={this.props.goToRecentMentions}
+          >
+            <div
+              css={theme => css`
+                background: ${theme.colors.blue};
+                border-radius: 15px;
+                color: ${theme.colors.white};
+                justify-content: center;
+                align-items: center;
+                height: 18px;
+                width: 18px;
+                box-sizing: border-box;
+                line-height: 1;
+                min-width: 16px;
+                opacity: 1;
+                padding: 2px 4px 3px;
+                display: ${_.isEmpty(viewObj.mention) ? 'flex' : 'none'};
+                position: absolute;
+                top: 50%;
+                left: -18px;
+                transform: translateY(-50%);
               `}
-              className="navbarlist__recent-comments"
-              to="/"
-            >
-              <div
-                css={theme => css`
-                  background: ${theme.colors.blue};
-                  border-radius: 15px;
-                  color: ${theme.colors.white};
-                  justify-content: center;
-                  align-items: center;
-                  height: 18px;
-                  width: 18px;
-                  box-sizing: border-box;
-                  line-height: 1;
-                  min-width: 16px;
-                  opacity: 1;
-                  padding: 2px 4px 3px;
-                  display: ${_.isEmpty(viewObj.mention) ? 'flex' : 'none'};
-                  position: absolute;
-                  top: 46%;
-                  left: 60%;
-                  transform: translateY(-50%);
-                `}
-              />
-              Recent @
-            </a>
+            />
+            Recent @
           </Menu.List.Item>
           <Menu.List.Item
             onClick={this.props.onHelpClick}
