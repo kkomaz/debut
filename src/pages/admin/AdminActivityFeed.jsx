@@ -162,9 +162,7 @@ class AdminActivityFeed extends Component {
     const { feedShares, userFollow } = this.props
     const {
       bottomReached,
-      // showCommentModal,
       showMoreOptions,
-      // showShareModal,
     } = this.state
 
     if (feedShares.loading) {
@@ -226,47 +224,6 @@ class AdminActivityFeed extends Component {
           bottomReached && feedShares.list.length >= 5 && !feedShares.full && <BarLoader style={{ height: '200px' }} />
         }
         </CSSTransitionGroup>
-        {/*
-          <Modal
-            show={showShareModal}
-            onClose={this.closeShareModal}
-            closeOnEsc
-          >
-            <Modal.Content>
-              <Section style={{ backgroundColor: 'white' }}>
-                <Heading size={6}>Shared Moment</Heading>
-                <ShareForm
-                  username={userFollow.username}
-                  currentShare={this.state.currentShare}
-                  onCancel={this.closeShareModal}
-                  onComplete={this.closeShareModal}
-                />
-              </Section>
-            </Modal.Content>
-          </Modal>
-        */}
-
-        {/*
-          showCommentModal &&
-          <Modal
-            show={showCommentModal}
-            onClose={this.closeModal}
-            closeOnEsc
-            >
-            <Modal.Content>
-              <Section style={{ backgroundColor: 'white' }}>
-                <Heading size={6}>User Comments</Heading>
-                <CommentForm
-                  currentComment={this.state.currentComment}
-                  onComplete={this.closeCommentModal}
-                  onCancel={this.closeCommentModal}
-                  shareId={this.state.currentComment.share_id}
-                  username={this.state.currentComment.creator}
-                />
-              </Section>
-            </Modal.Content>
-          </Modal>
-        */}
       </div>
     )
   }
