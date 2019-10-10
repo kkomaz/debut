@@ -18,7 +18,6 @@ const fetchContacts = async () => {
 
 function* followContact(contact, sessionUsername) {
   if (contact.attrs && contact.attrs.blockstackID) {
-    console.log("request to add user " + contact.attrs.blockstackID)
     yield followUser(requestFollow(sessionUsername, contact.attrs.blockstackID))
    }
 }
