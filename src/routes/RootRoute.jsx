@@ -15,6 +15,7 @@ import { requestFetchFollow } from "actions/follow";
 import UsernameRoute from "./UsernameRoute";
 import { RootContext } from "components/context/DebutContext";
 import { requestSingleUser } from 'actions/user'
+import { requestAddContactsToFollow } from 'actions/contacts'
 import BackOfficeRoute from './BackOfficeRoute'
 
 import "./RootRoute.scss";
@@ -43,6 +44,7 @@ class RootRoute extends Component {
     this.props.requestSingleUser(username)
     this.props.requestBlockstackDapps();
     this.props.requestFetchFollow(this.state.username);
+    this.props.requestAddContactsToFollow(this.state.username);
   }
 
   setHomePageClickedTrue = () => {
@@ -189,6 +191,7 @@ export default withRouter(
       requestBlockstackDapps,
       requestFetchFollow,
       requestSingleUser,
+      requestAddContactsToFollow,
     }
   )(RootRoute)
 );
